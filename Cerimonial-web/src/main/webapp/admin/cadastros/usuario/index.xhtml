@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="/WEB-INF/admin/layout/default.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Usuários
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form prependId="false"
+                id="form">
+
+            <h:messages/>
+
+
+
+            <p:dataTable id="dataTable"
+                         var="item"  
+                         rows="25" 
+                         paginator="true"
+                         pageLinks="5" 
+                         rowsPerPageTemplate="25,50,100"
+                         currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginatorPosition="bottom"
+                         value="#{ClienteCrudMB.lazyDataModel}" 
+                         widgetVar="dataTableVar"
+                         emptyMessage="Nenhum registro encontrado"
+                         lazy="true">
+
+                <f:facet name="header">
+                    <h:commandButton action="form?faces-redirect=true"
+                                     value="Novo" />
+                </f:facet>
+
+                <p:column id="idCliente" 
+                          width="100"
+                          exportable="true"
+                          sortBy="#{item.id}"
+                          filterBy="#{item.id}"
+                          headerText="Id">
+                    <h:outputText value="#{item.id}" />
+                </p:column>
+
+                <p:column id="nomeCliente" 
+                          filterBy="#{item.nome}"
+                          exportable="true"
+                          sortBy="#{item.nome}"
+                          headerText="Nome">
+                    <h:outputText value="#{item.nome}" />
+                </p:column>
+
+                <p:column id="acoes"
+                          width="100"
+                          headerText="Ações">
+                    <p:commandButton icon="fa fa-pencil"
+                                     styleClass="bt-acoes" 
+                                     process="@this"
+                                     onclick="window.location = '#{facesContext.externalContext.requestContextPath}/admin/configuracao/cadastros/cliente/form.xhtml?id=#{item.id}'">
+                        <f:param name="id" 
+                                 value="#{item.id}" />
+                    </p:commandButton>
+
+                    <p:commandButton icon="fa fa-trash"
+                                     styleClass="bt-acoes"
+                                     process="@this"
+                                     update="@form"
+                                     actionListener="#{ClienteCrudMB.removerCliente(item)}">
+                        <p:confirm header="Remover"
+                                   message="Deseja remover esse cliente?" 
+                                   icon="ui-icon-alert" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

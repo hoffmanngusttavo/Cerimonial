@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <f:view encoding="ISO-8859-1" contentType="text/html;" >        
+        <h:head>
+            <title>:: #{bundle.Acesso} ::</title>
+
+        </h:head>
+        <h:body style="background-color: whitesmoke;">
+            <h:form prependId="false" enctype="multipart/form-data">
+                <h:panelGroup  layout="block" style="width:483px;margin:auto auto;
+                               height:283px;
+                               margin-top: 5%;
+                               background:url('resources/images/back.png')">
+
+                    <h:panelGrid columns="2" width="100%" columnClasses="imagem,descricao">
+                        <p:graphicImage value="resources/images/ico_exclamation.png" />
+
+                        <h:panelGroup>
+
+                            <h1 class="desculpe">Desculpe!</h1>
+                            <div class="erro">Erro 404</div>
+                            <div class="pagina">Página não encontrada.</div>
+                            <div class="separador"></div>
+                            <div>
+                                <h:outputLink styleClass="link" value="#{facesContext.externalContext.requestContextPath}">
+                                    #{bundle.CliqueAquiParaRetornar}
+                                </h:outputLink>
+                            </div>
+                            <div class="desculpe" style="margin-top: 30px;">
+                                p-Thoth
+                            </div>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+
+                </h:panelGroup>
+            </h:form>
+        </h:body>
+    </f:view>
+</html>
+

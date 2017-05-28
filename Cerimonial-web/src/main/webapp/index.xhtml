@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Login</title>
+    </h:head>
+    <h:body>
+
+        <h:form prependId="false"
+                id="form">
+
+            <h:messages errorClass="msg_error"/>
+
+            <div id="top">
+
+            </div>
+            <div>
+                <div id="content" class="center_content">
+                    <div>
+                        <center>
+
+                            <table style="border-collapse: inherit;border-style: double;">
+                                <tr>
+                                    <td>Login</td>
+                                    <td>
+                                        <h:inputText />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Senha</td>
+                                    <td>
+                                        <h:inputText />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: center">
+                                        <p:link href="/admin/index.xhtml">
+                                            <i class="fa fa-edit"></i>
+                                            <span>Entrar</span>
+                                        </p:link>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+
+            </div>
+        </h:form>
+    </h:body>
+</html>
+
