@@ -22,4 +22,6 @@ abstract class BasicService<T> implements Serializable {
 
     public abstract T getEntity(Long id) throws Exception;
     
+    public abstract T save(T entity) throws Exception;
+    
 }

@@ -6,15 +6,23 @@
 package br.com.cerimonial.entity;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
 /**
@@ -57,7 +65,35 @@ public class Usuario implements Serializable, ModelInterface {
     private boolean master = false;
     @ManyToOne
     private Usuario modificadoPor;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataUltimaAlteracao;
+    
+   
 
+    @PrePersist
+    @PreUpdate
+    @PreRemove
+    @Override
+    public void preCrudEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+    }
+    
+     @Override
+    public Date getDataUltimaAlteracao() {
+        return dataUltimaAlteracao;
+    }
+
+    @Override
+    public void setDataUltimaAlteracao(Date data) {
+        this.dataUltimaAlteracao = data;
+    }
+    
+    
     @Override
     public Long getId() {
         return id;

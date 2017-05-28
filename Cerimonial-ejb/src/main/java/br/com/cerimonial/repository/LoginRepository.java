@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.repository;
 
+import br.com.cerimonial.entity.Login;
 import javax.persistence.EntityManager;
 
 /**
@@ -16,7 +17,11 @@ public class LoginRepository extends BasicRepository{
     public LoginRepository(EntityManager entityManager) {
         super(entityManager);
     }
-    
+
+    public Login create(Login entity) throws Exception {
+        addEntity(Login.class, entity);
+        return entity;
+    }
     
     
 }

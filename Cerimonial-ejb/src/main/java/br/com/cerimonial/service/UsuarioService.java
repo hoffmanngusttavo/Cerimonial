@@ -45,6 +45,7 @@ public class UsuarioService extends BasicService<Usuario> {
         return usuarioRepository.getUsuario(id);
     }
 
+    @Override
     public synchronized Usuario save(Usuario entity) throws Exception {
         if (entity != null) {
             if (entity.getId() == null) {

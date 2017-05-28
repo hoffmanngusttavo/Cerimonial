@@ -7,15 +7,21 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
+import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
 /**
@@ -33,6 +39,9 @@ public class Login implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date data;
+    
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataUltimaAlteracao;
     
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date hora;
@@ -99,7 +108,7 @@ public class Login implements Serializable, ModelInterface {
 
    @Override
     public void setId(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.id = id;
     }
 
     public String getCabecalho() {
@@ -110,6 +119,28 @@ public class Login implements Serializable, ModelInterface {
         this.cabecalho = cabecalho;
     }
     
+    @Override
+    public Date getDataUltimaAlteracao() {
+        return dataUltimaAlteracao;
+    }
+
+    @Override
+    public void setDataUltimaAlteracao(Date data) {
+        this.dataUltimaAlteracao = data;
+    }
+    
+    @PrePersist
+    @PreUpdate
+    @PreRemove
+    @Override
+    public void preCrudEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+    }
     
 
     @Override
@@ -136,6 +167,8 @@ public class Login implements Serializable, ModelInterface {
     public String toString() {
         return "br.com.cerimonial.entity.Login[ id=" + id + " ]";
     }
+
+    
 
     
 

@@ -9,6 +9,7 @@ import br.com.cerimonial.entity.Login;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.LoginService;
 import br.com.cerimonial.service.UsuarioService;
+import br.com.cerimonial.utils.ConstantsProject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -39,9 +40,8 @@ import org.apache.shiro.util.ByteSource;
  */
 public class Realm extends AuthorizingRealm {
     
-    
-    protected LoginService loginService = lookupLoginServiceBean();
-    protected UsuarioService usuarioService = lookupUsuarioServiceBean();
+    private final UsuarioService usuarioService = lookupUsuarioServiceBean();
+    private final LoginService loginService = lookupLoginServiceBean();
     
 
     @Override
@@ -100,7 +100,7 @@ public class Realm extends AuthorizingRealm {
 
                     login.setCabecalho(headers);
 
-                    loginService.create(login);
+                    loginService.save(login);
 
                 } catch (Exception ex) {
                     Logger.getLogger(Realm.class.getSimpleName()).log(Level.WARNING, null, ex);
@@ -146,7 +146,7 @@ public class Realm extends AuthorizingRealm {
     private UsuarioService lookupUsuarioServiceBean() {
         try {
             Context c = new InitialContext();
-            return (UsuarioService) c.lookup("java:global/br.com.project_Cerimonial-ear_ear_1.0-SNAPSHOT/br.com.project_Cerimonial-ejb_ejb_1.0-SNAPSHOT/UsuarioService!br.com.cerimonial.service.UsuarioService");
+            return (UsuarioService) c.lookup("java:global/"+ConstantsProject.appName+"/"+ConstantsProject.moduleEjbName+"/UsuarioService!br.com.cerimonial.service.UsuarioService");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
@@ -156,10 +156,16 @@ public class Realm extends AuthorizingRealm {
     private LoginService lookupLoginServiceBean() {
         try {
             Context c = new InitialContext();
-            return (LoginService) c.lookup("java:global/br.com.project_Cerimonial-ear_ear_1.0-SNAPSHOT/br.com.project_Cerimonial-ejb_ejb_1.0-SNAPSHOT/LoginService!br.com.cerimonial.service.LoginService");
+            return (LoginService) c.lookup("java:global/"+ConstantsProject.appName+"/"+ConstantsProject.moduleEjbName+"/LoginService!br.com.cerimonial.service.LoginService");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
     }
+
+    
+
+    
+
+    
 }

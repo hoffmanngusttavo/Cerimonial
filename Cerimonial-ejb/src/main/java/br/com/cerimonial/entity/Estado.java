@@ -6,6 +6,7 @@
 package br.com.cerimonial.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -127,6 +128,21 @@ public class Estado implements Serializable, ModelInterface {
     @Override
     public String toString() {
         return "br.com.project.rural.entity.Estado[ id=" + id + " ]";
+    }
+
+    @Override
+    public Date getDataUltimaAlteracao() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setDataUltimaAlteracao(Date data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void preCrudEntity() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

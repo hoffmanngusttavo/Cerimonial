@@ -6,6 +6,7 @@
 package br.com.cerimonial.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -145,6 +146,21 @@ public class Endereco implements Serializable, ModelInterface {
     @Override
     public String toString() {
         return "br.com.project.rural.entity.Endereco[ id=" + id + " ]";
+    }
+
+    @Override
+    public Date getDataUltimaAlteracao() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setDataUltimaAlteracao(Date data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void preCrudEntity() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

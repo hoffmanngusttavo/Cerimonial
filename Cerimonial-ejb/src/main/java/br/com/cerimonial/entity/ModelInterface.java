@@ -5,6 +5,8 @@
  */
 package br.com.cerimonial.entity;
 
+import java.util.Date;
+
 /**
  *
  * @author Gustavo Hoffmann
@@ -16,5 +18,10 @@ public interface ModelInterface  {
     
     public Usuario getModificadoPor();
     public void setModificadoPor(Usuario user);
+    
+    public Date getDataUltimaAlteracao();
+    public void setDataUltimaAlteracao(Date data);
+    
+    public void preCrudEntity();
     
 }

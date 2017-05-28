@@ -25,7 +25,7 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class LoginService extends BasicService<Login>{
+public class LoginService extends BasicService<Login> {
 
     private LoginRepository loginRepository;
 
@@ -33,17 +33,20 @@ public class LoginService extends BasicService<Login>{
     @PostActivate
     private void postConstruct() {
         loginRepository = new LoginRepository(em);
-        
-    }
-    
-    
-    @Override
-    public Login getEntity(Long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
-    public void create(Login login) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Override
+    public Login getEntity(Long id) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
+    @Override
+    public Login save(Login entity) throws Exception {
+        if (entity != null) {
+            return loginRepository.create(entity);
+        }
+        return null;
+    }
+
 }
