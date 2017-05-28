@@ -27,7 +27,7 @@ public class AutenticacaoMB extends BasicControl {
 
     protected String login;
     protected String senha;
-    protected boolean remember;
+    protected boolean remember = false;
     protected AutenticacaoInterface autenticacaoInterface;
 
     @EJB
@@ -62,7 +62,12 @@ public class AutenticacaoMB extends BasicControl {
 
             @Override
             public Usuario consultaLembrarSenha(String login) {
-                return usuarioService.getUsuarioByLogin(login);
+                try {
+                    return usuarioService.getUsuarioByLogin(login);
+                } catch (Exception ex) {
+                    Logger.getLogger(AutenticacaoMB.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return null;
             }
 
             @Override
@@ -83,6 +88,18 @@ public class AutenticacaoMB extends BasicControl {
             createFacesErrorMessage("Login ou senha inválidos");
         }
         return null;
+    }
+    
+    public void criarUsuarioMaster() {
+        try {
+            Usuario user = usuarioService.criarUsuarioMaster();
+            createFacesInfoMessage("Usuário "+user.getNome()+" criado com sucesso");
+        } catch (Exception ex) {
+            Logger.getLogger(AutenticacaoMB.class.getSimpleName()).log(Level.WARNING, null, ex);
+            createFacesErrorMessage("Não foi possível criar usuario master");
+        }finally{
+            scrollTopMessage();
+        }
     }
 
     public boolean hasPermission(String permissao) {
@@ -126,4 +143,30 @@ public class AutenticacaoMB extends BasicControl {
         return null;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public boolean isRemember() {
+        return remember;
+    }
+
+    public void setRemember(boolean remember) {
+        this.remember = remember;
+    }
+
+    
+    
 }

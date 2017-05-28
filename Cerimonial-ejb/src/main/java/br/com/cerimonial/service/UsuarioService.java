@@ -7,6 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;
+import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.Criptografia;
 import br.com.cerimonial.utils.ModelFilter;
 import javax.annotation.PostConstruct;
@@ -36,45 +37,59 @@ public class UsuarioService extends BasicService<Usuario> {
     @PostActivate
     private void postConstruct() {
         usuarioRepository = new UsuarioRepository(em);
-        
+
     }
 
     @Override
     public Usuario getEntity(Long id) throws Exception {
-        return null;
+        return usuarioRepository.getUsuario(id);
     }
-    
+
     public synchronized Usuario save(Usuario entity) throws Exception {
-        
-        return null;
-    }
-    
-    public synchronized Usuario alterarSenha(Usuario entity) throws Exception {
-        Usuario usuario = this.getEntity(entity.getId());
-        if (usuario != null && !usuario.getSenha().equals(entity.getSenha())) {
-            ByteSource salt = new SecureRandomNumberGenerator().nextBytes();
-            entity.setSenha(Criptografia.md5(entity.getSenha() + salt.toString()));
-            entity.setSalt(salt.toString());
+        if (entity != null) {
+            if (entity.getId() == null) {
+                alterarSaltSenha(entity);
+                return usuarioRepository.create(entity);
+            } else {
+                return usuarioRepository.edit(entity);
+            }
         }
         return null;
     }
-    
-    
-    public Usuario getUsuarioByLoginSenha(String login, String senha){
+
+    public Usuario getUsuarioByLoginSenha(String login, String senha) throws Exception {
         Usuario usuarioSalt = this.getUsuarioByLogin(login);
         String senhaMd5 = Criptografia.md5(senha + usuarioSalt.getSalt());
-        ModelFilter modelFilter = ModelFilter.getInstance();
-        modelFilter.addFilter("ativo", Boolean.TRUE);
-        modelFilter.addFilter("login", login);
-        modelFilter.addFilter("senha", senhaMd5);
-        return null;
+        return usuarioRepository.getUsuarioByLoginSenha(login, senhaMd5);
     }
-    
-    public Usuario getUsuarioByLogin(String login){
-        ModelFilter modelFilter = ModelFilter.getInstance();
-        modelFilter.addFilter("ativo", Boolean.TRUE);
-        modelFilter.addFilter("login", login);
-        return null;
+
+    public Usuario getUsuarioByLogin(String login) throws Exception {
+        return usuarioRepository.getUsuarioByLogin(login);
+    }
+
+    public synchronized Usuario alterarSenha(Usuario entity) throws Exception {
+        Usuario usuario = this.getEntity(entity.getId());
+        if (usuario != null && !usuario.getSenha().equals(entity.getSenha())) {
+            alterarSaltSenha(entity);
+        }
+        return usuarioRepository.edit(entity);
+    }
+
+    private void alterarSaltSenha(Usuario entity) {
+        ByteSource salt = new SecureRandomNumberGenerator().nextBytes();
+        entity.setSenha(Criptografia.md5(entity.getSenha() + salt.toString()));
+        entity.setSalt(salt.toString());
+    }
+
+    public Usuario criarUsuarioMaster() throws Exception {
+
+        Usuario usuario = new Usuario();
+        usuario.setNome("Master");
+        usuario.setLogin("master");
+        usuario.setSenha("master");
+        usuario.setEmail("hoffmann.gusttavo@gmail.com");
+        usuario.setToken(CerimonialUtils.SHA1(usuario.getLogin() + usuario.getSenha()));
+        return save(usuario);
     }
 
 }

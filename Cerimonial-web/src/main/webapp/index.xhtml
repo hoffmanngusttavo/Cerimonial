@@ -5,13 +5,29 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Login</title>
+
+        <h:panelGroup rendered="#{param['lastUrl']== null}">
+            <script type="text/javascript">
+                var last = document.referrer;
+                if (last.indexOf('#{facesContext.externalContext.requestContextPath}/admin/') != -1) {
+                    document.getElementById('retorno').value = last;
+                    document.getElementById('lastUrl').value = last;
+                }
+
+            </script>
+        </h:panelGroup>
+
+        
+
     </h:head>
     <h:body>
 
         <h:form prependId="false"
                 id="form">
 
-            <h:messages errorClass="msg_error"/>
+            <p:messages autoUpdate="true" id="messages"/>
+            
+            <p:focus for="login" context="login"/>
 
             <div id="top">
 
@@ -25,21 +41,47 @@
                                 <tr>
                                     <td>Login</td>
                                     <td>
-                                        <h:inputText />
+                                        <p:inputText value="#{AutenticacaoMB.login}" 
+                                                     required="true" 
+                                                     styleClass="input" 
+                                                     id="login">
+                                            <p:ajax event="change" 
+                                                    partialSubmit="true" 
+                                                    process="@this"/>
+                                        </p:inputText>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Senha</td>
                                     <td>
-                                        <h:inputText />
+                                        <p:password value="#{AutenticacaoMB.senha}" 
+                                                    required="true"
+                                                    feedback="false" 
+                                                    id="senha" 
+                                                    styleClass="input">
+                                            <p:ajax event="change" 
+                                                    partialSubmit="true" 
+                                                    process="@this"/>
+                                        </p:password>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" style="text-align: center">
-                                        <p:link href="/admin/index.xhtml">
-                                            <i class="fa fa-edit"></i>
-                                            <span>Entrar</span>
-                                        </p:link>
+                                        <p:commandButton value="Entrar" 
+                                                         styleClass="botao"
+                                                         id="btnEntrar"
+                                                         ajax="false" 
+                                                         action="#{AutenticacaoMB.logar()}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: center">
+                                        <p:commandButton value="Criar Usuário Padrão" 
+                                                         styleClass="botao"
+                                                         id="btnCriar"
+                                                         update="messages"
+                                                         process="@this"
+                                                         action="#{AutenticacaoMB.criarUsuarioMaster()}" />
                                     </td>
                                 </tr>
                             </table>

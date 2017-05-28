@@ -9,17 +9,17 @@ import br.com.cerimonial.entity.Login;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.LoginService;
 import br.com.cerimonial.service.UsuarioService;
-import br.com.cerimonial.utils.Criptografia;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -38,11 +38,11 @@ import org.apache.shiro.util.ByteSource;
  * @author Gustavo Hoffmann
  */
 public class Realm extends AuthorizingRealm {
-
-    @EJB
-    private UsuarioService usuarioService;
-    @EJB
-    private LoginService loginService;
+    
+    
+    protected LoginService loginService = lookupLoginServiceBean();
+    protected UsuarioService usuarioService = lookupUsuarioServiceBean();
+    
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection pc) {
@@ -50,7 +50,6 @@ public class Realm extends AuthorizingRealm {
         Usuario usuario = (Usuario) SecurityUtils.getSubject().getPrincipal();
 
         if (usuario != null) {
-
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             SimpleAuthorizationInfo infoGrupo = new SimpleAuthorizationInfo();
 
@@ -75,15 +74,12 @@ public class Realm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken at) throws AuthenticationException {
 
         try {
-
-            Usuario usuario = (Usuario) SecurityUtils.getSubject().getPrincipal();
-
             String senha = "";
             for (char c : (char[]) at.getCredentials()) {
                 senha += c;
             }
 
-            usuario = usuarioService.getUsuarioByLoginSenha(at.getPrincipal().toString(), senha);
+            Usuario usuario = usuarioService.getUsuarioByLoginSenha(at.getPrincipal().toString(), senha);
             if (usuario != null) {
                 try {
                     // Criar Login
@@ -98,7 +94,6 @@ public class Realm extends AuthorizingRealm {
                     login.setUsuario(usuario);
 
                     String headers = "";
-                    Enumeration<String> cabecalho = request.getHeaderNames();
                     for (String k : requestMap.keySet()) {
                         headers += k + "=" + requestMap.get(k) + "\n";
                     }
@@ -116,12 +111,10 @@ public class Realm extends AuthorizingRealm {
 
             } else {
                 Logger.getLogger(Realm.class.getSimpleName()).log(Level.WARNING, null, "Falha na autenticação, não carregou o salt ...");
-
                 return null;
             }
         } catch (Exception ex) {
             Logger.getLogger(Realm.class.getSimpleName()).log(Level.WARNING, null, ex);
-
             return null;
         }
     }
@@ -148,10 +141,25 @@ public class Realm extends AuthorizingRealm {
         public String toBase64() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
+    }
 
-        @Override
-        public boolean isEmpty() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private UsuarioService lookupUsuarioServiceBean() {
+        try {
+            Context c = new InitialContext();
+            return (UsuarioService) c.lookup("java:global/br.com.project_Cerimonial-ear_ear_1.0-SNAPSHOT/br.com.project_Cerimonial-ejb_ejb_1.0-SNAPSHOT/UsuarioService!br.com.cerimonial.service.UsuarioService");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private LoginService lookupLoginServiceBean() {
+        try {
+            Context c = new InitialContext();
+            return (LoginService) c.lookup("java:global/br.com.project_Cerimonial-ear_ear_1.0-SNAPSHOT/br.com.project_Cerimonial-ejb_ejb_1.0-SNAPSHOT/LoginService!br.com.cerimonial.service.LoginService");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
         }
     }
 }

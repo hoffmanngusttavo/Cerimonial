@@ -35,16 +35,22 @@ public class Usuario implements Serializable, ModelInterface {
     private String nome;
     @Column(nullable = false, unique = true)
     @NotNull
-    @Size(min = 4, max = 15)
+    @Size(min = 4)
     private String login;
+    @Column(nullable = false, unique = true)
+    @NotNull
+    @Size(min = 4)
+    private String email;
     @Column(nullable = false)
     @NotNull
-    @Size(min = 4, max = 15)
+    @Size(min = 4)
     private String senha;
     @Column(nullable = false)
     @NotNull
     @Size(min = 4)
     private String salt;
+    @Column(nullable = false)
+    private String token;
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
     @Column(columnDefinition = "boolean default false")
@@ -127,6 +133,23 @@ public class Usuario implements Serializable, ModelInterface {
         this.master = master;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    
     
     
     @Override
