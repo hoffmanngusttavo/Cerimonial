@@ -6,6 +6,9 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Usuario;
+import br.com.cerimonial.utils.ModelFilter;
+import java.util.HashMap;
+import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
@@ -35,12 +38,41 @@ public class UsuarioRepository extends BasicRepository{
         return getEntity(Usuario.class, id);
     }
 
-    public Usuario getUsuarioByLoginSenha(String login, String senhaMd5) throws Exception {
-        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1 and usr.senha = ?2 and usr.ativo = ?3", login, senhaMd5, Boolean.TRUE);
+    public Usuario getUsuarioByLoginSenha(String login, String senhaMd5, boolean ativo) throws Exception {
+        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1 and usr.senha = ?2 and usr.ativo = ?3", login, senhaMd5, ativo);
     }
 
-    public Usuario getUsuarioByLogin(String login)  throws Exception{
-        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1 and usr.ativo = ?2", login, Boolean.TRUE);
+    public Usuario getUsuarioByLogin(String login,  boolean ativo)  throws Exception{
+        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1 and usr.ativo = ?2", login, ativo);
+    }
+
+    public int countAll() throws Exception {
+        ModelFilter modelFilter = ModelFilter.getInstance();
+        modelFilter.setEntidade(Usuario.class);
+        return getCount(modelFilter.getSqlCountBase());
+    }
+    
+    public int countListagem(HashMap<String, Object> filter) throws Exception {
+        ModelFilter modelFilter = ModelFilter.getInstance();
+        modelFilter.setEntidade(Usuario.class);
+        modelFilter.addFilter(filter);
+        return getCount(modelFilter.getSqlCountBase());
+    }
+    
+    public List<Usuario> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception{
+        
+        ModelFilter modelFilter = ModelFilter.getInstance();
+        modelFilter.setEntidade(Usuario.class);
+        if(params != null){
+            modelFilter.addFilter(params);
+        }
+        modelFilter.setLimit(max);
+        modelFilter.setOffSet(offset);
+        if(sortField != null){
+            modelFilter.addOrderBy(sortField, sortAscDesc);
+        }
+        
+        return getPureList(Usuario.class, modelFilter.getSqlBase());
     }
    
 }

@@ -89,6 +89,10 @@ public class ModelFilter implements Serializable {
     public void addFilter(String campo, Object value) {
         filtros.put(campo, value);
     }
+    
+    public void addFilter(Map value) {
+        filtros.putAll(value);
+    }
 
     public void addOperador(Operadores operador, String campo) {
         ArrayList<String> campos = new ArrayList<>();

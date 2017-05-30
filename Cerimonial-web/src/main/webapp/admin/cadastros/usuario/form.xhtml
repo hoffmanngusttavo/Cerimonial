@@ -7,25 +7,37 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="titleOfPage">
-        Cadastro de Cliente
+        Cadastro de Usuário
     </ui:define>
 
     <ui:define name="content">
+        
+        <f:metadata>
+            <f:viewParam name="id" value="#{UsuarioCrudMB.id}" converter="javax.faces.Long"/>
+             <!--use view action if you are in a Java EE 7 server: -->
+             <f:viewAction action="#{UsuarioCrudMB.init()}"/>
+            <!--<f:event type="preRenderView" listener="{UsuarioCrudMB.init}"/>-->
+        </f:metadata>
+        
+        
         <h:form prependId="false">
 
             <h:messages/>
 
             <h:panelGrid columns="2">
                 <h:outputLabel value="Nome"/>
-                <h:inputText value="#{ClienteCrudMB.entity.nome}" required="true"/>
+                <h:inputText value="#{UsuarioCrudMB.entity.nome}" required="true"/>
                 
-                <h:outputLabel value="Cpf/Cnpj"/>
-                <h:inputText value="#{ClienteCrudMB.entity.cpfCnpj}" required="true"/>
+                <h:outputLabel value="Email"/>
+                <h:inputText value="#{UsuarioCrudMB.entity.email}" required="true"/>
+                
+                <h:outputLabel value="Login"/>
+                <h:inputText value="#{UsuarioCrudMB.entity.email}" required="true"/>
                 
                 
             </h:panelGrid>
           
-            <h:commandButton action="#{ClienteCrudMB.salvarCliente()}"
+            <h:commandButton action="#{UsuarioCrudMB.save()}"
                              value="Salvar"/>
             
             <h:commandButton action="index.xhtml"

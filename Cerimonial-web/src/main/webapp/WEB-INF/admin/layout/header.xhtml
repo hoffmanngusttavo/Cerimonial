@@ -7,20 +7,21 @@
                 xmlns:pe="http://primefaces.org/ui/extensions">
 
     <h:form prependId="false">
-        
-    <ul class="nav navbar-nav">
-        <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <span class="hidden-xs">Gustavo Hoffmann</span>
-            </a>
-        </li>
-        <li class="dropdown user user-menu">
-            <p:commandButton icon="fa fa-power"
-                             process="@this"
-                             action="#{AutenticacaoMB.sair()}"/>
-            
-        </li>
-    </ul>
+
+        <ul class="nav navbar-nav">
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="hidden-xs">Gustavo Hoffmann</span>
+                </a>
+            </li>
+            <li class="dropdown user user-menu">
+
+                <p:commandLink action="#{AutenticacaoMB.sair()}">
+                    <i class="fa power-off"></i>
+                    <span>Sair</span>
+                </p:commandLink>
+            </li>
+        </ul>
     </h:form>
 </ui:composition>
 

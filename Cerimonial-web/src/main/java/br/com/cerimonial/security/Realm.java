@@ -84,7 +84,7 @@ public class Realm extends AuthorizingRealm {
                 try {
                     // Criar Login
                     Login login = new Login();
-                    login.setData(new Date());
+                    login.setDataLogin(new Date());
                     login.setHora(new Date());
 
                     HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();

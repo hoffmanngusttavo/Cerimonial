@@ -38,7 +38,7 @@ public class Login implements Serializable, ModelInterface {
     private Long id;
 
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date data;
+    private Date dataLogin;
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
@@ -50,7 +50,7 @@ public class Login implements Serializable, ModelInterface {
     @NotNull
     private String ip;
     
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String cabecalho;
     
     @ManyToOne
@@ -64,12 +64,12 @@ public class Login implements Serializable, ModelInterface {
         return id;
     }
 
-    public Date getData() {
-        return data;
+    public Date getDataLogin() {
+        return dataLogin;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setDataLogin(Date dataLogin) {
+        this.dataLogin = dataLogin;
     }
 
     public Date getHora() {

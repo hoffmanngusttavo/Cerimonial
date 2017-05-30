@@ -60,6 +60,11 @@ import javax.persistence.Query;
         return qr.getResultList();
     }
     
+    protected <T> List<T> getPureList(Class<T> classToCast,String query) throws Exception{
+        Query qr = createQuery(query, null);
+        return qr.getResultList();
+    }
+    
     protected <T> List<T> getPureListRange(Class<T> classToCast,String query, int limit, int offSet) throws Exception{
         Query qr = createQuery(query, limit, offSet);
         return qr.getResultList();
@@ -82,8 +87,10 @@ import javax.persistence.Query;
     
     private Query createQuery(String query,Object... values) {
         Query qr = getEntityManager().createQuery(query);
-        for (int i = 0; i < values.length; i++) {
-            qr.setParameter((i+1), values[i]);
+        if (values != null) {
+            for (int i = 0; i < values.length; i++) {
+                qr.setParameter((i + 1), values[i]);
+            }
         }
         return qr;
     }

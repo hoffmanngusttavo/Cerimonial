@@ -7,17 +7,18 @@
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />
-            <!--<property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JTATransactionFactory"/>-->
+           
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            
-            <!--            <property name="hibernate.max_fetch_depth" value="1"/>
-            <property name="hibernate.order_updates" value="true"/>
             <property name="hibernate.cache.use_query_cache" value="false"/>
             <property name="hibernate.cache.use_second_level_cache" value="false"/>
-            <property name="hibernate.default_batch_fetch_size" value="1000"/>-->
-            <!--<property name="javax.persistence.schema-generation.database.action" value="create"/>-->
+            
+            <!--<property name="hibernate.max_fetch_depth" value="1"/>
+            <property name="hibernate.order_updates" value="true"/>
+            <property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JTATransactionFactory"/>
+            <property name="hibernate.default_batch_fetch_size" value="1000"/>
+            <property name="javax.persistence.schema-generation.database.action" value="create"/>-->
         </properties>
     </persistence-unit>
 </persistence>

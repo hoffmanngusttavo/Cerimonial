@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.cerimonial.controller;
+package br.com.cerimonial.controller.mb;
 
+import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.UsuarioService;
 import java.util.logging.Level;
@@ -12,78 +13,45 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.primefaces.context.RequestContext;
 
 /**
  *
  * @author Gustavo Hoffmann
  */
 @ManagedBean(name = "AutenticacaoMB")
-@SessionScoped
+@ViewScoped
 public class AutenticacaoMB extends BasicControl {
 
     protected String login;
     protected String senha;
     protected boolean remember = false;
-    protected AutenticacaoInterface autenticacaoInterface;
+    protected Usuario usuarioLogado = null;
 
     @EJB
     private UsuarioService usuarioService;
 
     public AutenticacaoMB() {
-
-        autenticacaoInterface = new AutenticacaoInterface() {
-
-            @Override
-            public String retornoLogin() {
-                try {
-                    FacesContext fc = FacesContext.getCurrentInstance();
-                    return fc.getExternalContext().getInitParameter("logar");
-                } catch (Exception ex) {
-                    String msg = "Falha ao tentar entrar no sistema";
-                    createFacesErrorMessage(msg);
-                    return null;
-                }
-            }
-
-            @Override
-            public String retornoLogout() {
-                try {
-                    FacesContext fc = FacesContext.getCurrentInstance();
-                    String retorno = fc.getExternalContext().getInitParameter("sair");
-                    return retorno;
-                } catch (Exception ex) {
-                    return null;
-                }
-            }
-
-            @Override
-            public Usuario consultaLembrarSenha(String login) {
-                try {
-                    return usuarioService.getUsuarioByLogin(login);
-                } catch (Exception ex) {
-                    Logger.getLogger(AutenticacaoMB.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return null;
-            }
-
-            @Override
-            public void enviarSenha(Usuario usuario) {
-
-            }
-        };
-
+        if(usuarioLogado == null){
+            usuarioLogado = getUsuario();
+        }
     }
 
+    /**
+     *Evento vindo da tela de login para autenticação
+     * @return vai redirecionar para dentro do sistema, se estiver autenticado,
+     * caso contrário, volta para o login.
+     */
     public String logar() {
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(login, senha.toCharArray(), remember);
             SecurityUtils.getSubject().login(token);
-            return getRequestParam("retorno") != null ? getRequestParam("retorno") : "login";
+            return "/admin/index.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(AutenticacaoMB.class.getSimpleName()).log(Level.WARNING, null, ex);
             createFacesErrorMessage("Login ou senha inválidos");
@@ -91,6 +59,11 @@ public class AutenticacaoMB extends BasicControl {
         return null;
     }
     
+    /**
+     *evento vindo da tela de login para criar um usuário master
+     * exibido somente uma vez para ter acesso ao sistema.
+     * login: master, senha:master
+     */
     public void criarUsuarioMaster() {
         try {
             Usuario user = usuarioService.criarUsuarioMaster();
@@ -103,6 +76,12 @@ public class AutenticacaoMB extends BasicControl {
         }
     }
 
+    /**
+     *Evento vindo de qualquer view para identificar se o usuário tem 
+     * determinada permissão
+     * @param permissao
+     * @return 
+     */
     public boolean hasPermission(String permissao) {
         if (SecurityUtils.getSubject() != null && SecurityUtils.getSubject().getPrincipal() != null) {
             if (((Usuario) SecurityUtils.getSubject().getPrincipal()).isMaster()) {
@@ -112,15 +91,20 @@ public class AutenticacaoMB extends BasicControl {
         return SecurityUtils.getSubject().isPermitted(permissao);
     }
 
-    public String sair() {
+    /**
+     *Evento invocado do menu pelo usuário identificando que ele 
+     * deseja fazer logout. retornando para o login;
+     */
+    public void sair() {
         try {
+            RequestContext context = RequestContext.getCurrentInstance();
+            String externalContextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             SecurityUtils.getSubject().logout();
-            return autenticacaoInterface.retornoLogout();
+            context.execute("window.location='" + externalContextPath + "/index.xhtml?faces-redirect=true'");
         } catch (Exception ex) {
             createFacesErrorMessage(ex.getLocalizedMessage());
         } finally {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("AtributoSessao");
                 HttpSession ref = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
                 ref.invalidate();
                 System.gc();
@@ -128,10 +112,14 @@ public class AutenticacaoMB extends BasicControl {
                 createFacesErrorMessage(ex.getLocalizedMessage());
             }
         }
-        return null;
+        
     }
 
-    public Usuario getUsuario() {
+    /**
+     *metodo que recupera o usuário logado 
+     * @return 
+     */
+    private Usuario getUsuario() {
         try {
             if (SecurityUtils.getSubject().getPrincipal() != null) {
                 Usuario usuario = (Usuario) SecurityUtils.getSubject().getPrincipal();

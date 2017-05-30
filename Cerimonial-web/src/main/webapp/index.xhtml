@@ -2,46 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:shiro="http://shiro.apache.org/tags">
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Login</title>
-
-        <h:panelGroup rendered="#{param['lastUrl']== null}">
-            <script type="text/javascript">
-                var last = document.referrer;
-                if (last.indexOf('#{facesContext.externalContext.requestContextPath}/admin/') != -1) {
-                    document.getElementById('retorno').value = last;
-                    document.getElementById('lastUrl').value = last;
-                }
-
-            </script>
-        </h:panelGroup>
-
-        <shiro:authenticated>
-                <script type="text/javascript">
-
-                    var lastUrl = '#{param['lastUrl']}';
-
-                    if (lastUrl.indexOf('#{facesContext.externalContext.requestContextPath}/admin/') != -1) {
-
-                        window.location = lastUrl;
-                    } else {
-                        if (#{AutenticacaoMB.usuario.master}) {
-                            window.location = '#{facesContext.externalContext.requestContextPath}/admin/index.xhtml';
-                        }else{
-                            window.location = '#{facesContext.externalContext.requestContextPath}/admin/index.xhtml';
-                        }
-                    }
-
-                    addToHome.show();
-
-                </script>
-            </shiro:authenticated>
-
     </h:head>
+    
     <h:body>
-
         <h:form prependId="false"
                 id="form">
 
@@ -98,6 +64,7 @@
                                     <td colspan="2" style="text-align: center">
                                         <p:commandButton value="Criar Usuário Padrão" 
                                                          styleClass="botao"
+                                                         rendered="false"
                                                          id="btnCriar"
                                                          update="messages"
                                                          process="@this"

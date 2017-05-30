@@ -9,7 +9,10 @@ import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.Criptografia;
-import br.com.cerimonial.utils.ModelFilter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
@@ -37,7 +40,6 @@ public class UsuarioService extends BasicService<Usuario> {
     @PostActivate
     private void postConstruct() {
         usuarioRepository = new UsuarioRepository(em);
-
     }
 
     @Override
@@ -57,15 +59,19 @@ public class UsuarioService extends BasicService<Usuario> {
         }
         return null;
     }
+    
+    public void delete(Usuario user) throws Exception{
+        usuarioRepository.delete(user);
+    }
 
     public Usuario getUsuarioByLoginSenha(String login, String senha) throws Exception {
         Usuario usuarioSalt = this.getUsuarioByLogin(login);
         String senhaMd5 = Criptografia.md5(senha + usuarioSalt.getSalt());
-        return usuarioRepository.getUsuarioByLoginSenha(login, senhaMd5);
+        return usuarioRepository.getUsuarioByLoginSenha(login, senhaMd5, Boolean.TRUE);
     }
 
     public Usuario getUsuarioByLogin(String login) throws Exception {
-        return usuarioRepository.getUsuarioByLogin(login);
+        return usuarioRepository.getUsuarioByLogin(login, Boolean.TRUE);
     }
 
     public synchronized Usuario alterarSenha(Usuario entity) throws Exception {
@@ -89,8 +95,37 @@ public class UsuarioService extends BasicService<Usuario> {
         usuario.setLogin("master");
         usuario.setSenha("master");
         usuario.setEmail("hoffmann.gusttavo@gmail.com");
+        usuario.setMaster(true);
         usuario.setToken(CerimonialUtils.SHA1(usuario.getLogin() + usuario.getSenha()));
         return save(usuario);
     }
 
+    public int countAll() {
+        try {
+            return usuarioRepository.countAll();
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+   
+    public int countListagem(HashMap<String, Object> filter) {
+        try {
+            if (filter != null) {
+                return usuarioRepository.countListagem(filter);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public List<Usuario> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
+        try {
+            return usuarioRepository.findRangeListagem(params, max, offset, sortField, sortAscDesc);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }
