@@ -4,7 +4,8 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 template="/WEB-INF/admin/layout/default.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
         Cadastro de Usuário
@@ -22,22 +23,47 @@
         
         <h:form prependId="false">
 
-            <h:messages/>
-
+            <p:messages autoUpdate="true" id="msgs"/>
+            
             <h:panelGrid columns="2">
-                <h:outputLabel value="Nome"/>
-                <h:inputText value="#{UsuarioCrudMB.entity.nome}" required="true"/>
+                <h:outputLabel value="Nome *"/>
+                <p:inputText value="#{UsuarioCrudMB.entity.nome}" required="true"
+                             label="Nome"/>
                 
-                <h:outputLabel value="Email"/>
-                <h:inputText value="#{UsuarioCrudMB.entity.email}" required="true"/>
+                <h:outputLabel value="Email *"/>
+                <p:inputText value="#{UsuarioCrudMB.entity.email}" required="true"
+                             placeholder="Ex: teste@teste.com"
+                             label="Email"/>
                 
-                <h:outputLabel value="Login"/>
-                <h:inputText value="#{UsuarioCrudMB.entity.email}" required="true"/>
+                <h:outputLabel value="Login *"/>
+                <p:inputText value="#{UsuarioCrudMB.entity.login}" required="true"
+                             placeholder="Deve conter no mínimo 4 caracteres"
+                             label="Login"/>
+                
+                <h:outputLabel value="Senha *"
+                               rendered="#{UsuarioCrudMB.entity.id == null}"/>
+                <p:password value="#{UsuarioCrudMB.entity.senha}"
+                            rendered="#{UsuarioCrudMB.entity.id == null}"
+                            required="true"
+                            label="Senha"/>
+                
+                <h:outputLabel value="Confirme a senha *"
+                               rendered="#{UsuarioCrudMB.entity.id == null}"/>
+                <p:password value="#{UsuarioCrudMB.confirmarSenha}"
+                            rendered="#{UsuarioCrudMB.entity.id == null}"
+                            required="true"/>
+                
+                <h:outputLabel value="Usuário Master ?"/>
+                <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.master}"/>
+                
+                <h:outputLabel value="Ativo ?"/>
+                <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.ativo}"/>
                 
                 
             </h:panelGrid>
           
-            <h:commandButton action="#{UsuarioCrudMB.save()}"
+            <p:commandButton action="#{UsuarioCrudMB.save()}"
+                             process="@form"
                              value="Salvar"/>
             
             <h:commandButton action="index.xhtml"

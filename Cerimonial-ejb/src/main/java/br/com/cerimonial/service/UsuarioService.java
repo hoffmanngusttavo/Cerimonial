@@ -96,7 +96,6 @@ public class UsuarioService extends BasicService<Usuario> {
         usuario.setSenha("master");
         usuario.setEmail("hoffmann.gusttavo@gmail.com");
         usuario.setMaster(true);
-        usuario.setToken(CerimonialUtils.SHA1(usuario.getLogin() + usuario.getSenha()));
         return save(usuario);
     }
 

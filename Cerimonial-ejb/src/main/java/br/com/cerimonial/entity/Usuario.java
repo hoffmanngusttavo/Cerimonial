@@ -57,8 +57,6 @@ public class Usuario implements Serializable, ModelInterface {
     @NotNull
     @Size(min = 4)
     private String salt;
-    @Column(nullable = false)
-    private String token;
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
     @Column(columnDefinition = "boolean default false")
@@ -167,14 +165,6 @@ public class Usuario implements Serializable, ModelInterface {
 
     public void setMaster(boolean master) {
         this.master = master;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getEmail() {

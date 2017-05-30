@@ -25,8 +25,8 @@ import org.primefaces.model.SortOrder;
  */
 @ManagedBean(name = "UsuarioCrudMB")
 @ViewScoped
-public class UsuarioCrudMB extends BasicControl{
-    
+public class UsuarioCrudMB extends BasicControl {
+
     private Usuario entity;
     private List<Usuario> usuariosSelecionados;
     private String confirmarSenha;
@@ -37,18 +37,18 @@ public class UsuarioCrudMB extends BasicControl{
     private Long id;
 
     public UsuarioCrudMB() {
-        
+
         try {
             filtros = (FilterUsuario) FilterUsuario.getFilter(FilterUsuario.class);
         } catch (Exception e) {
             Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, e);
             filtros = new FilterUsuario();
         }
-        
+
     }
-    
+
     public void init() {
-        
+
         if (id != null) {
             try {
                 entity = usuarioService.getEntity(id);
@@ -59,7 +59,7 @@ public class UsuarioCrudMB extends BasicControl{
             entity = new Usuario();
         }
     }
-    
+
     public void delete() {
         int numCars = 0;
         if (usuariosSelecionados != null) {
@@ -75,23 +75,31 @@ public class UsuarioCrudMB extends BasicControl{
             createFacesInfoMessage(numCars + " usuários removidos com sucesso!");
         }
     }
-    
-    
-    public synchronized String save()  {
+
+    public synchronized String save() {
         try {
-            usuarioService.save(entity);
-            createFacesInfoMessage("Dados gravados com sucesso!");
-            return "index.xhtml";
+
+            if (entity != null) {
+                if(entity.getId() == null){
+                    if(!entity.getSenha().equals(confirmarSenha)){
+                        createFacesErrorMessage("As senhas não estão iguais, favor verificar");
+                        return null;
+                    }
+                }
+                usuarioService.save(entity);
+                createFacesInfoMessage("Dados gravados com sucesso!");
+                return "index.xhtml";
+            }
         } catch (Exception ex) {
             Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
-        }finally{
+        } finally {
             scrollTopMessage();
         }
         return null;
     }
-    
-    public synchronized String alterarSenha()  {
+
+    public synchronized String alterarSenha() {
         try {
             usuarioService.alterarSenha(entity);
         } catch (Exception ex) {
@@ -126,12 +134,12 @@ public class UsuarioCrudMB extends BasicControl{
 
                     int count = usuarioService.countListagem(filtros.getFilter());
                     this.setRowCount(count);
-                    
-                    String sortAscDesc= "ASC";
+
+                    String sortAscDesc = "ASC";
                     if (sortField != null) {
-                        sortAscDesc= SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
+                        sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
                     }
-                    
+
                     List<Usuario> clientes = usuarioService.findRangeListagem(filtros.getFilter(), max, offset, sortField, sortAscDesc);
                     return clientes;
                 }
@@ -143,8 +151,7 @@ public class UsuarioCrudMB extends BasicControl{
         }
         return lazyLista;
     }
-    
-    
+
     public Usuario getEntity() {
         return entity;
     }
@@ -176,8 +183,5 @@ public class UsuarioCrudMB extends BasicControl{
     public void setId(Long id) {
         this.id = id;
     }
-    
-    
-    
-    
+
 }
