@@ -17,88 +17,104 @@
 
             <h:messages/>
 
-            <p:dataTable id="dataTable"
-                         var="item"  
-                         rows="25" 
-                         paginator="true"
-                         pageLinks="5" 
-                         rowsPerPageTemplate="25,50,100"
-                         currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginatorPosition="bottom"
-                         value="#{UsuarioCrudMB.lazyDataModel}" 
-                         selection="#{UsuarioCrudMB.usuariosSelecionados}"
-                         widgetVar="dataTableVar"
-                         reflow="true"
-                         emptyMessage="Nenhum registro encontrado"
-                         lazy="true">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <p:commandButton action="form?faces-redirect=true" 
+                                     ajax="false" 
+                                     icon="fa fa-plus"
+                                     value="Novo" 
+                                     styleClass="btn-primary"/>
 
-                <f:facet name="header">
-                    
-                    <p:commandButton icon="fa fa-trash"
-                                     styleClass="bt-acoes"
-                                     process="@this"
+                    <p:spacer width="5"/>
+
+                    <p:commandButton value="Excluir Selecionado(s)"
+                                     icon="fa fa-trash" 
                                      actionListener="#{UsuarioCrudMB.delete()}"
+                                     styleClass="btn-danger"
+                                     process="@form"
                                      update="@form">
                         <p:confirm header="Remover"
                                    message="Deseja remover esse usuário?" 
                                    icon="ui-icon-alert" />
                     </p:commandButton>
                     
-                    <h:commandButton action="form?faces-redirect=true"
-                                     value="Novo" />
-                </f:facet>
+                    <p:spacer width="5"/>
 
-                <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
-                
-                <p:column id="id" 
-                          width="100"
-                          exportable="true"
-                          sortBy="#{item.id}"
-                          headerText="#">
+                    <p:separator/>
 
-                    <p:link value="#{item.id}" outcome="form.xhtml" >
-                        <f:param name="id" value="#{item.id}"/>
-                    </p:link>
-                </p:column>
-
-                <p:column id="nome" 
-                          exportable="true"
-                          sortBy="#{item.nome}"
-                          headerText="Nome">
-                    <h:outputText value="#{item.nome}" />
-                </p:column>
-
-                <p:column id="login" 
-                          exportable="true"
-                          sortBy="#{item.login}"
-                          headerText="Login">
-                    <h:outputText value="#{item.login}" />
-                </p:column>
-
-                <p:column id="email" 
-                          exportable="true"
-                          sortBy="#{item.email}"
-                          headerText="Email">
-                    <h:outputText value="#{item.email}" />
-                </p:column>
-
-                <p:column id="ativo" 
-                          exportable="true"
-                          sortBy="#{item.ativo}"
-                          headerText="Ativo">
-                    <h:outputText value="#{item.ativo}" />
-                </p:column>
-
-                <p:column id="master" 
-                          exportable="true"
-                          sortBy="#{item.master}"
-                          headerText="Master">
-                    <h:outputText value="#{item.master}" />
-                </p:column>
-            </p:dataTable>
+                    <p:dataTable id="dataTable"
+                                 var="item"  
+                                 rows="25" 
+                                 paginator="true"
+                                 pageLinks="5" 
+                                 rowsPerPageTemplate="25,50,100"
+                                 currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 paginatorPosition="bottom"
+                                 value="#{UsuarioCrudMB.lazyDataModel}" 
+                                 selection="#{UsuarioCrudMB.usuariosSelecionados}"
+                                 widgetVar="dataTableVar"
+                                 reflow="true"
+                                 emptyMessage="Nenhum registro encontrado"
+                                 lazy="true">
 
 
+                        <p:column selectionMode="multiple" width="5%" style="text-align: center;"/>
+
+                        <p:column id="id" 
+                                  width="5%"
+                                  style="text-align: center;"
+                                  exportable="true"
+                                  sortBy="#{item.id}"
+                                  headerText="#">
+                            <p:link value="#{item.id}" 
+                                    outcome="form.xhtml" >
+                                <f:param name="id" value="#{item.id}"/>
+                            </p:link>
+                        </p:column>
+
+                        <p:column id="nome" 
+                                  exportable="true"
+                                  sortBy="#{item.nome}"
+                                  headerText="Nome">
+                            <h:outputText value="#{item.nome}" />
+                        </p:column>
+
+                        <p:column id="login" 
+                                  exportable="true"
+                                  sortBy="#{item.login}"
+                                  headerText="Login">
+                            <h:outputText value="#{item.login}" />
+                        </p:column>
+
+                        <p:column id="email" 
+                                  exportable="true"
+                                  sortBy="#{item.email}"
+                                  headerText="Email">
+                            <h:outputText value="#{item.email}" />
+                        </p:column>
+
+                        <p:column id="ativo" 
+                                  exportable="true"
+                                  sortBy="#{item.ativo}"
+                                  width="6%"
+                                  style="text-align: center;"
+                                  headerText="Ativo">
+                            <h:outputText value="#{item.ativo ? 'Sim':'Não'}" />
+                        </p:column>
+
+                        <p:column id="master" 
+                                  exportable="true"
+                                  sortBy="#{item.master}"
+                                  width="6%"
+                                  style="text-align: center;"
+                                  headerText="Master">
+                            <h:outputText value="#{item.master ? 'Sim':'Não'}" />
+                        </p:column>
+                    </p:dataTable>
+
+                </div>
+            </div>
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />

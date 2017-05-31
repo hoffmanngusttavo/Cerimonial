@@ -8,6 +8,7 @@ package br.com.cerimonial.utils;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  *
@@ -41,6 +42,14 @@ public class CerimonialUtils {
             } while (two_halfs++ < 1);
         }
         return buf.toString();
+    }
+    
+    public static boolean isListNotBlank(List list) {
+        return list != null && !list.isEmpty();
+    }
+    
+    public static boolean isListBlank(List list) {
+        return list == null || list.isEmpty();
     }
     
     

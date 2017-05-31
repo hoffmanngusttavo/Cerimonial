@@ -61,7 +61,13 @@ public class UsuarioService extends BasicService<Usuario> {
     }
     
     public void delete(Usuario user) throws Exception{
-        usuarioRepository.delete(user);
+        
+        if(user != null){
+            if(user.isMaster()){
+                throw new Exception("Usuário master não pode ser removido");
+            }
+            usuarioRepository.delete(user);
+        }
     }
 
     public Usuario getUsuarioByLoginSenha(String login, String senha) throws Exception {

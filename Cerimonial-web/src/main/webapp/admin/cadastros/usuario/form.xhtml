@@ -12,63 +12,115 @@
     </ui:define>
 
     <ui:define name="content">
-        
+
         <f:metadata>
             <f:viewParam name="id" value="#{UsuarioCrudMB.id}" converter="javax.faces.Long"/>
-             <!--use view action if you are in a Java EE 7 server: -->
-             <f:viewAction action="#{UsuarioCrudMB.init()}"/>
+            <!--use view action if you are in a Java EE 7 server: -->
+            <f:viewAction action="#{UsuarioCrudMB.init()}"/>
             <!--<f:event type="preRenderView" listener="{UsuarioCrudMB.init}"/>-->
         </f:metadata>
-        
-        
-        <h:form prependId="false">
 
-            <p:messages autoUpdate="true" id="msgs"/>
+        <h:form>
             
-            <h:panelGrid columns="2">
-                <h:outputLabel value="Nome *"/>
-                <p:inputText value="#{UsuarioCrudMB.entity.nome}" required="true"
-                             label="Nome"/>
-                
-                <h:outputLabel value="Email *"/>
-                <p:inputText value="#{UsuarioCrudMB.entity.email}" required="true"
-                             placeholder="Ex: teste@teste.com"
-                             label="Email"/>
-                
-                <h:outputLabel value="Login *"/>
-                <p:inputText value="#{UsuarioCrudMB.entity.login}" required="true"
-                             placeholder="Deve conter no mínimo 4 caracteres"
-                             label="Login"/>
-                
-                <h:outputLabel value="Senha *"
-                               rendered="#{UsuarioCrudMB.entity.id == null}"/>
-                <p:password value="#{UsuarioCrudMB.entity.senha}"
-                            rendered="#{UsuarioCrudMB.entity.id == null}"
-                            required="true"
-                            label="Senha"/>
-                
-                <h:outputLabel value="Confirme a senha *"
-                               rendered="#{UsuarioCrudMB.entity.id == null}"/>
-                <p:password value="#{UsuarioCrudMB.confirmarSenha}"
-                            rendered="#{UsuarioCrudMB.entity.id == null}"
-                            required="true"/>
-                
-                <h:outputLabel value="Usuário Master ?"/>
-                <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.master}"/>
-                
-                <h:outputLabel value="Ativo ?"/>
-                <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.ativo}"/>
-                
-                
-            </h:panelGrid>
-          
-            <p:commandButton action="#{UsuarioCrudMB.save()}"
-                             process="@form"
-                             value="Salvar"/>
+            <p:messages autoUpdate="true"/>
             
-            <h:commandButton action="index.xhtml"
-                             immediate="true"
-                             value="Cancelar"/>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar"
+                                         action="#{UsuarioCrudMB.save()}"
+                                         update="@form"
+                                         icon="fa fa-check" 
+                                         styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Voltar"
+                                         immediate="true"
+                                         action="index?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+
+                    </div>
+
+                    <p:separator/>
+
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Nome: *" for="inptNome"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptNome" 
+                                         value="#{UsuarioCrudMB.entity.nome}" 
+                                         required="true"
+                                         label="Nome"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Email: *" for="inptEmail"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptEmail" 
+                                         value="#{UsuarioCrudMB.entity.email}" 
+                                         required="true"
+                                         placeholder="Ex: teste@teste.com"
+                                         label="Email"/>
+                        </div>
+
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Login *" for="inptLogin"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText value="#{UsuarioCrudMB.entity.login}"
+                                         id="inptLogin" 
+                                         required="true"
+                                         placeholder="Deve conter no mínimo 4 caracteres"
+                                         label="Login"/>
+                        </div>
+
+                        <h:panelGroup rendered="#{UsuarioCrudMB.entity.id == null}">
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Senha *"
+                                               for="inptSenha"
+                                               rendered="#{UsuarioCrudMB.entity.id == null}"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:password value="#{UsuarioCrudMB.entity.senha}"
+                                            id="inptSenha"
+                                            rendered="#{UsuarioCrudMB.entity.id == null}"
+                                            required="true"
+                                            label="Senha"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Confirme a senha *"
+                                               for="inptConfirmSenha"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:password value="#{UsuarioCrudMB.confirmarSenha}"
+                                            id="inptConfirmSenha"
+                                            rendered="#{UsuarioCrudMB.entity.id == null}"
+                                            required="true"/>
+                            </div>
+                        </h:panelGroup>
+
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Usuário Master ?"
+                                           for="inptMaster"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.master}"
+                                                     id="inptMaster"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Ativo ?"
+                                           for="inptAtivo"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.ativo}"
+                                                     id="inptAtivo"/>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
         </h:form>
     </ui:define>

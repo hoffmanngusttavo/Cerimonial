@@ -156,6 +156,14 @@ public class AutenticacaoMB extends BasicControl {
         this.remember = remember;
     }
 
+    public Usuario getUsuarioLogado() {
+        return usuarioLogado;
+    }
+
+    public void setUsuarioLogado(Usuario usuarioLogado) {
+        this.usuarioLogado = usuarioLogado;
+    }
+
     
     
 }

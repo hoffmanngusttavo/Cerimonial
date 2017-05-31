@@ -9,6 +9,7 @@ import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.controller.filter.FilterUsuario;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.UsuarioService;
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -47,6 +49,11 @@ public class UsuarioCrudMB extends BasicControl {
 
     }
 
+    
+    /**
+     *Evento invocado ao abrir o xhtml na edição de um usuário
+     * objetivo de carregar os dados do usuario
+     */
     public void init() {
 
         if (id != null) {
@@ -60,7 +67,17 @@ public class UsuarioCrudMB extends BasicControl {
         }
     }
 
+    
+    /**
+     *Evento invocado pela tela de listagem para remover os itens selecionados
+     */
     public void delete() {
+
+        if (CerimonialUtils.isListBlank(usuariosSelecionados)) {
+            createFacesWarnMessage("Selecione ao menos um item");
+            return;
+        }
+
         int numCars = 0;
         if (usuariosSelecionados != null) {
             for (Usuario selectedCar : usuariosSelecionados) {
@@ -69,26 +86,37 @@ public class UsuarioCrudMB extends BasicControl {
                     numCars++;
                 } catch (Exception ex) {
                     Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+                    createFacesInfoMessage(ex.getMessage());
                 }
             }
+            
             usuariosSelecionados.clear();
-            createFacesInfoMessage(numCars + " usuários removidos com sucesso!");
+            
+            if(numCars > 0){
+                createFacesInfoMessage(numCars + " usuários removidos com sucesso!");
+            }
         }
     }
 
+    
+    /**
+     *Evento invocado pela tela de form para salvar um novo ou edicao de um usuario
+     * @return 
+     */
     public synchronized String save() {
         try {
 
             if (entity != null) {
-                if(entity.getId() == null){
-                    if(!entity.getSenha().equals(confirmarSenha)){
+                if (entity.getId() == null) {
+                    if (!entity.getSenha().equals(confirmarSenha)) {
                         createFacesErrorMessage("As senhas não estão iguais, favor verificar");
                         return null;
                     }
                 }
                 usuarioService.save(entity);
                 createFacesInfoMessage("Dados gravados com sucesso!");
-                return "index.xhtml";
+                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+                return "index.xhtml?faces-redirect=true";
             }
         } catch (Exception ex) {
             Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,6 +136,11 @@ public class UsuarioCrudMB extends BasicControl {
         return "";
     }
 
+    
+    /**
+     *Evento invocado pela tela de index para listar os usuarios
+     * @return 
+     */
     public LazyDataModel<Usuario> getLazyDataModel() {
 
         if (lazyLista == null) {

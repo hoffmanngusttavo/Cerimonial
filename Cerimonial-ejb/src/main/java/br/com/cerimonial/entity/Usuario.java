@@ -7,14 +7,18 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -32,6 +36,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Usuario implements Serializable, ModelInterface {
+    
 
     @Id
     @GeneratedValue(generator = "GENERATE_Usuario", strategy = GenerationType.SEQUENCE)
@@ -65,6 +70,8 @@ public class Usuario implements Serializable, ModelInterface {
     private Usuario modificadoPor;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Login> logins;
     
    
 
@@ -173,6 +180,14 @@ public class Usuario implements Serializable, ModelInterface {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Login> getLogins() {
+        return logins;
+    }
+
+    public void setLogins(List<Login> logins) {
+        this.logins = logins;
     }
 
     
