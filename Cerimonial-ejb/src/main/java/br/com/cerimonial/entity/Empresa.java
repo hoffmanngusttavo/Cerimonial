@@ -7,18 +7,14 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -35,42 +31,107 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class Usuario implements Serializable, ModelInterface {
+public class Empresa implements Serializable, ModelInterface {
 
     @Id
-    @GeneratedValue(generator = "GENERATE_Usuario", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "GENERATE_Usuario", sequenceName = "Usuario_pk_seq", allocationSize = 1)
+    @GeneratedValue(generator = "GENERATE_Empresa", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "GENERATE_Empresa", sequenceName = "Empresa_pk_seq", allocationSize = 1)
     private Long id;
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotNull
-    @Size(min = 4)
-    private String login;
-    @Column(nullable = false, unique = true)
+    @Size(min = 2, max = 255)
+    private String razaoSocial;
+    @Column
+    @Size(min = 2, max = 255)
+    private String nomeFantasia;
+    @Column
     @NotNull
-    @Size(min = 4)
+    private String telefone1;
+    @Column
+    private String telefone2;
+    @Column
     private String email;
-    @Column(nullable = false)
+    @Column
+    private String site;
+    @Column
     @NotNull
-    @Size(min = 4)
-    private String senha;
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 4)
-    private String salt;
-    @Column(columnDefinition = "boolean default true")
-    private boolean ativo = true;
-    @Column(columnDefinition = "boolean default false")
-    private boolean master = false;
+    private String cpfCnpj;
     @ManyToOne
     private Usuario modificadoPor;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Login> logins;
+    @ManyToOne
+    private Endereco endereco;
+    
+    
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getRazaoSocial() {
+        return razaoSocial;
+    }
+
+    public void setRazaoSocial(String razaoSocial) {
+        this.razaoSocial = razaoSocial;
+    }
+
+    public String getNomeFantasia() {
+        return nomeFantasia;
+    }
+
+    public void setNomeFantasia(String nomeFantasia) {
+        this.nomeFantasia = nomeFantasia;
+    }
+
+    public String getTelefone1() {
+        return telefone1;
+    }
+
+    public void setTelefone1(String telefone1) {
+        this.telefone1 = telefone1;
+    }
+
+    public String getTelefone2() {
+        return telefone2;
+    }
+
+    public void setTelefone2(String telefone2) {
+        this.telefone2 = telefone2;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public String getCpfCnpj() {
+        return cpfCnpj;
+    }
+
+    public void setCpfCnpj(String cpfCnpj) {
+        this.cpfCnpj = cpfCnpj;
+    }
 
     @Override
     public Date getDataUltimaAlteracao() {
@@ -92,38 +153,6 @@ public class Usuario implements Serializable, ModelInterface {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
     @Override
     public Usuario getModificadoPor() {
         return modificadoPor;
@@ -134,6 +163,16 @@ public class Usuario implements Serializable, ModelInterface {
         this.modificadoPor = modificadoPor;
     }
 
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -141,45 +180,13 @@ public class Usuario implements Serializable, ModelInterface {
         return hash;
     }
 
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public boolean isMaster() {
-        return master;
-    }
-
-    public void setMaster(boolean master) {
-        this.master = master;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Login> getLogins() {
-        return logins;
-    }
-
-    public void setLogins(List<Login> logins) {
-        this.logins = logins;
-    }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuario)) {
+        if (!(object instanceof Empresa)) {
             return false;
         }
-        Usuario other = (Usuario) object;
+        Empresa other = (Empresa) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -188,7 +195,7 @@ public class Usuario implements Serializable, ModelInterface {
 
     @Override
     public String toString() {
-        return "br.com.project.rural.entity.Usuario[ id=" + id + " ]";
+        return "br.com.cerimonial.entity.Empresa[ id=" + id + " ]";
     }
 
     @PrePersist

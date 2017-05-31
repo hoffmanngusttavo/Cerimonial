@@ -31,6 +31,11 @@ public class FilterUsuario extends AbstractFilter{
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    @Override
+    public void filtrar() {
+        
+    }
     
     
     

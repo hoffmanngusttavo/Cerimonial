@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang.SerializationUtils;
 
 /**
  *
@@ -27,11 +27,11 @@ public abstract class AbstractFilter implements Serializable {
 
     protected HashMap<String, String> paths;
     protected boolean exibirFiltroAvancado;
-    protected boolean exibirFiltro = true;
+    protected boolean exibirFiltro = false;
 
     public AbstractFilter() {
         paths = new HashMap<String, String>();
-        exibirFiltro = true;
+        exibirFiltro = false;
 
     }
 
@@ -44,6 +44,8 @@ public abstract class AbstractFilter implements Serializable {
     }
     
     public abstract void limparFiltros();
+    
+    public abstract void filtrar();
 
     public static AbstractFilter getFilter(Class classe) {
         String sessionID = ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getId();

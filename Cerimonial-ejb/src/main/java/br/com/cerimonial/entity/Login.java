@@ -130,10 +130,30 @@ public class Login implements Serializable, ModelInterface {
     }
     
     @PrePersist
+    @Override
+    public void prePersistEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
     @PreUpdate
+    @Override
+    public void preUpdateEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
     @PreRemove
     @Override
-    public void preCrudEntity() {
+    public void preRemoveEntity() {
         try {
             this.setDataUltimaAlteracao(new Date());
             this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());

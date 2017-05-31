@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.controller.mb;
 
+import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.controller.filter.FilterUsuario;
 import br.com.cerimonial.entity.Usuario;
@@ -35,18 +36,16 @@ public class UsuarioCrudMB extends BasicControl {
     @EJB
     private UsuarioService usuarioService;
     private LazyDataModel<Usuario> lazyLista;
-    private FilterUsuario filtros;
+    private AbstractFilter filtros;
     private Long id;
 
     public UsuarioCrudMB() {
 
         try {
-            filtros = (FilterUsuario) FilterUsuario.getFilter(FilterUsuario.class);
+            filtros = new FilterUsuario();
         } catch (Exception e) {
             Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, e);
-            filtros = new FilterUsuario();
         }
-
     }
 
     
@@ -216,5 +215,12 @@ public class UsuarioCrudMB extends BasicControl {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public AbstractFilter getFiltros() {
+        return filtros;
+    }
+
+   
+    
 
 }

@@ -7,15 +7,21 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
 /**
@@ -158,9 +164,37 @@ public class Endereco implements Serializable, ModelInterface {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @PrePersist
     @Override
-    public void preCrudEntity() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void prePersistEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    @PreUpdate
+    @Override
+    public void preUpdateEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    @PreRemove
+    @Override
+    public void preRemoveEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
     }
     
 }

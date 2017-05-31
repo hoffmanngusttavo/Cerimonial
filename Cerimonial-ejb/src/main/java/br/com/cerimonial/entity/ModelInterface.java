@@ -22,6 +22,8 @@ public interface ModelInterface  {
     public Date getDataUltimaAlteracao();
     public void setDataUltimaAlteracao(Date data);
     
-    public void preCrudEntity();
+    public void prePersistEntity();
+    public void preUpdateEntity();
+    public void preRemoveEntity();
     
 }

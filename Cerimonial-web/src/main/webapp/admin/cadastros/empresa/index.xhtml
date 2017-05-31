@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="/WEB-INF/admin/layout/default.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Cadastro Empresa
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form>
+            
+            <p:messages autoUpdate="true"/>
+            
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar"
+                                         action="#{EmpresaCrudMB.save()}"
+                                         update="@form"
+                                         icon="fa fa-check" 
+                                         styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Voltar"
+                                         immediate="true"
+                                         action="index?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+
+                    </div>
+
+                    <p:separator/>
+
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Nome: *" for="inptNome"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptNome" 
+                                         value="#{EmpresaCrudMB.entity.nome}" 
+                                         required="true"
+                                         label="Nome"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Email: *" for="inptEmail"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptEmail" 
+                                         value="#{EmpresaCrudMB.entity.email}" 
+                                         required="true"
+                                         placeholder="Ex: teste@teste.com"
+                                         label="Email"/>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

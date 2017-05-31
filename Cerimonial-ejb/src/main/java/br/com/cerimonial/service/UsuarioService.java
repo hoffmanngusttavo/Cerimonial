@@ -7,7 +7,6 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;
-import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.Criptografia;
 import java.util.HashMap;
 import java.util.List;

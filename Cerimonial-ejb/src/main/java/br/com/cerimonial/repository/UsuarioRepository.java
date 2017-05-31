@@ -56,6 +56,7 @@ public class UsuarioRepository extends BasicRepository{
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(Usuario.class);
         modelFilter.addFilter(filter);
+        modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
         return getCount(modelFilter.getSqlCountBase());
     }
     
@@ -65,6 +66,7 @@ public class UsuarioRepository extends BasicRepository{
         modelFilter.setEntidade(Usuario.class);
         if(params != null){
             modelFilter.addFilter(params);
+            modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
         }
         modelFilter.setLimit(max);
         modelFilter.setOffSet(offset);
