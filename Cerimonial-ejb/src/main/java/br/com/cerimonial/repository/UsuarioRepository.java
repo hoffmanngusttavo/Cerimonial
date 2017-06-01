@@ -21,17 +21,17 @@ public class UsuarioRepository extends BasicRepository{
         super(entityManager);
     }
     
-    public Usuario create(Usuario cliente) throws Exception {
-        addEntity(Usuario.class, cliente);
-        return cliente;
+    public Usuario create(Usuario usuario) throws Exception {
+        addEntity(Usuario.class, usuario);
+        return usuario;
     }
 
-    public void delete(Usuario cliente) throws Exception{
-        removeEntity(cliente);
+    public void delete(Usuario usuario) throws Exception{
+        removeEntity(usuario);
     }
 
-    public Usuario edit(Usuario cliente) throws Exception{
-        return setEntity(Usuario.class, cliente);
+    public Usuario edit(Usuario usuario) throws Exception{
+        return setEntity(Usuario.class, usuario);
     }
 
     public Usuario getUsuario(Long id) throws Exception{

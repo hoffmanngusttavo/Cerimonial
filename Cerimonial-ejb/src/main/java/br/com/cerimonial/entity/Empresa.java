@@ -5,16 +5,20 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.TipoPessoa;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -58,14 +62,20 @@ public class Empresa implements Serializable, ModelInterface {
     @Column
     private String site;
     @Column
-    @NotNull
-    private String cpfCnpj;
+    @Size(min = 11 , max = 25)
+    private String cpf;
+    @Column
+    @Size(min = 14, max = 25)
+    private String cnpj;
     @ManyToOne
     private Usuario modificadoPor;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    @ManyToOne
+    @OneToOne
     private Endereco endereco;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private TipoPessoa tipoPessoa = TipoPessoa.JURIDICA;
     
     
 
@@ -125,12 +135,20 @@ public class Empresa implements Serializable, ModelInterface {
         this.site = site;
     }
 
-    public String getCpfCnpj() {
-        return cpfCnpj;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setCpfCnpj(String cpfCnpj) {
-        this.cpfCnpj = cpfCnpj;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 
     @Override
@@ -169,6 +187,14 @@ public class Empresa implements Serializable, ModelInterface {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public TipoPessoa getTipoPessoa() {
+        return tipoPessoa;
+    }
+
+    public void setTipoPessoa(TipoPessoa tipoPessoa) {
+        this.tipoPessoa = tipoPessoa;
     }
 
     

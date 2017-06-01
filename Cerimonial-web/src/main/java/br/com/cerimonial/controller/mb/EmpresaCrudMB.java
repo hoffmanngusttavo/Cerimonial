@@ -7,20 +7,22 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Empresa;
-import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.EmpresaService;
+import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 /**
  *
  * @author Gustavo Hoffmann
  */
-@ManagedBean(name = "UsuarioCrudMB")
+@ManagedBean(name = "EmpresaCrudMB")
 @ViewScoped
 public class EmpresaCrudMB extends BasicControl {
 
@@ -65,6 +67,18 @@ public class EmpresaCrudMB extends BasicControl {
             scrollTopMessage();
         }
         return null;
+    }
+
+    public Empresa getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Empresa entity) {
+        this.entity = entity;
+    }
+    
+    public List<SelectItem> getComboTipoPessoa(){
+        return SelectItemUtils.getComboTipoPessoa();
     }
 
 }

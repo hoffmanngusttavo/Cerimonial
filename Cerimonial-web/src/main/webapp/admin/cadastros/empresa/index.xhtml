@@ -48,6 +48,22 @@
                                          label="Nome"/>
                         </div>
                         <div class="ui-g-12">
+                            <p:outputLabel value="Nome Fantasia: " for="inptNomeFantasia"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptNomeFantasia" 
+                                         value="#{EmpresaCrudMB.entity.nomeFantasia}" 
+                                         label="Nome Fantasia"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Razão social: " for="inptRazao"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptRazao" 
+                                         value="#{EmpresaCrudMB.entity.razaoSocial}" 
+                                         label="Razão social"/>
+                        </div>
+                        <div class="ui-g-12">
                             <p:outputLabel value="Email: *" for="inptEmail"/>
                         </div>
                         <div class="ui-g-12">
@@ -55,7 +71,57 @@
                                          value="#{EmpresaCrudMB.entity.email}" 
                                          required="true"
                                          placeholder="Ex: teste@teste.com"
-                                         label="Email"/>
+                                         label="Email">
+                                <f:validator validatorId="EmailValidate"/>
+                            </p:inputText>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Site:" for="inptSite"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptSite" 
+                                         value="#{EmpresaCrudMB.entity.site}" 
+                                         label="Site"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Telefone 1:" for="inptTelefone1"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputMask mask="(99)99999-9999"
+                                         value="#{EmpresaCrudMB.entity.telefone1}"
+                                         required="true"
+                                         id="inptTelefone1"
+                                         label="Telefone 1"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Telefone 2:" for="inptTelefone2"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputMask mask="(99)99999-9999"
+                                         value="#{EmpresaCrudMB.entity.telefone1}"
+                                         required="true"
+                                         id="inptTelefone2"
+                                         label="Telefone 1"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Cpf:" for="inptCpf"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputMask mask="999-999-999-99"
+                                         value="#{EmpresaCrudMB.entity.telefone1}"
+                                         required="true"
+                                         id="inptCpf"
+                                         label="Cpf"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Cnpj:" for="inptCnpj"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputMask mask="999-999-999-99"
+                                         value="#{EmpresaCrudMB.entity.telefone1}"
+                                         required="true"
+                                         id="inptCnpj"
+                                         label="Cnpj"/>
                         </div>
 
                     </div>

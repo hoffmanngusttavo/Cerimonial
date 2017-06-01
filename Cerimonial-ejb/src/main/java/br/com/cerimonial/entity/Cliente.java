@@ -7,18 +7,16 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -35,51 +33,53 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class Usuario implements Serializable, ModelInterface {
-
+public class Cliente implements Serializable, ModelInterface{
+    
+    
     @Id
-    @GeneratedValue(generator = "GENERATE_Usuario", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "GENERATE_Usuario", sequenceName = "Usuario_pk_seq", allocationSize = 1)
+    @GeneratedValue(generator = "GENERATE_Cliente", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "GENERATE_Cliente", sequenceName = "Cliente_pk_seq", allocationSize = 1)
     private Long id;
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotNull
-    @Size(min = 4)
-    private String login;
-    @Column(nullable = false, unique = true)
+    @Size(min = 2, max = 255)
+    private String rg;
+    @Column(nullable = false)
     @NotNull
-    @Size(min = 4)
+    @Size(min = 2, max = 255)
+    private String cpf;
+    @Column(nullable = false)
+    @NotNull
+    @Size(min = 2, max = 255)
     private String email;
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 4)
-    private String senha;
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 4)
-    private String salt;
-    @Column(columnDefinition = "boolean default true")
-    private boolean ativo = true;
-    @Column(columnDefinition = "boolean default false")
-    private boolean master = false;
+    @Column
+    @Size(min = 2, max = 255)
+    private String facebook;
+    @Column
+    @Size(min = 2, max = 255)
+    private String instagram;
+    @Column(columnDefinition = "TEXT")
+    private String observacao;
+    @Column
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataNascimento;
     @ManyToOne
     private Usuario modificadoPor;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Login> logins;
+    @OneToOne
+    private Endereco endereco;
 
-    
-
-    @Override
+     @Override
     public Long getId() {
         return id;
     }
-
-    @Override
+    
+   @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -112,53 +112,20 @@ public class Usuario implements Serializable, ModelInterface {
         this.nome = nome;
     }
 
-    public String getLogin() {
-        return login;
+    public String getRg() {
+        return rg;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setRg(String rg) {
+        this.rg = rg;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
-   
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public boolean isMaster() {
-        return master;
-    }
-
-    public void setMaster(boolean master) {
-        this.master = master;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -169,22 +136,65 @@ public class Usuario implements Serializable, ModelInterface {
         this.email = email;
     }
 
-    public List<Login> getLogins() {
-        return logins;
+    public String getFacebook() {
+        return facebook;
     }
 
-    public void setLogins(List<Login> logins) {
-        this.logins = logins;
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
+    }
+
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
+    
+    
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 19 * hash + Objects.hashCode(this.id);
+        return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuario)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        Usuario other = (Usuario) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Cliente other = (Cliente) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
@@ -192,10 +202,11 @@ public class Usuario implements Serializable, ModelInterface {
 
     @Override
     public String toString() {
-        return "br.com.project.rural.entity.Usuario[ id=" + id + " ]";
+        return "Cliente{" + "id=" + id + '}';
     }
-
-    @PrePersist
+    
+    
+     @PrePersist
     @Override
     public void prePersistEntity() {
         try {
@@ -228,4 +239,6 @@ public class Usuario implements Serializable, ModelInterface {
         }
     }
 
+    
+    
 }
