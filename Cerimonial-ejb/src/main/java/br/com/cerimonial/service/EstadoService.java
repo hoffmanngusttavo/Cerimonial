@@ -5,9 +5,9 @@
  */
 package br.com.cerimonial.service;
 
-import br.com.cerimonial.entity.Empresa;
-import br.com.cerimonial.repository.EmpresaRepository;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.entity.Estado;
+import br.com.cerimonial.repository.EstadoRepository;
+import br.com.cerimonial.repository.UsuarioRepository;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
@@ -26,41 +26,31 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class EmpresaService extends BasicService<Empresa>{
+public class EstadoService  extends BasicService<Estado>{
 
-    private EmpresaRepository repository;
+    private EstadoRepository repository;
+    
     
     @PostConstruct
     @PostActivate
     private void postConstruct() {
-        repository = new EmpresaRepository(em);
+        repository = new EstadoRepository(em);
     }
-    
+
     
     @Override
-    public Empresa getEntity(Long id) throws Exception {
+    public Estado getEntity(Long id) throws Exception {
         return repository.getEntity(id);
     }
-    
-    public Empresa getEmpresa() throws Exception {
-        List<Empresa> empresas = repository.findAll();
-        if(CerimonialUtils.isListNotBlank(empresas)){
-            return empresas.get(0);
-        }
-        return null;
+
+   
+    public List<Estado> findAll() throws Exception {
+        return repository.findAll();
     }
     
-
-    @Override
-    public Empresa save(Empresa entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
-        }
-        return null;
+     @Override
+    public Estado save(Estado entity) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

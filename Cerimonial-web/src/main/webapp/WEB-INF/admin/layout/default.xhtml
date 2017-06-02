@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -10,13 +11,30 @@
         <h:outputStylesheet name="./css/cssLayout.css"/>
         <h:outputStylesheet name="./css/showcase.css"/>
         <h:outputStylesheet name="./css/prism.css"/>
-        
+
         <h:outputStylesheet library="webjars" name="font-awesome/4.7.0/css/font-awesome-jsf.css" />
-        
+
         <title><ui:insert name="titleOfPage">None</ui:insert></title>
     </h:head>
 
     <h:body>
+
+        <p:dialog modal="true" 
+                  widgetVar="statusDialog" 
+                  id="dialogPreloader"
+                  styleClass="dialog-padrao"
+                  draggable="false"  
+                  position="center" 
+                  closable="false" 
+                  resizable="false">  
+            <h:panelGroup styleClass="chasing-dots selected" 
+                          layout="block">
+                <p>Processando ...</p>
+                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/loader.gif" />
+            </h:panelGroup>
+
+        </p:dialog>
+
 
         <div id="top">
             <ui:include src="./header.xhtml"/>
@@ -30,7 +48,7 @@
             </div>
         </div>
         <div id="bottom">
-             <ui:include src="./footer.xhtml"/>
+            <ui:include src="./footer.xhtml"/>
         </div>
 
     </h:body>

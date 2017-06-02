@@ -7,9 +7,10 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
-import br.com.cerimonial.entity.Cliente;
-import br.com.cerimonial.entity.Usuario;
-import br.com.cerimonial.service.ClienteService;
+import br.com.cerimonial.controller.filter.FilterCliente;
+import br.com.cerimonial.controller.filter.FilterFornecedor;
+import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
 import java.util.Map;
@@ -30,16 +31,20 @@ import org.primefaces.model.SortOrder;
 @ViewScoped
 public class ClienteCrudMB extends BasicControl{
     
-    private Cliente entity;
-    private List<Cliente> clientesSelecionados;
+    private Pessoa entity;
+    private List<Pessoa> clientesSelecionados;
     @EJB
-    private ClienteService service;
-    private LazyDataModel<Cliente> lazyLista;
+    private PessoaService service;
+    private LazyDataModel<Pessoa> lazyLista;
     private AbstractFilter filtros;
     private Long id;
 
     public ClienteCrudMB() {
-        
+        try {
+            filtros = new FilterCliente();
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
     }
     
     /**
@@ -52,10 +57,10 @@ public class ClienteCrudMB extends BasicControl{
             try {
                 entity = service.getEntity(id);
             } catch (Exception ex) {
-                Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            entity = new Cliente();
+            entity = new Pessoa();
         }
     }
 
@@ -72,12 +77,12 @@ public class ClienteCrudMB extends BasicControl{
 
         int numCars = 0;
         if (clientesSelecionados != null) {
-            for (Cliente cliente : clientesSelecionados) {
+            for (Pessoa cliente : clientesSelecionados) {
                 try {
                     service.delete(cliente);
                     numCars++;
                 } catch (Exception ex) {
-                    Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
                     createFacesInfoMessage(ex.getMessage());
                 }
             }
@@ -105,7 +110,7 @@ public class ClienteCrudMB extends BasicControl{
                 return "index.xhtml?faces-redirect=true";
             }
         } catch (Exception ex) {
-            Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
         } finally {
             scrollTopMessage();
@@ -117,15 +122,15 @@ public class ClienteCrudMB extends BasicControl{
      *Evento invocado pela tela de index para listar os clientes
      * @return 
      */
-    public LazyDataModel<Cliente> getLazyDataModel() {
+    public LazyDataModel<Pessoa> getLazyDataModel() {
 
         if (lazyLista == null) {
-            lazyLista = new LazyDataModel<Cliente>() {
+            lazyLista = new LazyDataModel<Pessoa>() {
 
                 @Override
-                public Cliente getRowData(String rowKey) {
-                    List<Cliente> list = (List<Cliente>) getWrappedData();
-                    for (Cliente cli : list) {
+                public Pessoa getRowData(String rowKey) {
+                    List<Pessoa> list = (List<Pessoa>) getWrappedData();
+                    for (Pessoa cli : list) {
                         if (cli.getId().toString().equals(rowKey)) {
                             return cli;
                         }
@@ -134,14 +139,14 @@ public class ClienteCrudMB extends BasicControl{
                 }
 
                 @Override
-                public Object getRowKey(Cliente object) {
+                public Object getRowKey(Pessoa object) {
                     return object.getId(); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
-                public List<Cliente> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+                public List<Pessoa> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
-                    int count = service.countListagem(filtros.getFilter());
+                    int count = service.countListagemClientes(filtros.getFilter());
                     this.setRowCount(count);
 
                     String sortAscDesc = "ASC";
@@ -149,7 +154,7 @@ public class ClienteCrudMB extends BasicControl{
                         sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
                     }
 
-                    List<Cliente> clientes = service.findRangeListagem(filtros.getFilter(), max, offset, sortField, sortAscDesc);
+                    List<Pessoa> clientes = service.findRangeListagemClientes(filtros.getFilter(), max, offset, sortField, sortAscDesc);
                     return clientes;
                 }
             };
@@ -161,19 +166,19 @@ public class ClienteCrudMB extends BasicControl{
         return lazyLista;
     }
 
-    public Cliente getEntity() {
+    public Pessoa getEntity() {
         return entity;
     }
 
-    public void setEntity(Cliente entity) {
+    public void setEntity(Pessoa entity) {
         this.entity = entity;
     }
 
-    public List<Cliente> getClientesSelecionados() {
+    public List<Pessoa> getClientesSelecionados() {
         return clientesSelecionados;
     }
 
-    public void setClientesSelecionados(List<Cliente> clientesSelecionados) {
+    public void setClientesSelecionados(List<Pessoa> clientesSelecionados) {
         this.clientesSelecionados = clientesSelecionados;
     }
 
@@ -192,6 +197,8 @@ public class ClienteCrudMB extends BasicControl{
     public void setId(Long id) {
         this.id = id;
     }
+
+    
     
     
     

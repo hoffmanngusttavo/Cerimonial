@@ -5,7 +5,12 @@
  */
 package br.com.cerimonial.utils;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -52,5 +57,37 @@ public class CerimonialUtils {
         return list == null || list.isEmpty();
     }
     
+    
+    public static String callURL(String paramUrl) {
+
+        StringBuilder sb = new StringBuilder();
+
+        try {
+
+            URLConnection urlConn;
+            InputStreamReader in = null;
+            URL url = new URL(paramUrl);
+            urlConn = url.openConnection();
+            if (urlConn != null) {
+                urlConn.setReadTimeout(60 * 1000);
+            }
+            if (urlConn != null && urlConn.getInputStream() != null) {
+                in = new InputStreamReader(urlConn.getInputStream(), Charset.defaultCharset());
+                try (BufferedReader bufferedReader = new BufferedReader(in)) {
+                    int cp;
+                    while ((cp = bufferedReader.read()) != -1) {
+                        sb.append((char) cp);
+                    }
+                }
+            }
+
+            in.close();
+        } catch (Exception ex) {
+
+            throw new RuntimeException("Exception while calling URL:" + paramUrl, ex);
+        }
+
+        return sb.toString();
+    }
     
 }

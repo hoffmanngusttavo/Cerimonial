@@ -5,13 +5,16 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.TipoEnvolvido;
+import br.com.cerimonial.enums.TipoPessoa;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,12 +36,11 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class Cliente implements Serializable, ModelInterface{
-    
-    
+public class Pessoa implements Serializable, ModelInterface {
+
     @Id
-    @GeneratedValue(generator = "GENERATE_Cliente", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "GENERATE_Cliente", sequenceName = "Cliente_pk_seq", allocationSize = 1)
+    @GeneratedValue(generator = "GENERATE_Pessoa", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "GENERATE_Pessoa", sequenceName = "Pessoa_pk_seq", allocationSize = 1)
     private Long id;
     @Column(nullable = false)
     @NotNull
@@ -48,12 +50,13 @@ public class Cliente implements Serializable, ModelInterface{
     @NotNull
     @Size(min = 2, max = 255)
     private String rg;
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 2, max = 255)
+    @Column
+    @Size(min = 11, max = 25)
     private String cpf;
+    @Column
+    @Size(min = 14, max = 25)
+    private String cnpj;
     @Column(nullable = false)
-    @NotNull
     @Size(min = 2, max = 255)
     private String email;
     @Column
@@ -62,28 +65,58 @@ public class Cliente implements Serializable, ModelInterface{
     @Column
     @Size(min = 2, max = 255)
     private String instagram;
+    @Column
+    @NotNull
+    private String telefone1;
+    @Column
+    private String telefone2;
     @Column(columnDefinition = "TEXT")
     private String observacao;
-    @Column
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataNascimento;
     @ManyToOne
     private Usuario modificadoPor;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
     @OneToOne
     private Endereco endereco;
+    
+    @Column
+    @Enumerated(EnumType.STRING)
+    private TipoPessoa tipoPessoa = TipoPessoa.JURIDICA;
+    
+    @Column
+    @Enumerated(EnumType.STRING)
+    private TipoEnvolvido tipoEnvolvido = TipoEnvolvido.CLIENTE;
+    
+    
+    @Column(columnDefinition = "boolean default true")
+    private boolean ativo = true;
+   
+    //Particularidades Colaborador
+     @Column(columnDefinition = "boolean default true")
+    private boolean carroProprio = true;
+    
+    //Particularidades Fornecedor
+    @ManyToOne
+    private CategoriaFornecedor categoria;
+    
+    //Particularidades Cliente
+    @Column
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataNascimento;
+    
+    
+    
 
-     @Override
+    @Override
     public Long getId() {
         return id;
     }
-    
-   @Override
+
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public Date getDataUltimaAlteracao() {
         return dataUltimaAlteracao;
@@ -93,8 +126,8 @@ public class Cliente implements Serializable, ModelInterface{
     public void setDataUltimaAlteracao(Date data) {
         this.dataUltimaAlteracao = data;
     }
-    
-     @Override
+
+    @Override
     public Usuario getModificadoPor() {
         return modificadoPor;
     }
@@ -112,20 +145,20 @@ public class Cliente implements Serializable, ModelInterface{
         this.nome = nome;
     }
 
-    public String getRg() {
-        return rg;
-    }
-
-    public void setRg(String rg) {
-        this.rg = rg;
-    }
-
     public String getCpf() {
         return cpf;
     }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 
     public String getEmail() {
@@ -152,20 +185,20 @@ public class Cliente implements Serializable, ModelInterface{
         this.instagram = instagram;
     }
 
-    public Date getDataNascimento() {
-        return dataNascimento;
+    public String getTelefone1() {
+        return telefone1;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
-        this.dataNascimento = dataNascimento;
+    public void setTelefone1(String telefone1) {
+        this.telefone1 = telefone1;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public String getTelefone2() {
+        return telefone2;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setTelefone2(String telefone2) {
+        this.telefone2 = telefone2;
     }
 
     public String getObservacao() {
@@ -176,25 +209,87 @@ public class Cliente implements Serializable, ModelInterface{
         this.observacao = observacao;
     }
 
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public TipoPessoa getTipoPessoa() {
+        return tipoPessoa;
+    }
+
+    public void setTipoPessoa(TipoPessoa tipoPessoa) {
+        this.tipoPessoa = tipoPessoa;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public CategoriaFornecedor getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaFornecedor categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public TipoEnvolvido getTipoEnvolvido() {
+        return tipoEnvolvido;
+    }
+
+    public void setTipoEnvolvido(TipoEnvolvido tipoEnvolvido) {
+        this.tipoEnvolvido = tipoEnvolvido;
+    }
+
+    public boolean isCarroProprio() {
+        return carroProprio;
+    }
+
+    public void setCarroProprio(boolean carroProprio) {
+        this.carroProprio = carroProprio;
+    }
+
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
     
     
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 19 * hash + Objects.hashCode(this.id);
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Pessoa)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Cliente other = (Cliente) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        Pessoa other = (Pessoa) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -202,11 +297,10 @@ public class Cliente implements Serializable, ModelInterface{
 
     @Override
     public String toString() {
-        return "Cliente{" + "id=" + id + '}';
+        return "br.com.cerimonial.entity.Pessoa[ id=" + id + " ]";
     }
-    
-    
-     @PrePersist
+
+    @PrePersist
     @Override
     public void prePersistEntity() {
         try {
@@ -239,6 +333,4 @@ public class Cliente implements Serializable, ModelInterface{
         }
     }
 
-    
-    
 }

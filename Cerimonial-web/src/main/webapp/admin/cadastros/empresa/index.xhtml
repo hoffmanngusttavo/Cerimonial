@@ -13,10 +13,18 @@
 
     <ui:define name="content">
 
+        <f:metadata>
+            <f:viewAction action="#{EmpresaCrudMB.init()}"/>
+        </f:metadata>
+
         <h:form>
-            
-            <p:messages autoUpdate="true"/>
-            
+
+            <div style="margin-bottom: 10px;">
+                <h1>
+                    Empresa
+                </h1>
+            </div>
+
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
@@ -24,20 +32,31 @@
                                          action="#{EmpresaCrudMB.save()}"
                                          update="@form"
                                          icon="fa fa-check" 
-                                         styleClass="btn-primary"/>
+                                         styleClass="btn-primary"
+                                         onstart="PF('statusDialog').show();"
+                                         oncomplete="PF('statusDialog').hide();"/>
                         <p:spacer width="5"/>
 
-                        <p:commandButton value="Voltar"
-                                         immediate="true"
-                                         action="index?faces-redirect=true"
-                                         process="@this"
-                                         icon="fa fa-close"/>
-
                     </div>
+
+                    <p:messages autoUpdate="true"/>
 
                     <p:separator/>
 
                     <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Tipo Pessoa: *" for="inptTipo"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <h:selectOneMenu id="inptTipo" 
+                                             styleClass="input100"
+                                             value="#{EmpresaCrudMB.entity.tipoPessoa}">
+                                <f:selectItems value="#{EmpresaCrudMB.comboTipoPessoa}" />
+                                <p:ajax process="@this" 
+                                        event="change"
+                                        update="@form"/>
+                            </h:selectOneMenu>
+                        </div>
                         <div class="ui-g-12">
                             <p:outputLabel value="Nome: *" for="inptNome"/>
                         </div>
@@ -98,33 +117,108 @@
                         </div>
                         <div class="ui-g-12">
                             <p:inputMask mask="(99)99999-9999"
-                                         value="#{EmpresaCrudMB.entity.telefone1}"
-                                         required="true"
+                                         value="#{EmpresaCrudMB.entity.telefone2}"
                                          id="inptTelefone2"
-                                         label="Telefone 1"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Cpf:" for="inptCpf"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputMask mask="999-999-999-99"
-                                         value="#{EmpresaCrudMB.entity.telefone1}"
-                                         required="true"
-                                         id="inptCpf"
-                                         label="Cpf"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Cnpj:" for="inptCnpj"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputMask mask="999-999-999-99"
-                                         value="#{EmpresaCrudMB.entity.telefone1}"
-                                         required="true"
-                                         id="inptCnpj"
-                                         label="Cnpj"/>
+                                         label="Telefone 2"/>
                         </div>
 
+                        <h:panelGroup rendered="#{EmpresaCrudMB.entity.pessoaFisica}">
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Cpf:" for="inptCpf"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputMask mask="999.999.999-99"
+                                             value="#{EmpresaCrudMB.entity.cpf}"
+                                             required="true"
+                                             id="inptCpf"
+                                             label="Cpf"/>
+                            </div>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{!EmpresaCrudMB.entity.pessoaFisica}">
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Cnpj:" for="inptCnpj"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputMask mask="99.999.999/9999-99"
+                                             value="#{EmpresaCrudMB.entity.cnpj}"
+                                             required="true"
+                                             id="inptCnpj"
+                                             label="Cnpj"/>
+                            </div>
+                        </h:panelGroup>
+
                     </div>
+
+                    <p:separator/>
+                    <h2>Endereço</h2>
+                    <p:separator/>
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Cep: *" for="inptCep"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputMask mask="99.999-999"
+                                         value="#{EmpresaCrudMB.entity.endereco.cep}"
+                                         required="true"
+                                         id="inptCep"
+                                         label="Cep">
+                                <p:ajax id="eventCep" 
+                                        event="change" 
+                                        listener="#{EmpresaCrudMB.buscaCep()}" 
+                                        process="@this"
+                                        update="@form"
+                                        partialSubmit="true"
+                                        onstart="PF('statusDialog').show();"
+                                        oncomplete="PF('statusDialog').hide();"/>
+                            </p:inputMask>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Logradouro: *" for="inptLog"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptLog" 
+                                         value="#{EmpresaCrudMB.entity.endereco.logradouro}" 
+                                         label="Logradouro"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Bairro: *" for="inptBairro"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptBairro" 
+                                         value="#{EmpresaCrudMB.entity.endereco.bairro}" 
+                                         label="Bairro"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Número:" for="inptNumero"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptNumero" 
+                                         value="#{EmpresaCrudMB.entity.endereco.numero}" 
+                                         label="Número"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Complemento:" for="inptComplemento"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptComplemento" 
+                                         value="#{EmpresaCrudMB.entity.endereco.complemento}" 
+                                         label="Complemento"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Cidade:" />
+                        </div>
+                        <div class="ui-g-12">
+
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Estado:" />
+                        </div>
+                        <div class="ui-g-12">
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

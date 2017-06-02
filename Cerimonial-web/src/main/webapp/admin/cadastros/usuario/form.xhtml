@@ -62,7 +62,9 @@
                                          value="#{UsuarioCrudMB.entity.email}" 
                                          required="true"
                                          placeholder="Ex: teste@teste.com"
-                                         label="Email"/>
+                                         label="Email">
+                                <f:validator validatorId="EmailValidate"/>
+                            </p:inputText>
                         </div>
 
                         <div class="ui-g-12">

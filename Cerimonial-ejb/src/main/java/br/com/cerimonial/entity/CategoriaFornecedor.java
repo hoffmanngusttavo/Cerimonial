@@ -22,6 +22,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.shiro.SecurityUtils;
@@ -33,36 +34,62 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class Cidade implements Serializable, ModelInterface {
+public class CategoriaFornecedor implements Serializable, ModelInterface {
     
     
-
-    @Id
-    @GeneratedValue(generator = "GENERATE_Cidade", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "GENERATE_Cidade", sequenceName = "Cidade_pk_seq", allocationSize = 1)
+     @Id
+    @GeneratedValue(generator = "GENERATE_CategoriaFornecedor", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "GENERATE_CategoriaFornecedor", sequenceName = "CategoriaFornecedor_pk_seq", allocationSize = 1)
     private Long id;
-    
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Usuario modificadoPor;
     @ManyToOne
-    private Estado estado;
-    @OneToMany(mappedBy = "cidade", fetch = FetchType.LAZY)
-    private List<Endereco> enderecos;
+    private Usuario modificadoPor;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataUltimaAlteracao;
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
+    private List<Pessoa> fornecedores;
     
 
-    @Override
+    public CategoriaFornecedor(String nome) {
+        this.nome = nome;
+    }
+
+    public CategoriaFornecedor() {
+    }
+    
+    
+    
+     @Override
     public Long getId() {
         return id;
     }
-
-    @Override
+    
+   @Override
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    @Override
+    public Date getDataUltimaAlteracao() {
+        return dataUltimaAlteracao;
+    }
+
+    @Override
+    public void setDataUltimaAlteracao(Date data) {
+        this.dataUltimaAlteracao = data;
+    }
+    
+     @Override
+    public Usuario getModificadoPor() {
+        return modificadoPor;
+    }
+
+    @Override
+    public void setModificadoPor(Usuario modificadoPor) {
+        this.modificadoPor = modificadoPor;
     }
 
     public String getNome() {
@@ -73,34 +100,17 @@ public class Cidade implements Serializable, ModelInterface {
         this.nome = nome;
     }
 
-    @Override
-    public Usuario getModificadoPor() {
-        return modificadoPor;
+    public List<Pessoa> getFornecedores() {
+        return fornecedores;
     }
 
-    @Override
-    public void setModificadoPor(Usuario modificadoPor) {
-        this.modificadoPor = modificadoPor;
+    public void setFornecedores(List<Pessoa> fornecedores) {
+        this.fornecedores = fornecedores;
     }
 
-    public Estado getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Estado estado) {
-        this.estado = estado;
-    }
-
-    public List<Endereco> getEnderecos() {
-        return enderecos;
-    }
-
-    public void setEnderecos(List<Endereco> enderecos) {
-        this.enderecos = enderecos;
-    }
     
     
-
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -111,10 +121,10 @@ public class Cidade implements Serializable, ModelInterface {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cidade)) {
+        if (!(object instanceof CategoriaFornecedor)) {
             return false;
         }
-        Cidade other = (Cidade) object;
+        CategoriaFornecedor other = (CategoriaFornecedor) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -123,19 +133,9 @@ public class Cidade implements Serializable, ModelInterface {
 
     @Override
     public String toString() {
-        return "br.com.project.rural.entity.Cidade[ id=" + id + " ]";
+        return "br.com.cerimonial.entity.CategoriaFornecedor[ id=" + id + " ]";
     }
-
-    @Override
-    public Date getDataUltimaAlteracao() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setDataUltimaAlteracao(Date data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
     @PrePersist
     @Override
     public void prePersistEntity() {
@@ -168,5 +168,6 @@ public class Cidade implements Serializable, ModelInterface {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
-
+    
+    
 }

@@ -8,16 +8,16 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Cadastro de Usuário
+        Cadastro de Fornecedor
     </ui:define>
 
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="id" value="#{UsuarioCrudMB.id}" converter="javax.faces.Long"/>
+            <f:viewParam name="id" value="#{FornecedorCrudMB.id}" converter="javax.faces.Long"/>
             <!--use view action if you are in a Java EE 7 server: -->
-            <f:viewAction action="#{UsuarioCrudMB.init()}"/>
-            <!--<f:event type="preRenderView" listener="{UsuarioCrudMB.init}"/>-->
+            <f:viewAction action="#{FornecedorCrudMB.init()}"/>
+            <!--<f:event type="preRenderView" listener="{FornecedorCrudMB.init}"/>-->
         </f:metadata>
 
         <h:form>
@@ -28,7 +28,7 @@
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
                         <p:commandButton value="Salvar"
-                                         action="#{UsuarioCrudMB.save()}"
+                                         action="#{FornecedorCrudMB.save()}"
                                          update="@form"
                                          icon="fa fa-check" 
                                          styleClass="btn-primary"/>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="ui-g-12">
                             <p:inputText id="inptNome" 
-                                         value="#{UsuarioCrudMB.entity.nome}" 
+                                         value="#{FornecedorCrudMB.entity.nome}" 
                                          required="true"
                                          label="Nome"/>
                         </div>
@@ -59,62 +59,18 @@
                         </div>
                         <div class="ui-g-12">
                             <p:inputText id="inptEmail" 
-                                         value="#{UsuarioCrudMB.entity.email}" 
+                                         value="#{FornecedorCrudMB.entity.email}" 
                                          required="true"
                                          placeholder="Ex: teste@teste.com"
                                          label="Email"/>
                         </div>
 
                         <div class="ui-g-12">
-                            <p:outputLabel value="Login *" for="inptLogin"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText value="#{UsuarioCrudMB.entity.login}"
-                                         id="inptLogin" 
-                                         required="true"
-                                         placeholder="Deve conter no mínimo 4 caracteres"
-                                         label="Login"/>
-                        </div>
-
-                        <h:panelGroup rendered="#{UsuarioCrudMB.entity.id == null}">
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Senha *"
-                                               for="inptSenha"
-                                               rendered="#{UsuarioCrudMB.entity.id == null}"/>
-                            </div>
-                            <div class="ui-g-12">
-                                <p:password value="#{UsuarioCrudMB.entity.senha}"
-                                            id="inptSenha"
-                                            rendered="#{UsuarioCrudMB.entity.id == null}"
-                                            required="true"
-                                            label="Senha"/>
-                            </div>
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Confirme a senha *"
-                                               for="inptConfirmSenha"/>
-                            </div>
-                            <div class="ui-g-12">
-                                <p:password value="#{UsuarioCrudMB.confirmarSenha}"
-                                            id="inptConfirmSenha"
-                                            rendered="#{UsuarioCrudMB.entity.id == null}"
-                                            required="true"/>
-                            </div>
-                        </h:panelGroup>
-
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Usuário Master ?"
-                                           for="inptMaster"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.master}"
-                                                     id="inptMaster"/>
-                        </div>
-                        <div class="ui-g-12">
                             <p:outputLabel value="Ativo ?"
                                            for="inptAtivo"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.ativo}"
+                            <p:selectBooleanCheckbox value="#{FornecedorCrudMB.entity.ativo}"
                                                      id="inptAtivo"/>
                         </div>
 

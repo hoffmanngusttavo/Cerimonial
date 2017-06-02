@@ -129,6 +129,15 @@
             <version>1.14</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20170516</version>
+        </dependency>
+
+
+
         
         <dependency>
             <groupId>org.slf4j</groupId>

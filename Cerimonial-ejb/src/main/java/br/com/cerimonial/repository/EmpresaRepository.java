@@ -6,6 +6,8 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Empresa;
+import br.com.cerimonial.entity.Usuario;
+import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
@@ -27,8 +29,14 @@ public class EmpresaRepository extends BasicRepository{
         return setEntity(Empresa.class, empresa);
     }
 
-    public Empresa getEmpresa(Long id) throws Exception{
+    public Empresa getEntity(Long id) throws Exception{
         return getEntity(Empresa.class, id);
+    }
+
+    public List<Empresa> findAll() throws Exception {
+        return getPureList(Empresa.class, "select emp from Empresa emp ");
+        
+        
     }
     
     

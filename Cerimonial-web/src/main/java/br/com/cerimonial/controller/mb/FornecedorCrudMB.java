@@ -7,8 +7,9 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
-import br.com.cerimonial.entity.Fornecedor;
-import br.com.cerimonial.service.FornecedorService;
+import br.com.cerimonial.controller.filter.FilterFornecedor;
+import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
 import java.util.Map;
@@ -29,15 +30,20 @@ import org.primefaces.model.SortOrder;
 @ViewScoped
 public class FornecedorCrudMB extends BasicControl{
     
-    private Fornecedor entity;
-    private List<Fornecedor> fornecedoresSelecionados;
+    private Pessoa entity;
+    private List<Pessoa> fornecedoresSelecionados;
     @EJB
-    private FornecedorService service;
-    private LazyDataModel<Fornecedor> lazyLista;
+    private PessoaService service;
+    private LazyDataModel<Pessoa> lazyLista;
     private AbstractFilter filtros;
     private Long id;
 
     public FornecedorCrudMB() {
+        try {
+            filtros = new FilterFornecedor();
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
         
     }
     
@@ -54,7 +60,7 @@ public class FornecedorCrudMB extends BasicControl{
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            entity = new Fornecedor();
+            entity = new Pessoa();
         }
     }
     
@@ -70,7 +76,7 @@ public class FornecedorCrudMB extends BasicControl{
 
         int numCars = 0;
         if (fornecedoresSelecionados != null) {
-            for (Fornecedor fornecedor : fornecedoresSelecionados) {
+            for (Pessoa fornecedor : fornecedoresSelecionados) {
                 try {
                     service.delete(fornecedor);
                     numCars++;
@@ -115,15 +121,15 @@ public class FornecedorCrudMB extends BasicControl{
      *Evento invocado pela tela de index para listar os clientes
      * @return 
      */
-    public LazyDataModel<Fornecedor> getLazyDataModel() {
+    public LazyDataModel<Pessoa> getLazyDataModel() {
 
         if (lazyLista == null) {
-            lazyLista = new LazyDataModel<Fornecedor>() {
+            lazyLista = new LazyDataModel<Pessoa>() {
 
                 @Override
-                public Fornecedor getRowData(String rowKey) {
-                    List<Fornecedor> list = (List<Fornecedor>) getWrappedData();
-                    for (Fornecedor cli : list) {
+                public Pessoa getRowData(String rowKey) {
+                    List<Pessoa> list = (List<Pessoa>) getWrappedData();
+                    for (Pessoa cli : list) {
                         if (cli.getId().toString().equals(rowKey)) {
                             return cli;
                         }
@@ -132,14 +138,14 @@ public class FornecedorCrudMB extends BasicControl{
                 }
 
                 @Override
-                public Object getRowKey(Fornecedor object) {
+                public Object getRowKey(Pessoa object) {
                     return object.getId(); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
-                public List<Fornecedor> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+                public List<Pessoa> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
-                    int count = service.countListagem(filtros.getFilter());
+                    int count = service.countListagemFornecedor(filtros.getFilter());
                     this.setRowCount(count);
 
                     String sortAscDesc = "ASC";
@@ -147,7 +153,7 @@ public class FornecedorCrudMB extends BasicControl{
                         sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
                     }
 
-                    List<Fornecedor> clientes = service.findRangeListagem(filtros.getFilter(), max, offset, sortField, sortAscDesc);
+                    List<Pessoa> clientes = service.findRangeListagemFornecedor(filtros.getFilter(), max, offset, sortField, sortAscDesc);
                     return clientes;
                 }
             };
@@ -158,25 +164,23 @@ public class FornecedorCrudMB extends BasicControl{
         }
         return lazyLista;
     }
-    
-    
 
-    public Fornecedor getEntity() {
+    public Pessoa getEntity() {
         return entity;
     }
 
-    public void setEntity(Fornecedor entity) {
+    public void setEntity(Pessoa entity) {
         this.entity = entity;
     }
 
-    public List<Fornecedor> getFornecedoresSelecionados() {
+    public List<Pessoa> getFornecedoresSelecionados() {
         return fornecedoresSelecionados;
     }
 
-    public void setFornecedoresSelecionados(List<Fornecedor> fornecedoresSelecionados) {
+    public void setFornecedoresSelecionados(List<Pessoa> fornecedoresSelecionados) {
         this.fornecedoresSelecionados = fornecedoresSelecionados;
     }
-
+    
     public AbstractFilter getFiltros() {
         return filtros;
     }

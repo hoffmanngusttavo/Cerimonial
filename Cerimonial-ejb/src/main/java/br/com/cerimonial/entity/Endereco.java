@@ -41,7 +41,7 @@ public class Endereco implements Serializable, ModelInterface {
     private Usuario modificadoPor;
     @Column(nullable = false)
     @NotNull
-    @Size(min = 8, max = 8)
+    @Size(min = 8, max = 15)
     private String cep;
     @Column(nullable = false)
     @NotNull

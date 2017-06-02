@@ -7,7 +7,9 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Empresa;
+import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.service.EmpresaService;
+import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,9 +31,12 @@ public class EmpresaCrudMB extends BasicControl {
     private Empresa entity;
     @EJB
     private EmpresaService service;
+    @EJB
+    private EnderecoService enderecoService;
+    private final SelectItemUtils selectItemUtils;
 
     public EmpresaCrudMB() {
-        init();
+        selectItemUtils = new SelectItemUtils();
     }
 
     /**
@@ -40,10 +45,17 @@ public class EmpresaCrudMB extends BasicControl {
      */
     public void init() {
         try {
-//            entity = service.getEntity(null);
-            entity = new Empresa();
+            entity = service.getEmpresa();
+            if(entity == null){
+                entity = new Empresa();
+            }
         } catch (Exception ex) {
-            Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            entity = new Empresa();
+        }finally{
+            if(entity.getEndereco() == null){
+                 entity.setEndereco(new Endereco());
+            }
         }
 
     }
@@ -61,13 +73,26 @@ public class EmpresaCrudMB extends BasicControl {
                 return "index.xhtml?faces-redirect=true";
             }
         } catch (Exception ex) {
-            Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
         } finally {
             scrollTopMessage();
         }
         return null;
     }
+    
+    
+    public void buscaCep(){
+        if(entity != null && entity.getEndereco() != null){
+            try {
+                entity.setEndereco(enderecoService.buscaCep(entity.getEndereco()));
+            } catch (Exception ex) {
+                Logger.getLogger(EmpresaCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    
 
     public Empresa getEntity() {
         return entity;
@@ -79,6 +104,14 @@ public class EmpresaCrudMB extends BasicControl {
     
     public List<SelectItem> getComboTipoPessoa(){
         return SelectItemUtils.getComboTipoPessoa();
+    }
+    
+    public List<SelectItem> getComboCidade(){
+        return selectItemUtils.getComboCidade();
+    }
+    
+    public List<SelectItem> getComboEstado(){
+        return selectItemUtils.getComboEstado();
     }
 
 }

@@ -10,10 +10,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,10 +49,8 @@ public class Empresa implements Serializable, ModelInterface {
     private String nome;
     @Column(nullable = false)
     @NotNull
-    @Size(min = 2, max = 255)
     private String razaoSocial;
     @Column
-    @Size(min = 2, max = 255)
     private String nomeFantasia;
     @Column
     @NotNull
@@ -67,18 +67,20 @@ public class Empresa implements Serializable, ModelInterface {
     @Column
     @Size(min = 14, max = 25)
     private String cnpj;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    @OneToOne
-    private Endereco endereco;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private Endereco endereco = new Endereco();
     @Column
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa = TipoPessoa.JURIDICA;
-    
-    
 
+    public Empresa() {
+        endereco = new Endereco();
+    }
+    
     public String getNome() {
         return nome;
     }
@@ -197,6 +199,10 @@ public class Empresa implements Serializable, ModelInterface {
         this.tipoPessoa = tipoPessoa;
     }
 
+    
+    public boolean isPessoaFisica(){
+        return this.getTipoPessoa().equals(TipoPessoa.FISICA);
+    }
     
     
     @Override
