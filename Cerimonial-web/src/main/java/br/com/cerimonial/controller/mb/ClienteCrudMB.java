@@ -8,7 +8,6 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.controller.filter.FilterCliente;
-import br.com.cerimonial.controller.filter.FilterFornecedor;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.utils.CerimonialUtils;

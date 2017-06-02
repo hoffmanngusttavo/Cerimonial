@@ -26,5 +26,18 @@ public class EstadoRepository extends BasicRepository{
     public List<Estado> findAll() throws Exception {
         return getPureList(Estado.class, "select estado from Estado estado");
     }
+
+    public Estado findBySigla(String uf) throws Exception {
+        return getPurePojo(Estado.class, "select estado from Estado estado where estado.sigla = ?1", uf);
+    }
+
+    public Estado create(Estado entity) throws Exception{
+        addEntity(Estado.class, entity);
+        return entity;
+    }
+
+    public Estado edit(Estado entity) throws Exception{
+        return setEntity(Estado.class, entity);
+    }
     
 }

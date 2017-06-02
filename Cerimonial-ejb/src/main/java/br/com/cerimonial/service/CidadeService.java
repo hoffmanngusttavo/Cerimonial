@@ -8,6 +8,8 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.repository.CidadeRepository;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
@@ -46,9 +48,35 @@ public class CidadeService  extends BasicService<Cidade>{
        return repository.findAll();
     }
     
+    public Cidade findByNomeEstado(String city, String sigla){
+        try {
+            return repository.findByNomeEstado(city, sigla);
+        } catch (Exception ex) {
+            Logger.getLogger(CidadeService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    /**
+     *
+     * @param entity
+     * @return
+     */
     @Override
-    public Cidade save(Cidade entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Cidade save(Cidade entity) {
+        try {
+            if (entity != null) {
+                if (entity.getId() == null) {
+                    return repository.create(entity);
+
+                } else {
+                    return repository.edit(entity);
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(EstadoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
 }

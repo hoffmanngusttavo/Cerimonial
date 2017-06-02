@@ -14,21 +14,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.faces.model.SelectItem;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
  * @author Gustavo Hoffmann
  */
 public class SelectItemUtils {
+    
+    
+    private final EstadoService estadoService = lookupEstadoServiceBean();
 
-    @EJB
-    private CidadeService cidadeService;
-    @EJB
-    private EstadoService estadoService;
-    
-    
+    private final CidadeService cidadeService = lookupCidadeServiceBean();
+
     
     public static List<SelectItem> getComboTipoPessoa() {
         List<SelectItem> items = new LinkedList<>();
@@ -60,6 +61,26 @@ public class SelectItemUtils {
             Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return items;
+    }
+
+    private CidadeService lookupCidadeServiceBean() {
+        try {
+            Context c = new InitialContext();
+            return (CidadeService) c.lookup("java:global/"+ConstantsProject.appName+"/"+ConstantsProject.moduleEjbName+"/CidadeService!br.com.cerimonial.service.CidadeService");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private EstadoService lookupEstadoServiceBean() {
+        try {
+            Context c = new InitialContext();
+            return (EstadoService) c.lookup("java:global/"+ConstantsProject.appName+"/"+ConstantsProject.moduleEjbName+"/EstadoService!br.com.cerimonial.service.EstadoService");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
 
 }

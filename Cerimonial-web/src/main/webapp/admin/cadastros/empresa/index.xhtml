@@ -2,7 +2,7 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns="http://www.w3.org/1999/xhtml"
-                template="/WEB-INF/admin/layout/default.xhtml"
+                template="#{LayoutMB.layout}"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
@@ -206,16 +206,36 @@
                                          label="Complemento"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:outputLabel value="Cidade:" />
+                            <p:outputLabel value="Cidade:" for="inptCidade"/>
                         </div>
                         <div class="ui-g-12">
-
+                            <h:selectOneMenu id="inptCidade" 
+                                             value="#{EmpresaCrudMB.entity.endereco.cidade}"
+                                             converter="EntityConverter"
+                                             label="Cidade">
+                                <f:selectItem itemValue="" 
+                                              itemLabel="Selecione" /> 
+                                <f:selectItems value="#{EmpresaCrudMB.comboCidade}" />
+                                <p:ajax process="@this"
+                                        update="@this"
+                                        global="false"/>
+                            </h:selectOneMenu>
                         </div>
                         <div class="ui-g-12">
-                            <p:outputLabel value="Estado:" />
+                            <p:outputLabel value="Estado:" for="inptEstado"/>
                         </div>
                         <div class="ui-g-12">
-
+                            <h:selectOneMenu id="inptEstado" 
+                                             value="#{EmpresaCrudMB.entity.endereco.cidade.estado}"
+                                             converter="EntityConverter"
+                                             label="Estado">
+                                <f:selectItem itemValue="" 
+                                              itemLabel="Selecione" /> 
+                                <f:selectItems value="#{EmpresaCrudMB.comboEstado}" />
+                                <p:ajax process="@this"
+                                        update="@this"
+                                        global="false"/>
+                            </h:selectOneMenu>
                         </div>
                     </div>
 

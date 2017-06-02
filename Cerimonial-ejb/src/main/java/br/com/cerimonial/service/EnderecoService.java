@@ -5,11 +5,13 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Endereco;
+import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.repository.EnderecoRepository;
-import br.com.cerimonial.repository.UsuarioRepository;
 import br.com.cerimonial.utils.CerimonialUtils;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -31,14 +33,16 @@ import org.json.JSONObject;
 public class EnderecoService extends BasicService<Endereco> {
 
     private EnderecoRepository repository;
+    @EJB
+    private CidadeService cidadeService;
+    @EJB
+    private EstadoService estadoService;
 
     @PostConstruct
     @PostActivate
     private void postConstruct() {
         repository = new EnderecoRepository(em);
     }
-
-    
 
     public Endereco buscaCep(Endereco endereco) throws Exception {
 
@@ -54,12 +58,29 @@ public class EnderecoService extends BasicService<Endereco> {
             throw new Exception("Cep Inválido");
         }
 
-        String city = (String) json.get("localidade");
         String uf = (String) json.get("uf");
+
+        Estado estado = estadoService.findBySigla(uf);
+        if (estado == null) {
+            estado = new Estado();
+            estado.setNome(uf);
+            estado.setSigla(uf);
+            estado = estadoService.save(estado);
+        }
+
+        String city = (String) json.get("localidade");
+        Cidade cidade = cidadeService.findByNomeEstado(city, estado.getSigla());
+
+        if (cidade == null) {
+            cidade = new Cidade();
+            cidade.setNome(city);
+            cidade.setEstado(estado);
+            cidade = cidadeService.save(cidade);
+        }
 
         endereco.setLogradouro((String) json.get("logradouro"));
         endereco.setBairro((String) json.get("bairro"));
-        endereco.setCidade(null);
+        endereco.setCidade(cidade);
 
         return endereco;
     }
@@ -69,7 +90,7 @@ public class EnderecoService extends BasicService<Endereco> {
         endereco.setCep(cep);
         return buscaCep(endereco);
     }
-    
+
     @Override
     public Endereco getEntity(Long id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
