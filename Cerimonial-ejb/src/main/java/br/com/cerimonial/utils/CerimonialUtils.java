@@ -14,14 +14,14 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
  * @author Gustavo Hoffmann
  */
 public class CerimonialUtils {
-    
-    
+
     public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md;
         md = MessageDigest.getInstance("SHA-1");
@@ -48,22 +48,18 @@ public class CerimonialUtils {
         }
         return buf.toString();
     }
-    
+
     public static boolean isListNotBlank(List list) {
         return list != null && !list.isEmpty();
     }
-    
+
     public static boolean isListBlank(List list) {
         return list == null || list.isEmpty();
     }
-    
-    
+
     public static String callURL(String paramUrl) {
-
         StringBuilder sb = new StringBuilder();
-
         try {
-
             URLConnection urlConn;
             InputStreamReader in = null;
             URL url = new URL(paramUrl);
@@ -89,5 +85,12 @@ public class CerimonialUtils {
 
         return sb.toString();
     }
-    
+
+    public static String removerNaoDigitos(String valor) {
+        if (StringUtils.isNotBlank(valor)) {
+            return valor.replaceAll("\\D", "");
+        }
+        return "";
+    }
+
 }

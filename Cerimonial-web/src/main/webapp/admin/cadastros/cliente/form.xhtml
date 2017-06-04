@@ -98,9 +98,10 @@
                             <p:outputLabel value="Telefone 1:" for="inptTelefone1"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputMask mask="(99)99999-9999"
-                                         value="#{ClienteCrudMB.entity.telefone1}"
+                            <p:inputText value="#{ClienteCrudMB.entity.telefone1}"
                                          required="true"
+                                         onfocus="functionMaskPhone();"
+                                         styleClass="phone"
                                          id="inptTelefone1"
                                          label="Telefone 1"/>
                         </div>
@@ -108,7 +109,8 @@
                             <p:outputLabel value="Telefone 2:" for="inptTelefone2"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputMask mask="(99)99999-9999"
+                            <p:inputText onfocus="functionMaskPhone();"
+                                         styleClass="phone"
                                          value="#{ClienteCrudMB.entity.telefone2}"
                                          id="inptTelefone2"
                                          label="Telefone 2"/>
@@ -117,10 +119,20 @@
                             <p:outputLabel value="Data Nascimento:" for="inptNascimento"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputMask mask="99/99/9999"
-                                         value="#{ClienteCrudMB.entity.dataNascimento}"
-                                         id="inptNascimento"
-                                         label="Data Nascimento"/>
+
+                            <p:calendar pattern="dd/MM/yyyy"
+                                        mask="true" 
+                                        id="inptNascimento" 
+                                        value="#{ClienteCrudMB.entity.dataNascimento}"
+                                        label="Data Nascimento" 
+                                        showOn="button"
+                                        navigator="true"
+                                        locale="pt"
+                                        timeZone="GMT-3">
+                                <f:convertDateTime pattern="dd/MM/yyyy"
+                                                   locale="pt_BR"
+                                                   timeZone="GMT-3"/>
+                            </p:calendar>
                         </div>
 
                         <div class="ui-g-12">

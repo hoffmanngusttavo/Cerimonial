@@ -5,8 +5,10 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;
+import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.Criptografia;
 import java.util.HashMap;
 import java.util.List;
@@ -103,6 +105,19 @@ public class UsuarioService extends BasicService<Usuario> {
         usuario.setMaster(true);
         return save(usuario);
     }
+    
+    public Usuario criarUsuarioCliente(Pessoa cliente) throws Exception {
+        if(cliente == null){
+            throw new Exception("Cliente Null");
+        }
+        Usuario usuario = new Usuario();
+        usuario.setNome(cliente.getNome());
+        usuario.setLogin(cliente.getEmail());
+        usuario.setSenha(CerimonialUtils.removerNaoDigitos(cliente.getCpf()));
+        usuario.setEmail(cliente.getEmail());
+        usuario.setMaster(false);
+        return usuario;
+    }
 
     public int countAll() {
         try {
@@ -131,5 +146,9 @@ public class UsuarioService extends BasicService<Usuario> {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+   public void enviarEmailBoasVindas(Usuario user, String senha) {
+        
     }
 }

@@ -9,6 +9,7 @@ import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.CascadeType;
@@ -20,6 +21,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -96,19 +98,24 @@ public class Pessoa implements Serializable, ModelInterface {
     private boolean carroProprio = true;
     
     //Particularidades Fornecedor
-    @ManyToOne
-    private CategoriaFornecedor categoria;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<CategoriaFornecedor> categoriasFornecedor;
     
     //Particularidades Cliente
     @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataNascimento;
+    @OneToOne
+    private Usuario usuarioCliente;
+    
 
     public Pessoa() {
         endereco = new Endereco();
     }
     
-    
+    public boolean isPessoaFisica(){
+        return this.getTipoPessoa().equals(TipoPessoa.FISICA);
+    }
     
 
     @Override
@@ -237,13 +244,7 @@ public class Pessoa implements Serializable, ModelInterface {
         this.ativo = ativo;
     }
 
-    public CategoriaFornecedor getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(CategoriaFornecedor categoria) {
-        this.categoria = categoria;
-    }
+    
 
     public String getRg() {
         return rg;
@@ -275,6 +276,22 @@ public class Pessoa implements Serializable, ModelInterface {
 
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public List<CategoriaFornecedor> getCategoriasFornecedor() {
+        return categoriasFornecedor;
+    }
+
+    public void setCategoriasFornecedor(List<CategoriaFornecedor> categoriasFornecedor) {
+        this.categoriasFornecedor = categoriasFornecedor;
+    }
+
+    public Usuario getUsuarioCliente() {
+        return usuarioCliente;
+    }
+
+    public void setUsuarioCliente(Usuario usuarioCliente) {
+        this.usuarioCliente = usuarioCliente;
     }
     
     

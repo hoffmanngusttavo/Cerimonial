@@ -6,6 +6,7 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.repository.PessoaRepository;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -31,6 +33,9 @@ import javax.ejb.TransactionManagementType;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class PessoaService extends BasicService<Pessoa> {
 
+    @EJB
+    private UsuarioService usuarioService;
+    
     private PessoaRepository repository;
 
     @PostConstruct
@@ -78,7 +83,14 @@ public class PessoaService extends BasicService<Pessoa> {
         if (entity != null) {
             entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
             if (entity.getId() == null) {
-                return repository.create(entity);
+                //criar novo usuario
+                Usuario user = usuarioService.criarUsuarioCliente(entity);
+                String senha = user.getSenha();
+                user = usuarioService.save(user);
+                entity.setUsuarioCliente(user);
+                repository.create(entity);
+                usuarioService.enviarEmailBoasVindas(user,senha);
+                return entity;
             } else {
                 return repository.edit(entity);
             }
@@ -156,6 +168,47 @@ public class PessoaService extends BasicService<Pessoa> {
         return null;
     }
 
+    //--------------------COLABORADOR----------------------------
+
+    public Pessoa saveColaborador(Pessoa entity) throws Exception {
+        if (entity != null) {
+            entity.setTipoEnvolvido(TipoEnvolvido.COLABORADOR);
+            if (entity.getId() == null) {
+                return repository.create(entity);
+            } else {
+                return repository.edit(entity);
+            }
+        }
+        return null;
+    }
+    
+    public int countListagemColaborador(HashMap<String, Object> filter) {
+        try {
+            if (filter == null) {
+                filter = new HashMap<>();
+            }
+
+            filter.put("tipoEnvolvido", TipoEnvolvido.COLABORADOR);
+            return repository.countListagemColaborador(filter);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public List<Pessoa> findRangeListagemColaborador(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
+        try {
+            if (params == null) {
+                params = new HashMap<>();
+            }
+            params.put("tipoEnvolvido", TipoEnvolvido.COLABORADOR);
+            return repository.findRangeListagemColaborador(params, max, offset, sortField, sortAscDesc);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     
 
 }

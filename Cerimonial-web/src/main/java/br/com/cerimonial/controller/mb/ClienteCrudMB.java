@@ -5,25 +5,15 @@
  */
 package br.com.cerimonial.controller.mb;
 
-import br.com.cerimonial.controller.AbstractFilter;
-import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.controller.filter.FilterCliente;
-import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Pessoa;
-import br.com.cerimonial.enums.TipoEnvolvido;
-import br.com.cerimonial.service.EnderecoService;
-import br.com.cerimonial.service.PessoaService;
-import br.com.cerimonial.utils.CerimonialUtils;
-import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -33,72 +23,13 @@ import org.primefaces.model.SortOrder;
  */
 @ManagedBean(name = "ClienteCrudMB")
 @ViewScoped
-public class ClienteCrudMB extends BasicControl {
-
-    private Pessoa entity;
-    private List<Pessoa> clientesSelecionados;
-    @EJB
-    private PessoaService service;
-    private LazyDataModel<Pessoa> lazyLista;
-    private AbstractFilter filtros;
-    private Long id;
-    @EJB
-    private EnderecoService enderecoService;
-    private final SelectItemUtils selectItemUtils;
+public class ClienteCrudMB extends PessoaMB{
 
     public ClienteCrudMB() {
-        selectItemUtils = new SelectItemUtils();
         try {
             filtros = new FilterCliente();
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
-        }
-    }
-
-    /**
-     * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
-     * carregar os dados do cliente
-     */
-    public void init() {
-
-        if (id != null) {
-            try {
-                entity = service.getEntity(id);
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            entity = new Pessoa();
-        }
-    }
-
-    /**
-     * Evento invocado pela tela de listagem para remover os itens selecionados
-     */
-    public void delete() {
-
-        if (CerimonialUtils.isListBlank(clientesSelecionados)) {
-            createFacesWarnMessage("Selecione ao menos um item");
-            return;
-        }
-
-        int numCars = 0;
-        if (clientesSelecionados != null) {
-            for (Pessoa cliente : clientesSelecionados) {
-                try {
-                    service.delete(cliente);
-                    numCars++;
-                } catch (Exception ex) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                    createFacesInfoMessage(ex.getMessage());
-                }
-            }
-
-            clientesSelecionados.clear();
-
-            if (numCars > 0) {
-                createFacesInfoMessage(numCars + " clientes removidos com sucesso!");
-            }
         }
     }
 
@@ -123,16 +54,6 @@ public class ClienteCrudMB extends BasicControl {
             scrollTopMessage();
         }
         return null;
-    }
-
-    public void buscaCep() {
-        if (entity != null && entity.getEndereco() != null) {
-            try {
-                entity.setEndereco(enderecoService.buscaCep(entity.getEndereco()));
-            } catch (Exception ex) {
-                Logger.getLogger(EmpresaCrudMB.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
 
     /**
@@ -184,46 +105,4 @@ public class ClienteCrudMB extends BasicControl {
         return lazyLista;
     }
     
-    
-    public List<SelectItem> getComboCidade(Estado estado){
-        return selectItemUtils.getComboCidade(estado);
-    }
-    
-    public List<SelectItem> getComboEstado(){
-        return selectItemUtils.getComboEstado();
-    }
-    
-
-    public Pessoa getEntity() {
-        return entity;
-    }
-
-    public void setEntity(Pessoa entity) {
-        this.entity = entity;
-    }
-
-    public List<Pessoa> getClientesSelecionados() {
-        return clientesSelecionados;
-    }
-
-    public void setClientesSelecionados(List<Pessoa> clientesSelecionados) {
-        this.clientesSelecionados = clientesSelecionados;
-    }
-
-    public AbstractFilter getFiltros() {
-        return filtros;
-    }
-
-    public void setFiltros(AbstractFilter filtros) {
-        this.filtros = filtros;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 }

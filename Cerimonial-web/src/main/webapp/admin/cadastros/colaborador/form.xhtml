@@ -8,23 +8,23 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Cadastro de Fornecedor
+        Cadastro de Colaborador
     </ui:define>
 
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="id" value="#{FornecedorCrudMB.id}" converter="javax.faces.Long"/>
+            <f:viewParam name="id" value="#{ColaboradorCrudMB.id}" converter="javax.faces.Long"/>
             <!--use view action if you are in a Java EE 7 server: -->
-            <f:viewAction action="#{FornecedorCrudMB.init()}"/>
-            <!--<f:event type="preRenderView" listener="{FornecedorCrudMB.init}"/>-->
+            <f:viewAction action="#{ColaboradorCrudMB.init()}"/>
+            <!--<f:event type="preRenderView" listener="{ColaboradorCrudMB.init}"/>-->
         </f:metadata>
 
         <h:form>
 
             <div style="margin-bottom: 10px;">
                 <h1>
-                    Fornecedor
+                    Colaborador
                 </h1>
             </div>
 
@@ -32,7 +32,7 @@
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
                         <p:commandButton value="Salvar"
-                                         action="#{FornecedorCrudMB.save()}"
+                                         action="#{ColaboradorCrudMB.save()}"
                                          update="@form"
                                          icon="fa fa-check" 
                                          styleClass="btn-primary"/>
@@ -50,62 +50,34 @@
 
                     <p:separator/>
 
-                    <div class="ui-g-12">
-                        <p:outputLabel value="Tipo Pessoa: *" for="inptTipo"/>
-                    </div>
-                    <div class="ui-g-12">
-                        <h:selectOneMenu id="inptTipo" 
-                                         styleClass="input100"
-                                         value="#{FornecedorCrudMB.entity.tipoPessoa}">
-                            <f:selectItems value="#{FornecedorCrudMB.comboTipoPessoa}" />
-                            <p:ajax process="@this" 
-                                    event="change"
-                                    update="@form"/>
-                        </h:selectOneMenu>
-                    </div
-
                     <div class="ui-g ui-fluid">
                         <div class="ui-g-12">
                             <p:outputLabel value="Nome: *" for="inptNome"/>
                         </div>
                         <div class="ui-g-12">
                             <p:inputText id="inptNome" 
-                                         value="#{FornecedorCrudMB.entity.nome}" 
+                                         value="#{ColaboradorCrudMB.entity.nome}" 
                                          required="true"
                                          label="Nome"/>
                         </div>
 
-                        <h:panelGroup rendered="#{FornecedorCrudMB.entity.pessoaFisica}">
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Cpf: *" for="inptCpf"/>
-                            </div>
-                            <div class="ui-g-12">
-                                <p:inputMask mask="999.999.999-99"
-                                             value="#{FornecedorCrudMB.entity.cpf}"
-                                             required="true"
-                                             id="inptCpf"
-                                             label="Cpf"/>
-                            </div>
-                        </h:panelGroup>
-
-                        <h:panelGroup rendered="#{!FornecedorCrudMB.entity.pessoaFisica}">
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Cnpj: *" for="inptCnpj"/>
-                            </div>
-                            <div class="ui-g-12">
-                                <p:inputText value="#{FornecedorCrudMB.entity.cnpj}"
-                                             required="true"
-                                             id="inptCnpj"
-                                             label="Cnpj"/>
-                            </div>
-                        </h:panelGroup>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Cpf: *" for="inptCpf"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputMask mask="999.999.999-99"
+                                         value="#{ColaboradorCrudMB.entity.cpf}"
+                                         required="true"
+                                         id="inptCpf"
+                                         label="Cpf"/>
+                        </div>
 
                         <div class="ui-g-12">
                             <p:outputLabel value="Email: *" for="inptEmail"/>
                         </div>
                         <div class="ui-g-12">
                             <p:inputText id="inptEmail" 
-                                         value="#{FornecedorCrudMB.entity.email}" 
+                                         value="#{ColaboradorCrudMB.entity.email}" 
                                          required="true"
                                          placeholder="Ex: teste@teste.com"
                                          label="Email">
@@ -116,7 +88,7 @@
                             <p:outputLabel value="Telefone 1:" for="inptTelefone1"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputText value="#{FornecedorCrudMB.entity.telefone1}"
+                            <p:inputText value="#{ColaboradorCrudMB.entity.telefone1}"
                                          required="true"
                                          onfocus="functionMaskPhone();"
                                          styleClass="phone"
@@ -129,49 +101,37 @@
                         <div class="ui-g-12">
                             <p:inputText onfocus="functionMaskPhone();"
                                          styleClass="phone"
-                                         value="#{FornecedorCrudMB.entity.telefone2}"
+                                         value="#{ColaboradorCrudMB.entity.telefone2}"
                                          id="inptTelefone2"
                                          label="Telefone 2"/>
                         </div>
 
                         <div class="ui-g-12">
-                            <p:outputLabel value="Facebook:" for="inptFace"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText id="inptFace" 
-                                         value="#{FornecedorCrudMB.entity.facebook}" 
-                                         label="Facebook"/>
-                        </div>
-
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Instagram:" for="inptInsta"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText id="inptInsta" 
-                                         value="#{FornecedorCrudMB.entity.instagram}" 
-                                         label="Instagram"/>
-                        </div>
-                        
-                        <div class="ui-g-12">
                             <p:outputLabel value="Ativo ?"
                                            for="inptAtivo"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:selectBooleanCheckbox value="#{FornecedorCrudMB.entity.ativo}"
+                            <p:selectBooleanCheckbox value="#{ColaboradorCrudMB.entity.ativo}"
                                                      id="inptAtivo"/>
                         </div>
                         
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Carro Próprio ?"
+                                           for="inptCarro"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:selectBooleanCheckbox value="#{ColaboradorCrudMB.entity.carroProprio}"
+                                                     id="inptCarro"/>
+                        </div>
+
                         <div class="ui-g-12">
                             <p:outputLabel value="Observação:" for="inptObs"/>
                         </div>
                         <div class="ui-g-12">
                             <p:inputTextarea id="inptObs" 
-                                             value="#{FornecedorCrudMB.entity.observacao}" 
+                                             value="#{ColaboradorCrudMB.entity.observacao}" 
                                              label="Observação"/>
                         </div>
-
-
-
                     </div>
 
                     <p:separator/>
@@ -184,13 +144,13 @@
                             </div>
                             <div class="ui-g-12">
                                 <p:inputMask mask="99.999-999"
-                                             value="#{FornecedorCrudMB.entity.endereco.cep}"
+                                             value="#{ColaboradorCrudMB.entity.endereco.cep}"
                                              required="true"
                                              id="inptCep"
                                              label="Cep">
                                     <p:ajax id="eventCep" 
                                             event="change" 
-                                            listener="#{FornecedorCrudMB.buscaCep()}" 
+                                            listener="#{ColaboradorCrudMB.buscaCep()}" 
                                             process="@this"
                                             update="enderecoGroup"
                                             partialSubmit="true"
@@ -203,7 +163,7 @@
                             </div>
                             <div class="ui-g-12">
                                 <p:inputText id="inptLog" 
-                                             value="#{FornecedorCrudMB.entity.endereco.logradouro}" 
+                                             value="#{ColaboradorCrudMB.entity.endereco.logradouro}" 
                                              label="Logradouro"/>
                             </div>
                             <div class="ui-g-12">
@@ -211,7 +171,7 @@
                             </div>
                             <div class="ui-g-12">
                                 <p:inputText id="inptBairro" 
-                                             value="#{FornecedorCrudMB.entity.endereco.bairro}" 
+                                             value="#{ColaboradorCrudMB.entity.endereco.bairro}" 
                                              label="Bairro"/>
                             </div>
                             <div class="ui-g-12">
@@ -219,7 +179,7 @@
                             </div>
                             <div class="ui-g-12">
                                 <p:inputText id="inptNumero" 
-                                             value="#{FornecedorCrudMB.entity.endereco.numero}" 
+                                             value="#{ColaboradorCrudMB.entity.endereco.numero}" 
                                              label="Número"/>
                             </div>
                             <div class="ui-g-12">
@@ -227,7 +187,7 @@
                             </div>
                             <div class="ui-g-12">
                                 <p:inputText id="inptComplemento" 
-                                             value="#{FornecedorCrudMB.entity.endereco.complemento}" 
+                                             value="#{ColaboradorCrudMB.entity.endereco.complemento}" 
                                              label="Complemento"/>
                             </div>
 
@@ -236,12 +196,12 @@
                             </div>
                             <div class="ui-g-12">
                                 <h:selectOneMenu id="inptEstado" 
-                                                 value="#{FornecedorCrudMB.entity.endereco.estado}"
+                                                 value="#{ColaboradorCrudMB.entity.endereco.estado}"
                                                  converter="EntityConverter"
                                                  label="Estado">
                                     <f:selectItem itemValue="" 
                                                   itemLabel="Selecione" /> 
-                                    <f:selectItems value="#{FornecedorCrudMB.comboEstado}" />
+                                    <f:selectItems value="#{ColaboradorCrudMB.comboEstado}" />
                                     <p:ajax process="@this"
                                             update="@this, inptCidade"
                                             global="false"/>
@@ -253,12 +213,12 @@
                             </div>
                             <div class="ui-g-12">
                                 <h:selectOneMenu id="inptCidade" 
-                                                 value="#{FornecedorCrudMB.entity.endereco.cidade}"
+                                                 value="#{ColaboradorCrudMB.entity.endereco.cidade}"
                                                  converter="EntityConverter"
                                                  label="Cidade">
                                     <f:selectItem itemValue="" 
                                                   itemLabel="Selecione" /> 
-                                    <f:selectItems value="#{FornecedorCrudMB.getComboCidade(FornecedorCrudMB.entity.endereco.estado)}" />
+                                    <f:selectItems value="#{ColaboradorCrudMB.getComboCidade(ColaboradorCrudMB.entity.endereco.estado)}" />
                                     <p:ajax process="@this"
                                             update="@this"
                                             global="false"/>

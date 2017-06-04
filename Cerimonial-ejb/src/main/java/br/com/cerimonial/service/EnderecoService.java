@@ -47,7 +47,7 @@ public class EnderecoService extends BasicService<Endereco> {
     public Endereco buscaCep(Endereco endereco) throws Exception {
 
         String cep = endereco.getCep();
-        String strCep = cep.replaceAll("\\D", "");
+        String strCep = CerimonialUtils.removerNaoDigitos(cep);
         String jsonString = CerimonialUtils.callURL("http://viacep.com.br/ws/" + strCep + "/json/");
         String jsonStringFormat = new String(jsonString.getBytes(), "UTF-8");
 

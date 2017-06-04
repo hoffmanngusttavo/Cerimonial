@@ -8,7 +8,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Fornecedores
+        Colaboradores
     </ui:define>
 
     <ui:define name="content">
@@ -17,14 +17,14 @@
 
             <div style="margin-bottom: 10px;">
                 <h1>
-                    Fornecedores
+                    Colaboradores
                 </h1>
             </div>
             
             <p:messages autoUpdate="true"/>
 
             <h:panelGroup id="filtrosGroup">
-                <h:panelGroup rendered="#{FornecedorCrudMB.filtros.exibirFiltro}">
+                <h:panelGroup rendered="#{ColaboradorCrudMB.filtros.exibirFiltro}">
                     <div class="box box-primary">
                         <div class="box-header with-border">
 
@@ -35,18 +35,18 @@
                                 </div>
                                 <div >
                                     <p:inputText id="inptNome" 
-                                                 value="#{FornecedorCrudMB.filtros.nome}" 
+                                                 value="#{ColaboradorCrudMB.filtros.nome}" 
                                                  label="Nome"/>
                                 </div>
                                 <div >
-                                    <p:commandButton actionListener="#{FornecedorCrudMB.filtros.limparFiltros()}"
+                                    <p:commandButton actionListener="#{ColaboradorCrudMB.filtros.limparFiltros()}"
                                                      icon="fa fa-eraser"
                                                      value="Limpar" 
                                                      update="filtrosGroup"
                                                      styleClass="btn-primary"/>
                                 </div>
                                 <div >
-                                    <p:commandButton actionListener="#{FornecedorCrudMB.filtros.filtrar()}"
+                                    <p:commandButton actionListener="#{ColaboradorCrudMB.filtros.filtrar()}"
                                                      icon="fa fa-search"
                                                      value="Buscar" 
                                                      update="dataTable"
@@ -70,7 +70,7 @@
 
                     <p:commandButton value="Excluir Selecionado(s)"
                                      icon="fa fa-trash" 
-                                     actionListener="#{FornecedorCrudMB.delete()}"
+                                     actionListener="#{ColaboradorCrudMB.delete()}"
                                      styleClass="btn-danger"
                                      process="@form"
                                      update="@form">
@@ -82,9 +82,9 @@
                     <p:spacer width="5"/>
 
                     <p:commandButton id="btnFind"
-                                     value="#{FornecedorCrudMB.filtros.exibirFiltro ? 'Esconder' : 'Exibir'} Filtros"
+                                     value="#{ColaboradorCrudMB.filtros.exibirFiltro ? 'Esconder' : 'Exibir'} Filtros"
                                      process="@form"
-                                     actionListener="#{FornecedorCrudMB.filtros.setExibirFiltro(!FornecedorCrudMB.filtros.exibirFiltro)}"
+                                     actionListener="#{ColaboradorCrudMB.filtros.setExibirFiltro(!ColaboradorCrudMB.filtros.exibirFiltro)}"
                                      update="filtrosGroup, @this"
                                      icon="fa fa-search" 
                                      styleClass="btn-flat bg-black"
@@ -101,8 +101,8 @@
                                  currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  paginatorPosition="bottom"
-                                 value="#{FornecedorCrudMB.lazyDataModel}" 
-                                 selection="#{FornecedorCrudMB.itensSelecionados}"
+                                 value="#{ColaboradorCrudMB.lazyDataModel}" 
+                                 selection="#{ColaboradorCrudMB.itensSelecionados}"
                                  widgetVar="dataTableVar"
                                  reflow="true"
                                  emptyMessage="Nenhum registro encontrado"
@@ -130,13 +130,6 @@
                             <h:outputText value="#{item.nome}" />
                         </p:column>
 
-                        <p:column id="cnpj" 
-                                  exportable="true"
-                                  sortBy="#{item.cnpj}"
-                                  headerText="Cnpj">
-                            <h:outputText value="#{item.cnpj}" />
-                        </p:column>
-                        
                         <p:column id="email" 
                                   exportable="true"
                                   sortBy="#{item.email}"
@@ -149,13 +142,6 @@
                                   sortBy="#{item.telefone1}"
                                   headerText="Telefone">
                             <h:outputText value="#{item.telefone1}" />
-                        </p:column>
-                        
-                        <p:column id="categoria" 
-                                  exportable="true"
-                                  sortBy="#{item.categoria.nome}"
-                                  headerText="Categoria">
-                            <h:outputText value="#{item.categoria.nome}" />
                         </p:column>
                         
                         <p:column id="ativo" 

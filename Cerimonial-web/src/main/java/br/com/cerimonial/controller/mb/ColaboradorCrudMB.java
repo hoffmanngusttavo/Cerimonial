@@ -5,7 +5,7 @@
  */
 package br.com.cerimonial.controller.mb;
 
-import br.com.cerimonial.controller.filter.FilterFornecedor;
+import br.com.cerimonial.controller.filter.FilterColaborador;
 import br.com.cerimonial.entity.Pessoa;
 import java.util.List;
 import java.util.Map;
@@ -21,32 +21,29 @@ import org.primefaces.model.SortOrder;
  *
  * @author Gustavo Hoffmann
  */
-@ManagedBean(name = "FornecedorCrudMB")
+@ManagedBean(name = "ColaboradorCrudMB")
 @ViewScoped
-public class FornecedorCrudMB extends PessoaMB{
-    
-    
+public class ColaboradorCrudMB extends PessoaMB{
 
-    public FornecedorCrudMB() {
+    public ColaboradorCrudMB() {
         try {
-            filtros = new FilterFornecedor();
+            filtros = new FilterColaborador();
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
-        
     }
     
-   
     
      /**
-     *Evento invocado pela tela de form para salvar um novo ou edicao de um fornecedor
-     * @return 
+     * Evento invocado pela tela de form para salvar um novo ou edicao de um
+     * colaborador
+     *
+     * @return
      */
     public synchronized String save() {
         try {
-
             if (entity != null) {
-                service.saveFornecedor(entity);
+                service.saveColaborador(entity);
                 createFacesInfoMessage("Dados gravados com sucesso!");
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
                 return "index.xhtml?faces-redirect=true";
@@ -60,9 +57,8 @@ public class FornecedorCrudMB extends PessoaMB{
         return null;
     }
     
-    
     /**
-     *Evento invocado pela tela de index para listar os clientes
+     *Evento invocado pela tela de index para listar os colaboradores
      * @return 
      */
     public LazyDataModel<Pessoa> getLazyDataModel() {
@@ -89,7 +85,7 @@ public class FornecedorCrudMB extends PessoaMB{
                 @Override
                 public List<Pessoa> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
-                    int count = service.countListagemFornecedor(filtros.getFilter());
+                    int count = service.countListagemColaborador(filtros.getFilter());
                     this.setRowCount(count);
 
                     String sortAscDesc = "ASC";
@@ -97,7 +93,7 @@ public class FornecedorCrudMB extends PessoaMB{
                         sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
                     }
 
-                    List<Pessoa> clientes = service.findRangeListagemFornecedor(filtros.getFilter(), max, offset, sortField, sortAscDesc);
+                    List<Pessoa> clientes = service.findRangeListagemColaborador(filtros.getFilter(), max, offset, sortField, sortAscDesc);
                     return clientes;
                 }
             };

@@ -47,7 +47,7 @@ public class Pais implements Serializable, ModelInterface {
     @NotNull
     @Size(min = 2, max = 255)
     private String sigla;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
     @OneToMany(mappedBy = "pais", fetch = FetchType.LAZY)
     private List<Estado> estados;

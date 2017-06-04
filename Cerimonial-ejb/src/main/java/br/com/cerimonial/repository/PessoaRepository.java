@@ -95,4 +95,29 @@ public class PessoaRepository extends BasicRepository {
         return getCount(modelFilter.getSqlCountBase());
     }
 
+    //-----------Colaboradores----------------------
+    public int countListagemColaborador(HashMap<String, Object> filter) throws Exception {
+        ModelFilter modelFilter = ModelFilter.getInstance();
+        modelFilter.setEntidade(Pessoa.class);
+        modelFilter.addFilter(filter);
+        modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
+        return getCount(modelFilter.getSqlCountBase());
+    }
+
+    public List<Pessoa> findRangeListagemColaborador(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
+        ModelFilter modelFilter = ModelFilter.getInstance();
+        modelFilter.setEntidade(Pessoa.class);
+        if (params != null) {
+            modelFilter.addFilter(params);
+            modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
+        }
+        modelFilter.setLimit(max);
+        modelFilter.setOffSet(offset);
+        if (sortField != null) {
+            modelFilter.addOrderBy(sortField, sortAscDesc);
+        }
+
+        return getPureList(Pessoa.class, modelFilter.getSqlBase());
+    }
+
 }

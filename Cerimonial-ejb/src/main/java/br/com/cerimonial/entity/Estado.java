@@ -49,7 +49,7 @@ public class Estado implements Serializable, ModelInterface {
     @NotNull
     @Size(min = 2, max = 255)
     private String sigla;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
     @ManyToOne
     private Pais pais;

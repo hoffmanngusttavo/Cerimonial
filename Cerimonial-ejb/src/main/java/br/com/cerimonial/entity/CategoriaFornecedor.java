@@ -16,6 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -45,12 +46,13 @@ public class CategoriaFornecedor implements Serializable, ModelInterface {
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "categoriasFornecedor", fetch = FetchType.LAZY)
     private List<Pessoa> fornecedores;
+    
     
 
     public CategoriaFornecedor(String nome) {
@@ -107,6 +109,8 @@ public class CategoriaFornecedor implements Serializable, ModelInterface {
     public void setFornecedores(List<Pessoa> fornecedores) {
         this.fornecedores = fornecedores;
     }
+
+   
 
     
     
