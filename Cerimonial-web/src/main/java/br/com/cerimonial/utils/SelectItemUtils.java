@@ -39,10 +39,10 @@ public class SelectItemUtils {
         return items;
     }
     
-    public  List<SelectItem> getComboCidade() {
+    public  List<SelectItem> getComboCidade(Estado estado) {
         List<SelectItem> items = new LinkedList<>();
         try {
-            for (Cidade item : cidadeService.findAll()) {
+            for (Cidade item : cidadeService.findByEstado(estado)) {
                 items.add(new SelectItem(item, item.getNome()));
             }
         } catch (Exception ex) {

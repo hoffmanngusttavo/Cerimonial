@@ -8,6 +8,7 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Empresa;
 import br.com.cerimonial.entity.Endereco;
+import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.service.EmpresaService;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.utils.SelectItemUtils;
@@ -106,8 +107,8 @@ public class EmpresaCrudMB extends BasicControl {
         return SelectItemUtils.getComboTipoPessoa();
     }
     
-    public List<SelectItem> getComboCidade(){
-        return selectItemUtils.getComboCidade();
+    public List<SelectItem> getComboCidade(Estado estado){
+        return selectItemUtils.getComboCidade(estado);
     }
     
     public List<SelectItem> getComboEstado(){

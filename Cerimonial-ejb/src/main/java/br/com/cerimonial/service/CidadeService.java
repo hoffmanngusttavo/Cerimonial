@@ -6,7 +6,9 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Cidade;
+import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.repository.CidadeRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +59,17 @@ public class CidadeService  extends BasicService<Cidade>{
         return null;
     }
     
+    public List<Cidade> findByEstado(Estado estado) {
+        if(estado != null){
+            try {
+                return repository.findByEstado(estado);
+            } catch (Exception ex) {
+                Logger.getLogger(CidadeService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return new ArrayList<>();
+    }
+    
     /**
      *
      * @param entity
@@ -78,5 +91,7 @@ public class CidadeService  extends BasicService<Cidade>{
         }
         return null;
     }
+
+    
     
 }

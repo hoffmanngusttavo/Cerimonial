@@ -8,9 +8,13 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.controller.filter.FilterCliente;
+import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.enums.TipoEnvolvido;
+import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -19,6 +23,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -28,8 +33,8 @@ import org.primefaces.model.SortOrder;
  */
 @ManagedBean(name = "ClienteCrudMB")
 @ViewScoped
-public class ClienteCrudMB extends BasicControl{
-    
+public class ClienteCrudMB extends BasicControl {
+
     private Pessoa entity;
     private List<Pessoa> clientesSelecionados;
     @EJB
@@ -37,18 +42,22 @@ public class ClienteCrudMB extends BasicControl{
     private LazyDataModel<Pessoa> lazyLista;
     private AbstractFilter filtros;
     private Long id;
+    @EJB
+    private EnderecoService enderecoService;
+    private final SelectItemUtils selectItemUtils;
 
     public ClienteCrudMB() {
+        selectItemUtils = new SelectItemUtils();
         try {
             filtros = new FilterCliente();
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
-    
+
     /**
-     *Evento invocado ao abrir o xhtml na edição de um cliente
-     * objetivo de carregar os dados do cliente
+     * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
+     * carregar os dados do cliente
      */
     public void init() {
 
@@ -63,9 +72,8 @@ public class ClienteCrudMB extends BasicControl{
         }
     }
 
-    
     /**
-     *Evento invocado pela tela de listagem para remover os itens selecionados
+     * Evento invocado pela tela de listagem para remover os itens selecionados
      */
     public void delete() {
 
@@ -85,25 +93,25 @@ public class ClienteCrudMB extends BasicControl{
                     createFacesInfoMessage(ex.getMessage());
                 }
             }
-            
+
             clientesSelecionados.clear();
-            
-            if(numCars > 0){
+
+            if (numCars > 0) {
                 createFacesInfoMessage(numCars + " clientes removidos com sucesso!");
             }
         }
     }
 
-    
     /**
-     *Evento invocado pela tela de form para salvar um novo ou edicao de um cliente
-     * @return 
+     * Evento invocado pela tela de form para salvar um novo ou edicao de um
+     * cliente
+     *
+     * @return
      */
     public synchronized String save() {
         try {
-
             if (entity != null) {
-                service.save(entity);
+                service.saveCliente(entity);
                 createFacesInfoMessage("Dados gravados com sucesso!");
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
                 return "index.xhtml?faces-redirect=true";
@@ -116,10 +124,21 @@ public class ClienteCrudMB extends BasicControl{
         }
         return null;
     }
-    
+
+    public void buscaCep() {
+        if (entity != null && entity.getEndereco() != null) {
+            try {
+                entity.setEndereco(enderecoService.buscaCep(entity.getEndereco()));
+            } catch (Exception ex) {
+                Logger.getLogger(EmpresaCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     /**
-     *Evento invocado pela tela de index para listar os clientes
-     * @return 
+     * Evento invocado pela tela de index para listar os clientes
+     *
+     * @return
      */
     public LazyDataModel<Pessoa> getLazyDataModel() {
 
@@ -164,6 +183,16 @@ public class ClienteCrudMB extends BasicControl{
         }
         return lazyLista;
     }
+    
+    
+    public List<SelectItem> getComboCidade(Estado estado){
+        return selectItemUtils.getComboCidade(estado);
+    }
+    
+    public List<SelectItem> getComboEstado(){
+        return selectItemUtils.getComboEstado();
+    }
+    
 
     public Pessoa getEntity() {
         return entity;
@@ -197,10 +226,4 @@ public class ClienteCrudMB extends BasicControl{
         this.id = id;
     }
 
-    
-    
-    
-    
-    
-    
 }

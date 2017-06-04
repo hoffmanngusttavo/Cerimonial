@@ -81,6 +81,7 @@ public class EnderecoService extends BasicService<Endereco> {
         endereco.setLogradouro((String) json.get("logradouro"));
         endereco.setBairro((String) json.get("bairro"));
         endereco.setCidade(cidade);
+        endereco.setEstado(estado);
 
         return endereco;
     }

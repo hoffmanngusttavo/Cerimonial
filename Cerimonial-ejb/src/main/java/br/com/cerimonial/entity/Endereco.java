@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.shiro.SecurityUtils;
@@ -37,8 +39,10 @@ public class Endereco implements Serializable, ModelInterface {
     @GeneratedValue(generator = "GENERATE_Endereco", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "GENERATE_Endereco", sequenceName = "Endereco_pk_seq", allocationSize = 1)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataUltimaAlteracao;
     @Column(nullable = false)
     @NotNull
     @Size(min = 8, max = 15)
@@ -58,6 +62,9 @@ public class Endereco implements Serializable, ModelInterface {
     @ManyToOne
     @NotNull
     private Cidade cidade;
+    @ManyToOne
+    @NotNull
+    private Estado estado;
 
     @Override
     public Long getId() {
@@ -79,6 +86,16 @@ public class Endereco implements Serializable, ModelInterface {
         this.modificadoPor = modificadoPor;
     }
 
+     @Override
+    public Date getDataUltimaAlteracao() {
+        return dataUltimaAlteracao;
+    }
+
+    @Override
+    public void setDataUltimaAlteracao(Date data) {
+        this.dataUltimaAlteracao = data;
+    }
+    
     public String getCep() {
         return cep;
     }
@@ -126,6 +143,14 @@ public class Endereco implements Serializable, ModelInterface {
     public void setCidade(Cidade cidade) {
         this.cidade = cidade;
     }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
     
     
 
@@ -154,15 +179,7 @@ public class Endereco implements Serializable, ModelInterface {
         return "br.com.project.rural.entity.Endereco[ id=" + id + " ]";
     }
 
-    @Override
-    public Date getDataUltimaAlteracao() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setDataUltimaAlteracao(Date data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
 
     @PrePersist
     @Override

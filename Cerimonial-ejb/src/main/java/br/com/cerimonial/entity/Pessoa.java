@@ -11,10 +11,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -60,10 +62,8 @@ public class Pessoa implements Serializable, ModelInterface {
     @Size(min = 2, max = 255)
     private String email;
     @Column
-    @Size(min = 2, max = 255)
     private String facebook;
     @Column
-    @Size(min = 2, max = 255)
     private String instagram;
     @Column
     @NotNull
@@ -72,11 +72,11 @@ public class Pessoa implements Serializable, ModelInterface {
     private String telefone2;
     @Column(columnDefinition = "TEXT")
     private String observacao;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Endereco endereco;
     
     @Column
@@ -103,6 +103,10 @@ public class Pessoa implements Serializable, ModelInterface {
     @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataNascimento;
+
+    public Pessoa() {
+        endereco = new Endereco();
+    }
     
     
     

@@ -153,95 +153,98 @@
                     <p:separator/>
                     <h2>Endereço</h2>
                     <p:separator/>
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Cep: *" for="inptCep"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputMask mask="99.999-999"
-                                         value="#{EmpresaCrudMB.entity.endereco.cep}"
-                                         required="true"
-                                         id="inptCep"
-                                         label="Cep">
-                                <p:ajax id="eventCep" 
-                                        event="change" 
-                                        listener="#{EmpresaCrudMB.buscaCep()}" 
-                                        process="@this"
-                                        update="@form"
-                                        partialSubmit="true"
-                                        onstart="PF('statusDialog').show();"
-                                        oncomplete="PF('statusDialog').hide();"/>
-                            </p:inputMask>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Logradouro: *" for="inptLog"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText id="inptLog" 
-                                         value="#{EmpresaCrudMB.entity.endereco.logradouro}" 
-                                         label="Logradouro"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Bairro: *" for="inptBairro"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText id="inptBairro" 
-                                         value="#{EmpresaCrudMB.entity.endereco.bairro}" 
-                                         label="Bairro"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Número:" for="inptNumero"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText id="inptNumero" 
-                                         value="#{EmpresaCrudMB.entity.endereco.numero}" 
-                                         label="Número"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Complemento:" for="inptComplemento"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText id="inptComplemento" 
-                                         value="#{EmpresaCrudMB.entity.endereco.complemento}" 
-                                         label="Complemento"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Cidade:" for="inptCidade"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <h:selectOneMenu id="inptCidade" 
-                                             value="#{EmpresaCrudMB.entity.endereco.cidade}"
-                                             converter="EntityConverter"
-                                             label="Cidade">
-                                <f:selectItem itemValue="" 
-                                              itemLabel="Selecione" /> 
-                                <f:selectItems value="#{EmpresaCrudMB.comboCidade}" />
-                                <p:ajax process="@this"
-                                        update="@this"
-                                        global="false"/>
-                            </h:selectOneMenu>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Estado:" for="inptEstado"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <h:selectOneMenu id="inptEstado" 
-                                             value="#{EmpresaCrudMB.entity.endereco.cidade.estado}"
-                                             converter="EntityConverter"
-                                             label="Estado">
-                                <f:selectItem itemValue="" 
-                                              itemLabel="Selecione" /> 
-                                <f:selectItems value="#{EmpresaCrudMB.comboEstado}" />
-                                <p:ajax process="@this"
-                                        update="@this"
-                                        global="false"/>
-                            </h:selectOneMenu>
-                        </div>
-                    </div>
+                    <h:panelGroup id="enderecoGroup">
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Cep: *" for="inptCep"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputMask mask="99.999-999"
+                                             value="#{EmpresaCrudMB.entity.endereco.cep}"
+                                             required="true"
+                                             id="inptCep"
+                                             label="Cep">
+                                    <p:ajax id="eventCep" 
+                                            event="change" 
+                                            listener="#{EmpresaCrudMB.buscaCep()}" 
+                                            process="@this"
+                                            update="enderecoGroup"
+                                            partialSubmit="true"
+                                            onstart="PF('statusDialog').show();"
+                                            oncomplete="PF('statusDialog').hide();"/>
+                                </p:inputMask>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Logradouro: *" for="inptLog"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputText id="inptLog" 
+                                             value="#{EmpresaCrudMB.entity.endereco.logradouro}" 
+                                             label="Logradouro"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Bairro: *" for="inptBairro"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputText id="inptBairro" 
+                                             value="#{EmpresaCrudMB.entity.endereco.bairro}" 
+                                             label="Bairro"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Número:" for="inptNumero"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputText id="inptNumero" 
+                                             value="#{EmpresaCrudMB.entity.endereco.numero}" 
+                                             label="Número"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Complemento:" for="inptComplemento"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputText id="inptComplemento" 
+                                             value="#{EmpresaCrudMB.entity.endereco.complemento}" 
+                                             label="Complemento"/>
+                            </div>
 
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Estado:" for="inptEstado"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <h:selectOneMenu id="inptEstado" 
+                                                 value="#{EmpresaCrudMB.entity.endereco.estado}"
+                                                 converter="EntityConverter"
+                                                 label="Estado">
+                                    <f:selectItem itemValue="" 
+                                                  itemLabel="Selecione" /> 
+                                    <f:selectItems value="#{EmpresaCrudMB.comboEstado}" />
+                                    <p:ajax process="@this"
+                                            update="@this, inptCidade"
+                                            global="false"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="ui-g-12">
+                                <p:outputLabel value="Cidade:" for="inptCidade"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <h:selectOneMenu id="inptCidade" 
+                                                 value="#{EmpresaCrudMB.entity.endereco.cidade}"
+                                                 converter="EntityConverter"
+                                                 label="Cidade">
+                                    <f:selectItem itemValue="" 
+                                                  itemLabel="Selecione" /> 
+                                    <f:selectItems value="#{EmpresaCrudMB.getComboCidade(EmpresaCrudMB.entity.endereco.estado)}" />
+                                    <p:ajax process="@this"
+                                            update="@this"
+                                            global="false"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                        </div>
+                    </h:panelGroup>
                 </div>
             </div>
-
         </h:form>
     </ui:define>
 

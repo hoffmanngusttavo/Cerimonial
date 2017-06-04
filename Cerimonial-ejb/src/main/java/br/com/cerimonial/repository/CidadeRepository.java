@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
  *
  * @author Gustavo Hoffmann
  */
-public class CidadeRepository extends BasicRepository{
+public class CidadeRepository extends BasicRepository {
 
     public CidadeRepository(EntityManager entityManager) {
         super(entityManager);
@@ -25,7 +25,7 @@ public class CidadeRepository extends BasicRepository{
     }
 
     public Cidade getEntity(Long id) throws Exception {
-       return getEntity(Cidade.class, id);
+        return getEntity(Cidade.class, id);
     }
 
     public Cidade findByNomeEstado(String city, String sigla) throws Exception {
@@ -43,7 +43,15 @@ public class CidadeRepository extends BasicRepository{
     }
 
     public Cidade edit(Cidade entity) throws Exception {
-       return setEntity(Cidade.class, entity);
+        return setEntity(Cidade.class, entity);
     }
-    
+
+    public List<Cidade> findByEstado(Estado estado) throws Exception {
+        StringBuilder sql = new StringBuilder("select city from Cidade city  ");
+        sql.append("INNER JOIN city.estado estado");
+        sql.append(" where 1=1");
+        sql.append(" and estado.id = ?1");
+        return getPureList(Cidade.class, sql.toString(), estado.getId());
+    }
+
 }

@@ -74,6 +74,18 @@ public class PessoaService extends BasicService<Pessoa> {
     
     //-----------Clientes----------------------
     
+    public Pessoa saveCliente(Pessoa entity) throws Exception {
+        if (entity != null) {
+            entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
+            if (entity.getId() == null) {
+                return repository.create(entity);
+            } else {
+                return repository.edit(entity);
+            }
+        }
+        return null;
+    }
+    
     public int countListagemClientes(HashMap<String, Object> filter) {
         try {
             if (filter == null) {
@@ -105,6 +117,18 @@ public class PessoaService extends BasicService<Pessoa> {
     //-----------Fornecedores----------------------
     
     
+    public Pessoa saveFornecedor(Pessoa entity) throws Exception {
+        if (entity != null) {
+            entity.setTipoEnvolvido(TipoEnvolvido.FORNECEDOR);
+            if (entity.getId() == null) {
+                return repository.create(entity);
+            } else {
+                return repository.edit(entity);
+            }
+        }
+        return null;
+    }
+    
     public int countListagemFornecedor(HashMap<String, Object> filter) {
         try {
             if (filter == null) {
@@ -131,5 +155,7 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         return null;
     }
+
+    
 
 }
