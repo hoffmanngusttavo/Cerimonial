@@ -99,7 +99,14 @@ public class EnderecoService extends BasicService<Endereco> {
 
     @Override
     public Endereco save(Endereco entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (entity != null) {
+            if (entity.getId() == null) {
+                return repository.create(entity);
+            } else {
+                return repository.edit(entity);
+            }
+        }
+        return null;
     }
 
 }

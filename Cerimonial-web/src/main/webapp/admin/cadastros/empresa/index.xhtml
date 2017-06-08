@@ -32,7 +32,7 @@
                                          action="#{EmpresaCrudMB.save()}"
                                          update="@form"
                                          icon="fa fa-check" 
-                                         styleClass="btn-primary"
+                                         class="btn btn-xs btn-success"
                                          onstart="PF('statusDialog').show();"
                                          oncomplete="PF('statusDialog').hide();"/>
                         <p:spacer width="5"/>
@@ -106,17 +106,20 @@
                             <p:outputLabel value="Telefone 1:" for="inptTelefone1"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputMask mask="(99)99999-9999"
-                                         value="#{EmpresaCrudMB.entity.telefone1}"
+                            <p:inputText value="#{EmpresaCrudMB.entity.telefone1}"
                                          required="true"
+                                         onfocus="functionMaskPhone();"
+                                         styleClass="phone"
                                          id="inptTelefone1"
                                          label="Telefone 1"/>
+
                         </div>
                         <div class="ui-g-12">
                             <p:outputLabel value="Telefone 2:" for="inptTelefone2"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputMask mask="(99)99999-9999"
+                            <p:inputText onfocus="functionMaskPhone();"
+                                         styleClass="phone"
                                          value="#{EmpresaCrudMB.entity.telefone2}"
                                          id="inptTelefone2"
                                          label="Telefone 2"/>

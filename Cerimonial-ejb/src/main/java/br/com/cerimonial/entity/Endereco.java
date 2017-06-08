@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -33,6 +34,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Endereco implements Serializable, ModelInterface {
+    
     
     
     @Id
@@ -65,6 +67,8 @@ public class Endereco implements Serializable, ModelInterface {
     @ManyToOne
     @NotNull
     private Estado estado;
+    @OneToOne(mappedBy = "endereco")
+    private Pessoa pessoa;
 
     @Override
     public Long getId() {
@@ -150,6 +154,14 @@ public class Endereco implements Serializable, ModelInterface {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
     
     

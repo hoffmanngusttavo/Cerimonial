@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+
 /**
  *
  * @author Gustavo Hoffmann
@@ -52,7 +53,7 @@ import javax.persistence.Query;
     protected void removeEntity(Object entity) throws Exception{
         Object updateObj = getEntityManager().merge(entity);
         getEntityManager().remove(updateObj);
-        getEntityManager().flush();
+//        getEntityManager().flush();
     }
     
     protected <T> List<T> getPureList(Class<T> classToCast,String query,Object... values) throws Exception{

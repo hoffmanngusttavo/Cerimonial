@@ -30,24 +30,14 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.3.1.Final</version>
+            <version>4.3.5.Final</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.3.1.Final</version>
-        </dependency>
+        
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-envers -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
-            <version>4.3.1.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>          
-            <version>4.0.2.GA</version>
+            <version>4.3.5.Final</version>
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/postgresql/postgresql -->

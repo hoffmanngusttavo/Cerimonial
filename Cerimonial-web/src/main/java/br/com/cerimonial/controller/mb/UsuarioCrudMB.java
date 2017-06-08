@@ -85,7 +85,7 @@ public class UsuarioCrudMB extends BasicControl {
                     numCars++;
                 } catch (Exception ex) {
                     Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
-                    createFacesInfoMessage(ex.getMessage());
+                    createFacesErrorMessage(ex.getMessage());
                 }
             }
             

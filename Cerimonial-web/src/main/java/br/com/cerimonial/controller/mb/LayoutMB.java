@@ -30,11 +30,11 @@ public class LayoutMB implements Serializable{
     }
 
     public void setHorizontalLayout() {
-        layout = "/WEB-INF/admin/layout/default.xhtml";
+        layout = "/WEB-INF/admin/layout/default/default.xhtml";
     }
 
     public void setDefaultLayout() {
-        layout = "/WEB-INF/admin/layout/default.xhtml";
+        layout = "/WEB-INF/admin/layout/bootstrap/default.xhtml";
     }
     
 }

@@ -43,14 +43,14 @@
                                                      icon="fa fa-eraser"
                                                      value="Limpar" 
                                                      update="filtrosGroup"
-                                                     styleClass="btn-primary"/>
+                                                     class="btn btn-xs btn-default"/>
                                 </div>
                                 <div >
                                     <p:commandButton actionListener="#{UsuarioCrudMB.filtros.filtrar()}"
                                                      icon="fa fa-search"
                                                      value="Buscar" 
                                                      update="dataTable"
-                                                     styleClass="btn-primary"/>
+                                                     class="btn btn-xs btn-primary"/>
                                 </div>
                             </div>
                         </div>
@@ -64,14 +64,14 @@
                                      ajax="false" 
                                      icon="fa fa-plus"
                                      value="Novo" 
-                                     styleClass="btn-primary"/>
+                                     class="btn btn-xs btn-primary"/>
 
                     <p:spacer width="5"/>
 
                     <p:commandButton value="Excluir Selecionado(s)"
                                      icon="fa fa-trash" 
                                      actionListener="#{UsuarioCrudMB.delete()}"
-                                     styleClass="btn-danger"
+                                     class="btn btn-xs btn-danger"
                                      process="@form"
                                      update="@form">
                         <p:confirm header="Remover"
@@ -87,7 +87,7 @@
                                      actionListener="#{UsuarioCrudMB.filtros.setExibirFiltro(!UsuarioCrudMB.filtros.exibirFiltro)}"
                                      update="filtrosGroup, @this"
                                      icon="fa fa-search" 
-                                     styleClass="btn-flat bg-black"
+                                     class="btn btn-xs btn-default"
                                      partialSubmit="true"/>
 
                     <p:separator/>

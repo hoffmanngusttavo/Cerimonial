@@ -78,8 +78,9 @@ public class Pessoa implements Serializable, ModelInterface {
     private Usuario modificadoPor;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private Endereco endereco;
+    
+    @OneToOne(cascade = {CascadeType.ALL})
+    private Endereco endereco = new Endereco();
     
     @Column
     @Enumerated(EnumType.STRING)
@@ -105,7 +106,7 @@ public class Pessoa implements Serializable, ModelInterface {
     @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataNascimento;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Usuario usuarioCliente;
     
 

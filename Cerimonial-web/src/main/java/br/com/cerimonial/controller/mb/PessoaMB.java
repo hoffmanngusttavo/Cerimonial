@@ -76,7 +76,7 @@ public class PessoaMB extends BasicControl {
                     numCars++;
                 } catch (Exception ex) {
                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                    createFacesInfoMessage(ex.getMessage());
+                    createFacesErrorMessage(ex.getMessage());
                 }
             }
 

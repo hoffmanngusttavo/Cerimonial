@@ -2,7 +2,7 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns="http://www.w3.org/1999/xhtml"
-                template="#{LayoutMB.layout}"
+                template="/WEB-INF/admin/layout/bootstrap/default.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
@@ -15,14 +15,12 @@
         <h:form prependId="false"
                 id="form">
 
-            <h:messages/>
-
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-4 text-center">
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Orçamentos em Negociação</h3>
+                                <h3 class="panel-title">Visitas</h3>
                             </div>
                             <div class="panel-body">
                                 <h3>120.310</h3>
@@ -32,7 +30,7 @@
                     <div class="col-sm-4 text-center">
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Orçamentos Contratados</h3>
+                                <h3 class="panel-title">Visitas Únicas</h3>
                             </div>
                             <div class="panel-body">
                                 <h3>13.050</h3>
@@ -42,7 +40,7 @@
                     <div class="col-sm-4 text-center">
                         <div class="panel panel-danger">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Orçamentos Cancelados</h3>
+                                <h3 class="panel-title">Bounce</h3>
                             </div>
                             <div class="panel-body">
                                 <h3>22%</h3>
@@ -54,20 +52,20 @@
                     <div class="col-md-6">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Lembretes</h3>
+                                <h3 class="panel-title">Ultimas Páginas</h3>
                             </div>
                             <div class="panel-body">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Tarefa</th>
+                                            <th>Título</th>
                                             <th class="hidden-xs">Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <a href="#">Task 1 </a>
+                                                <a href="#">Bootstrap 4 - O que há de novo?</a>
                                             </td>
                                             <td class="hidden-xs">
                                                 <a class="btn btn-xs btn-info" href="#">Detalhes</a>
@@ -75,7 +73,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <a href="#">Task 2</a>
+                                                <a href="#">Trabalhando com modais</a>
                                             </td>
                                             <td class="hidden-xs">
                                                 <a class="btn btn-xs btn-info" href="#">Detalhes</a>
@@ -83,7 +81,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <a href="#">Task 3</a>
+                                                <a href="#">O que é um Framework</a>
                                             </td>
                                             <td class="hidden-xs">
                                                 <a class="btn btn-xs btn-info" href="#">Detalhes</a>
@@ -91,7 +89,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <a href="#">Task 4</a>
+                                                <a href="#">Utilizando Scrollspy</a>
                                             </td>
                                             <td class="hidden-xs">
                                                 <a class="btn btn-xs btn-info" href="#">Detalhes</a>
@@ -106,7 +104,7 @@
                     <div class="col-md-6">
                         <div class="panel panel-warning">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Contas a Vencer</h3>
+                                <h3 class="panel-title">Categorias</h3>
                             </div>
                             <div class="panel-body">
                                 <table class="table table-hover">
