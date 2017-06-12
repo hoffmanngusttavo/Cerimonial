@@ -86,10 +86,6 @@ public class PessoaService extends BasicService<Pessoa> {
         if (entity != null) {
             entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
             
-            if(entity.getEndereco() != null){
-                enderecoService.save(entity.getEndereco());
-            }
-            
             if (entity.getId() == null) {
                 //criar novo usuario
                 Usuario user = usuarioService.criarUsuarioCliente(entity);
@@ -141,10 +137,6 @@ public class PessoaService extends BasicService<Pessoa> {
         if (entity != null) {
             entity.setTipoEnvolvido(TipoEnvolvido.FORNECEDOR);
             
-            if(entity.getEndereco() != null){
-                enderecoService.save(entity.getEndereco());
-            }
-            
             if (entity.getId() == null) {
                 return repository.create(entity);
             } else {
@@ -186,10 +178,6 @@ public class PessoaService extends BasicService<Pessoa> {
     public Pessoa saveColaborador(Pessoa entity) throws Exception {
         if (entity != null) {
             entity.setTipoEnvolvido(TipoEnvolvido.COLABORADOR);
-            
-//            if(entity.getEndereco() != null){
-//                enderecoService.save(entity.getEndereco());
-//            }
             
             if (entity.getId() == null) {
                 return repository.create(entity);

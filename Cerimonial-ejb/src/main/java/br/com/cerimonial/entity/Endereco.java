@@ -34,39 +34,45 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Endereco implements Serializable, ModelInterface {
-    
-    
-    
+
     @Id
-    @GeneratedValue(generator = "GENERATE_Endereco", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "GENERATE_Endereco", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Endereco", sequenceName = "Endereco_pk_seq", allocationSize = 1)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+
     @Column(nullable = false)
     @NotNull
     @Size(min = 8, max = 15)
     private String cep;
+
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String logradouro;
+
     @Column
     private String complemento;
+
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String bairro;
+
     @Column
     private String numero;
+
     @ManyToOne
-    @NotNull
     private Cidade cidade;
+
     @ManyToOne
-    @NotNull
     private Estado estado;
+
     @OneToOne(mappedBy = "endereco")
     private Pessoa pessoa;
 
@@ -90,7 +96,7 @@ public class Endereco implements Serializable, ModelInterface {
         this.modificadoPor = modificadoPor;
     }
 
-     @Override
+    @Override
     public Date getDataUltimaAlteracao() {
         return dataUltimaAlteracao;
     }
@@ -99,7 +105,7 @@ public class Endereco implements Serializable, ModelInterface {
     public void setDataUltimaAlteracao(Date data) {
         this.dataUltimaAlteracao = data;
     }
-    
+
     public String getCep() {
         return cep;
     }
@@ -163,8 +169,6 @@ public class Endereco implements Serializable, ModelInterface {
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -190,8 +194,6 @@ public class Endereco implements Serializable, ModelInterface {
     public String toString() {
         return "br.com.project.rural.entity.Endereco[ id=" + id + " ]";
     }
-
-  
 
     @PrePersist
     @Override
@@ -225,5 +227,5 @@ public class Endereco implements Serializable, ModelInterface {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
-    
+
 }

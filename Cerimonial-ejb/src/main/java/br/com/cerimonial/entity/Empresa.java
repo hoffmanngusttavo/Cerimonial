@@ -40,41 +40,52 @@ import org.hibernate.envers.Audited;
 public class Empresa implements Serializable, ModelInterface {
 
     @Id
-    @GeneratedValue(generator = "GENERATE_Empresa", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "GENERATE_Empresa", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Empresa", sequenceName = "Empresa_pk_seq", allocationSize = 1)
     private Long id;
+
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
+
     @Column(nullable = false)
     @NotNull
     private String razaoSocial;
+
     @Column
     private String nomeFantasia;
+
     @Column
     @NotNull
     private String telefone1;
+
     @Column
     private String telefone2;
+
     @Column
     private String email;
+
     @Column
     private String site;
+
     @Column
-    @Size(min = 11 , max = 25)
+    @Size(min = 11, max = 25)
     private String cpf;
+
     @Column
     @Size(min = 14, max = 25)
     private String cnpj;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    
+
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Endereco endereco = new Endereco();
-    
+
     @Column
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa = TipoPessoa.JURIDICA;
@@ -82,7 +93,7 @@ public class Empresa implements Serializable, ModelInterface {
     public Empresa() {
         endereco = new Endereco();
     }
-    
+
     public String getNome() {
         return nome;
     }
@@ -201,12 +212,10 @@ public class Empresa implements Serializable, ModelInterface {
         this.tipoPessoa = tipoPessoa;
     }
 
-    
-    public boolean isPessoaFisica(){
+    public boolean isPessoaFisica() {
         return this.getTipoPessoa().equals(TipoPessoa.FISICA);
     }
-    
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

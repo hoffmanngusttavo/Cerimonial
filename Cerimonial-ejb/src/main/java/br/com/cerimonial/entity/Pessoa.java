@@ -43,81 +43,86 @@ import org.hibernate.envers.Audited;
 public class Pessoa implements Serializable, ModelInterface {
 
     @Id
-    @GeneratedValue(generator = "GENERATE_Pessoa", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "GENERATE_Pessoa", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Pessoa", sequenceName = "Pessoa_pk_seq", allocationSize = 1)
     private Long id;
+
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 2, max = 255)
+
+    @Column
     private String rg;
+
     @Column
-    @Size(min = 11, max = 25)
     private String cpf;
+
     @Column
-    @Size(min = 14, max = 25)
     private String cnpj;
-    @Column(nullable = false)
-    @Size(min = 2, max = 255)
+
+    @Column
     private String email;
+
     @Column
     private String facebook;
+
     @Column
     private String instagram;
-    @Column
+
+    @Column(nullable = false)
     @NotNull
     private String telefone1;
+
     @Column
     private String telefone2;
+
     @Column(columnDefinition = "TEXT")
     private String observacao;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    
+
     @OneToOne(cascade = {CascadeType.ALL})
     private Endereco endereco = new Endereco();
-    
+
     @Column
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa = TipoPessoa.JURIDICA;
-    
+
     @Column
     @Enumerated(EnumType.STRING)
     private TipoEnvolvido tipoEnvolvido = TipoEnvolvido.CLIENTE;
-    
-    
+
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
-   
+
     //Particularidades Colaborador
-     @Column(columnDefinition = "boolean default true")
+    @Column(columnDefinition = "boolean default true")
     private boolean carroProprio = true;
-    
+
     //Particularidades Fornecedor
     @ManyToMany(fetch = FetchType.LAZY)
     private List<CategoriaFornecedor> categoriasFornecedor;
-    
+
     //Particularidades Cliente
     @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataNascimento;
+
     @OneToOne(cascade = CascadeType.REMOVE)
     private Usuario usuarioCliente;
-    
 
     public Pessoa() {
         endereco = new Endereco();
     }
-    
-    public boolean isPessoaFisica(){
+
+    public boolean isPessoaFisica() {
         return this.getTipoPessoa().equals(TipoPessoa.FISICA);
     }
-    
 
     @Override
     public Long getId() {
@@ -245,8 +250,6 @@ public class Pessoa implements Serializable, ModelInterface {
         this.ativo = ativo;
     }
 
-    
-
     public String getRg() {
         return rg;
     }
@@ -294,8 +297,6 @@ public class Pessoa implements Serializable, ModelInterface {
     public void setUsuarioCliente(Usuario usuarioCliente) {
         this.usuarioCliente = usuarioCliente;
     }
-    
-    
 
     @Override
     public int hashCode() {

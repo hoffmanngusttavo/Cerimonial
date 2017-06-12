@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,16 +34,18 @@ import org.hibernate.envers.Audited;
 public class Login implements Serializable, ModelInterface {
 
     @Id
-    @GeneratedValue(generator = "GENERATE_Login", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "GENERATE_Login", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Login", sequenceName = "Login_pk_seq", allocationSize = 1)
     private Long id;
 
+    @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataLogin;
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
     
+    @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date hora;
     
@@ -53,10 +56,10 @@ public class Login implements Serializable, ModelInterface {
     @Column(columnDefinition = "TEXT")
     private String cabecalho;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario usuario;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
     @Override

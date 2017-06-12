@@ -22,6 +22,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.shiro.SecurityUtils;
@@ -34,25 +35,31 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Pais implements Serializable, ModelInterface {
-    
+
     @Id
-    @GeneratedValue(generator = "GENERATE_Pais", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "GENERATE_Pais", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Pais", sequenceName = "Pais_pk_seq", allocationSize = 1)
     private Long id;
+
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
+
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String sigla;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+    
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataUltimaAlteracao;
+
     @OneToMany(mappedBy = "pais", fetch = FetchType.LAZY)
     private List<Estado> estados;
-    
-    
+
     @Override
     public Long getId() {
         return id;
@@ -96,7 +103,16 @@ public class Pais implements Serializable, ModelInterface {
     public void setEstados(List<Estado> estados) {
         this.estados = estados;
     }
+    
+    @Override
+    public Date getDataUltimaAlteracao() {
+        return dataUltimaAlteracao;
+    }
 
+    @Override
+    public void setDataUltimaAlteracao(Date data) {
+        this.dataUltimaAlteracao = data;
+    }
 
     @Override
     public int hashCode() {
@@ -123,15 +139,7 @@ public class Pais implements Serializable, ModelInterface {
         return "br.com.project.rural.entity.Pais[ id=" + id + " ]";
     }
 
-    @Override
-    public Date getDataUltimaAlteracao() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setDataUltimaAlteracao(Date data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     @PrePersist
     @Override
@@ -165,5 +173,5 @@ public class Pais implements Serializable, ModelInterface {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
-    
+
 }

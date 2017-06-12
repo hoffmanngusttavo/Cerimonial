@@ -40,40 +40,51 @@ public class Usuario implements Serializable, ModelInterface {
     
 
     @Id
-    @GeneratedValue(generator = "GENERATE_Usuario", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "GENERATE_Usuario", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Usuario", sequenceName = "Usuario_pk_seq", allocationSize = 1)
     private Long id;
+    
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
+    
     @Column(nullable = false, unique = true)
     @NotNull
     @Size(min = 4)
     private String login;
+    
     @Column(nullable = false)
     @NotNull
     @Size(min = 4)
     private String email;
+    
     @Column(nullable = false)
     @NotNull
     @Size(min = 4)
     private String senha;
+    
     @Column(nullable = false)
     @NotNull
     @Size(min = 4)
     private String salt;
+    
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
+    
     @Column(columnDefinition = "boolean default false")
     private boolean master = false;
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+    
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Login> logins;
-    @OneToOne(mappedBy = "usuarioCliente")
+    
+    @OneToOne(mappedBy = "usuarioCliente", fetch = FetchType.LAZY)
     private Pessoa cliente;
     
 

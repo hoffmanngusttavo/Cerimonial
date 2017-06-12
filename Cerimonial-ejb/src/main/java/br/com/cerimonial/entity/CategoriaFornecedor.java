@@ -36,24 +36,25 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class CategoriaFornecedor implements Serializable, ModelInterface {
-    
-    
-     @Id
-    @GeneratedValue(generator = "GENERATE_CategoriaFornecedor", strategy = GenerationType.SEQUENCE)
+
+    @Id
+    @GeneratedValue(generator = "GENERATE_CategoriaFornecedor", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_CategoriaFornecedor", sequenceName = "CategoriaFornecedor_pk_seq", allocationSize = 1)
     private Long id;
+    
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+    
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    
     @ManyToMany(mappedBy = "categoriasFornecedor", fetch = FetchType.LAZY)
     private List<Pessoa> fornecedores;
-    
-    
 
     public CategoriaFornecedor(String nome) {
         this.nome = nome;
@@ -61,19 +62,17 @@ public class CategoriaFornecedor implements Serializable, ModelInterface {
 
     public CategoriaFornecedor() {
     }
-    
-    
-    
-     @Override
+
+    @Override
     public Long getId() {
         return id;
     }
-    
-   @Override
+
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public Date getDataUltimaAlteracao() {
         return dataUltimaAlteracao;
@@ -83,8 +82,8 @@ public class CategoriaFornecedor implements Serializable, ModelInterface {
     public void setDataUltimaAlteracao(Date data) {
         this.dataUltimaAlteracao = data;
     }
-    
-     @Override
+
+    @Override
     public Usuario getModificadoPor() {
         return modificadoPor;
     }
@@ -110,11 +109,6 @@ public class CategoriaFornecedor implements Serializable, ModelInterface {
         this.fornecedores = fornecedores;
     }
 
-   
-
-    
-    
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -139,7 +133,7 @@ public class CategoriaFornecedor implements Serializable, ModelInterface {
     public String toString() {
         return "br.com.cerimonial.entity.CategoriaFornecedor[ id=" + id + " ]";
     }
-    
+
     @PrePersist
     @Override
     public void prePersistEntity() {
@@ -172,6 +166,5 @@ public class CategoriaFornecedor implements Serializable, ModelInterface {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
-    
-    
+
 }
