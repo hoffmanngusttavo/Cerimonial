@@ -25,6 +25,7 @@ public class ModelFilter implements Serializable {
     private int limit;
     private int offSet;
     private Map<String, Object> filtros;
+    private Map<String, String> joins;
     private Map<String, ArrayList<String>> operadores;
     private Map<String, String> orderBy;
     private Class entidade;
@@ -48,6 +49,8 @@ public class ModelFilter implements Serializable {
     public static String ILIKE = "ILIKE";
     public static String LIKERIGHT = "LIKERIGHT";
     public static String EQUAL = "EQUAL";
+    public static String LEFTJOIN = "LEFT JOIN";
+    public static String INNERJOIN = "INNER JOIN";
 
     public enum Operadores {
 
@@ -79,6 +82,7 @@ public class ModelFilter implements Serializable {
         filtros = new HashMap<String, Object>();
         operadores = new HashMap<>();
         orderBy = new HashMap<String, String>();
+        joins = new HashMap<String, String>();
 
     }
 
@@ -89,7 +93,11 @@ public class ModelFilter implements Serializable {
     public void addFilter(String campo, Object value) {
         filtros.put(campo, value);
     }
-    
+
+    public void addJoin(String campo, String value) {
+        joins.put(campo, value);
+    }
+
     public void addFilter(Map value) {
         filtros.putAll(value);
     }
@@ -102,7 +110,14 @@ public class ModelFilter implements Serializable {
 
     public String getSqlCountBase() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT COUNT(o) FROM ").append(entidade.getSimpleName()).append(" as o WHERE 1 = 1 ");
+        sb.append("SELECT COUNT(o) FROM ").append(entidade.getSimpleName()).append(" as o ");
+        
+        if (joins != null && !joins.isEmpty()) {
+            sb.append(getJoins());
+        }
+
+        sb.append("WHERE 1 = 1  ");
+        
         if (filtros != null) {
             for (String key : filtros.keySet()) {
                 sb.append(getOperadorCampo(key));
@@ -113,7 +128,13 @@ public class ModelFilter implements Serializable {
 
     public String getSqlBase() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT (o) FROM ").append(entidade.getSimpleName()).append(" as o WHERE 1 = 1 ");
+        sb.append("SELECT (o) FROM ").append(entidade.getSimpleName()).append(" as o  ");
+
+        if (joins != null && !joins.isEmpty()) {
+            sb.append(getJoins());
+        }
+
+        sb.append("WHERE 1 = 1  ");
 
         if (filtros != null) {
             for (String key : filtros.keySet()) {
@@ -146,7 +167,7 @@ public class ModelFilter implements Serializable {
     public String getOperadorCampo(String campo) {
         return getOperadorCampo(campo, "AND");
     }
-    
+
     public String getOperadorCampo(String campo, String agregador) {
         String aliasCampo = campo;
 
@@ -238,6 +259,16 @@ public class ModelFilter implements Serializable {
         }
 
         return agregador + "  " + aliasCampo + " =  '" + filtros.get(campo) + "' ";
+    }
+
+    public String getJoins() {
+        StringBuilder sb = new StringBuilder();
+        if (joins != null) {
+            for (Map.Entry<String, String> entry : joins.entrySet()) {
+               sb.append(" ").append(entry.getValue()).append(" o.").append(entry.getKey()).append(" ");
+            }
+        }
+        return sb.toString();
     }
 
     public static ModelFilter getInstance() {

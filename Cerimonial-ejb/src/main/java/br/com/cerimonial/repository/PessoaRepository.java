@@ -6,6 +6,7 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.HashMap;
 import java.util.List;
@@ -82,8 +83,17 @@ public class PessoaRepository extends BasicRepository {
         if (sortField != null) {
             modelFilter.addOrderBy(sortField, sortAscDesc);
         }
-
-        return getPureList(Pessoa.class, modelFilter.getSqlBase());
+        
+        modelFilter.addJoin("categoriasFornecedor", ModelFilter.LEFTJOIN);
+        List<Pessoa> fornecedores = getPureList(Pessoa.class, modelFilter.getSqlBase());
+        if(CerimonialUtils.isListNotBlank(fornecedores)){
+            for (Pessoa fornecedor : fornecedores) {
+                if(fornecedor.getCategoriasFornecedor() != null){
+                    fornecedor.getCategoriasFornecedor().size();
+                }
+            }
+        }
+        return fornecedores;
     }
 
     public int countListagemFornecedor(HashMap<String, Object> filter) throws Exception {

@@ -153,9 +153,12 @@
                         
                         <p:column id="categoria" 
                                   exportable="true"
-                                  sortBy="#{item.categoria.nome}"
                                   headerText="Categoria">
-                            <h:outputText value="#{item.categoria.nome}" />
+                            
+                            <ui:repeat value="#{item.categoriasFornecedor}"
+                                       var="cat">
+                                <h:outputText value="#{cat.nome}" />
+                            </ui:repeat>
                         </p:column>
                         
                         <p:column id="ativo" 
