@@ -67,6 +67,14 @@
                                      class="btn btn-xs btn-primary"/>
 
                     <p:spacer width="5"/>
+                    
+                     <p:commandButton action="categoria/index?faces-redirect=true" 
+                                     ajax="false" 
+                                     icon="fa fa-plus"
+                                     value="Categorias" 
+                                     class="btn btn-xs btn-primary"/>
+
+                    <p:spacer width="5"/>
 
                     <p:commandButton value="Excluir Selecionado(s)"
                                      icon="fa fa-trash" 
@@ -158,6 +166,7 @@
                             <ui:repeat value="#{item.categoriasFornecedor}"
                                        var="cat">
                                 <h:outputText value="#{cat.nome}" />
+                                <br/>
                             </ui:repeat>
                         </p:column>
                         

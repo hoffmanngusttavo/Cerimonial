@@ -67,6 +67,20 @@
                             </h:selectOneMenu>
                         </div>
 
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Categoria: *" for="inptCategoria"/>
+                        </div>
+                        <div class="ui-g-12">
+
+                            <p:selectCheckboxMenu id="inptCategoria"
+                                                  label=" Selecione"
+                                                  filter="true"
+                                                  converter="EntityConverter"
+                                                  value="#{FornecedorCrudMB.entity.categoriasFornecedor}">
+                                <f:selectItems value="#{FornecedorCrudMB.categoriasFornecedor}" />
+                            </p:selectCheckboxMenu>
+                        </div>
+
 
                         <div class="ui-g-12">
                             <p:outputLabel value="Nome: *" for="inptNome"/>
@@ -77,7 +91,7 @@
                                          required="true"
                                          label="Nome"/>
                         </div>
-                        
+
                         <h:panelGroup rendered="#{FornecedorCrudMB.entity.pessoaFisica}">
                             <div class="ui-g-12">
                                 <p:outputLabel value="Cpf: *" for="inptCpf"/>

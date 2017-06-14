@@ -39,6 +39,14 @@ public class PessoaRepository extends BasicRepository {
         return getEntity(Pessoa.class, id);
     }
 
+    public Pessoa getEntityFornecedorCategoria(Long id) throws Exception {
+        Pessoa entity = getEntity(Pessoa.class, id);
+        if (entity != null && entity.getCategoriasFornecedor() != null) {
+            entity.getCategoriasFornecedor().size();
+        }
+        return entity;
+    }
+
     public int countAll() throws Exception {
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(Pessoa.class);
@@ -83,12 +91,12 @@ public class PessoaRepository extends BasicRepository {
         if (sortField != null) {
             modelFilter.addOrderBy(sortField, sortAscDesc);
         }
-        
-        modelFilter.addJoin("categoriasFornecedor", ModelFilter.LEFTJOIN);
+
+//        modelFilter.addJoin("categoriasFornecedor", ModelFilter.LEFTJOIN);
         List<Pessoa> fornecedores = getPureList(Pessoa.class, modelFilter.getSqlBase());
-        if(CerimonialUtils.isListNotBlank(fornecedores)){
+        if (CerimonialUtils.isListNotBlank(fornecedores)) {
             for (Pessoa fornecedor : fornecedores) {
-                if(fornecedor.getCategoriasFornecedor() != null){
+                if (fornecedor.getCategoriasFornecedor() != null) {
                     fornecedor.getCategoriasFornecedor().size();
                 }
             }

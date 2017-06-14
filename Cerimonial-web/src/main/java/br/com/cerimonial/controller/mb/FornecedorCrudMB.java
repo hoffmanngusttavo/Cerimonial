@@ -7,13 +7,16 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.filter.FilterFornecedor;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.service.CategoriaFornecedorService;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -25,18 +28,41 @@ import org.primefaces.model.SortOrder;
 @ViewScoped
 public class FornecedorCrudMB extends PessoaMB{
     
+    private List<SelectItem> categoriasFornecedor;
     
+    @EJB
+    protected CategoriaFornecedorService categoriaFornecedorService;
 
+   
+    @Override
+    public void init() {
+
+        if (id != null) {
+            try {
+                entity = service.getEntityFornecedorCategoria(id);
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            entity = new Pessoa();
+        }
+    }
+    
+    
+    
     public FornecedorCrudMB() {
         try {
             filtros = new FilterFornecedor();
+            buscarCategorias();
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
         
     }
     
-   
+   private void buscarCategorias(){
+       categoriasFornecedor = selectItemUtils.getComboCategoriasFornecedor();
+   }
     
      /**
      *Evento invocado pela tela de form para salvar um novo ou edicao de um fornecedor
@@ -108,6 +134,17 @@ public class FornecedorCrudMB extends PessoaMB{
         }
         return lazyLista;
     }
+
+    public List<SelectItem> getCategoriasFornecedor() {
+        return categoriasFornecedor;
+    }
+
+    public void setCategoriasFornecedor(List<SelectItem> categoriasFornecedor) {
+        this.categoriasFornecedor = categoriasFornecedor;
+    }
+
+   
+    
     
     
 }

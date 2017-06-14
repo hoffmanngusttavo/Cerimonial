@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="#{LayoutMB.layout}"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Cadastro Categoria de Fornecedor
+    </ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam name="id" value="#{CategoriaFornecedorCrudMB.id}" converter="javax.faces.Long"/>
+            <!--use view action if you are in a Java EE 7 server: -->
+            <f:viewAction action="#{CategoriaFornecedorCrudMB.init()}"/>
+            <!--<f:event type="preRenderView" listener="{CategoriaFornecedorCrudMB.init}"/>-->
+        </f:metadata>
+
+        <h:form prependId="false"
+                id="form">
+
+            <div style="margin-bottom: 10px;">
+                <h1>
+                    Categoria de Fornecedor Fornecedor
+                </h1>
+            </div>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons">
+                        <p:commandButton value="Salvar"
+                                         action="#{CategoriaFornecedorCrudMB.save()}"
+                                         update="@form"
+                                         icon="fa fa-check" 
+                                         class="btn btn-xs btn-success"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Voltar"
+                                         immediate="true"
+                                         action="index?faces-redirect=true"
+                                         process="@this"
+                                         class="btn btn-xs btn-default"
+                                         icon="fa fa-close"/>
+
+                    </div>
+
+                    <p:messages autoUpdate="true"/>
+
+                    <p:separator/>
+
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Nome: *" for="inptNome"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="inptNome" 
+                                         value="#{CategoriaFornecedorCrudMB.entity.nome}" 
+                                         required="true"
+                                         label="Nome"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

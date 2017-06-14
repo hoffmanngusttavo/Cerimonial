@@ -51,6 +51,11 @@ public class PessoaService extends BasicService<Pessoa> {
     public Pessoa getEntity(Long id) throws Exception {
         return repository.getPessoa(id);
     }
+    
+    
+    public Pessoa getEntityFornecedorCategoria(Long id) throws Exception {
+        return repository.getEntityFornecedorCategoria(id);
+    }
 
     @Override
     public synchronized Pessoa save(Pessoa entity) throws Exception {
