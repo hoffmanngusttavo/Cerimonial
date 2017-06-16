@@ -326,3 +326,111 @@ function validaFormularioColaborador(){
 function alteraEtapaColaborador(etapa){
   $('#tabEtapas a[href="#etapa'+etapa+'"]').tab('show');
 }
+
+
+//---------------FORNECEDOR----------------------
+
+function alteraEtapaFornecedor(etapa){
+  $('#tabEtapas a[href="#etapa'+etapa+'"]').tab('show');
+}
+
+
+function validaFormularioFornecedor(){
+  var inptTipo = $('#inptTipo').val();
+  var inptNome = $('#inptNome').val();
+  var inptCpf = $('#inptCpf').val();
+  var inptCnpj = $('#inptCnpj').val();
+  var inptEmail = $('#inptEmail').val();
+  var inptTelefone1 = $('#inptTelefone1').val();
+  
+  if(inptTipo === ''){
+    alteraEtapaFornecedor(1);
+    $('#inptTipo').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  
+  if(inptCpf === ''){
+    alteraEtapaFornecedor(1);
+    $('#inptCpf').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  
+  if(inptCnpj === ''){
+    alteraEtapaFornecedor(1);
+    $('#inptCnpj').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  
+  if(inptNome === ''){
+    alteraEtapaFornecedor(1);
+    $('#inptNome').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  
+  if(inptEmail === ''){
+    alteraEtapaFornecedor(1);
+    $('#inptEmail').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  if(inptTelefone1 === ''){
+    alteraEtapaFornecedor(1);
+    $('#inptTelefone1').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  
+  var inptCep = $('#inptCep').val();
+  var inptBairro = $('#inptBairro').val();
+  var inptLog = $('#inptLog').val();
+  var inptEstado = $('#inptEstado').val();
+  var inptCidade = $('#inptCidade').val();
+
+  if(inptCep === ''){
+    alteraEtapaFornecedor(2);
+    $('#inptCep').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }  
+  if(inptBairro === ''){
+    alteraEtapaFornecedor(2);
+    $('#inptBairro').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  } 
+  
+  if(inptCep === ''){
+    alteraEtapaFornecedor(2);
+    $('#inptCep').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  } 
+  
+  if(inptLog === ''){
+    alteraEtapaFornecedor(2);
+    $('#inptLog').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }  
+  
+  if(inptEstado === ''){
+    alteraEtapaFornecedor(2);
+    $('#inptEstado').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  } 
+  
+  if(inptCidade === ''){
+    alteraEtapaFornecedor(2);
+    $('#inptCidade').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }  
+
+
+  console.log(inptTipo);
+}
