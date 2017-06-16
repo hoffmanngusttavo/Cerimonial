@@ -69,3 +69,11 @@
     z-index: 99999; 
     opacity: 0.7;
 }
+
+.msg-required{
+    color: #a94442;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    
+}

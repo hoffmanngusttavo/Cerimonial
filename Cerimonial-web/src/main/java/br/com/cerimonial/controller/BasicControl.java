@@ -22,6 +22,8 @@ import org.primefaces.context.RequestContext;
  * @author Gustavo Hoffmann
  */
 public abstract class BasicControl implements Serializable {
+    
+    protected boolean entityLoaded = false;
 
     protected SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     
@@ -69,7 +71,7 @@ public abstract class BasicControl implements Serializable {
     
     public void scrollTopMessage(String id){
         if(id == null || id.isEmpty()){
-            id = "form-menu";
+            id = "form";
         }
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("$('html, body').animate({ scrollTop: $('#"+id+"').offset().top }, 800);");

@@ -23,44 +23,47 @@
         <h:form prependId="false"
                 id="form">
 
-            <div style="margin-bottom: 10px;">
-                <h1>
-                    Categoria de Fornecedor Fornecedor
-                </h1>
-            </div>
+            <p:messages autoUpdate="true" globalOnly="true"/>
+            
+            <p:focus for="inptNome"/>
 
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <div id="main-buttons">
-                        <p:commandButton value="Salvar"
-                                         action="#{CategoriaFornecedorCrudMB.save()}"
-                                         update="@form"
-                                         icon="fa fa-check" 
-                                         class="btn btn-xs btn-success"/>
-                        <p:spacer width="5"/>
+            <div role="tabpanel" class="tab-pane active" id="etapa1">
+                <h2>Categoria de Fornecedor</h2>
 
-                        <p:commandButton value="Voltar"
-                                         immediate="true"
-                                         action="index?faces-redirect=true"
-                                         process="@this"
-                                         class="btn btn-xs btn-default"
-                                         icon="fa fa-close"/>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="inptNome">
+                            Nome
+                            <span class="asteriskField">
+                                *
+                            </span>
+                        </label>
+                        <p:message for="inptNome" />
+                        <p:inputText id="inptNome" 
+                                     value="#{CategoriaFornecedorCrudMB.entity.nome}" 
+                                     required="true"
+                                     requiredMessage="Preencha um nome válido"
+                                     class="form-control"
+                                     label="Nome"/>
 
                     </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <div >
+                            <p:commandButton value="Salvar"
+                                             action="#{CategoriaFornecedorCrudMB.save()}"
+                                             update="@form"
+                                             style="margin-right: 10px;"
+                                             icon="fa fa-check" 
+                                             class="btn btn-success"/>
 
-                    <p:messages autoUpdate="true"/>
-
-                    <p:separator/>
-
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Nome: *" for="inptNome"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText id="inptNome" 
-                                         value="#{CategoriaFornecedorCrudMB.entity.nome}" 
-                                         required="true"
-                                         label="Nome"/>
+                            <p:commandButton value="Voltar"
+                                             immediate="true"
+                                             action="index?faces-redirect=true"
+                                             process="@this"
+                                             class="btn btn-default"
+                                             icon="fa fa-close"/>
                         </div>
                     </div>
                 </div>

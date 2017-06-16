@@ -46,24 +46,28 @@ public class EmpresaCrudMB extends BasicControl {
      */
     public void init() {
         try {
-            entity = service.getEmpresa();
-            if(entity == null){
-                entity = new Empresa();
+            if (!entityLoaded) {
+                entity = service.getEmpresa();
+                if (entity == null) {
+                    entity = new Empresa();
+                }
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             entity = new Empresa();
-        }finally{
-            if(entity.getEndereco() == null){
-                 entity.setEndereco(new Endereco());
+        } finally {
+            if (entity.getEndereco() == null) {
+                entity.setEndereco(new Endereco());
             }
         }
 
     }
-    
+
     /**
-     *Evento invocado pela tela de form para salvar um novo ou edicao de uma empresa
-     * @return 
+     * Evento invocado pela tela de form para salvar um novo ou edicao de uma
+     * empresa
+     *
+     * @return
      */
     public synchronized String save() {
         try {
@@ -81,10 +85,9 @@ public class EmpresaCrudMB extends BasicControl {
         }
         return null;
     }
-    
-    
-    public void buscaCep(){
-        if(entity != null && entity.getEndereco() != null){
+
+    public void buscaCep() {
+        if (entity != null && entity.getEndereco() != null) {
             try {
                 entity.setEndereco(enderecoService.buscaCep(entity.getEndereco()));
             } catch (Exception ex) {
@@ -92,8 +95,6 @@ public class EmpresaCrudMB extends BasicControl {
             }
         }
     }
-    
-    
 
     public Empresa getEntity() {
         return entity;
@@ -102,16 +103,16 @@ public class EmpresaCrudMB extends BasicControl {
     public void setEntity(Empresa entity) {
         this.entity = entity;
     }
-    
-    public List<SelectItem> getComboTipoPessoa(){
+
+    public List<SelectItem> getComboTipoPessoa() {
         return SelectItemUtils.getComboTipoPessoa();
     }
-    
-    public List<SelectItem> getComboCidade(Estado estado){
+
+    public List<SelectItem> getComboCidade(Estado estado) {
         return selectItemUtils.getComboCidade(estado);
     }
-    
-    public List<SelectItem> getComboEstado(){
+
+    public List<SelectItem> getComboEstado() {
         return selectItemUtils.getComboEstado();
     }
 

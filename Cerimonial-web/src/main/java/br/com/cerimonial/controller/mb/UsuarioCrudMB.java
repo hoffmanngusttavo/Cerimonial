@@ -19,6 +19,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -48,10 +49,9 @@ public class UsuarioCrudMB extends BasicControl {
         }
     }
 
-    
     /**
-     *Evento invocado ao abrir o xhtml na edição de um usuário
-     * objetivo de carregar os dados do usuario
+     * Evento invocado ao abrir o xhtml na edição de um usuário objetivo de
+     * carregar os dados do usuario
      */
     public void init() {
 
@@ -66,9 +66,8 @@ public class UsuarioCrudMB extends BasicControl {
         }
     }
 
-    
     /**
-     *Evento invocado pela tela de listagem para remover os itens selecionados
+     * Evento invocado pela tela de listagem para remover os itens selecionados
      */
     public void delete() {
 
@@ -88,19 +87,20 @@ public class UsuarioCrudMB extends BasicControl {
                     createFacesErrorMessage(ex.getMessage());
                 }
             }
-            
+
             usuariosSelecionados.clear();
-            
-            if(numCars > 0){
+
+            if (numCars > 0) {
                 createFacesInfoMessage(numCars + " usuários removidos com sucesso!");
             }
         }
     }
 
-    
     /**
-     *Evento invocado pela tela de form para salvar um novo ou edicao de um usuario
-     * @return 
+     * Evento invocado pela tela de form para salvar um novo ou edicao de um
+     * usuario
+     *
+     * @return
      */
     public synchronized String save() {
         try {
@@ -121,7 +121,7 @@ public class UsuarioCrudMB extends BasicControl {
             Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
         } finally {
-            scrollTopMessage();
+            scrollTopMessage("form");
         }
         return null;
     }
@@ -135,10 +135,10 @@ public class UsuarioCrudMB extends BasicControl {
         return "";
     }
 
-    
     /**
-     *Evento invocado pela tela de index para listar os usuarios
-     * @return 
+     * Evento invocado pela tela de index para listar os usuarios
+     *
+     * @return
      */
     public LazyDataModel<Usuario> getLazyDataModel() {
 
@@ -219,8 +219,5 @@ public class UsuarioCrudMB extends BasicControl {
     public AbstractFilter getFiltros() {
         return filtros;
     }
-
-   
-    
 
 }

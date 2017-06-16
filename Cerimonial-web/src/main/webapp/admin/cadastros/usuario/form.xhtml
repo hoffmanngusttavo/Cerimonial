@@ -23,112 +23,141 @@
         <h:form prependId="false"
                 id="form">
             
-            <div style="margin-bottom: 10px;">
-                <h1>
-                    Usuário
-                </h1>
-            </div>
+            <p:focus for="inptNome"/>
             
-           
-            
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <div id="main-buttons" >
-                        <p:commandButton value="Salvar"
-                                         action="#{UsuarioCrudMB.save()}"
-                                         update="@form"
-                                         icon="fa fa-check" 
-                                         class="btn btn-xs btn-success"/>
-                        <p:spacer width="5"/>
+            <p:messages autoUpdate="true" id="msgs" closable="true" />
 
-                        <p:commandButton value="Voltar"
-                                         immediate="true"
-                                         action="index?faces-redirect=true"
-                                         process="@this"
-                                         class="btn btn-xs btn-default"
-                                         icon="fa fa-close"/>
+            <div class="row">
 
-                    </div>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="etapa1">
 
-                     <p:messages autoUpdate="true"/>
-                    
-                    <p:separator/>
-
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Nome: *" for="inptNome"/>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <h2>Usuário</h2>
+                            </div>
                         </div>
-                        <div class="ui-g-12">
+
+                        <div class="form-group col-md-6">
+                            <label class="control-label ">Nome
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+
                             <p:inputText id="inptNome" 
                                          value="#{UsuarioCrudMB.entity.nome}" 
                                          required="true"
+                                         requiredMessage="Preencha um nome válido"
+                                         class="form-control"
                                          label="Nome"/>
+
                         </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Email: *" for="inptEmail"/>
+                        
+                        <div class="form-group col-md-6">
+                            <label>Login
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+
+                            <p:inputText value="#{UsuarioCrudMB.entity.login}"
+                                         id="inptLogin" 
+                                         required="true"
+                                         class="form-control"
+                                         requiredMessage="Preencha um login válido"
+                                         placeholder="Deve conter no mínimo 4 caracteres"
+                                         label="Login"/>
                         </div>
-                        <div class="ui-g-12">
+
+                        <div class="form-group col-md-12">
+                            <label>E-mail
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+
                             <p:inputText id="inptEmail" 
                                          value="#{UsuarioCrudMB.entity.email}" 
+                                         class="form-control"
                                          required="true"
+                                         requiredMessage="Preencha um e-mail válido"
                                          placeholder="Ex: teste@teste.com"
                                          label="Email">
                                 <f:validator validatorId="EmailValidate"/>
                             </p:inputText>
                         </div>
 
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Login *" for="inptLogin"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText value="#{UsuarioCrudMB.entity.login}"
-                                         id="inptLogin" 
-                                         required="true"
-                                         placeholder="Deve conter no mínimo 4 caracteres"
-                                         label="Login"/>
-                        </div>
-
                         <h:panelGroup rendered="#{UsuarioCrudMB.entity.id == null}">
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Senha *"
-                                               for="inptSenha"
-                                               rendered="#{UsuarioCrudMB.entity.id == null}"/>
-                            </div>
-                            <div class="ui-g-12">
+                            <div class="form-group col-md-6">
+                                <label>Senha
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
                                 <p:password value="#{UsuarioCrudMB.entity.senha}"
                                             id="inptSenha"
                                             rendered="#{UsuarioCrudMB.entity.id == null}"
                                             required="true"
+                                            class="form-control"
+                                            requiredMessage="Preencha uma senha válida"
                                             label="Senha"/>
+
                             </div>
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Confirme a senha *"
-                                               for="inptConfirmSenha"/>
-                            </div>
-                            <div class="ui-g-12">
+
+                            <div class="form-group col-md-6">
+                                <label>Confirme Senha
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
                                 <p:password value="#{UsuarioCrudMB.confirmarSenha}"
                                             id="inptConfirmSenha"
                                             rendered="#{UsuarioCrudMB.entity.id == null}"
+                                            class="form-control"
+                                            requiredMessage="Preencha uma senha válida"
                                             required="true"/>
+
                             </div>
                         </h:panelGroup>
 
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Usuário Master ?"
-                                           for="inptMaster"/>
-                        </div>
-                        <div class="ui-g-12">
+                        <div class="form-group col-md-6">
+                            <label>Usuário Master ?
+                            </label>
+
                             <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.master}"
+                                                     class="checkbox-inline"
                                                      id="inptMaster"/>
                         </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Ativo ?"
-                                           for="inptAtivo"/>
-                        </div>
-                        <div class="ui-g-12">
+
+                        <div class="form-group col-md-6">
+                            <label>Ativo ?
+                            </label>
+
                             <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.ativo}"
+                                                     class="checkbox-inline"
                                                      id="inptAtivo"/>
                         </div>
+
+                        <p:commandButton value="Voltar"
+                                         immediate="true"
+                                         action="index?faces-redirect=true"
+                                         process="@this"
+                                         class="btn btn-default"
+                                         icon="fa fa-close"/>
+
+
+                        <p:commandButton value="Salvar"
+                                         action="#{UsuarioCrudMB.save()}"
+                                         onclick="validaFormularioUsuario()"
+                                         icon="fa fa-check" 
+                                         class="btn btn-success"
+                                         style="margin-left: 10px;"
+                                         onstart="PF('statusDialog').show();"
+                                         oncomplete="PF('statusDialog').hide();"/>
 
                     </div>
                 </div>
