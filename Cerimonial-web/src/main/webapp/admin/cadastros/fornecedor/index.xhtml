@@ -21,85 +21,62 @@
                 </h1>
             </div>
             
-            <p:messages autoUpdate="true"/>
+            <p:messages autoUpdate="true" closable="true"/>
 
-            <h:panelGroup id="filtrosGroup">
-                <h:panelGroup rendered="#{FornecedorCrudMB.filtros.exibirFiltro}">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-
-
-                            <div class="ui-g ui-fluid">
-                                <div >
-                                    <p:outputLabel value="Nome:" for="inptNome"/>
-                                </div>
-                                <div >
-                                    <p:inputText id="inptNome" 
-                                                 value="#{FornecedorCrudMB.filtros.nome}" 
-                                                 label="Nome"/>
-                                </div>
-                                <div >
-                                    <p:commandButton actionListener="#{FornecedorCrudMB.filtros.limparFiltros()}"
-                                                     icon="fa fa-eraser"
-                                                     value="Limpar" 
-                                                     update="filtrosGroup"
-                                                     class="btn btn-xs btn-default"/>
-                                </div>
-                                <div >
-                                    <p:commandButton actionListener="#{FornecedorCrudMB.filtros.filtrar()}"
-                                                     icon="fa fa-search"
-                                                     value="Buscar" 
-                                                     update="dataTable"
-                                                     class="btn btn-xs btn-primary"/>
-                                </div>
-                            </div>
-                        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col-md-1">
+                        <p:commandButton action="form?faces-redirect=true" 
+                                         ajax="false" 
+                                         icon="fa fa-plus"
+                                         value="Novo" 
+                                         class="btn btn-primary"/>
                     </div>
-                </h:panelGroup>
-            </h:panelGroup>
-
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <p:commandButton action="form?faces-redirect=true" 
-                                     ajax="false" 
-                                     icon="fa fa-plus"
-                                     value="Novo" 
-                                     class="btn btn-xs btn-primary"/>
-
-                    <p:spacer width="5"/>
                     
-                     <p:commandButton action="categoria/index?faces-redirect=true" 
+                    <div class="form-group col-md-2">
+                        <p:commandButton value="Excluir Selecionado(s)"
+                                         icon="fa fa-trash" 
+                                         actionListener="#{FornecedorCrudMB.delete()}"
+                                         class="btn btn-danger"
+                                         process="@form"
+                                         update="@form">
+                            <p:confirm header="Remover"
+                                       message="Deseja remover esse usuário?" 
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </div>
+                    
+                    <div class="form-group col-md-2">
+                        <p:commandButton action="categoria/index?faces-redirect=true" 
                                      ajax="false" 
                                      icon="fa fa-plus"
                                      value="Categorias" 
-                                     class="btn btn-xs btn-primary"/>
+                                     class="btn btn-default"/>
+                    </div>
+                    
+                    <div class="form-group col-md-1">
+                       
+                    </div>
+                    <div class="form-group col-md-5">
+                        <p:inputText id="inptNome" 
+                                     value="#{FornecedorCrudMB.filtros.nome}" 
+                                     placeholder="Pesquise por nome"
+                                     class="form-control"
+                                     label="Nome"/>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <p:commandButton actionListener="#{FornecedorCrudMB.filtros.filtrar()}"
+                                         icon="fa fa-search"
+                                         value="Buscar" 
+                                         update="dataTable"
+                                         class="btn btn-primary"/>
+                    </div>
+                    
+                </div>
+            </div>
 
-                    <p:spacer width="5"/>
-
-                    <p:commandButton value="Excluir Selecionado(s)"
-                                     icon="fa fa-trash" 
-                                     actionListener="#{FornecedorCrudMB.delete()}"
-                                     class="btn btn-xs btn-danger"
-                                     process="@form"
-                                     update="@form">
-                        <p:confirm header="Remover"
-                                   message="Deseja remover esse(s) fornecedor(es)?" 
-                                   icon="ui-icon-alert" />
-                    </p:commandButton>
-
-                    <p:spacer width="5"/>
-
-                    <p:commandButton id="btnFind"
-                                     value="#{FornecedorCrudMB.filtros.exibirFiltro ? 'Esconder' : 'Exibir'} Filtros"
-                                     process="@form"
-                                     actionListener="#{FornecedorCrudMB.filtros.setExibirFiltro(!FornecedorCrudMB.filtros.exibirFiltro)}"
-                                     update="filtrosGroup, @this"
-                                     icon="fa fa-search" 
-                                     class="btn btn-xs btn-default"
-                                     partialSubmit="true"/>
-
-                    <p:separator/>
-
+            <div class="row" style="margin-top: 10px;">
+                <div >
                     <p:dataTable id="dataTable"
                                  var="item"  
                                  rows="25" 

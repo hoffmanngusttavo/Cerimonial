@@ -20,133 +20,186 @@
             <!--<f:event type="preRenderView" listener="{ColaboradorCrudMB.init}"/>-->
         </f:metadata>
 
-        <h:form>
+        <h:form prependId="false"
+                id="form">
 
-            <div style="margin-bottom: 10px;">
-                <h1>
-                    Colaborador
-                </h1>
-            </div>
+            <p:focus for="inptNome"/>
 
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <div id="main-buttons">
-                        <p:commandButton value="Salvar"
-                                         action="#{ColaboradorCrudMB.save()}"
-                                         update="@form"
-                                         icon="fa fa-check" 
-                                         class="btn btn-xs btn-success"/>
-                        <p:spacer width="5"/>
-
-                        <p:commandButton value="Voltar"
-                                         immediate="true"
-                                         action="index?faces-redirect=true"
-                                         process="@this"
-                                         class="btn btn-xs btn-default"
-                                         icon="fa fa-close"/>
-
-                    </div>
-
-                    <p:messages autoUpdate="true"/>
-
-                    <p:separator/>
-
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Nome: *" for="inptNome"/>
+            <p:messages autoUpdate="true" id="msgs" closable="true" />
+            
+            <div class="row">
+                <!-- Nav tabs -->
+                <ul id="tabEtapas" class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#etapa1" aria-controls="etapa1" role="tab" data-toggle="tab">Dados Gerais</a></li>
+                    <li role="presentation"><a href="#etapa2" aria-controls="etapa2" role="tab" data-toggle="tab">Endereço</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="etapa1">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <h2>Dados Gerais</h2>
+                            </div>
                         </div>
-                        <div class="ui-g-12">
+
+                        <div class="form-group col-md-12">
+                            <label class="control-label ">Nome
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+
                             <p:inputText id="inptNome" 
                                          value="#{ColaboradorCrudMB.entity.nome}" 
                                          required="true"
+                                         requiredMessage="Preencha um nome válido"
+                                         class="form-control"
                                          label="Nome"/>
+
                         </div>
 
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Cpf: *" for="inptCpf"/>
-                        </div>
-                        <div class="ui-g-12">
+                        <div class="form-group col-md-6">
+                            <label class="control-label ">Cpf
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+
                             <p:inputMask mask="999.999.999-99"
                                          value="#{ColaboradorCrudMB.entity.cpf}"
                                          required="true"
+                                         requiredMessage="Preencha um cpf válido"
                                          id="inptCpf"
+                                         class="form-control"
                                          label="Cpf"/>
                         </div>
 
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Email: *" for="inptEmail"/>
-                        </div>
-                        <div class="ui-g-12">
+                        <div class="form-group col-md-6">
+                            <label>E-mail
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+
                             <p:inputText id="inptEmail" 
                                          value="#{ColaboradorCrudMB.entity.email}" 
+                                         class="form-control"
                                          required="true"
+                                         requiredMessage="Preencha um e-mail válido"
                                          placeholder="Ex: teste@teste.com"
                                          label="Email">
                                 <f:validator validatorId="EmailValidate"/>
                             </p:inputText>
                         </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Telefone 1:" for="inptTelefone1"/>
-                        </div>
-                        <div class="ui-g-12">
+
+                        <div class="form-group col-md-6">
+                            <label>Telefone 1
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+
                             <p:inputText value="#{ColaboradorCrudMB.entity.telefone1}"
                                          required="true"
+                                         requiredMessage="Preencha um telefone válido"
                                          onfocus="functionMaskPhone();"
                                          styleClass="phone"
+                                         class="form-control"
                                          id="inptTelefone1"
                                          label="Telefone 1"/>
                         </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Telefone 2:" for="inptTelefone2"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText onfocus="functionMaskPhone();"
+
+                        <div class="form-group col-md-6">
+                            <label>Telefone 2
+                            </label>
+
+                            <p:inputText value="#{ColaboradorCrudMB.entity.telefone2}"
+                                         onfocus="functionMaskPhone();"
                                          styleClass="phone"
-                                         value="#{ColaboradorCrudMB.entity.telefone2}"
+                                         class="form-control"
                                          id="inptTelefone2"
                                          label="Telefone 2"/>
                         </div>
 
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Ativo ?"
-                                           for="inptAtivo"/>
-                        </div>
-                        <div class="ui-g-12">
+                        <div class="form-group col-md-6">
+                            <label class="control-label ">Ativo ?
+                            </label>
+
                             <p:selectBooleanCheckbox value="#{ColaboradorCrudMB.entity.ativo}"
+                                                     class="checkbox-inline"
                                                      id="inptAtivo"/>
                         </div>
                         
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Carro Próprio ?"
-                                           for="inptCarro"/>
-                        </div>
-                        <div class="ui-g-12">
+                        <div class="form-group col-md-6">
+                            <label class="control-label ">Carro Próprio ?
+                            </label>
+
                             <p:selectBooleanCheckbox value="#{ColaboradorCrudMB.entity.carroProprio}"
+                                                     class="checkbox-inline"
                                                      id="inptCarro"/>
                         </div>
+                        
+                        <div class="form-group col-md-12">
+                            <label class="control-label ">Observação
+                            </label>
 
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Observação:" for="inptObs"/>
-                        </div>
-                        <div class="ui-g-12">
                             <p:inputTextarea id="inptObs" 
+                                             class="form-control"
                                              value="#{ColaboradorCrudMB.entity.observacao}" 
                                              label="Observação"/>
                         </div>
+
+                        
+
+                        <div class="form-group col-md-12">
+                            <p:commandButton onclick="alteraEtapaColaborador(2)"
+                                             process="@this"
+                                             class="btn btn-info"
+                                             value="Próxima Etapa"/>
+
+                            <p:commandButton value="Salvar"
+                                             action="#{ColaboradorCrudMB.save()}"
+                                             onclick="validaFormularioColaborador()"
+                                             icon="fa fa-check" 
+                                             style="margin-left: 10px;"
+                                             id="btn-salvar-cliente"
+                                             class="btn btn-success"
+                                             onstart="PF('statusDialog').show();"
+                                             oncomplete="PF('statusDialog').hide();"/>
+                            
+                            <p:commandButton value="Voltar"
+                                         immediate="true"
+                                         action="index?faces-redirect=true"
+                                         process="@this"
+                                         style="margin-left: 10px;"
+                                         class="btn btn-default"
+                                         icon="fa fa-close"/>
+                        </div>
+
                     </div>
 
-                    <p:separator/>
-                    <h2>Endereço</h2>
-                    <p:separator/>
-                    <h:panelGroup id="enderecoGroup">
-                        <div class="ui-g ui-fluid">
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Cep: *" for="inptCep"/>
+                    <div role="tabpanel" class="tab-pane" id="etapa2">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <h2>Endereço</h2>
                             </div>
-                            <div class="ui-g-12">
+
+                        </div>
+
+                        <h:panelGroup id="enderecoGroup">
+
+                            <div class="form-group col-md-6">
+                                <label>Cep
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
                                 <p:inputMask mask="99.999-999"
                                              value="#{ColaboradorCrudMB.entity.endereco.cep}"
                                              required="true"
+                                             requiredMessage="Preencha um cep válido"
+                                             class="form-control"
                                              id="inptCep"
                                              label="Cep">
                                     <p:ajax id="eventCep" 
@@ -154,51 +207,76 @@
                                             listener="#{ColaboradorCrudMB.buscaCep()}" 
                                             process="@this"
                                             update="enderecoGroup"
-                                            partialSubmit="true"
                                             onstart="PF('statusDialog').show();"
-                                            oncomplete="PF('statusDialog').hide();"/>
+                                            oncomplete="PF('statusDialog').hide();"
+                                            partialSubmit="true"/>
                                 </p:inputMask>
+
                             </div>
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Logradouro: *" for="inptLog"/>
-                            </div>
-                            <div class="ui-g-12">
-                                <p:inputText id="inptLog" 
-                                             value="#{ColaboradorCrudMB.entity.endereco.logradouro}" 
-                                             label="Logradouro"/>
-                            </div>
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Bairro: *" for="inptBairro"/>
-                            </div>
-                            <div class="ui-g-12">
+
+                            <div class="form-group col-md-6">
+                                <label>Bairro
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
                                 <p:inputText id="inptBairro" 
                                              value="#{ColaboradorCrudMB.entity.endereco.bairro}" 
+                                             required="true"
+                                             requiredMessage="Preencha um bairro válido"
+                                             class="form-control"
                                              label="Bairro"/>
+
                             </div>
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Número:" for="inptNumero"/>
+
+                            <div class="form-group col-md-12">
+                                <label>Logradouro
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputText id="inptLog" 
+                                             value="#{ColaboradorCrudMB.entity.endereco.logradouro}" 
+                                             required="true"
+                                             requiredMessage="Preencha um logradouro válido"
+                                             class="form-control"
+                                             label="Logradouro"/>
+
                             </div>
-                            <div class="ui-g-12">
+
+                            <div class="form-group col-md-6">
+                                <label>Número</label>
+
                                 <p:inputText id="inptNumero" 
                                              value="#{ColaboradorCrudMB.entity.endereco.numero}" 
+                                             class="form-control"
                                              label="Número"/>
                             </div>
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Complemento:" for="inptComplemento"/>
-                            </div>
-                            <div class="ui-g-12">
+
+                            <div class="form-group col-md-6">
+                                <label>Complemento</label>
+
                                 <p:inputText id="inptComplemento" 
                                              value="#{ColaboradorCrudMB.entity.endereco.complemento}" 
+                                             class="form-control"
                                              label="Complemento"/>
                             </div>
 
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Estado:" for="inptEstado"/>
-                            </div>
-                            <div class="ui-g-12">
+                            <div class="form-group col-md-6">
+                                <label>Estado 
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
                                 <h:selectOneMenu id="inptEstado" 
                                                  value="#{ColaboradorCrudMB.entity.endereco.estado}"
                                                  converter="EntityConverter"
+                                                 rendered="true"
+                                                 requiredMessage="Preencha um estado válido"
+                                                 class="form-control"
                                                  label="Estado">
                                     <f:selectItem itemValue="" 
                                                   itemLabel="Selecione" /> 
@@ -209,13 +287,19 @@
                                 </h:selectOneMenu>
                             </div>
 
-                            <div class="ui-g-12">
-                                <p:outputLabel value="Cidade:" for="inptCidade"/>
-                            </div>
-                            <div class="ui-g-12">
+                            <div class="form-group col-md-6">
+                                <label>Cidade 
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
                                 <h:selectOneMenu id="inptCidade" 
                                                  value="#{ColaboradorCrudMB.entity.endereco.cidade}"
                                                  converter="EntityConverter"
+                                                 required="true"
+                                                 requiredMessage="Preencha uma cidade válida"
+                                                 class="form-control"
                                                  label="Cidade">
                                     <f:selectItem itemValue="" 
                                                   itemLabel="Selecione" /> 
@@ -225,12 +309,28 @@
                                             global="false"/>
                                 </h:selectOneMenu>
                             </div>
+                        </h:panelGroup>
 
-                        </div>
-                    </h:panelGroup>
+                        <p:commandButton value="Salvar"
+                                         action="#{ColaboradorCrudMB.save()}"
+                                         onclick="validaFormularioColaborador()"
+                                         icon="fa fa-check" 
+                                         class="btn btn-success"
+                                         onstart="PF('statusDialog').show();"
+                                         oncomplete="PF('statusDialog').hide();"/>
+                        
+                        <p:commandButton value="Voltar"
+                                         immediate="true"
+                                         action="index?faces-redirect=true"
+                                         process="@this"
+                                         class="btn btn-default"
+                                         style="margin-left: 10px;"
+                                         icon="fa fa-close"/>
+
+                    </div>
                 </div>
             </div>
-
+            
         </h:form>
     </ui:define>
 

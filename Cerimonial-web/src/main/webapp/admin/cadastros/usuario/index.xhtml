@@ -20,153 +20,133 @@
                     Usuários
                 </h1>
             </div>
-            
-            <p:messages autoUpdate="true"/>
 
-            <h:panelGroup id="filtrosGroup">
-                <h:panelGroup rendered="#{UsuarioCrudMB.filtros.exibirFiltro}">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
+            <p:messages autoUpdate="true" closable="true"/>
 
-
-                            <div class="ui-g ui-fluid">
-                                <div >
-                                    <p:outputLabel value="Nome:" for="inptNome"/>
-                                </div>
-                                <div >
-                                    <p:inputText id="inptNome" 
-                                                 value="#{UsuarioCrudMB.filtros.nome}" 
-                                                 label="Nome"/>
-                                </div>
-                                <div >
-                                    <p:commandButton actionListener="#{UsuarioCrudMB.filtros.limparFiltros()}"
-                                                     icon="fa fa-eraser"
-                                                     value="Limpar" 
-                                                     update="filtrosGroup"
-                                                     class="btn btn-xs btn-default"/>
-                                </div>
-                                <div >
-                                    <p:commandButton actionListener="#{UsuarioCrudMB.filtros.filtrar()}"
-                                                     icon="fa fa-search"
-                                                     value="Buscar" 
-                                                     update="dataTable"
-                                                     class="btn btn-xs btn-primary"/>
-                                </div>
-                            </div>
-                        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col-md-1">
+                        <p:commandButton action="form?faces-redirect=true" 
+                                         ajax="false" 
+                                         icon="fa fa-plus"
+                                         value="Novo" 
+                                         class="btn btn-primary"/>
                     </div>
-                </h:panelGroup>
-            </h:panelGroup>
-
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <p:commandButton action="form?faces-redirect=true" 
-                                     ajax="false" 
-                                     icon="fa fa-plus"
-                                     value="Novo" 
-                                     class="btn btn-xs btn-primary"/>
-
-                    <p:spacer width="5"/>
-
-                    <p:commandButton value="Excluir Selecionado(s)"
-                                     icon="fa fa-trash" 
-                                     actionListener="#{UsuarioCrudMB.delete()}"
-                                     class="btn btn-xs btn-danger"
-                                     process="@form"
-                                     update="@form">
-                        <p:confirm header="Remover"
-                                   message="Deseja remover esse usuário?" 
-                                   icon="ui-icon-alert" />
-                    </p:commandButton>
-
-                    <p:spacer width="5"/>
-
-                    <p:commandButton id="btnFind"
-                                     value="#{UsuarioCrudMB.filtros.exibirFiltro ? 'Esconder' : 'Exibir'} Filtros"
-                                     process="@form"
-                                     actionListener="#{UsuarioCrudMB.filtros.setExibirFiltro(!UsuarioCrudMB.filtros.exibirFiltro)}"
-                                     update="filtrosGroup, @this"
-                                     icon="fa fa-search" 
-                                     class="btn btn-xs btn-default"
-                                     partialSubmit="true"/>
-
-                    <p:separator/>
-
-                    <p:dataTable id="dataTable"
-                                 var="item"  
-                                 rows="25" 
-                                 paginator="true"
-                                 pageLinks="5" 
-                                 rowsPerPageTemplate="25,50,100"
-                                 currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
-                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 paginatorPosition="bottom"
-                                 value="#{UsuarioCrudMB.lazyDataModel}" 
-                                 selection="#{UsuarioCrudMB.usuariosSelecionados}"
-                                 widgetVar="dataTableVar"
-                                 reflow="true"
-                                 emptyMessage="Nenhum registro encontrado"
-                                 lazy="true">
-
-
-                        <p:column selectionMode="multiple" width="5%" style="text-align: center;"/>
-
-                        <p:column id="id" 
-                                  width="5%"
-                                  style="text-align: center;"
-                                  exportable="true"
-                                  sortBy="#{item.id}"
-                                  headerText="#">
-                            <p:link value="#{item.id}" 
-                                    outcome="form.xhtml" >
-                                <f:param name="id" value="#{item.id}"/>
-                            </p:link>
-                        </p:column>
-
-                        <p:column id="nome" 
-                                  exportable="true"
-                                  sortBy="#{item.nome}"
-                                  headerText="Nome">
-                            <h:outputText value="#{item.nome}" />
-                        </p:column>
-
-                        <p:column id="login" 
-                                  exportable="true"
-                                  sortBy="#{item.login}"
-                                  headerText="Login">
-                            <h:outputText value="#{item.login}" />
-                        </p:column>
-
-                        <p:column id="email" 
-                                  exportable="true"
-                                  sortBy="#{item.email}"
-                                  headerText="Email">
-                            <h:outputText value="#{item.email}" />
-                        </p:column>
-
-                        <p:column id="ativo" 
-                                  exportable="true"
-                                  sortBy="#{item.ativo}"
-                                  width="6%"
-                                  style="text-align: center;"
-                                  headerText="Ativo">
-                            <h:outputText value="#{item.ativo ? 'Sim':'Não'}" />
-                        </p:column>
-
-                        <p:column id="master" 
-                                  exportable="true"
-                                  sortBy="#{item.master}"
-                                  width="6%"
-                                  style="text-align: center;"
-                                  headerText="Master">
-                            <h:outputText value="#{item.master ? 'Sim':'Não'}" />
-                        </p:column>
-                    </p:dataTable>
-
+                    <div class="form-group col-md-2">
+                        <p:commandButton value="Excluir Selecionado(s)"
+                                         icon="fa fa-trash" 
+                                         actionListener="#{UsuarioCrudMB.delete()}"
+                                         class="btn btn-danger"
+                                         process="@form"
+                                         update="@form">
+                            <p:confirm header="Remover"
+                                       message="Deseja remover esse usuário?" 
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </div>
+                    
+                    <div class="form-group col-md-1">
+                       
+                    </div>
+                    <div class="form-group col-md-5">
+                        <p:inputText id="inptNome" 
+                                     value="#{UsuarioCrudMB.filtros.nome}" 
+                                     placeholder="Pesquise por nome"
+                                     class="form-control"
+                                     label="Nome"/>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <p:commandButton actionListener="#{UsuarioCrudMB.filtros.filtrar()}"
+                                         icon="fa fa-search"
+                                         value="Buscar" 
+                                         update="dataTable"
+                                         class="btn btn-primary"/>
+                    </div>
+                    
                 </div>
             </div>
 
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <div class="row" style="margin-top: 10px;">
+                <div >
+                    <div >
+                        <p:dataTable id="dataTable"
+                                     var="item"  
+                                     rows="25" 
+                                     paginator="true"
+                                     pageLinks="5" 
+                                     rowsPerPageTemplate="25,50,100"
+                                     currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     paginatorPosition="bottom"
+                                     value="#{UsuarioCrudMB.lazyDataModel}" 
+                                     selection="#{UsuarioCrudMB.usuariosSelecionados}"
+                                     widgetVar="dataTableVar"
+                                     reflow="true"
+                                     emptyMessage="Nenhum registro encontrado"
+                                     lazy="true">
+
+
+                            <p:column selectionMode="multiple" width="5%" style="text-align: center;"/>
+
+                            <p:column id="id" 
+                                      width="5%"
+                                      style="text-align: center;"
+                                      exportable="true"
+                                      sortBy="#{item.id}"
+                                      headerText="#">
+                                <p:link value="#{item.id}" 
+                                        outcome="form.xhtml" >
+                                    <f:param name="id" value="#{item.id}"/>
+                                </p:link>
+                            </p:column>
+
+                            <p:column id="nome" 
+                                      exportable="true"
+                                      sortBy="#{item.nome}"
+                                      headerText="Nome">
+                                <h:outputText value="#{item.nome}" />
+                            </p:column>
+
+                            <p:column id="login" 
+                                      exportable="true"
+                                      sortBy="#{item.login}"
+                                      headerText="Login">
+                                <h:outputText value="#{item.login}" />
+                            </p:column>
+
+                            <p:column id="email" 
+                                      exportable="true"
+                                      sortBy="#{item.email}"
+                                      headerText="Email">
+                                <h:outputText value="#{item.email}" />
+                            </p:column>
+
+                            <p:column id="ativo" 
+                                      exportable="true"
+                                      sortBy="#{item.ativo}"
+                                      width="6%"
+                                      style="text-align: center;"
+                                      headerText="Ativo">
+                                <h:outputText value="#{item.ativo ? 'Sim':'Não'}" />
+                            </p:column>
+
+                            <p:column id="master" 
+                                      exportable="true"
+                                      sortBy="#{item.master}"
+                                      width="6%"
+                                      style="text-align: center;"
+                                      headerText="Master">
+                                <h:outputText value="#{item.master ? 'Sim':'Não'}" />
+                            </p:column>
+                        </p:dataTable>
+
+                    </div>
+                </div>
+            </div>
+
+            <p:confirmDialog global="true" 
+                             showEffect="fade" 
+                             hideEffect="fade">
                 <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                 <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
