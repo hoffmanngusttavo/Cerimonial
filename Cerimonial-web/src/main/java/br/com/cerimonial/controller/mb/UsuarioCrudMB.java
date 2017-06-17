@@ -70,28 +70,15 @@ public class UsuarioCrudMB extends BasicControl {
      * Evento invocado pela tela de listagem para remover os itens selecionados
      */
     public void delete() {
-
-        if (CerimonialUtils.isListBlank(usuariosSelecionados)) {
-            createFacesWarnMessage("Selecione ao menos um item");
-            return;
-        }
-
-        int numCars = 0;
-        if (usuariosSelecionados != null) {
-            for (Usuario selectedCar : usuariosSelecionados) {
-                try {
-                    usuarioService.delete(selectedCar);
-                    numCars++;
-                } catch (Exception ex) {
-                    Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
-                    createFacesErrorMessage(ex.getMessage());
-                }
-            }
-
-            usuariosSelecionados.clear();
-
-            if (numCars > 0) {
-                createFacesInfoMessage(numCars + " usuários removidos com sucesso!");
+        if (entity != null && entity.getId() != null) {
+            try {
+                usuarioService.delete(entity);
+                createFacesInfoMessage("Usuário removido com sucesso!");
+            } catch (Exception ex) {
+                Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+                createFacesErrorMessage(ex.getMessage());
+            }finally{
+                scrollTopMessage();
             }
         }
     }

@@ -17,7 +17,7 @@
 
 .content {
     width: 100%;
-    padding-top: 20px;
+    /*padding-top: 20px;*/
 }
 
 .menu {
@@ -75,5 +75,89 @@
     display: block;
     margin-top: 5px;
     margin-bottom: 10px;
-    
+
 }
+
+.no-margin {
+    margin: 0;
+}
+
+#event-module .module-title {
+    color: #8A8180;
+    font-size: 22px;
+    font-family: 'Gotham-Book';
+    text-transform: initial;
+}
+
+.fixed-rounded-button:hover {
+    background-color: #449d44;
+    transition: all 0.2s ease;
+}
+
+.fixed-rounded-button .glyphicon {
+    font-size: 20px;
+    padding-top: 25px;
+}
+
+.fixed-rounded-button {
+    width: 80px;
+    height: 80px;
+    background-color: #337ab7;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    text-align: center;
+    line-height: 50px;
+    position: fixed;
+    bottom: 20px;
+    right: 25px;
+    z-index: 2;
+    color: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.bt-acoes,.ui-widget .ui-widget.bt-acoes{
+    border:0;
+    box-shadow:0 0 0;
+    background:transparent!important;
+    font-size:20px;
+    width:25px;
+    margin:0 3px; 
+}
+
+.bt-acoes.ui-button-icon-only .ui-button-text{
+    padding:0; 
+}
+
+.bt-acoes .fa{
+    border-radius:0;
+    height:auto;
+    /*color: white;*/
+    /*width:25px;*/
+    left:0;
+    margin-left:0; 
+}
+
+
+.bt-acoes-add,.ui-widget .ui-widget.bt-acoes-add{
+    border:0;
+    box-shadow:0 0 0;
+    background:transparent!important;
+    font-size:26px;
+    width:25px;
+    margin:0 3px; 
+}
+
+.bt-acoes-add.ui-button-icon-only .ui-button-text{
+    padding:0; 
+}
+
+.bt-acoes-add .fa{
+    border-radius:0;
+    height:auto;
+    color: white;
+    width:27px;
+    left:0;
+    margin-left:0; 
+}
+
