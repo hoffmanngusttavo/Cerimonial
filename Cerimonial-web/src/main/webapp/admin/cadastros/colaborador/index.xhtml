@@ -15,128 +15,185 @@
         <h:form prependId="false"
                 id="form">
 
-            <div style="margin-bottom: 10px;">
-                <h1>
-                    Colaboradores
-                </h1>
+            <div class="fixed-rounded-button">
+                <span class="glyphicon"
+                      style="margin-top: -9px;margin-left: -10px;">
+                    <p:commandButton action="form?faces-redirect=true" 
+                                     ajax="false"
+                                     icon="fa fa-plus"
+                                     styleClass="bt-acoes-add"
+                                     onstart="PF('statusDialog').show();"
+                                     oncomplete="PF('statusDialog').hide();"/>
+                </span>
             </div>
-            
-            <p:messages autoUpdate="true" closable="true"/>
 
-            <div class="container">
-                <div class="row">
-                    <div class="form-group col-md-1">
-                        <p:commandButton action="form?faces-redirect=true" 
-                                         ajax="false" 
-                                         icon="fa fa-plus"
-                                         value="Novo" 
-                                         class="btn btn-primary"/>
+            <div id="event-module">
+                <div class="row no-margim">
+                    <div class="col-md-12">
+                        <h1 class="module-title">
+                            Colaboradores
+                        </h1>
                     </div>
-                    <div class="form-group col-md-2">
-                        <p:commandButton value="Excluir Selecionado(s)"
-                                         icon="fa fa-trash" 
-                                         actionListener="#{ColaboradorCrudMB.delete()}"
-                                         class="btn btn-danger"
-                                         process="@form"
-                                         update="@form">
-                            <p:confirm header="Remover"
-                                       message="Deseja remover esse usuário?" 
-                                       icon="ui-icon-alert" />
-                        </p:commandButton>
+                </div>
+
+                <div class="row" style="margin-top: 10px;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <p:inputText id="inptNome" 
+                                             value="#{ColaboradorCrudMB.filtros.nome}" 
+                                             placeholder="Pesquise por nome"
+                                             class="form-control"
+                                             label="Nome"/>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <p:commandButton actionListener="#{ColaboradorCrudMB.filtros.filtrar()}"
+                                                 icon="fa fa-search"
+                                                 value="Buscar" 
+                                                 update="dataTable"
+                                                 class="btn btn-primary"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="form-group col-md-1">
-                       
+                </div>
+
+
+                <div class="row" style="margin-top: 10px;">
+                    <div >
+                        <div >
+                            <p:dataTable id="dataTable"
+                                         var="item"  
+                                         rows="25" 
+                                         paginator="true"
+                                         pageLinks="5" 
+                                         rowsPerPageTemplate="25,50,100"
+                                         currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         paginatorPosition="bottom"
+                                         value="#{ColaboradorCrudMB.lazyDataModel}" 
+                                         selection="#{ColaboradorCrudMB.itensSelecionados}"
+                                         widgetVar="dataTableVar"
+                                         reflow="true"
+                                         emptyMessage="Nenhum registro encontrado"
+                                         lazy="true">
+
+                                <p:column id="id" 
+                                          width="5%"
+                                          style="text-align: center;"
+                                          exportable="true"
+                                          sortBy="#{item.id}"
+                                          headerText="#">
+                                    <p:link value="#{item.id}" 
+                                            outcome="form.xhtml" >
+                                        <f:param name="id" value="#{item.id}"/>
+                                    </p:link>
+                                </p:column>
+
+                                <p:column id="nome" 
+                                          exportable="true"
+                                          sortBy="#{item.nome}"
+                                          headerText="Nome">
+                                    <h:outputText value="#{item.nome}" />
+                                </p:column>
+
+                                <p:column id="email" 
+                                          exportable="true"
+                                          sortBy="#{item.email}"
+                                          headerText="Email">
+                                    <h:outputText value="#{item.email}" />
+                                </p:column>
+
+                                <p:column id="telefone" 
+                                          exportable="true"
+                                          sortBy="#{item.telefone1}"
+                                          headerText="Telefone">
+                                    <h:outputText value="#{item.telefone1}" />
+                                </p:column>
+
+                                <p:column id="ativo" 
+                                          exportable="true"
+                                          sortBy="#{item.ativo}"
+                                          width="6%"
+                                          style="text-align: center;"
+                                          headerText="Ativo">
+                                    <h:outputText value="#{item.ativo ? 'Sim':'Não'}" />
+                                </p:column>
+
+                                <p:column headerText="Ações"
+                                          style="text-align: center;width: 60px;">
+                                    <p:commandButton icon="fa fa-trash" 
+                                                     styleClass="bt-acoes"
+                                                     actionListener="#{ColaboradorCrudMB.setEntity(item)}"
+                                                     process="@this"
+                                                     update=":form:groupRemove"
+                                                     immediate="true"
+                                                     oncomplete="$('#removeDialogVar').modal('show');"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
                     </div>
-                    <div class="form-group col-md-5">
-                        <p:inputText id="inptNome" 
-                                     value="#{ColaboradorCrudMB.filtros.nome}" 
-                                     placeholder="Pesquise por nome"
-                                     class="form-control"
-                                     label="Nome"/>
-                    </div>
-                    <div class="form-group col-md-1">
-                        <p:commandButton actionListener="#{ColaboradorCrudMB.filtros.filtrar()}"
-                                         icon="fa fa-search"
-                                         value="Buscar" 
-                                         update="dataTable"
-                                         class="btn btn-primary"/>
-                    </div>
-                    
                 </div>
             </div>
 
-            <div class="row" style="margin-top: 10px;">
-                <div>
-                    <p:dataTable id="dataTable"
-                                 var="item"  
-                                 rows="25" 
-                                 paginator="true"
-                                 pageLinks="5" 
-                                 rowsPerPageTemplate="25,50,100"
-                                 currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
-                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 paginatorPosition="bottom"
-                                 value="#{ColaboradorCrudMB.lazyDataModel}" 
-                                 selection="#{ColaboradorCrudMB.itensSelecionados}"
-                                 widgetVar="dataTableVar"
-                                 reflow="true"
-                                 emptyMessage="Nenhum registro encontrado"
-                                 lazy="true">
 
 
-                        <p:column selectionMode="multiple" width="5%" style="text-align: center;"/>
+            <div class="modal fade" 
+                 id="removeDialogVar" tabindex="-1" 
+                 role="dialog" aria-labelledby="myModal" 
+                 aria-hidden="true" data-keyboard="false" 
+                 data-backdrop="static">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <h:panelGroup id="groupRemove">
+                            <div class="modal-header modal-header-danger">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title">Remover ?</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label ">Id
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-3">
+                                            <h:outputText value="#{ColaboradorCrudMB.entity.id}" />
+                                        </div>
+                                    </div>
 
-                        <p:column id="id" 
-                                  width="5%"
-                                  style="text-align: center;"
-                                  exportable="true"
-                                  sortBy="#{item.id}"
-                                  headerText="#">
-                            <p:link value="#{item.id}" 
-                                    outcome="form.xhtml" >
-                                <f:param name="id" value="#{item.id}"/>
-                            </p:link>
-                        </p:column>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label ">Nome
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-3">
+                                            <h:outputText value="#{ColaboradorCrudMB.entity.nome}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h:panelGroup layout="block" styleClass="modal-footer">
+                                <p:commandLink value="Fechar"
+                                               immediate="true" 
+                                               styleClass="btn btn-default" 
+                                               oncomplete="$('#removeDialogVar').modal('hide');" />
 
-                        <p:column id="nome" 
-                                  exportable="true"
-                                  sortBy="#{item.nome}"
-                                  headerText="Nome">
-                            <h:outputText value="#{item.nome}" />
-                        </p:column>
-
-                        <p:column id="email" 
-                                  exportable="true"
-                                  sortBy="#{item.email}"
-                                  headerText="Email">
-                            <h:outputText value="#{item.email}" />
-                        </p:column>
-
-                        <p:column id="telefone" 
-                                  exportable="true"
-                                  sortBy="#{item.telefone1}"
-                                  headerText="Telefone">
-                            <h:outputText value="#{item.telefone1}" />
-                        </p:column>
-                        
-                        <p:column id="ativo" 
-                                  exportable="true"
-                                  sortBy="#{item.ativo}"
-                                  width="6%"
-                                  style="text-align: center;"
-                                  headerText="Ativo">
-                            <h:outputText value="#{item.ativo ? 'Sim':'Não'}" />
-                        </p:column>
-                    </p:dataTable>
+                                <p:commandLink value="Confirmar" 
+                                               action="#{ColaboradorCrudMB.delete()}" 
+                                               update="dataTable"
+                                               styleClass="btn btn-primary"
+                                               process="groupRemove" 
+                                               onstart="PF('statusDialog').show();"
+                                               oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
                 </div>
             </div>
-
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-            </p:confirmDialog>
-
         </h:form>
     </ui:define>
 

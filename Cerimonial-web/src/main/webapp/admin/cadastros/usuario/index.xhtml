@@ -13,52 +13,9 @@
 
     <ui:define name="content">
 
-        <script type="text/javascript">
-
-            function openModal() {
-                alert('aqui');
-                $('#myModal').appendTo("body").modal('show');
-            }
-        </script>
-
-
-        
-        
 
         <h:form prependId="false"
                 id="form">
-
-            <p:commandLink value="Show modal" 
-                           styleClass="btn btn-primary" 
-                           onclick="$('#myModal').modal('show');"
-                           update=":form:groupForm" 
-                           immediate="true" />
-
-            <div class="modal fade" 
-                 id="myModal" tabindex="-1" 
-                 role="dialog" aria-labelledby="myModal" 
-                 aria-hidden="true" data-keyboard="false" 
-                 data-backdrop="static">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <h:panelGroup id="groupForm">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Test Modal</h4>
-                            </div>
-                            <div class="modal-body">
-                                Content area
-                            </div>
-                            <h:panelGroup layout="block" styleClass="modal-footer">
-                                <p:commandLink value="Close"
-                                               immediate="true" 
-                                               styleClass="btn btn-default" 
-                                               oncomplete="$('#myModal').modal('hide');" />
-                            </h:panelGroup>
-                        </h:panelGroup>
-                    </div>
-                </div>
-            </div>
-
 
             <div class="fixed-rounded-button">
                 <span class="glyphicon"
@@ -181,57 +138,73 @@
                                                      styleClass="bt-acoes"
                                                      actionListener="#{UsuarioCrudMB.setEntity(item)}"
                                                      process="@this"
-                                                     update=":form:removeDialog"
-                                                     oncomplete="PF('removeDialogVar').show()"/>
+                                                     update=":form:groupRemove"
+                                                     immediate="true"
+                                                     oncomplete="$('#removeDialogVar').modal('show');"/>
                                 </p:column>
-
                             </p:dataTable>
-
                         </div>
                     </div>
                 </div>
-
             </div>
 
 
 
-            <p:dialog id="removeDialog"
-                      header="Remover ?" 
-                      widgetVar="removeDialogVar" 
-                      modal="true"
-                      resizable="false"
-                      dynamic="true"
-                      class="icon-fa"
-                      position="center">
-
-                <h:panelGroup id="removerPanel">
-                    <div class="conteudo-dialog"> 
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label class="control-label ">Id
-                                </label>
+            <div class="modal fade" 
+                 id="removeDialogVar" tabindex="-1" 
+                 role="dialog" aria-labelledby="myModal" 
+                 aria-hidden="true" data-keyboard="false" 
+                 data-backdrop="static">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <h:panelGroup id="groupRemove">
+                            <div class="modal-header modal-header-danger">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title">Remover ?</h4>
                             </div>
-                            <div class="col-md-3 col-md-offset-3">
-                                <h:outputText value="#{UsuarioCrudMB.entity.id}" />
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label ">Id
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-3">
+                                            <h:outputText value="#{UsuarioCrudMB.entity.id}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label ">Nome
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-3">
+                                            <h:outputText value="#{UsuarioCrudMB.entity.nome}" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            <h:panelGroup layout="block" styleClass="modal-footer">
+                                <p:commandLink value="Fechar"
+                                               immediate="true" 
+                                               styleClass="btn btn-default" 
+                                               oncomplete="$('#removeDialogVar').modal('hide');" />
 
+                                <p:commandLink value="Confirmar" 
+                                               action="#{UsuarioCrudMB.delete()}" 
+                                               update="dataTable"
+                                               styleClass="btn btn-primary"
+                                               process="groupRemove" 
+                                               onstart="PF('statusDialog').show();"
+                                               oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
                     </div>
-
-                    <div class="footer-dialog">                    
-                        <div class="acao-dialog">
-                            <p:commandButton value="Confirmar" 
-                                             action="#{UsuarioCrudMB.delete()}" 
-                                             update="dataTable"
-                                             class="btn btn-primary"
-                                             process="removerPanel" 
-                                             onstart="PF('statusDialog').show();"
-                                             oncomplete="PF('statusDialog').hide();PF('removeDialogVar').hide();">
-                            </p:commandButton>                        
-                        </div>
-                    </div>
-                </h:panelGroup>
-            </p:dialog>
+                </div>
+            </div>
 
         </h:form>
     </ui:define>
