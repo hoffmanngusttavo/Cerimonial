@@ -6,6 +6,7 @@
 package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.filter.FilterFornecedor;
+import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.service.CategoriaFornecedorService;
 import java.util.List;
@@ -26,14 +27,13 @@ import org.primefaces.model.SortOrder;
  */
 @ManagedBean(name = "FornecedorCrudMB")
 @ViewScoped
-public class FornecedorCrudMB extends PessoaMB{
-    
-    private List<SelectItem> categoriasFornecedor;
-    
+public class FornecedorCrudMB extends PessoaMB {
+
     @EJB
     protected CategoriaFornecedorService categoriaFornecedorService;
 
-   
+    private CategoriaFornecedor categoriaFornecedor;
+
     @Override
     public void init() {
 
@@ -47,26 +47,31 @@ public class FornecedorCrudMB extends PessoaMB{
             entity = new Pessoa();
         }
     }
-    
-    
-    
+
     public FornecedorCrudMB() {
         try {
             filtros = new FilterFornecedor();
-            buscarCategorias();
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
-        
+
     }
-    
-   private void buscarCategorias(){
-       categoriasFornecedor = selectItemUtils.getComboCategoriasFornecedor();
-   }
-    
-     /**
-     *Evento invocado pela tela de form para salvar um novo ou edicao de um fornecedor
+
+    /**
+     * Método invocado pela tela form de fornecedor para buscar
+     * uma categoria pelo nome
+     * @param nome
      * @return 
+     */
+    public List<CategoriaFornecedor> completeCategorias(String nome) {
+        return categoriaFornecedorService.findAllByNome(nome);
+    }
+
+    /**
+     * Evento invocado pela tela de form para salvar um novo ou edicao de um
+     * fornecedor
+     *
+     * @return
      */
     public synchronized String save() {
         try {
@@ -85,11 +90,11 @@ public class FornecedorCrudMB extends PessoaMB{
         }
         return null;
     }
-    
-    
+
     /**
-     *Evento invocado pela tela de index para listar os clientes
-     * @return 
+     * Evento invocado pela tela de index para listar os clientes
+     *
+     * @return
      */
     public LazyDataModel<Pessoa> getLazyDataModel() {
 
@@ -135,16 +140,12 @@ public class FornecedorCrudMB extends PessoaMB{
         return lazyLista;
     }
 
-    public List<SelectItem> getCategoriasFornecedor() {
-        return categoriasFornecedor;
+    public CategoriaFornecedor getCategoriaFornecedor() {
+        return categoriaFornecedor;
     }
 
-    public void setCategoriasFornecedor(List<SelectItem> categoriasFornecedor) {
-        this.categoriasFornecedor = categoriasFornecedor;
+    public void setCategoriaFornecedor(CategoriaFornecedor categoriaFornecedor) {
+        this.categoriaFornecedor = categoriaFornecedor;
     }
 
-   
-    
-    
-    
 }

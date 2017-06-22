@@ -39,16 +39,17 @@
                 <ul id="tabEtapas" class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#etapa1" aria-controls="etapa1" role="tab" data-toggle="tab">Fornecedor</a></li>
                     <li role="presentation"><a href="#etapa2" aria-controls="etapa2" role="tab" data-toggle="tab">Endereço</a></li>
+                    <li role="presentation"><a href="#etapa3" aria-controls="etapa3" role="tab" data-toggle="tab">Categorias</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
-                        <div class="row">
+
+                         <div class="row">
                             <div class="form-group col-md-3">
-                                <h2>Dados Gerais</h2>
                             </div>
                         </div>
-
+                        
                         <div class="form-group col-md-6">
                             <label class="control-label ">Tipo Pessoa
                                 <span class="asteriskField">
@@ -67,7 +68,7 @@
                                         update="@form"/>
                             </h:selectOneMenu>
                         </div>
-                        
+
                         <div class="form-group col-md-6">
                             <label class="control-label ">Nome
                                 <span class="asteriskField">
@@ -210,6 +211,7 @@
                             <p:commandButton onclick="alteraEtapaFornecedor(2)"
                                              process="@this"
                                              class="btn btn-info"
+                                             icon="fa fa-arrow-right"
                                              value="Próxima Etapa"/>
 
                             <p:commandButton value="Salvar"
@@ -235,9 +237,9 @@
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="etapa2">
+
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <h2>Endereço</h2>
                             </div>
                         </div>
 
@@ -366,10 +368,24 @@
                             </div>
                         </h:panelGroup>
 
+                        <p:commandButton onclick="alteraEtapaFornecedor(1)"
+                                         process="@this"
+                                         class="btn btn-info"
+                                         icon="fa fa-arrow-left"
+                                         value="Voltar Etapa"/>
+
+                        <p:commandButton onclick="alteraEtapaFornecedor(3)"
+                                         process="@this"
+                                         style="margin-left: 10px;"
+                                         icon="fa fa-arrow-right"
+                                         class="btn btn-info"
+                                         value="Próxima Etapa"/>
+
                         <p:commandButton value="Salvar"
                                          action="#{FornecedorCrudMB.save()}"
                                          onclick="validaFormularioFornecedor()"
                                          icon="fa fa-check" 
+                                         style="margin-left: 10px;"
                                          class="btn btn-success"
                                          onstart="PF('statusDialog').show();"
                                          oncomplete="PF('statusDialog').hide();"/>
@@ -381,6 +397,80 @@
                                          class="btn btn-default"
                                          style="margin-left: 10px;"
                                          icon="fa fa-close"/>
+
+
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="etapa3">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+
+                            <div class="form-group col-md-6">
+                                <label>Categoria 
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:autoComplete id="inptCategoria"
+                                                value="#{FornecedorCrudMB.categoriaFornecedor}"
+                                                completeMethod="#{FornecedorCrudMB.completeCategorias}"
+                                                minQueryLength="2"  
+                                                var="p" 
+                                                class="typeahead"
+                                                placeholder="Pesquise uma categoria"
+                                                label="Categoria"
+                                                itemLabel="#{p.nome}" 
+                                                itemValue="#{p}" 
+                                                converter="EntityConverter" >
+
+                                    <p:column style="padding: 10px; border: none" >
+                                        #{p.nome}
+                                    </p:column>
+
+                                    <p:ajax event="change"
+                                            global="false"
+                                            process="@this"/> 
+
+                                    <p:ajax event="itemSelect" 
+                                            global="false"
+                                            async="false"
+                                            process="@this" /> 
+                                </p:autoComplete>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <p:commandButton onclick="alteraEtapaFornecedor(2)"
+                                                 process="@this"
+                                                 class="btn btn-info"
+                                                 icon="fa fa-arrow-left"
+                                                 value="Voltar Etapa"/>
+
+                                <p:commandButton value="Salvar"
+                                                 action="#{FornecedorCrudMB.save()}"
+                                                 onclick="validaFormularioFornecedor()"
+                                                 icon="fa fa-check" 
+                                                 class="btn btn-success"
+                                                 style="margin-left: 10px;"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+
+                                <p:commandButton value="Voltar"
+                                                 immediate="true"
+                                                 action="index?faces-redirect=true"
+                                                 process="@this"
+                                                 class="btn btn-default"
+                                                 style="margin-left: 10px;"
+                                                 icon="fa fa-close"/>
+                            </div>
+                        </div>
 
                     </div>
                 </div>

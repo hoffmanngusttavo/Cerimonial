@@ -190,6 +190,7 @@
                             <p:commandButton onclick="alteraEtapaCliente(2)"
                                              process="@this"
                                              class="btn btn-info"
+                                             icon="fa fa-arrow-right"
                                              value="Próxima Etapa"/>
 
                             <p:commandButton value="Salvar"
@@ -346,11 +347,18 @@
                             </div>
                         </h:panelGroup>
 
+                        <p:commandButton onclick="alteraEtapaCliente(1)"
+                                         process="@this"
+                                         class="btn btn-info"
+                                         icon="fa fa-arrow-left"
+                                         value="Voltar Etapa"/>
+                        
                         <p:commandButton value="Salvar"
                                          action="#{ClienteCrudMB.save()}"
                                          onclick="validaFormularioCliente()"
                                          icon="fa fa-check" 
                                          class="btn btn-success"
+                                         style="margin-left: 10px;"
                                          onstart="PF('statusDialog').show();"
                                          oncomplete="PF('statusDialog').hide();"/>
                         

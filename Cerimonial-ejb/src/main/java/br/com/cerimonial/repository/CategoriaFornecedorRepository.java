@@ -59,4 +59,13 @@ public class CategoriaFornecedorRepository extends BasicRepository {
 
         return getPureList(CategoriaFornecedor.class, modelFilter.getSqlBase());
     }
+
+    public List<CategoriaFornecedor> findAllByNome(String nome) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM categoriafornecedor as cf");
+        sb.append(" WHERE 1=1 ");
+        sb.append(" AND TRANSLATE(UPPER(cf.nome), 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ', 'aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC')");
+        sb.append(" LIKE TRANSLATE('%").append(nome).append("%', 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ', 'aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC')");
+        return getPureListNative(CategoriaFornecedor.class, sb.toString());
+    }
 }
