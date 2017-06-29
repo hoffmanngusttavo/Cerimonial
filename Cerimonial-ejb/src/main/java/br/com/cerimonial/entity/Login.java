@@ -56,7 +56,7 @@ public class Login implements Serializable, ModelInterface {
     @Column(columnDefinition = "TEXT")
     private String cabecalho;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Usuario usuario;
     
     @ManyToOne(fetch = FetchType.LAZY)

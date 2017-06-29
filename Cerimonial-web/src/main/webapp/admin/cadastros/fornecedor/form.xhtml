@@ -32,8 +32,6 @@
 
             <p:focus for="inptTipo"/>
 
-            <p:messages autoUpdate="true" id="msgs" closable="true" />
-
             <div class="row">
                 <!-- Nav tabs -->
                 <ul id="tabEtapas" class="nav nav-tabs" role="tablist">
@@ -45,11 +43,11 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
 
-                         <div class="row">
+                        <div class="row">
                             <div class="form-group col-md-3">
                             </div>
                         </div>
-                        
+
                         <div class="form-group col-md-6">
                             <label class="control-label ">Tipo Pessoa
                                 <span class="asteriskField">
@@ -408,8 +406,6 @@
                         </div>
 
                         <div class="row">
-
-
                             <div class="form-group col-md-6">
                                 <label>Categoria 
                                     <span class="asteriskField">
@@ -442,8 +438,46 @@
                                             async="false"
                                             process="@this" /> 
                                 </p:autoComplete>
+
+                                <p:commandButton actionListener="#{FornecedorCrudMB.adicionarCategoria()}"
+                                                 process="@this"
+                                                 class="btn btn-primary"
+                                                 icon="fa fa-plus"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"
+                                                 update="panelGroupCategoria, inptCategoria"
+                                                 value="Adicionar Categoria"/>
                             </div>
                         </div>
+                        <h:panelGroup id="panelGroupCategoria">
+                            <h:panelGroup rendered="#{not empty FornecedorCrudMB.entity.categoriasFornecedor}">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <table>
+                                            <tr>
+                                                <th>Nome</th>
+                                                <th>Ação</th>
+                                            </tr>
+
+                                            <p:repeat value="#{FornecedorCrudMB.entity.categoriasFornecedor}"
+                                                      var="categoria">
+                                                <tr>
+                                                    <td>#{categoria.nome}</td>
+                                                    <td>
+                                                        <p:commandButton icon="fa fa-trash" 
+                                                                         styleClass="bt-acoes"
+                                                                         actionListener="#{FornecedorCrudMB.removerCategoria(categoria)}"
+                                                                         process="@this"
+                                                                         update="panelGroupCategoria"/>
+
+                                                        </td>
+                                                </tr>
+                                            </p:repeat>
+                                        </table>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
 
                         <div class="row">
                             <div class="form-group col-md-6">

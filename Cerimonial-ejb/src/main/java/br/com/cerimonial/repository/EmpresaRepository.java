@@ -6,7 +6,6 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Empresa;
-import br.com.cerimonial.entity.Usuario;
 import java.util.List;
 import javax.persistence.EntityManager;
 

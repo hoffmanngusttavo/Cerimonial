@@ -6,8 +6,13 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Login;
+import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.repository.LoginRepository;
-import br.com.cerimonial.repository.UsuarioRepository;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
@@ -27,12 +32,12 @@ import javax.ejb.TransactionManagementType;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class LoginService extends BasicService<Login> {
 
-    private LoginRepository loginRepository;
+    private LoginRepository repository;
 
     @PostConstruct
     @PostActivate
     private void postConstruct() {
-        loginRepository = new LoginRepository(em);
+        repository = new LoginRepository(em);
 
     }
 
@@ -44,7 +49,20 @@ public class LoginService extends BasicService<Login> {
     @Override
     public Login save(Login entity) throws Exception {
         if (entity != null) {
-            return loginRepository.create(entity);
+            return repository.create(entity);
+        }
+        return null;
+    }
+    
+    
+    public List<Login> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
+        try {
+            if (params == null) {
+                params = new HashMap<>();
+            }
+            return repository.findRangeListagem(params, max, offset, sortField, sortAscDesc);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

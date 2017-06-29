@@ -9,6 +9,7 @@ import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -362,6 +363,29 @@ public class Pessoa implements Serializable, ModelInterface {
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
+    }
+
+    public void adicionarCategoria(CategoriaFornecedor categoriaFornecedor) throws Exception{
+        if(categoriaFornecedor == null){
+            throw new Exception("Categoria Inválida");
+        }
+        if(this.getCategoriasFornecedor() == null){
+            this.setCategoriasFornecedor(new LinkedList<>());
+        }
+        
+        if(!this.getCategoriasFornecedor().contains(categoriaFornecedor)){
+            this.getCategoriasFornecedor().add(categoriaFornecedor);
+        }
+    }
+    
+    public void removerCategoria(CategoriaFornecedor categoriaFornecedor) throws Exception{
+        if(categoriaFornecedor == null){
+            throw new Exception("Categoria Inválida");
+        }
+        if(this.getCategoriasFornecedor().isEmpty()){
+            throw new Exception("Lista de Categorias está vazia");
+        }
+        this.getCategoriasFornecedor().remove(categoriaFornecedor);
     }
 
 }

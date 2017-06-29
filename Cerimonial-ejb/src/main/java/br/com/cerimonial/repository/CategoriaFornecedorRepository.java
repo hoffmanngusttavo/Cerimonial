@@ -6,7 +6,6 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.CategoriaFornecedor;
-import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -57,7 +56,7 @@ public class CategoriaFornecedorRepository extends BasicRepository {
             modelFilter.addOrderBy(sortField, sortAscDesc);
         }
 
-        return getPureList(CategoriaFornecedor.class, modelFilter.getSqlBase());
+        return getPureListRange(CategoriaFornecedor.class, modelFilter.getSqlBase(), max, offset);
     }
 
     public List<CategoriaFornecedor> findAllByNome(String nome) throws Exception {

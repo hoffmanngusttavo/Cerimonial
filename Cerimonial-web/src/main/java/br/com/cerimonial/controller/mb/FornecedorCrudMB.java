@@ -17,7 +17,6 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -56,6 +55,35 @@ public class FornecedorCrudMB extends PessoaMB {
         }
 
     }
+    
+    public void removerCategoria(CategoriaFornecedor categoria) {
+        try {
+            if (entity != null) {
+                entity.removerCategoria(categoria);
+                createFacesInfoMessage("Categoria removida com sucesso!");
+            }
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getMessage());
+        }
+    }
+    
+    public void adicionarCategoria() {
+        try {
+            if (entity != null) {
+                entity.adicionarCategoria(categoriaFornecedor);
+                categoriaFornecedor = null;
+                createFacesInfoMessage("Categoria adicionada com sucesso!");
+            }
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getMessage());
+        }
+    }
+    
+    
+    
+    
 
     /**
      * Método invocado pela tela form de fornecedor para buscar

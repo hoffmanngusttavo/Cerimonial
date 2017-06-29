@@ -11,7 +11,6 @@ import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.PessoaService;
-import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -62,28 +61,14 @@ public class PessoaMB extends BasicControl {
      * Evento invocado pela tela de listagem para remover os itens selecionados
      */
     public void delete() {
-
-        if (CerimonialUtils.isListBlank(itensSelecionados)) {
-            createFacesWarnMessage("Selecione ao menos um item");
-            return;
-        }
-
-        int numCars = 0;
-        if (itensSelecionados != null) {
-            for (Pessoa fornecedor : itensSelecionados) {
-                try {
-                    service.delete(fornecedor);
-                    numCars++;
-                } catch (Exception ex) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                    createFacesErrorMessage(ex.getMessage());
-                }
-            }
-
-            itensSelecionados.clear();
-
-            if (numCars > 0) {
-                createFacesInfoMessage(numCars + " fornecedores removidos com sucesso!");
+        if (entity != null && entity.getId() != null) {
+            try {
+                String tipoPessoa = entity.getTipoEnvolvido().toString();
+                service.delete(entity);
+                createFacesInfoMessage(tipoPessoa+" removido com sucesso!");
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                createFacesErrorMessage(ex.getMessage());
             }
         }
     }

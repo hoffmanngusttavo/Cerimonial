@@ -10,7 +10,6 @@ import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.controller.filter.FilterUsuario;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.UsuarioService;
-import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -19,7 +18,6 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 

@@ -74,7 +74,7 @@ public class UsuarioRepository extends BasicRepository{
             modelFilter.addOrderBy(sortField, sortAscDesc);
         }
         
-        return getPureList(Usuario.class, modelFilter.getSqlBase());
+        return getPureListRange(Usuario.class, modelFilter.getSqlBase(), max, offset);
     }
    
 }

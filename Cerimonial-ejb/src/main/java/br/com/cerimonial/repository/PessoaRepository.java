@@ -76,7 +76,7 @@ public class PessoaRepository extends BasicRepository {
             modelFilter.addOrderBy(sortField, sortAscDesc);
         }
 
-        return getPureList(Pessoa.class, modelFilter.getSqlBase());
+        return getPureListRange(Pessoa.class, modelFilter.getSqlBase(), max, offset);
     }
 
     public int countListagemClientes(HashMap<String, Object> filter) throws Exception {
@@ -101,8 +101,7 @@ public class PessoaRepository extends BasicRepository {
             modelFilter.addOrderBy(sortField, sortAscDesc);
         }
 
-//        modelFilter.addJoin("categoriasFornecedor", ModelFilter.LEFTJOIN);
-        List<Pessoa> fornecedores = getPureList(Pessoa.class, modelFilter.getSqlBase());
+        List<Pessoa> fornecedores = getPureListRange(Pessoa.class, modelFilter.getSqlBase(), max, offset);
         if (CerimonialUtils.isListNotBlank(fornecedores)) {
             for (Pessoa fornecedor : fornecedores) {
                 if (fornecedor.getCategoriasFornecedor() != null) {
@@ -143,7 +142,7 @@ public class PessoaRepository extends BasicRepository {
             modelFilter.addOrderBy(sortField, sortAscDesc);
         }
 
-        return getPureList(Pessoa.class, modelFilter.getSqlBase());
+        return getPureListRange(Pessoa.class, modelFilter.getSqlBase(), max, offset);
     }
 
 }
