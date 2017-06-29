@@ -36,13 +36,22 @@ public class PessoaRepository extends BasicRepository {
     }
 
     public Pessoa getPessoa(Long id) throws Exception {
-        return getEntity(Pessoa.class, id);
+        Pessoa entity = getEntity(Pessoa.class, id);
+        if(entity != null && entity.getEndereco() != null){
+             entity.getEndereco().getId();
+        }
+        return entity;
     }
 
     public Pessoa getEntityFornecedorCategoria(Long id) throws Exception {
         Pessoa entity = getEntity(Pessoa.class, id);
-        if (entity != null && entity.getCategoriasFornecedor() != null) {
-            entity.getCategoriasFornecedor().size();
+        if (entity != null) {
+            if (entity.getCategoriasFornecedor() != null) {
+                entity.getCategoriasFornecedor().size();
+            }
+            if (entity.getEndereco() != null) {
+                entity.getEndereco().getId();
+            }
         }
         return entity;
     }

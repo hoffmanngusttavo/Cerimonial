@@ -24,6 +24,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -88,7 +89,7 @@ public class Pessoa implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, optional = false, fetch = FetchType.LAZY)
     private Endereco endereco = new Endereco();
 
     @Column
@@ -115,8 +116,9 @@ public class Pessoa implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataNascimento;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Usuario usuarioCliente;
+   
 
     public Pessoa() {
         endereco = new Endereco();

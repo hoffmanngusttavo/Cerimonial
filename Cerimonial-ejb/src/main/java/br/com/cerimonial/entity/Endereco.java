@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -73,8 +74,7 @@ public class Endereco implements Serializable, ModelInterface {
     @ManyToOne
     private Estado estado;
 
-    @OneToOne(mappedBy = "endereco")
-    private Pessoa pessoa;
+    
 
     @Override
     public Long getId() {
@@ -160,14 +160,6 @@ public class Endereco implements Serializable, ModelInterface {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
-    }
-
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
     }
 
     @Override

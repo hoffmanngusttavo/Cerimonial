@@ -34,7 +34,7 @@ public class EmpresaRepository extends BasicRepository{
     }
 
     public List<Empresa> findAll() throws Exception {
-        return getPureList(Empresa.class, "select emp from Empresa emp ");
+        return getPureListNative(Empresa.class, "select * from Empresa emp ");
         
         
     }
