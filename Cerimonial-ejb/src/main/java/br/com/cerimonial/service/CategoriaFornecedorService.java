@@ -7,7 +7,6 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.repository.CategoriaFornecedorRepository;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

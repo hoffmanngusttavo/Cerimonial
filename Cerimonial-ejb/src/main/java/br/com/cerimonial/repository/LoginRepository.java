@@ -6,7 +6,6 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Login;
-import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.ArrayList;
 import java.util.HashMap;

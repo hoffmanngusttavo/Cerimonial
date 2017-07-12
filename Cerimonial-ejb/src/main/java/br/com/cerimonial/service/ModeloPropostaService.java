@@ -6,7 +6,13 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ModeloProposta;
+import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.repository.ModeloPropostaRepository;
+import br.com.cerimonial.repository.ModeloPropostaRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
@@ -36,12 +42,51 @@ public class ModeloPropostaService extends BasicService<ModeloProposta>{
 
     @Override
     public ModeloProposta getEntity(Long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return repository.getEntity(id);
     }
 
     @Override
     public ModeloProposta save(ModeloProposta entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (entity != null) {
+            if (entity.getId() == null) {
+                return repository.create(entity);
+            } else {
+                return repository.edit(entity);
+            }
+        }
+        return null;
     }
+
+    public List<ModeloProposta> findAll() {
+        try {
+            return repository.findAll();
+        } catch (Exception ex) {
+            Logger.getLogger(ModeloPropostaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
+    }
+
+    public void delete(ModeloProposta categoria) throws Exception {
+        repository.delete(categoria);
+    }
+
+    public int countAll() {
+        try {
+            return repository.countAll();
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public List<ModeloProposta> findRangeListagemCategorias(int max, int offset, String sortField, String sortAscDesc) {
+        try {
+            return repository.findRangeListagemCategorias(max, offset, sortField, sortAscDesc);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     
 }

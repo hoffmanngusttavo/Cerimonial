@@ -7,12 +7,18 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.ModeloProposta;
-import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.ModeloPropostaService;
+import br.com.cerimonial.utils.CerimonialUtils;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 
 /**
  *
@@ -22,13 +28,144 @@ import org.primefaces.model.LazyDataModel;
 @ViewScoped
 public class ModeloPropostaCrudMB extends BasicControl{
     
-    private LazyDataModel<ModeloProposta> lazyLista;
-    private ModeloProposta entity;
-    
+    protected LazyDataModel<ModeloProposta> lazyLista;
+    protected Long id;
+    protected ModeloProposta entity;
+    protected List<ModeloProposta> itensSelecionados;
     @EJB
-    private ModeloPropostaService service;
+    protected ModeloPropostaService service;
+    
+    /**
+     * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
+     * carregar os dados do cliente
+     */
+    public void init() {
 
-    public ModeloPropostaCrudMB() {
+        if (id != null) {
+            try {
+                entity = service.getEntity(id);
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            entity = new ModeloProposta();
+        }
+    }
+    
+    /**
+     * Evento invocado pela tela de listagem para remover os itens selecionados
+     */
+    public void delete() {
+
+        if (CerimonialUtils.isListBlank(itensSelecionados)) {
+            createFacesWarnMessage("Selecione ao menos um item");
+            return;
+        }
+
+        int numCars = 0;
+        if (itensSelecionados != null) {
+            for (ModeloProposta categoria : itensSelecionados) {
+                try {
+                    service.delete(categoria);
+                    numCars++;
+                } catch (Exception ex) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                    createFacesErrorMessage(ex.getMessage());
+                }
+            }
+
+            itensSelecionados.clear();
+
+            if (numCars > 0) {
+                createFacesInfoMessage(numCars + " categorias removidos com sucesso!");
+            }
+        }
+    }
+    
+    /**
+     *Evento invocado pela tela de form para salvar um novo ou edicao de um fornecedor
+     * @return 
+     */
+    public synchronized String save() {
+        try {
+            if (entity != null) {
+                service.save(entity);
+                createFacesInfoMessage("Dados gravados com sucesso!");
+                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+                return "index.xhtml?faces-redirect=true";
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
+        } finally {
+            scrollTopMessage();
+        }
+        return null;
+    }
+    
+    
+    /**
+     *Evento invocado pela tela de index para listar os clientes
+     * @return 
+     */
+    public LazyDataModel<ModeloProposta> getLazyDataModel() {
+
+        if (lazyLista == null) {
+            lazyLista = new LazyDataModel<ModeloProposta>() {
+
+                @Override
+                public ModeloProposta getRowData(String rowKey) {
+                    List<ModeloProposta> list = (List<ModeloProposta>) getWrappedData();
+                    for (ModeloProposta cli : list) {
+                        if (cli.getId().toString().equals(rowKey)) {
+                            return cli;
+                        }
+                    }
+                    return null;
+                }
+
+                @Override
+                public Object getRowKey(ModeloProposta object) {
+                    return object.getId(); //To change body of generated methods, choose Tools | Templates.
+                }
+
+                @Override
+                public List<ModeloProposta> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+
+                    int count = service.countAll();
+                    this.setRowCount(count);
+
+                    String sortAscDesc = "ASC";
+                    if (sortField != null) {
+                        sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
+                    }
+
+                    List<ModeloProposta> clientes = service.findRangeListagemCategorias(max, offset, sortField, sortAscDesc);
+                    return clientes;
+                }
+            };
+            //
+            int count = service.countAll();
+            lazyLista.setRowCount(count);
+            //
+        }
+        return lazyLista;
+    }
+
+    public LazyDataModel<ModeloProposta> getLazyLista() {
+        return lazyLista;
+    }
+
+    public void setLazyLista(LazyDataModel<ModeloProposta> lazyLista) {
+        this.lazyLista = lazyLista;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public ModeloProposta getEntity() {
@@ -38,6 +175,15 @@ public class ModeloPropostaCrudMB extends BasicControl{
     public void setEntity(ModeloProposta entity) {
         this.entity = entity;
     }
+
+    public List<ModeloProposta> getItensSelecionados() {
+        return itensSelecionados;
+    }
+
+    public void setItensSelecionados(List<ModeloProposta> itensSelecionados) {
+        this.itensSelecionados = itensSelecionados;
+    }
+
     
     
     

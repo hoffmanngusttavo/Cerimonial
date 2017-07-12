@@ -21,7 +21,7 @@ import javax.persistence.Query;
     private static final long serialVersionUID = 1L;
     
     private final EntityManager entityManager;
-
+    
     public BasicRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }

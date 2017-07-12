@@ -35,17 +35,17 @@ import org.apache.shiro.util.ByteSource;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class UsuarioService extends BasicService<Usuario> {
 
-    private UsuarioRepository usuarioRepository;
+    private UsuarioRepository repository;
 
     @PostConstruct
     @PostActivate
     private void postConstruct() {
-        usuarioRepository = new UsuarioRepository(em);
+        repository = new UsuarioRepository(em);
     }
 
     @Override
     public Usuario getEntity(Long id) throws Exception {
-        return usuarioRepository.getUsuario(id);
+        return repository.getUsuario(id);
     }
 
     @Override
@@ -53,9 +53,9 @@ public class UsuarioService extends BasicService<Usuario> {
         if (entity != null) {
             if (entity.getId() == null) {
                 alterarSaltSenha(entity);
-                return usuarioRepository.create(entity);
+                return repository.create(entity);
             } else {
-                return usuarioRepository.edit(entity);
+                return repository.edit(entity);
             }
         }
         return null;
@@ -67,18 +67,18 @@ public class UsuarioService extends BasicService<Usuario> {
             if(user.isMaster()){
                 throw new Exception("Usuário master não pode ser removido");
             }
-            usuarioRepository.delete(user);
+            repository.delete(user);
         }
     }
 
     public Usuario getUsuarioByLoginSenha(String login, String senha) throws Exception {
         Usuario usuarioSalt = this.getUsuarioByLogin(login);
         String senhaMd5 = Criptografia.md5(senha + usuarioSalt.getSalt());
-        return usuarioRepository.getUsuarioByLoginSenha(login, senhaMd5, Boolean.TRUE);
+        return repository.getUsuarioByLoginSenha(login, senhaMd5, Boolean.TRUE);
     }
 
     public Usuario getUsuarioByLogin(String login) throws Exception {
-        return usuarioRepository.getUsuarioByLogin(login, Boolean.TRUE);
+        return repository.getUsuarioByLogin(login, Boolean.TRUE);
     }
 
     public synchronized Usuario alterarSenha(Usuario entity) throws Exception {
@@ -86,7 +86,7 @@ public class UsuarioService extends BasicService<Usuario> {
         if (usuario != null && !usuario.getSenha().equals(entity.getSenha())) {
             alterarSaltSenha(entity);
         }
-        return usuarioRepository.edit(entity);
+        return repository.edit(entity);
     }
 
     private void alterarSaltSenha(Usuario entity) {
@@ -121,7 +121,7 @@ public class UsuarioService extends BasicService<Usuario> {
 
     public int countAll() {
         try {
-            return usuarioRepository.countAll();
+            return repository.countAll();
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
@@ -131,7 +131,7 @@ public class UsuarioService extends BasicService<Usuario> {
     public int countListagem(HashMap<String, Object> filter) {
         try {
             if (filter != null) {
-                return usuarioRepository.countListagem(filter);
+                return repository.countListagem(filter);
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -141,7 +141,7 @@ public class UsuarioService extends BasicService<Usuario> {
 
     public List<Usuario> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return usuarioRepository.findRangeListagem(params, max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem(params, max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }

@@ -14,10 +14,10 @@
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="id" value="#{UsuarioCrudMB.id}" converter="javax.faces.Long"/>
+            <f:viewParam name="id" value="#{ModeloPropostaCrudMB.id}" converter="javax.faces.Long"/>
             <!--use view action if you are in a Java EE 7 server: -->
-            <f:viewAction action="#{UsuarioCrudMB.init()}"/>
-            <!--<f:event type="preRenderView" listener="{UsuarioCrudMB.init}"/>-->
+            <f:viewAction action="#{ModeloPropostaCrudMB.init()}"/>
+            <!--<f:event type="preRenderView" listener="{ModeloPropostaCrudMB.init}"/>-->
         </f:metadata>
 
         <h:form prependId="false"
@@ -42,7 +42,7 @@
                             </label>
 
                             <p:inputText id="inptNome" 
-                                         value="#{UsuarioCrudMB.entity.nome}" 
+                                         value="#{ModeloPropostaCrudMB.entity.nome}" 
                                          required="true"
                                          requiredMessage="Preencha um nome válido"
                                          class="form-control"
@@ -57,7 +57,7 @@
                                 </span>
                             </label>
 
-                            <p:inputText value="#{UsuarioCrudMB.entity.login}"
+                            <p:inputText value="#{ModeloPropostaCrudMB.entity.login}"
                                          id="inptLogin" 
                                          required="true"
                                          class="form-control"
@@ -74,7 +74,7 @@
                             </label>
 
                             <p:inputText id="inptEmail" 
-                                         value="#{UsuarioCrudMB.entity.email}" 
+                                         value="#{ModeloPropostaCrudMB.entity.email}" 
                                          class="form-control"
                                          required="true"
                                          requiredMessage="Preencha um e-mail válido"
@@ -84,7 +84,7 @@
                             </p:inputText>
                         </div>
 
-                        <h:panelGroup rendered="#{UsuarioCrudMB.entity.id == null}">
+                        <h:panelGroup rendered="#{ModeloPropostaCrudMB.entity.id == null}">
                             <div class="form-group col-md-6">
                                 <label>Senha
                                     <span class="asteriskField">
@@ -92,9 +92,9 @@
                                     </span>
                                 </label>
 
-                                <p:password value="#{UsuarioCrudMB.entity.senha}"
+                                <p:password value="#{ModeloPropostaCrudMB.entity.senha}"
                                             id="inptSenha"
-                                            rendered="#{UsuarioCrudMB.entity.id == null}"
+                                            rendered="#{ModeloPropostaCrudMB.entity.id == null}"
                                             required="true"
                                             class="form-control"
                                             requiredMessage="Preencha uma senha válida"
@@ -109,9 +109,9 @@
                                     </span>
                                 </label>
 
-                                <p:password value="#{UsuarioCrudMB.confirmarSenha}"
+                                <p:password value="#{ModeloPropostaCrudMB.confirmarSenha}"
                                             id="inptConfirmSenha"
-                                            rendered="#{UsuarioCrudMB.entity.id == null}"
+                                            rendered="#{ModeloPropostaCrudMB.entity.id == null}"
                                             class="form-control"
                                             requiredMessage="Preencha uma senha válida"
                                             required="true"/>
@@ -123,7 +123,7 @@
                             <label>Usuário Master ?
                             </label>
 
-                            <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.master}"
+                            <p:selectBooleanCheckbox value="#{ModeloPropostaCrudMB.entity.master}"
                                                      class="checkbox-inline"
                                                      id="inptMaster"/>
                         </div>
@@ -132,7 +132,7 @@
                             <label>Ativo ?
                             </label>
 
-                            <p:selectBooleanCheckbox value="#{UsuarioCrudMB.entity.ativo}"
+                            <p:selectBooleanCheckbox value="#{ModeloPropostaCrudMB.entity.ativo}"
                                                      class="checkbox-inline"
                                                      id="inptAtivo"/>
                         </div>
@@ -146,7 +146,7 @@
 
 
                         <p:commandButton value="Salvar"
-                                         action="#{UsuarioCrudMB.save()}"
+                                         action="#{ModeloPropostaCrudMB.save()}"
                                          onclick="validaFormularioUsuario()"
                                          icon="fa fa-check" 
                                          class="btn btn-success"
