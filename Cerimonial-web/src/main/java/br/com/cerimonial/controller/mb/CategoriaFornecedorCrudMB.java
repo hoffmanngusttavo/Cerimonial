@@ -34,7 +34,7 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
     protected List<CategoriaFornecedor> itensSelecionados;
     @EJB
     protected CategoriaFornecedorService service;
-    
+
     /**
      * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
      * carregar os dados do cliente
@@ -51,40 +51,26 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
             entity = new CategoriaFornecedor();
         }
     }
-    
+
     /**
      * Evento invocado pela tela de listagem para remover os itens selecionados
      */
     public void delete() {
-
-        if (CerimonialUtils.isListBlank(itensSelecionados)) {
-            createFacesWarnMessage("Selecione ao menos um item");
-            return;
-        }
-
-        int numCars = 0;
-        if (itensSelecionados != null) {
-            for (CategoriaFornecedor categoria : itensSelecionados) {
-                try {
-                    service.delete(categoria);
-                    numCars++;
-                } catch (Exception ex) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                    createFacesErrorMessage(ex.getMessage());
-                }
+        try {
+            if (entity != null && entity.getId() != null) {
+                service.delete(entity);
             }
-
-            itensSelecionados.clear();
-
-            if (numCars > 0) {
-                createFacesInfoMessage(numCars + " categorias removidos com sucesso!");
-            }
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
         }
     }
-    
+
     /**
-     *Evento invocado pela tela de form para salvar um novo ou edicao de um fornecedor
-     * @return 
+     * Evento invocado pela tela de form para salvar um novo ou edicao de um
+     * fornecedor
+     *
+     * @return
      */
     public synchronized String save() {
         try {
@@ -102,11 +88,11 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
         }
         return null;
     }
-    
-    
+
     /**
-     *Evento invocado pela tela de index para listar os clientes
-     * @return 
+     * Evento invocado pela tela de index para listar os clientes
+     *
+     * @return
      */
     public LazyDataModel<CategoriaFornecedor> getLazyDataModel() {
 
@@ -175,7 +161,5 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
     public void setItensSelecionados(List<CategoriaFornecedor> itensSelecionados) {
         this.itensSelecionados = itensSelecionados;
     }
-    
-    
-    
+
 }

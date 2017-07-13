@@ -48,7 +48,7 @@ public class ModeloProposta implements Serializable, ModelInterface {
     
     @Lob
     @Column(columnDefinition = "TEXT")
-    private String observacao;
+    private String conteudo;
     
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
@@ -81,13 +81,15 @@ public class ModeloProposta implements Serializable, ModelInterface {
         this.titulo = titulo;
     }
 
-    public String getObservacao() {
-        return observacao;
+    public String getConteudo() {
+        return conteudo;
     }
 
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
+    public void setConteudo(String conteudo) {
+        this.conteudo = conteudo;
     }
+
+  
 
     public boolean isAtivo() {
         return ativo;

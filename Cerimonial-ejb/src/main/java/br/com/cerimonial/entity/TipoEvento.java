@@ -25,6 +25,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -96,7 +97,7 @@ public class TipoEvento implements Serializable, ModelInterface {
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.nome = StringUtils.isNotBlank(nome) ? nome.toUpperCase().trim(): nome;
     }
 
     public boolean isAtivo() {

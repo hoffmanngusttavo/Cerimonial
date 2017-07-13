@@ -5,10 +5,10 @@
  */
 package br.com.cerimonial.controller.mb;
 
+import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.service.TipoEventoService;
-import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -35,6 +35,7 @@ public class TipoEventoCrudMB extends BasicControl{
     protected List<TipoEvento> itensSelecionados;
     @EJB
     protected TipoEventoService service;
+    protected AbstractFilter filtros;
     
     /**
      * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
@@ -57,29 +58,13 @@ public class TipoEventoCrudMB extends BasicControl{
      * Evento invocado pela tela de listagem para remover os itens selecionados
      */
     public void delete() {
-
-        if (CerimonialUtils.isListBlank(itensSelecionados)) {
-            createFacesWarnMessage("Selecione ao menos um item");
-            return;
-        }
-
-        int numCars = 0;
-        if (itensSelecionados != null) {
-            for (TipoEvento categoria : itensSelecionados) {
-                try {
-                    service.delete(categoria);
-                    numCars++;
-                } catch (Exception ex) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                    createFacesErrorMessage(ex.getMessage());
-                }
+         try {
+            if (entity != null && entity.getId() != null) {
+                service.delete(entity);
             }
-
-            itensSelecionados.clear();
-
-            if (numCars > 0) {
-                createFacesInfoMessage(numCars + " categorias removidos com sucesso!");
-            }
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
         }
     }
     
@@ -183,6 +168,14 @@ public class TipoEventoCrudMB extends BasicControl{
 
     public void setItensSelecionados(List<TipoEvento> itensSelecionados) {
         this.itensSelecionados = itensSelecionados;
+    }
+
+    public AbstractFilter getFiltros() {
+        return filtros;
+    }
+
+    public void setFiltros(AbstractFilter filtros) {
+        this.filtros = filtros;
     }
 
     

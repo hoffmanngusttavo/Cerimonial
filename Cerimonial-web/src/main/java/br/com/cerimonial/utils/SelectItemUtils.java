@@ -8,10 +8,12 @@ package br.com.cerimonial.utils;
 import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Estado;
+import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.service.CategoriaFornecedorService;
 import br.com.cerimonial.service.CidadeService;
 import br.com.cerimonial.service.EstadoService;
+import br.com.cerimonial.service.TipoEventoService;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,12 +28,15 @@ import javax.naming.NamingException;
  * @author Gustavo Hoffmann
  */
 public class SelectItemUtils {
+    TipoEventoService tipoEventoService = lookupTipoEventoServiceBean();
 
     private final EstadoService estadoService = lookupEstadoServiceBean();
 
     private final CidadeService cidadeService = lookupCidadeServiceBean();
 
     private final CategoriaFornecedorService categoriaFornecedorService = lookupCategoriaFornecedorServiceBean();
+    
+    
 
     public static List<SelectItem> getComboTipoPessoa() {
         List<SelectItem> items = new LinkedList<>();
@@ -76,6 +81,18 @@ public class SelectItemUtils {
         }
         return items;
     }
+    
+    public List<SelectItem> getComboTipoEvento() {
+        List<SelectItem> items = new LinkedList<>();
+        try {
+            for (TipoEvento item : tipoEventoService.findAll()) {
+                items.add(new SelectItem(item, item.getNome()));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return items;
+    }
 
     private CidadeService lookupCidadeServiceBean() {
         try {
@@ -106,5 +123,17 @@ public class SelectItemUtils {
             throw new RuntimeException(ne);
         }
     }
+
+    private TipoEventoService lookupTipoEventoServiceBean() {
+        try {
+            Context c = new InitialContext();
+            return (TipoEventoService) c.lookup("java:global/" + ConstantsProject.appName + "/" + ConstantsProject.moduleEjbName + "/TipoEventoService!br.com.cerimonial.service.TipoEventoService");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    
 
 }

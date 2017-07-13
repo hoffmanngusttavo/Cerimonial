@@ -5,10 +5,12 @@
  */
 package br.com.cerimonial.controller.mb;
 
+import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.service.ModeloPropostaService;
 import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -17,6 +19,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -34,7 +37,9 @@ public class ModeloPropostaCrudMB extends BasicControl{
     protected List<ModeloProposta> itensSelecionados;
     @EJB
     protected ModeloPropostaService service;
-    
+    protected AbstractFilter filtros;
+    protected SelectItemUtils selectItemUtils;
+
     /**
      * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
      * carregar os dados do cliente
@@ -50,35 +55,21 @@ public class ModeloPropostaCrudMB extends BasicControl{
         } else {
             entity = new ModeloProposta();
         }
+        
+         this.selectItemUtils = new SelectItemUtils();
     }
     
     /**
      * Evento invocado pela tela de listagem para remover os itens selecionados
      */
     public void delete() {
-
-        if (CerimonialUtils.isListBlank(itensSelecionados)) {
-            createFacesWarnMessage("Selecione ao menos um item");
-            return;
-        }
-
-        int numCars = 0;
-        if (itensSelecionados != null) {
-            for (ModeloProposta categoria : itensSelecionados) {
-                try {
-                    service.delete(categoria);
-                    numCars++;
-                } catch (Exception ex) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                    createFacesErrorMessage(ex.getMessage());
-                }
+        try {
+            if (entity != null && entity.getId() != null) {
+                service.delete(entity);
             }
-
-            itensSelecionados.clear();
-
-            if (numCars > 0) {
-                createFacesInfoMessage(numCars + " categorias removidos com sucesso!");
-            }
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
         }
     }
     
@@ -151,6 +142,10 @@ public class ModeloPropostaCrudMB extends BasicControl{
         }
         return lazyLista;
     }
+    
+    public List<SelectItem> getComboTipoEvento() {
+        return selectItemUtils.getComboTipoEvento();
+    }
 
     public LazyDataModel<ModeloProposta> getLazyLista() {
         return lazyLista;
@@ -182,6 +177,14 @@ public class ModeloPropostaCrudMB extends BasicControl{
 
     public void setItensSelecionados(List<ModeloProposta> itensSelecionados) {
         this.itensSelecionados = itensSelecionados;
+    }
+
+    public AbstractFilter getFiltros() {
+        return filtros;
+    }
+
+    public void setFiltros(AbstractFilter filtros) {
+        this.filtros = filtros;
     }
 
     

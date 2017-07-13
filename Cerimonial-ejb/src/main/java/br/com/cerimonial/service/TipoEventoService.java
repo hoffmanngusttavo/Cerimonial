@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
+import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
@@ -23,6 +24,7 @@ import javax.ejb.TransactionManagementType;
  *
  * @author Gustavo Hoffmann
  */
+@Stateless
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)

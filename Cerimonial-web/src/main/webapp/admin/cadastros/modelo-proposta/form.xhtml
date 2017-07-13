@@ -8,7 +8,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Cadastro de Usuário
+        Cadastro de Modelo de Propostas
     </ui:define>
 
     <ui:define name="content">
@@ -22,140 +22,91 @@
 
         <h:form prependId="false"
                 id="form">
-            
+
             <p:focus for="inptNome"/>
-            
+
             <div class="row">
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <h2>Usuário</h2>
+                                <h2>Modelo de Proposta</h2>
                             </div>
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label class="control-label ">Nome
+                            <label class="control-label ">Título
                                 <span class="asteriskField">
                                     *
                                 </span>
                             </label>
 
                             <p:inputText id="inptNome" 
-                                         value="#{ModeloPropostaCrudMB.entity.nome}" 
+                                         value="#{ModeloPropostaCrudMB.entity.titulo}" 
                                          required="true"
-                                         requiredMessage="Preencha um nome válido"
+                                         requiredMessage="Preencha um título válido"
                                          class="form-control"
                                          label="Nome"/>
 
                         </div>
-                        
+
                         <div class="form-group col-md-6">
-                            <label>Login
+                            <label>Tipo de Evento
                                 <span class="asteriskField">
                                     *
                                 </span>
                             </label>
+                            <h:selectOneMenu id="inptTipoEvento" 
+                                             value="#{ModeloPropostaCrudMB.entity.tipoEvento}"
+                                             converter="EntityConverter"
+                                             rendered="true"
+                                             requiredMessage="Preencha um tipo de evento válido"
+                                             class="form-control"
+                                             label="Tipo de Evento">
+                                <f:selectItem itemValue="" 
+                                              itemLabel="Selecione" /> 
+                                <f:selectItems value="#{ModeloPropostaCrudMB.comboTipoEvento}" />
+                                <p:ajax process="@this"
+                                        update="@this"
+                                        global="false"/>
+                            </h:selectOneMenu>
 
-                            <p:inputText value="#{ModeloPropostaCrudMB.entity.login}"
-                                         id="inptLogin" 
-                                         required="true"
-                                         class="form-control"
-                                         requiredMessage="Preencha um login válido"
-                                         placeholder="Deve conter no mínimo 4 caracteres"
-                                         label="Login"/>
                         </div>
 
                         <div class="form-group col-md-12">
-                            <label>E-mail
+                            <label>Conteúdo
                                 <span class="asteriskField">
                                     *
                                 </span>
                             </label>
 
-                            <p:inputText id="inptEmail" 
-                                         value="#{ModeloPropostaCrudMB.entity.email}" 
-                                         class="form-control"
-                                         required="true"
-                                         requiredMessage="Preencha um e-mail válido"
-                                         placeholder="Ex: teste@teste.com"
-                                         label="Email">
-                                <f:validator validatorId="EmailValidate"/>
-                            </p:inputText>
+                            <p:editor id="inptConteudo" 
+                                      value="#{ModeloPropostaCrudMB.entity.conteudo}" 
+                                      required="true"
+                                      requiredMessage="Preencha um texto válido"/>
+
                         </div>
-
-                        <h:panelGroup rendered="#{ModeloPropostaCrudMB.entity.id == null}">
-                            <div class="form-group col-md-6">
-                                <label>Senha
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
-
-                                <p:password value="#{ModeloPropostaCrudMB.entity.senha}"
-                                            id="inptSenha"
-                                            rendered="#{ModeloPropostaCrudMB.entity.id == null}"
-                                            required="true"
-                                            class="form-control"
-                                            requiredMessage="Preencha uma senha válida"
-                                            label="Senha"/>
-
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label>Confirme Senha
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
-
-                                <p:password value="#{ModeloPropostaCrudMB.confirmarSenha}"
-                                            id="inptConfirmSenha"
-                                            rendered="#{ModeloPropostaCrudMB.entity.id == null}"
-                                            class="form-control"
-                                            requiredMessage="Preencha uma senha válida"
-                                            required="true"/>
-
-                            </div>
-                        </h:panelGroup>
-
-                        <div class="form-group col-md-6">
-                            <label>Usuário Master ?
-                            </label>
-
-                            <p:selectBooleanCheckbox value="#{ModeloPropostaCrudMB.entity.master}"
-                                                     class="checkbox-inline"
-                                                     id="inptMaster"/>
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Ativo ?
-                            </label>
-
-                            <p:selectBooleanCheckbox value="#{ModeloPropostaCrudMB.entity.ativo}"
-                                                     class="checkbox-inline"
-                                                     id="inptAtivo"/>
-                        </div>
-
-                        <p:commandButton value="Voltar"
-                                         immediate="true"
-                                         action="index?faces-redirect=true"
-                                         process="@this"
-                                         class="btn btn-default"
-                                         icon="fa fa-close"/>
-
-
-                        <p:commandButton value="Salvar"
-                                         action="#{ModeloPropostaCrudMB.save()}"
-                                         onclick="validaFormularioUsuario()"
-                                         icon="fa fa-check" 
-                                         class="btn btn-success"
-                                         style="margin-left: 10px;"
-                                         onstart="PF('statusDialog').show();"
-                                         oncomplete="PF('statusDialog').hide();"/>
 
                     </div>
                 </div>
+            </div>
+            <div class="row">
+                <p:commandButton value="Voltar"
+                                 immediate="true"
+                                 action="index?faces-redirect=true"
+                                 process="@this"
+                                 class="btn btn-default"
+                                 icon="fa fa-close"/>
+
+
+                <p:commandButton value="Salvar"
+                                 action="#{ModeloPropostaCrudMB.save()}"
+                                 onclick="validaFormularioUsuario()"
+                                 icon="fa fa-check" 
+                                 class="btn btn-success"
+                                 style="margin-left: 10px;"
+                                 onstart="PF('statusDialog').show();"
+                                 oncomplete="PF('statusDialog').hide();"/>
             </div>
 
         </h:form>
