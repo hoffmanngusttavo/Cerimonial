@@ -22,6 +22,8 @@
                       style="margin-top: -9px;margin-left: -10px;">
                     <p:commandButton action="form?faces-redirect=true" 
                                      ajax="false"
+                                     process="@this"
+                                     immediate="true"
                                      icon="fa fa-plus"
                                      styleClass="bt-acoes-add"
                                      onstart="PF('statusDialog').show();"
@@ -82,6 +84,27 @@
                                           sortBy="#{item.tipoEvento.nome}"
                                           headerText="Tipo Evento">
                                     <h:outputText value="#{item.tipoEvento.nome}" />
+                                </p:column>
+
+                                <p:column id="valor" 
+                                          exportable="true"
+                                          width="100"
+                                          sortBy="#{item.valorProposta}"
+                                          headerText="Valor">
+                                    <h:outputText value="#{item.valorProposta}" 
+                                                  class="currency">
+                                        <f:convertNumber maxFractionDigits="2"
+                                                         minFractionDigits="2"
+                                                         locale="pt_BR"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column id="ativo" 
+                                          exportable="true"
+                                          width="80"
+                                          sortBy="#{item.ativo}"
+                                          headerText="Ativo">
+                                    <h:outputText value="#{item.ativo ? 'Sim': 'Não'}" />
                                 </p:column>
 
                                 <p:column headerText="Ações"

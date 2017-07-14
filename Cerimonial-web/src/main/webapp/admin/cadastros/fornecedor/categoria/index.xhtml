@@ -20,6 +20,8 @@
                       style="margin-top: -9px;margin-left: -10px;">
                     <p:commandButton action="form?faces-redirect=true" 
                                      ajax="false"
+                                     process="@this"
+                                     immediate="true"
                                      icon="fa fa-plus"
                                      styleClass="bt-acoes-add"
                                      onstart="PF('statusDialog').show();"
@@ -42,6 +44,8 @@
                             <div class="form-group col-md-5">
                                 <p:commandButton action="/admin/cadastros/fornecedor/index.xhtml?faces-redirect=true" 
                                                  ajax="false" 
+                                                 process="@this"
+                                                 immediate="true"
                                                  icon="fa fa-arrow-left"
                                                  value="Voltar" 
                                                  class="btn btn-default"/>

@@ -93,3 +93,8 @@ fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid silver}legend{
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
+
+input.currency {
+    text-align: right;
+    padding-right: 15px;
+}

@@ -17,41 +17,73 @@
 
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-4 text-center">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Orçamentos em Negociação</h3>
-                            </div>
-                            <div class="panel-body">
-                                <h3>120.310</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Orçamentos Contratados</h3>
-                            </div>
-                            <div class="panel-body">
-                                <h3>13.050</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 text-center">
+                    <div class="col-md-4 text-center">
                         <div class="panel panel-danger">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Orçamentos Cancelados</h3>
+                                <h3 class="panel-title">Verificar Disponibilidade de Evento</h3>
                             </div>
                             <div class="panel-body">
-                                <h3>22%</h3>
+                                <div style="margin-left: 28px;">
+                                    <p:calendar mode="inline"
+                                                value="#{DashBoardMB.dataSelecionada}"
+                                                navigator="true">
+                                        <p:ajax event="dateSelect"
+                                                process="@this"
+                                                onstart="PF('statusDialog').show();"
+                                                oncomplete="PF('statusDialog').hide();"
+                                                listener="#{DashBoardMB.carregarEventosDoDia()}"
+                                                update="groupEvento"/>
+                                    </p:calendar>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="col-md-4 text-center">
+                        #{DashBoardMB.carregarEventosDoDia()}
+                        <div class="panel panel-warning">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    Eventos do Dia
+                                    <h:outputText value="#{DashBoardMB.dataSelecionada}">
+                                        <f:convertDateTime locale="pt_BR"
+                                                           pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <h:panelGroup id="groupEvento">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Evento</th>
+                                                <th>Hora</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <p:repeat value="#{DashBoardMB.eventosDia}" var="evento">
+                                                <tr>
+                                                    <td>
+                                                        <h:outputText value="#{evento.nome}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{evento.hora}">
+                                                            <f:convertDateTime pattern="HH:mm"
+                                                                               locale="pt_BR"
+                                                                               timeZone="GMT-3"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </p:repeat>
+                                        </tbody>
+                                    </table>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
 
 
-                <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4 text-center">
                         #{DashBoardMB.carregarLogins()}
                         <div class="panel panel-primary">
                             <div class="panel-heading">
@@ -84,7 +116,7 @@
                                                                            timeZone="GMT-3"/>
                                                     </h:outputText>
                                                 </td>
-                                                
+
                                             </tr>
                                         </p:repeat>
                                     </tbody>
@@ -93,57 +125,8 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="panel panel-warning">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Contas a Vencer</h3>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th class="hidden-xs">Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <a href="#">Front-end</a>
-                                            </td>
-                                            <td class="hidden-xs">
-                                                <a class="btn btn-xs btn-warning" href="#">Editar</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="#">Back-end</a>
-                                            </td>
-                                            <td class="hidden-xs">
-                                                <a class="btn btn-xs btn-warning" href="#">Editar</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="#">Database</a>
-                                            </td>
-                                            <td class="hidden-xs">
-                                                <a class="btn btn-xs btn-warning" href="#">Editar</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="#">Mobile</a>
-                                            </td>
-                                            <td class="hidden-xs">
-                                                <a class="btn btn-xs btn-warning" href="#">Editar</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+
+
                 </div>
             </div>
         </h:form>

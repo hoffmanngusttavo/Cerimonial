@@ -20,6 +20,8 @@
                       style="margin-top: -9px;margin-left: -10px;">
                     <p:commandButton action="form?faces-redirect=true" 
                                      ajax="false"
+                                     process="@this"
+                                     immediate="true"
                                      icon="fa fa-plus"
                                      styleClass="bt-acoes-add"
                                      onstart="PF('statusDialog').show();"

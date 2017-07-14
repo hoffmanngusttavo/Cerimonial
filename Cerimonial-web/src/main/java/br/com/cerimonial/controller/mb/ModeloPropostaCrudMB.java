@@ -9,7 +9,6 @@ import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.service.ModeloPropostaService;
-import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.Map;

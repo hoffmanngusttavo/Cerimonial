@@ -29,64 +29,100 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
                         <div class="row">
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-6">
                                 <h2>Modelo de Proposta</h2>
                             </div>
                         </div>
 
-                        <div class="form-group col-md-6">
-                            <label class="control-label ">Título
-                                <span class="asteriskField">
-                                    *
-                                </span>
-                            </label>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="control-label ">Título
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
 
-                            <p:inputText id="inptNome" 
-                                         value="#{ModeloPropostaCrudMB.entity.titulo}" 
-                                         required="true"
-                                         requiredMessage="Preencha um título válido"
-                                         class="form-control"
-                                         label="Nome"/>
-
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label>Tipo de Evento
-                                <span class="asteriskField">
-                                    *
-                                </span>
-                            </label>
-                            <h:selectOneMenu id="inptTipoEvento" 
-                                             value="#{ModeloPropostaCrudMB.entity.tipoEvento}"
-                                             converter="EntityConverter"
-                                             rendered="true"
-                                             requiredMessage="Preencha um tipo de evento válido"
+                                <p:inputText id="inptNome" 
+                                             value="#{ModeloPropostaCrudMB.entity.titulo}" 
+                                             required="true"
+                                             requiredMessage="Preencha um título válido"
                                              class="form-control"
-                                             label="Tipo de Evento">
-                                <f:selectItem itemValue="" 
-                                              itemLabel="Selecione" /> 
-                                <f:selectItems value="#{ModeloPropostaCrudMB.comboTipoEvento}" />
-                                <p:ajax process="@this"
-                                        update="@this"
-                                        global="false"/>
-                            </h:selectOneMenu>
+                                             label="Nome"/>
 
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Tipo de Evento
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+                                <h:selectOneMenu id="inptTipoEvento" 
+                                                 value="#{ModeloPropostaCrudMB.entity.tipoEvento}"
+                                                 converter="EntityConverter"
+                                                 rendered="true"
+                                                 requiredMessage="Preencha um tipo de evento válido"
+                                                 class="form-control"
+                                                 label="Tipo de Evento">
+                                    <f:selectItem itemValue="" 
+                                                  itemLabel="Selecione" /> 
+                                    <f:selectItems value="#{ModeloPropostaCrudMB.comboTipoEvento}" />
+                                    <p:ajax process="@this"
+                                            update="@this"
+                                            global="false"/>
+                                </h:selectOneMenu>
+
+                            </div>
                         </div>
 
-                        <div class="form-group col-md-12">
-                            <label>Conteúdo
-                                <span class="asteriskField">
-                                    *
-                                </span>
-                            </label>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label>Valor Proposta
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+                                <p:inputText id="inptValor" 
+                                             value="#{ModeloPropostaCrudMB.entity.valorProposta}" 
+                                             required="true"
+                                             requiredMessage="Preencha um valor válido"
+                                             class="form-control currency"
+                                             label="Valor">
+                                    <f:convertNumber maxFractionDigits="2"
+                                                     minFractionDigits="2"
+                                                     locale="pt_BR"/>
+                                    <p:ajax process="@this"
+                                            update="@this"
+                                            global="false"/>
+                                </p:inputText>
 
-                            <p:editor id="inptConteudo" 
-                                      value="#{ModeloPropostaCrudMB.entity.conteudo}" 
-                                      required="true"
-                                      requiredMessage="Preencha um texto válido"/>
+                            </div>
 
+                            <div class="form-group col-md-3" style="margin-top: 28px;">
+                                <label>Ativo ?
+                                </label>
+
+                                <p:selectBooleanCheckbox value="#{ModeloPropostaCrudMB.entity.ativo}"
+                                                         class="checkbox-inline"
+                                                         id="inptAtivo"/>
+                            </div>
                         </div>
 
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label>Conteúdo
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:editor id="inptConteudo" 
+                                          value="#{ModeloPropostaCrudMB.entity.conteudo}" 
+                                          required="true"
+                                          requiredMessage="Preencha um texto válido"/>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

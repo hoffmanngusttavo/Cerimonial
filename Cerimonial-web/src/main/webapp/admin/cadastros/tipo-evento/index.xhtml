@@ -20,6 +20,8 @@
                       style="margin-top: -9px;margin-left: -10px;">
                     <p:commandButton action="form?faces-redirect=true" 
                                      ajax="false"
+                                     process="@this"
+                                     immediate="true"
                                      icon="fa fa-plus"
                                      styleClass="bt-acoes-add"
                                      onstart="PF('statusDialog').show();"
@@ -85,6 +87,14 @@
                                           sortBy="#{item.nome}"
                                           headerText="Nome">
                                     <h:outputText value="#{item.nome}" />
+                                </p:column>
+                                
+                                <p:column id="ativo" 
+                                          exportable="true"
+                                          width="80"
+                                          sortBy="#{item.ativo}"
+                                          headerText="Ativo">
+                                    <h:outputText value="#{item.ativo ? 'Sim': 'Não'}" />
                                 </p:column>
 
                                 <p:column headerText="Ações"
