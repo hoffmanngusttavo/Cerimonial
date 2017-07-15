@@ -39,6 +39,7 @@ public class TipoEvento implements Serializable, ModelInterface {
     
     
     
+    
     @Id
     @GeneratedValue(generator = "GENERATE_TipoEvento", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_TipoEvento", sequenceName = "TipoEvento_pk_seq", allocationSize = 1)
@@ -60,6 +61,9 @@ public class TipoEvento implements Serializable, ModelInterface {
     
     @OneToMany(mappedBy = "tipoEvento", fetch = FetchType.LAZY)
     private List<ModeloProposta> modelosPropostas;
+    
+    @OneToMany(mappedBy = "tipoEvento", fetch = FetchType.LAZY)
+    private List<ContatoEvento> contatosEventos;
     
     
     @Override
@@ -114,6 +118,14 @@ public class TipoEvento implements Serializable, ModelInterface {
 
     public void setModelosPropostas(List<ModeloProposta> modelosPropostas) {
         this.modelosPropostas = modelosPropostas;
+    }
+
+    public List<ContatoEvento> getContatosEventos() {
+        return contatosEventos;
+    }
+
+    public void setContatosEventos(List<ContatoEvento> contatosEventos) {
+        this.contatosEventos = contatosEventos;
     }
     
     

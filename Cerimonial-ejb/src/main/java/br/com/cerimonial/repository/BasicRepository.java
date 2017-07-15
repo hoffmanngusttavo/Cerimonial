@@ -71,6 +71,11 @@ import javax.persistence.Query;
         return qr.getResultList();
     }
     
+    protected <T> List<T> getPureListNative(String query) throws Exception{
+        Query qr = getEntityManager().createNativeQuery(query);
+        return qr.getResultList();
+    }
+    
     protected <T> List<T> getPureListRange(Class<T> classToCast,String query, int limit, int offSet) throws Exception{
         Query qr = createQuery(query, limit, offSet);
         return qr.getResultList();

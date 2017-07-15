@@ -8,7 +8,6 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.repository.TipoEventoRepository;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

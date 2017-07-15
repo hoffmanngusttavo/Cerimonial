@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="#{LayoutMB.layout}"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Tipo de Eventos
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form prependId="false"
+                id="form">
+
+            <div class="fixed-rounded-button">
+                <span class="glyphicon"
+                      style="margin-top: -9px;margin-left: -10px;">
+                    <p:commandButton action="form?faces-redirect=true" 
+                                     ajax="false"
+                                     process="@this"
+                                     immediate="true"
+                                     icon="fa fa-plus"
+                                     styleClass="bt-acoes-add"
+                                     onstart="PF('statusDialog').show();"
+                                     oncomplete="PF('statusDialog').hide();"/>
+                </span>
+            </div>
+
+            <div id="event-module">
+                <div class="row no-margim">
+                    <div class="col-md-12">
+                        <h1 class="module-title">
+                            Contato Inicial
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" style="margin-top: 10px;">
+                    <div >
+                        <div >
+
+                            <p:dataTable id="dataTable"
+                                         var="item"  
+                                         rows="25" 
+                                         paginator="true"
+                                         pageLinks="5" 
+                                         rowsPerPageTemplate="25,50,100"
+                                         currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         paginatorPosition="bottom"
+                                         value="#{ContatoInicialCrudMB.lazyDataModel}" 
+                                         selection="#{ContatoInicialCrudMB.itensSelecionados}"
+                                         widgetVar="dataTableVar"
+                                         reflow="true"
+                                         emptyMessage="Nenhum registro encontrado"
+                                         lazy="true">
+
+                                <p:column id="id" 
+                                          width="5%"
+                                          style="text-align: center;"
+                                          exportable="true"
+                                          sortBy="#{item.id}"
+                                          headerText="#">
+                                    <p:link value="#{item.id}" 
+                                            outcome="form.xhtml" >
+                                        <f:param name="id" value="#{item.id}"/>
+                                    </p:link>
+                                </p:column>
+                                
+                                <p:column id="dataEvento" 
+                                          exportable="true"
+                                          width="150"
+                                          sortBy="#{item.dataEvento}"
+                                          headerText="Data Evento">
+                                    <h:outputText value="#{item.dataEvento}" >
+                                        <f:convertDateTime locale="pt_BR"
+                                                           pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column id="nomeContato" 
+                                          exportable="true"
+                                          sortBy="#{item.nomeContato}"
+                                          headerText="Nome">
+                                    <h:outputText value="#{item.nomeContato}" />
+                                </p:column>
+                                
+                                <p:column id="telefone" 
+                                          exportable="true"
+                                          sortBy="#{item.telefoneContato}"
+                                          headerText="Telefone">
+                                    <h:outputText value="#{item.telefoneContato}" />
+                                </p:column>
+                                
+                                <p:column id="tipoEvento" 
+                                          exportable="true"
+                                          sortBy="#{item.tipoEvento.nome}"
+                                          headerText="Tipo Evento">
+                                    <h:outputText value="#{item.tipoEvento.nome}" />
+                                </p:column>
+
+                                <p:column headerText="Ações"
+                                          style="text-align: center;width: 70px;">
+                                    <p:commandButton icon="fa fa-trash" 
+                                                     styleClass="bt-acoes"
+                                                     actionListener="#{ContatoInicialCrudMB.setEntity(item)}"
+                                                     process="@this"
+                                                     update=":form:groupRemove"
+                                                     immediate="true"
+                                                     oncomplete="$('#removeDialogVar').modal('show');"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="modal fade" 
+                 id="removeDialogVar" tabindex="-1" 
+                 role="dialog" aria-labelledby="myModal" 
+                 aria-hidden="true" data-keyboard="false" 
+                 data-backdrop="static">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <h:panelGroup id="groupRemove">
+                            <div class="modal-header modal-header-danger">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title">Remover ?</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label ">Id
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-3">
+                                            <h:outputText value="#{ContatoInicialCrudMB.entity.id}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label ">Nome
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-3">
+                                            <h:outputText value="#{ContatoInicialCrudMB.entity.nomeContato}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h:panelGroup layout="block" styleClass="modal-footer">
+                                <p:commandLink value="Fechar"
+                                               immediate="true" 
+                                               styleClass="btn btn-default" 
+                                               oncomplete="$('#removeDialogVar').modal('hide');" />
+
+                                <p:commandLink value="Confirmar" 
+                                               action="#{ContatoInicialCrudMB.delete()}" 
+                                               update="dataTable"
+                                               styleClass="btn btn-primary"
+                                               process="groupRemove" 
+                                               onstart="PF('statusDialog').show();"
+                                               oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </div>
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

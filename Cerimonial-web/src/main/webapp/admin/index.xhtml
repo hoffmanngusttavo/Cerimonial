@@ -15,6 +15,22 @@
         <h:form prependId="false"
                 id="form">
 
+            <div class="fixed-rounded-button">
+                <span class="glyphicon"
+                      style="margin-top: -9px;margin-left: -10px;">
+                    <p:commandButton action="/admin/cadastros/contato-inicial/form?faces-redirect=true" 
+                                     ajax="false"
+                                     title="Novo Contato"
+                                     process="@this"
+                                     immediate="true"
+                                     icon="fa fa-plus"
+                                     styleClass="bt-acoes-add"
+                                     onstart="PF('statusDialog').show();"
+                                     oncomplete="PF('statusDialog').hide();"/>
+                </span>
+            </div>
+
+
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-4 text-center">

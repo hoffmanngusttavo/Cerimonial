@@ -52,7 +52,6 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @Column
     private String emailContato;
     
-    //pode ser autocomplete ao preencher
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
@@ -86,6 +85,9 @@ public class ContatoEvento implements Serializable, ModelInterface{
     
     @Column
     private Integer quantidadeConvidados;
+    
+    @ManyToOne
+    private TipoEvento tipoEvento;
  
     
      @Override
@@ -197,6 +199,16 @@ public class ContatoEvento implements Serializable, ModelInterface{
     public void setQuantidadeConvidados(Integer quantidadeConvidados) {
         this.quantidadeConvidados = quantidadeConvidados;
     }
+
+    public TipoEvento getTipoEvento() {
+        return tipoEvento;
+    }
+
+    public void setTipoEvento(TipoEvento tipoEvento) {
+        this.tipoEvento = tipoEvento;
+    }
+    
+    
 
     @Override
     public int hashCode() {
