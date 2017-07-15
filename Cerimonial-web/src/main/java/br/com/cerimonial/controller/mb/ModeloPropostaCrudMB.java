@@ -130,7 +130,7 @@ public class ModeloPropostaCrudMB extends BasicControl{
                         sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
                     }
 
-                    List<ModeloProposta> clientes = service.findRangeListagemCategorias(max, offset, sortField, sortAscDesc);
+                    List<ModeloProposta> clientes = service.findRangeListagem(max, offset, sortField, sortAscDesc);
                     return clientes;
                 }
             };

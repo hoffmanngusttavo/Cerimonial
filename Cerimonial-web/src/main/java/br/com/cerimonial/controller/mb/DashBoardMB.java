@@ -37,7 +37,7 @@ public class DashBoardMB extends BasicControl{
     
 
     public DashBoardMB() {
-        
+        dataSelecionada = new Date();
     }
 
     public void carregarLogins(){

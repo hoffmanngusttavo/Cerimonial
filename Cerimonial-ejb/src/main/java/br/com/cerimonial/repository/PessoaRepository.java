@@ -16,31 +16,58 @@ import javax.persistence.EntityManager;
  *
  * @author Gustavo Hoffmann
  */
-public class PessoaRepository extends BasicRepository {
+public class PessoaRepository extends AbstractRepository<Pessoa> {
 
     public PessoaRepository(EntityManager entityManager) {
-        super(entityManager);
-    }
-
-    public Pessoa create(Pessoa entity) throws Exception {
-        addEntity(Pessoa.class, entity);
-        return entity;
-    }
-
-    public void delete(Pessoa entity) throws Exception {
-        removeEntity(entity);
-    }
-
-    public Pessoa edit(Pessoa entity) throws Exception {
-        return setEntity(Pessoa.class, entity);
+        super(entityManager, Pessoa.class);
     }
 
     public Pessoa getPessoa(Long id) throws Exception {
-        Pessoa entity = getEntity(Pessoa.class, id);
-        if(entity != null && entity.getEndereco() != null){
-             entity.getEndereco().getId();
+        Pessoa entity = super.getEntity(Pessoa.class, id);
+        if (entity != null && entity.getEndereco() != null) {
+            entity.getEndereco().getId();
         }
         return entity;
+    }
+
+    @Override
+    public int countListagem(HashMap<String, Object> filter) throws Exception {
+        ModelFilter modelFilter = ModelFilter.getInstance();
+        modelFilter.setEntidade(Pessoa.class);
+        modelFilter.addFilter(filter);
+        modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
+        return super.countListagem(modelFilter); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Pessoa> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
+
+        ModelFilter modelFilter = ModelFilter.getInstance();
+        modelFilter.setEntidade(Pessoa.class);
+        if (params != null) {
+            modelFilter.addFilter(params);
+            modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
+        }
+        modelFilter.setLimit(max);
+        modelFilter.setOffSet(offset);
+        if (sortField != null) {
+            modelFilter.addOrderBy(sortField, sortAscDesc);
+        }
+
+        return super.findRangeListagem(modelFilter); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    //-----------Fornecedores----------------------
+    public List<Pessoa> findRangeListagemFornecedor(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
+        List<Pessoa> fornecedores = this.findRangeListagem(params, max, offset, sortField, sortAscDesc);
+        if (CerimonialUtils.isListNotBlank(fornecedores)) {
+            for (Pessoa fornecedor : fornecedores) {
+                if (fornecedor.getCategoriasFornecedor() != null) {
+                    fornecedor.getCategoriasFornecedor().size();
+                }
+            }
+        }
+        return fornecedores;
     }
 
     public Pessoa getEntityFornecedorCategoria(Long id) throws Exception {
@@ -54,95 +81,6 @@ public class PessoaRepository extends BasicRepository {
             }
         }
         return entity;
-    }
-
-    public int countAll() throws Exception {
-        ModelFilter modelFilter = ModelFilter.getInstance();
-        modelFilter.setEntidade(Pessoa.class);
-        return getCount(modelFilter.getSqlCountBase());
-    }
-
-    //-----------Clientes----------------------
-    public List<Pessoa> findRangeListagemClientes(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
-        ModelFilter modelFilter = ModelFilter.getInstance();
-        modelFilter.setEntidade(Pessoa.class);
-        if (params != null) {
-            modelFilter.addFilter(params);
-            modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
-        }
-        modelFilter.setLimit(max);
-        modelFilter.setOffSet(offset);
-        if (sortField != null) {
-            modelFilter.addOrderBy(sortField, sortAscDesc);
-        }
-
-        return getPureListRange(Pessoa.class, modelFilter.getSqlBase(), max, offset);
-    }
-
-    public int countListagemClientes(HashMap<String, Object> filter) throws Exception {
-        ModelFilter modelFilter = ModelFilter.getInstance();
-        modelFilter.setEntidade(Pessoa.class);
-        modelFilter.addFilter(filter);
-        modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
-        return getCount(modelFilter.getSqlCountBase());
-    }
-
-    //-----------Fornecedores----------------------
-    public List<Pessoa> findRangeListagemFornecedor(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
-        ModelFilter modelFilter = ModelFilter.getInstance();
-        modelFilter.setEntidade(Pessoa.class);
-        if (params != null) {
-            modelFilter.addFilter(params);
-            modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
-        }
-        modelFilter.setLimit(max);
-        modelFilter.setOffSet(offset);
-        if (sortField != null) {
-            modelFilter.addOrderBy(sortField, sortAscDesc);
-        }
-
-        List<Pessoa> fornecedores = getPureListRange(Pessoa.class, modelFilter.getSqlBase(), max, offset);
-        if (CerimonialUtils.isListNotBlank(fornecedores)) {
-            for (Pessoa fornecedor : fornecedores) {
-                if (fornecedor.getCategoriasFornecedor() != null) {
-                    fornecedor.getCategoriasFornecedor().size();
-                }
-            }
-        }
-        return fornecedores;
-    }
-
-    public int countListagemFornecedor(HashMap<String, Object> filter) throws Exception {
-        ModelFilter modelFilter = ModelFilter.getInstance();
-        modelFilter.setEntidade(Pessoa.class);
-        modelFilter.addFilter(filter);
-        modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
-        return getCount(modelFilter.getSqlCountBase());
-    }
-
-    //-----------Colaboradores----------------------
-    public int countListagemColaborador(HashMap<String, Object> filter) throws Exception {
-        ModelFilter modelFilter = ModelFilter.getInstance();
-        modelFilter.setEntidade(Pessoa.class);
-        modelFilter.addFilter(filter);
-        modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
-        return getCount(modelFilter.getSqlCountBase());
-    }
-
-    public List<Pessoa> findRangeListagemColaborador(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
-        ModelFilter modelFilter = ModelFilter.getInstance();
-        modelFilter.setEntidade(Pessoa.class);
-        if (params != null) {
-            modelFilter.addFilter(params);
-            modelFilter.addOperador(ModelFilter.Operadores.ILIKE, "nome");
-        }
-        modelFilter.setLimit(max);
-        modelFilter.setOffSet(offset);
-        if (sortField != null) {
-            modelFilter.addOrderBy(sortField, sortAscDesc);
-        }
-
-        return getPureListRange(Pessoa.class, modelFilter.getSqlBase(), max, offset);
     }
 
 }

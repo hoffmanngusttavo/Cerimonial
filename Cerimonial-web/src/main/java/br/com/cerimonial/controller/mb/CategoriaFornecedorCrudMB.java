@@ -8,7 +8,6 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.service.CategoriaFornecedorService;
-import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -126,7 +125,7 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
                         sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
                     }
 
-                    List<CategoriaFornecedor> clientes = service.findRangeListagemCategorias(max, offset, sortField, sortAscDesc);
+                    List<CategoriaFornecedor> clientes = service.findRangeListagem(max, offset, sortField, sortAscDesc);
                     return clientes;
                 }
             };

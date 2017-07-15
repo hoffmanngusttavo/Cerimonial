@@ -78,9 +78,9 @@ public class CategoriaFornecedorService extends BasicService<CategoriaFornecedor
         return 0;
     }
 
-    public List<CategoriaFornecedor> findRangeListagemCategorias(int max, int offset, String sortField, String sortAscDesc) {
+    public List<CategoriaFornecedor> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return repository.findRangeListagemCategorias( max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem(max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }

@@ -12,18 +12,10 @@ import javax.persistence.EntityManager;
  *
  * @author Gustavo Hoffmann
  */
-public class EnderecoRepository extends BasicRepository{
+public class EnderecoRepository extends AbstractRepository<Endereco>{
 
     public EnderecoRepository(EntityManager entityManager) {
-        super(entityManager);
+        super(entityManager, Endereco.class);
     }
 
-    public Endereco create(Endereco entity) throws Exception {
-        return addEntity(Endereco.class, entity);
-    }
-
-    public Endereco edit(Endereco entity) throws Exception {
-        return setEntity(Endereco.class, entity);
-    }
-    
 }

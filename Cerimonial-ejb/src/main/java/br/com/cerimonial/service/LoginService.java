@@ -6,8 +6,6 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Login;
-import br.com.cerimonial.entity.Pessoa;
-import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.repository.LoginRepository;
 import java.util.HashMap;
 import java.util.List;

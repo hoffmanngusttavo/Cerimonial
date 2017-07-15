@@ -5,18 +5,21 @@
  */
 package br.com.cerimonial.repository;
 
-import br.com.cerimonial.entity.TipoEvento;
+import br.com.cerimonial.entity.ContatoEvento;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Gustavo Hoffmann
  */
-public class TipoEventoRepository extends AbstractRepository<TipoEvento>{
+public class ContatoEventoRepository extends AbstractRepository<ContatoEvento>{
 
-    public TipoEventoRepository(EntityManager entityManager) {
-        super(entityManager, TipoEvento.class);
+    public ContatoEventoRepository(EntityManager entityManager) {
+        super(entityManager, ContatoEvento.class);
     }
 
-   
+    
+    
+    
+    
 }

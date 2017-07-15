@@ -45,7 +45,7 @@ public class UsuarioService extends BasicService<Usuario> {
 
     @Override
     public Usuario getEntity(Long id) throws Exception {
-        return repository.getUsuario(id);
+        return repository.getEntity(id);
     }
 
     @Override

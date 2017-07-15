@@ -126,7 +126,7 @@ public class TipoEventoCrudMB extends BasicControl{
                         sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
                     }
 
-                    List<TipoEvento> clientes = service.findRangeListagemCategorias(max, offset, sortField, sortAscDesc);
+                    List<TipoEvento> clientes = service.findRangeListagem(max, offset, sortField, sortAscDesc);
                     return clientes;
                 }
             };

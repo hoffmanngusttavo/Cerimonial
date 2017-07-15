@@ -8,6 +8,7 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.repository.TipoEventoRepository;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,9 +78,9 @@ public class TipoEventoService extends BasicService<TipoEvento> {
         return 0;
     }
 
-    public List<TipoEvento> findRangeListagemCategorias(int max, int offset, String sortField, String sortAscDesc) {
+    public List<TipoEvento> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return repository.findRangeListagemCategorias(max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem( max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }

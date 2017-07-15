@@ -6,37 +6,16 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Empresa;
-import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Gustavo Hoffmann
  */
-public class EmpresaRepository extends BasicRepository{
+public class EmpresaRepository extends AbstractRepository<Empresa> {
 
     public EmpresaRepository(EntityManager entityManager) {
-        super(entityManager);
-    }
-    
-    public Empresa create(Empresa empresa) throws Exception {
-        addEntity(Empresa.class, empresa);
-        return empresa;
+        super(entityManager, Empresa.class);
     }
 
-    public Empresa edit(Empresa empresa) throws Exception{
-        return setEntity(Empresa.class, empresa);
-    }
-
-    public Empresa getEntity(Long id) throws Exception{
-        return getEntity(Empresa.class, id);
-    }
-
-    public List<Empresa> findAll() throws Exception {
-        return getPureListNative(Empresa.class, "select * from Empresa emp ");
-        
-        
-    }
-    
-    
 }

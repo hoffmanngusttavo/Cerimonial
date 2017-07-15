@@ -32,7 +32,7 @@
                                                 onstart="PF('statusDialog').show();"
                                                 oncomplete="PF('statusDialog').hide();"
                                                 listener="#{DashBoardMB.carregarEventosDoDia()}"
-                                                update="groupEvento"/>
+                                                update="groupEvento,dataEvento"/>
                                     </p:calendar>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">
                                     Eventos do Dia
-                                    <h:outputText value="#{DashBoardMB.dataSelecionada}">
+                                    <h:outputText value="#{DashBoardMB.dataSelecionada}" id="dataEvento">
                                         <f:convertDateTime locale="pt_BR"
                                                            pattern="dd/MM/yyyy"/>
                                     </h:outputText>

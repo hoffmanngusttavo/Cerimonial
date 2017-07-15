@@ -6,8 +6,6 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ModeloProposta;
-import br.com.cerimonial.entity.ModeloProposta;
-import br.com.cerimonial.repository.ModeloPropostaRepository;
 import br.com.cerimonial.repository.ModeloPropostaRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,9 +77,9 @@ public class ModeloPropostaService extends BasicService<ModeloProposta>{
         return 0;
     }
 
-    public List<ModeloProposta> findRangeListagemCategorias(int max, int offset, String sortField, String sortAscDesc) {
+    public List<ModeloProposta> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return repository.findRangeListagemCategorias(max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem(max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }

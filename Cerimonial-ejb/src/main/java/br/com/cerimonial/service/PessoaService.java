@@ -114,7 +114,7 @@ public class PessoaService extends BasicService<Pessoa> {
             }
 
             filter.put("tipoEnvolvido", TipoEnvolvido.CLIENTE);
-            return repository.countListagemClientes(filter);
+            return repository.countListagem(filter);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
@@ -127,7 +127,7 @@ public class PessoaService extends BasicService<Pessoa> {
                 params = new HashMap<>();
             }
             params.put("tipoEnvolvido", TipoEnvolvido.CLIENTE);
-            return repository.findRangeListagemClientes(params, max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem(params, max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
@@ -158,7 +158,7 @@ public class PessoaService extends BasicService<Pessoa> {
             }
 
             filter.put("tipoEnvolvido", TipoEnvolvido.FORNECEDOR);
-            return repository.countListagemFornecedor(filter);
+            return repository.countListagem(filter);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
@@ -200,7 +200,7 @@ public class PessoaService extends BasicService<Pessoa> {
             }
 
             filter.put("tipoEnvolvido", TipoEnvolvido.COLABORADOR);
-            return repository.countListagemColaborador(filter);
+            return repository.countListagem(filter);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
@@ -213,7 +213,7 @@ public class PessoaService extends BasicService<Pessoa> {
                 params = new HashMap<>();
             }
             params.put("tipoEnvolvido", TipoEnvolvido.COLABORADOR);
-            return repository.findRangeListagemColaborador(params, max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem(params, max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
