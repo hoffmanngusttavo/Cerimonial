@@ -7,13 +7,8 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
-import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.TipoIndicacao;
-import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.TipoIndicacaoService;
-import br.com.cerimonial.utils.CerimonialUtils;
-import br.com.cerimonial.utils.SelectItemUtils;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -22,7 +17,6 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -30,20 +24,17 @@ import org.primefaces.model.SortOrder;
  *
  * @author Gustavo Hoffmann
  */
-@ManagedBean(name = "ContatoInicialCrudMB")
+@ManagedBean(name = "TipoIndicacaoCrudMB")
 @ViewScoped
-public class ContatoInicialCrudMB extends BasicControl {
-
-    protected LazyDataModel<ContatoEvento> lazyLista;
+public class TipoIndicacaoCrudMB extends BasicControl{
+    
+    protected LazyDataModel<TipoIndicacao> lazyLista;
     protected Long id;
-    protected ContatoEvento entity;
-    protected List<ContatoEvento> itensSelecionados;
+    protected TipoIndicacao entity;
+    protected List<TipoIndicacao> itensSelecionados;
     @EJB
-    protected ContatoEventoService service;
-    @EJB
-    protected TipoIndicacaoService tipoIndicacaoService;
+    protected TipoIndicacaoService service;
     protected AbstractFilter filtros;
-    protected SelectItemUtils selectItemUtils;
     
     /**
      * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
@@ -58,17 +49,15 @@ public class ContatoInicialCrudMB extends BasicControl {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            entity = new ContatoEvento();
+            entity = new TipoIndicacao();
         }
-        
-        this.selectItemUtils = new SelectItemUtils();
     }
-
+    
     /**
      * Evento invocado pela tela de listagem para remover os itens selecionados
      */
     public void delete() {
-        try {
+         try {
             if (entity != null && entity.getId() != null) {
                 service.delete(entity);
             }
@@ -77,12 +66,10 @@ public class ContatoInicialCrudMB extends BasicControl {
             createFacesErrorMessage(ex.getMessage());
         }
     }
-
+    
     /**
-     * Evento invocado pela tela de form para salvar um novo ou edicao de um
-     * fornecedor
-     *
-     * @return
+     *Evento invocado pela tela de form para salvar um novo ou edicao de um fornecedor
+     * @return 
      */
     public synchronized String save() {
         try {
@@ -100,21 +87,21 @@ public class ContatoInicialCrudMB extends BasicControl {
         }
         return null;
     }
-
+    
+    
     /**
-     * Evento invocado pela tela de index para listar os clientes
-     *
-     * @return
+     *Evento invocado pela tela de index para listar os clientes
+     * @return 
      */
-    public LazyDataModel<ContatoEvento> getLazyDataModel() {
+    public LazyDataModel<TipoIndicacao> getLazyDataModel() {
 
         if (lazyLista == null) {
-            lazyLista = new LazyDataModel<ContatoEvento>() {
+            lazyLista = new LazyDataModel<TipoIndicacao>() {
 
                 @Override
-                public ContatoEvento getRowData(String rowKey) {
-                    List<ContatoEvento> list = (List<ContatoEvento>) getWrappedData();
-                    for (ContatoEvento cli : list) {
+                public TipoIndicacao getRowData(String rowKey) {
+                    List<TipoIndicacao> list = (List<TipoIndicacao>) getWrappedData();
+                    for (TipoIndicacao cli : list) {
                         if (cli.getId().toString().equals(rowKey)) {
                             return cli;
                         }
@@ -123,12 +110,12 @@ public class ContatoInicialCrudMB extends BasicControl {
                 }
 
                 @Override
-                public Object getRowKey(ContatoEvento object) {
+                public Object getRowKey(TipoIndicacao object) {
                     return object.getId(); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
-                public List<ContatoEvento> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+                public List<TipoIndicacao> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
                     int count = service.countAll();
                     this.setRowCount(count);
@@ -138,7 +125,7 @@ public class ContatoInicialCrudMB extends BasicControl {
                         sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
                     }
 
-                    List<ContatoEvento> clientes = service.findRangeListagem(max, offset, sortField, sortAscDesc);
+                    List<TipoIndicacao> clientes = service.findRangeListagem(max, offset, sortField, sortAscDesc);
                     return clientes;
                 }
             };
@@ -149,25 +136,14 @@ public class ContatoInicialCrudMB extends BasicControl {
         }
         return lazyLista;
     }
-    
-     public List<SelectItem> getComboTipoEvento() {
-        return selectItemUtils.getComboTipoEvento();
-    }
-     
-   public List<String> completeLocalEvento(String value){
-       return service.getLocaisEvento(value);
-   }
-   
-   public List<TipoIndicacao> completeTipoIndicacao(String value){
-        List<TipoIndicacao> listaRetorno = tipoIndicacaoService.findTiposIndicacaoByNome(value);
-        if(CerimonialUtils.isListNotBlank(listaRetorno)){
-            return listaRetorno;
-        }else{
-            entity.setTipoIndicacao(new TipoIndicacao());
-            return new ArrayList<>();
-        }
-   }
 
+    public LazyDataModel<TipoIndicacao> getLazyLista() {
+        return lazyLista;
+    }
+
+    public void setLazyLista(LazyDataModel<TipoIndicacao> lazyLista) {
+        this.lazyLista = lazyLista;
+    }
 
     public Long getId() {
         return id;
@@ -177,19 +153,19 @@ public class ContatoInicialCrudMB extends BasicControl {
         this.id = id;
     }
 
-    public ContatoEvento getEntity() {
+    public TipoIndicacao getEntity() {
         return entity;
     }
 
-    public void setEntity(ContatoEvento entity) {
+    public void setEntity(TipoIndicacao entity) {
         this.entity = entity;
     }
 
-    public List<ContatoEvento> getItensSelecionados() {
+    public List<TipoIndicacao> getItensSelecionados() {
         return itensSelecionados;
     }
 
-    public void setItensSelecionados(List<ContatoEvento> itensSelecionados) {
+    public void setItensSelecionados(List<TipoIndicacao> itensSelecionados) {
         this.itensSelecionados = itensSelecionados;
     }
 
@@ -201,7 +177,5 @@ public class ContatoInicialCrudMB extends BasicControl {
         this.filtros = filtros;
     }
 
-    
-    
     
 }

@@ -216,6 +216,26 @@
 
                     </div>
 
+                    <div class="form-group col-md-6">
+                        <label for="inptTipoIndicacao">
+                            Tipo de Indicação
+                        </label>
+                        <p:autoComplete id="inptTipoIndicacao" 
+                                        value="#{ContatoInicialCrudMB.entity.tipoIndicacao}" 
+                                        style="width: 100% !important;"
+                                        forceSelection="true"
+                                        var="tipo"
+                                        itemValue="#{tipo}"
+                                        itemLabel="#{tipo.nome}"
+                                        minQueryLength="2"
+                                        converter="EntityConverter"
+                                        completeMethod="#{ContatoInicialCrudMB.completeTipoIndicacao}"
+                                        requiredMessage="Preencha um tipo de indicação válido"
+                                        label="Local">
+                            
+                        </p:autoComplete>
+                    </div>
+
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">

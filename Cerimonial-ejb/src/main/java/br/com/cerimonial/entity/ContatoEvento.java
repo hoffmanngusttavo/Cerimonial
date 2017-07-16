@@ -7,6 +7,7 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -88,7 +90,13 @@ public class ContatoEvento implements Serializable, ModelInterface{
     
     @ManyToOne
     private TipoEvento tipoEvento;
+    
+    @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY)
+    private List<OrcamentoEvento> propostas;
  
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TipoIndicacao tipoIndicacao;
+    
     
      @Override
     public Long getId() {
@@ -206,6 +214,22 @@ public class ContatoEvento implements Serializable, ModelInterface{
 
     public void setTipoEvento(TipoEvento tipoEvento) {
         this.tipoEvento = tipoEvento;
+    }
+
+    public List<OrcamentoEvento> getPropostas() {
+        return propostas;
+    }
+
+    public void setPropostas(List<OrcamentoEvento> propostas) {
+        this.propostas = propostas;
+    }
+
+    public TipoIndicacao getTipoIndicacao() {
+        return tipoIndicacao;
+    }
+
+    public void setTipoIndicacao(TipoIndicacao tipoIndicacao) {
+        this.tipoIndicacao = tipoIndicacao;
     }
     
     

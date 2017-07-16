@@ -6,7 +6,6 @@
 package br.com.cerimonial.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,7 +16,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -37,29 +35,20 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class ModeloProposta implements Serializable, ModelInterface {
-    
-    
+public class TipoIndicacao implements Serializable, ModelInterface {
     
     @Id
-    @GeneratedValue(generator = "GENERATE_ModeloProposta", strategy = GenerationType.AUTO)
-    @SequenceGenerator(name = "GENERATE_ModeloProposta", sequenceName = "ModeloProposta_pk_seq", allocationSize = 1)
+    @GeneratedValue(generator = "GENERATE_TipoIndicacao", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "GENERATE_TipoIndicacao", sequenceName = "TipoIndicacao_pk_seq", allocationSize = 1)
     private Long id;
     
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
-    private String titulo;
-    
-    @Lob
-    @Column(columnDefinition = "TEXT")
-    private String conteudo;
+    private String nome;
     
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
-    
-    @ManyToOne
-    private TipoEvento tipoEvento;
     
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
@@ -67,13 +56,10 @@ public class ModeloProposta implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
     
-    @Column(precision = 16, scale = 2)
-    private BigDecimal valorProposta = BigDecimal.ZERO;
-    
-    @OneToMany(mappedBy = "modeloProposta", fetch = FetchType.LAZY)
-    private List<OrcamentoEvento> orcamentos;
-    
+    @OneToMany(mappedBy = "tipoIndicacao", fetch = FetchType.LAZY)
+    private List<ContatoEvento> contatos;
 
+    
     @Override
     public Long getId() {
         return id;
@@ -83,34 +69,8 @@ public class ModeloProposta implements Serializable, ModelInterface {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-         this.titulo = StringUtils.isNotBlank(titulo) ? titulo.toUpperCase().trim(): titulo;
-    }
-
-    public String getConteudo() {
-        return conteudo;
-    }
-
-    public void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
-    }
-
-  
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
-     @Override
+    
+    @Override
     public Date getDataUltimaAlteracao() {
         return dataUltimaAlteracao;
     }
@@ -130,32 +90,32 @@ public class ModeloProposta implements Serializable, ModelInterface {
         this.modificadoPor = modificadoPor;
     }
 
-    public TipoEvento getTipoEvento() {
-        return tipoEvento;
+    public String getNome() {
+        return nome;
     }
 
-    public void setTipoEvento(TipoEvento tipoEvento) {
-        this.tipoEvento = tipoEvento;
+    public void setNome(String nome) {
+        this.nome = StringUtils.isNotBlank(nome) ? nome.toUpperCase().trim(): nome;
     }
 
-    public BigDecimal getValorProposta() {
-        return valorProposta;
+    public boolean isAtivo() {
+        return ativo;
     }
 
-    public void setValorProposta(BigDecimal valorProposta) {
-        this.valorProposta = valorProposta;
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
-    public List<OrcamentoEvento> getOrcamentos() {
-        return orcamentos;
+    public List<ContatoEvento> getContatos() {
+        return contatos;
     }
 
-    public void setOrcamentos(List<OrcamentoEvento> orcamentos) {
-        this.orcamentos = orcamentos;
+    public void setContatos(List<ContatoEvento> contatos) {
+        this.contatos = contatos;
     }
 
     
-    
+
     @PrePersist
     @Override
     public void prePersistEntity() {
@@ -188,8 +148,7 @@ public class ModeloProposta implements Serializable, ModelInterface {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
-    
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -200,10 +159,10 @@ public class ModeloProposta implements Serializable, ModelInterface {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ModeloProposta)) {
+        if (!(object instanceof TipoIndicacao)) {
             return false;
         }
-        ModeloProposta other = (ModeloProposta) object;
+        TipoIndicacao other = (TipoIndicacao) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -212,7 +171,7 @@ public class ModeloProposta implements Serializable, ModelInterface {
 
     @Override
     public String toString() {
-        return "br.com.cerimonial.entity.ModeloProposta[ id=" + id + " ]";
+        return "br.com.cerimonial.entity.TipoIndicacao[ id=" + id + " ]";
     }
     
 }

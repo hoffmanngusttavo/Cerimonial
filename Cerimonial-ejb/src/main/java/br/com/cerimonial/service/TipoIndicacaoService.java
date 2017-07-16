@@ -5,14 +5,13 @@
  */
 package br.com.cerimonial.service;
 
-import br.com.cerimonial.entity.ContatoEvento;
-import br.com.cerimonial.repository.ContatoEventoRepository;
+import br.com.cerimonial.entity.TipoIndicacao;
+import br.com.cerimonial.repository.TipoIndicacaoRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -30,25 +29,24 @@ import org.apache.commons.lang.StringUtils;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ContatoEventoService extends BasicService<ContatoEvento> {
-
-    private ContatoEventoRepository repository;
+public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
     
+     private TipoIndicacaoRepository repository;
+
     @PostConstruct
     @PostActivate
     private void postConstruct() {
-        repository = new ContatoEventoRepository(em);
+        repository = new TipoIndicacaoRepository(em);
     }
-
-    @Override
-    public ContatoEvento getEntity(Long id) throws Exception {
+    
+      @Override
+    public TipoIndicacao getEntity(Long id) throws Exception {
         return repository.getEntity(id);
     }
 
     @Override
-    public ContatoEvento save(ContatoEvento entity) throws Exception {
+    public TipoIndicacao save(TipoIndicacao entity) throws Exception {
         if (entity != null) {
-            
             if (entity.getId() == null) {
                 return repository.create(entity);
             } else {
@@ -58,16 +56,16 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
         return null;
     }
 
-    public List<ContatoEvento> findAll() {
+    public List<TipoIndicacao> findAll() {
         try {
             return repository.findAll();
         } catch (Exception ex) {
-            Logger.getLogger(ContatoEventoService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TipoIndicacaoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new ArrayList<>();
     }
 
-    public void delete(ContatoEvento categoria) throws Exception {
+    public void delete(TipoIndicacao categoria) throws Exception {
         repository.delete(categoria);
     }
 
@@ -80,24 +78,24 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
         return 0;
     }
 
-    public List<ContatoEvento> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
+    public List<TipoIndicacao> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return repository.findRangeListagem(max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem( max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    public List<String> getLocaisEvento(String value) {
+    public List<TipoIndicacao> findTiposIndicacaoByNome(String value) {
         if (StringUtils.isNotBlank(value)) {
             try {
-                return repository.getLocaisEvento(value.toUpperCase());
+                return repository.findTiposIndicacaoByNome(value.toUpperCase());
             } catch (Exception ex) {
                 Logger.getLogger(ContatoEventoService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
     }
-
+    
 }
