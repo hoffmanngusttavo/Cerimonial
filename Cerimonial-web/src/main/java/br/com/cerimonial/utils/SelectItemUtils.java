@@ -8,11 +8,13 @@ package br.com.cerimonial.utils;
 import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Estado;
+import br.com.cerimonial.entity.StatusContato;
 import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.service.CategoriaFornecedorService;
 import br.com.cerimonial.service.CidadeService;
 import br.com.cerimonial.service.EstadoService;
+import br.com.cerimonial.service.StatusContatoService;
 import br.com.cerimonial.service.TipoEventoService;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +30,10 @@ import javax.naming.NamingException;
  * @author Gustavo Hoffmann
  */
 public class SelectItemUtils {
-    TipoEventoService tipoEventoService = lookupTipoEventoServiceBean();
+
+    private final StatusContatoService statusContatoService = lookupStatusContatoServiceBean();
+    
+    private final TipoEventoService tipoEventoService = lookupTipoEventoServiceBean();
 
     private final EstadoService estadoService = lookupEstadoServiceBean();
 
@@ -93,6 +98,18 @@ public class SelectItemUtils {
         }
         return items;
     }
+    
+    public List<SelectItem> getComboStatusContato() {
+        List<SelectItem> items = new LinkedList<>();
+        try {
+            for (StatusContato item : statusContatoService.findAll()) {
+                items.add(new SelectItem(item, item.getNome()));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return items;
+    }
 
     private CidadeService lookupCidadeServiceBean() {
         try {
@@ -128,6 +145,16 @@ public class SelectItemUtils {
         try {
             Context c = new InitialContext();
             return (TipoEventoService) c.lookup("java:global/" + ConstantsProject.appName + "/" + ConstantsProject.moduleEjbName + "/TipoEventoService!br.com.cerimonial.service.TipoEventoService");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private StatusContatoService lookupStatusContatoServiceBean() {
+        try {
+            Context c = new InitialContext();
+            return (StatusContatoService) c.lookup("java:global/" + ConstantsProject.appName + "/" + ConstantsProject.moduleEjbName + "/StatusContatoService!br.com.cerimonial.service.StatusContatoService");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

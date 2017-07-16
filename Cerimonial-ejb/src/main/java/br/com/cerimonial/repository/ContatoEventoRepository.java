@@ -25,6 +25,9 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
         if(entity != null && entity.getTipoIndicacao() != null){
             entity.getTipoIndicacao().getId();
         }
+        if(entity != null && entity.getStatus() != null){
+            entity.getStatus().getId();
+        }
         return entity;
     }
     

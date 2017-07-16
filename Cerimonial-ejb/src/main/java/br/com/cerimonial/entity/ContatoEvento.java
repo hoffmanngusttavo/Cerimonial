@@ -96,7 +96,9 @@ public class ContatoEvento implements Serializable, ModelInterface{
  
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoIndicacao tipoIndicacao;
-    
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private StatusContato status;
     
      @Override
     public Long getId() {
@@ -230,6 +232,14 @@ public class ContatoEvento implements Serializable, ModelInterface{
 
     public void setTipoIndicacao(TipoIndicacao tipoIndicacao) {
         this.tipoIndicacao = tipoIndicacao;
+    }
+
+    public StatusContato getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusContato status) {
+        this.status = status;
     }
     
     
