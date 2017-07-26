@@ -6,17 +6,36 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.utils.CerimonialUtils;
+import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Gustavo Hoffmann
  */
-public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvento>{
+public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvento> {
 
     public OrcamentoEventoRepository(EntityManager entityManager) {
         super(entityManager, OrcamentoEvento.class);
     }
-    
-    
+
+    public List<OrcamentoEvento> findAllByContatoId(Long id) throws Exception {
+        StringBuilder sql = new StringBuilder("select o from OrcamentoEvento o  ");
+        sql.append("INNER JOIN o.contatoEvento contato");
+        sql.append(" where 1=1");
+        sql.append(" and contato.id = ?1");
+        List<OrcamentoEvento> propostas = getPureList(OrcamentoEvento.class, sql.toString(), id);
+        if (CerimonialUtils.isListNotBlank(propostas)) {
+            propostas.stream().forEach(item -> {
+                if (item.getModeloProposta() != null) {
+                    item.getModeloProposta().getId();
+                }
+            });
+        }
+
+        return propostas;
+
+    }
+
 }

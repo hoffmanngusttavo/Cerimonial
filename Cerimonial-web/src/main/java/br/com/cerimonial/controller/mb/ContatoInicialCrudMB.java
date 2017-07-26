@@ -8,12 +8,16 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.ContatoEvento;
+import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.TipoIndicacao;
+import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.service.ContatoEventoService;
+import br.com.cerimonial.service.OrcamentoEventoService;
 import br.com.cerimonial.service.TipoIndicacaoService;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -21,6 +25,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
@@ -37,13 +42,17 @@ public class ContatoInicialCrudMB extends BasicControl {
     protected LazyDataModel<ContatoEvento> lazyLista;
     protected Long id;
     protected ContatoEvento entity;
+    protected OrcamentoEvento orcamento;
     protected List<ContatoEvento> itensSelecionados;
+    protected AbstractFilter filtros;
+    protected SelectItemUtils selectItemUtils;
+
     @EJB
     protected ContatoEventoService service;
     @EJB
+    protected OrcamentoEventoService orcamentoService;
+    @EJB
     protected TipoIndicacaoService tipoIndicacaoService;
-    protected AbstractFilter filtros;
-    protected SelectItemUtils selectItemUtils;
 
     /**
      * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
@@ -54,6 +63,9 @@ public class ContatoInicialCrudMB extends BasicControl {
         if (id != null) {
             try {
                 entity = service.getEntity(id);
+                if (CerimonialUtils.isListBlank(entity.getPropostas())) {
+                    instanciarOrcamento();
+                }
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
@@ -62,6 +74,10 @@ public class ContatoInicialCrudMB extends BasicControl {
         }
 
         this.selectItemUtils = new SelectItemUtils();
+    }
+
+    public void instanciarOrcamento() {
+        orcamento = new OrcamentoEvento(entity);
     }
 
     /**
@@ -80,7 +96,7 @@ public class ContatoInicialCrudMB extends BasicControl {
 
     /**
      * Evento invocado pela tela de form para salvar um novo ou edicao de um
-     * fornecedor
+     * contato
      *
      * @return
      */
@@ -97,6 +113,60 @@ public class ContatoInicialCrudMB extends BasicControl {
             createFacesErrorMessage(ex.getMessage());
         } finally {
             scrollTopMessage();
+        }
+        return null;
+    }
+
+    /**
+     * Evento invocado pela tela de form para salvar um novo orçamento
+     *
+     */
+    public synchronized void saveOrcamento() {
+        try {
+            orcamentoService.save(orcamento);
+            entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
+            orcamento = null;
+            createFacesInfoMessage("Orçamento gravado com sucesso!");
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
+        } finally {
+            scrollTopMessage();
+        }
+    }
+    
+    /**
+     * Evento invocado pela tela de form para enviar email
+     *
+     * @param proposta
+     */
+    public synchronized void enviarPropostaEmail(OrcamentoEvento proposta) {
+        try {
+            orcamentoService.enviarOrcamentoEmail(proposta);
+            createFacesInfoMessage("Proposta enviada com sucesso!");
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
+        } finally {
+            scrollTopMessage();
+        }
+    }
+    
+     /**
+     * Evento invocado pela tela de form para fazer download do arquivo
+     *
+     * @param proposta
+     * @return 
+     */
+    public String baixarArquivoOrcamento(OrcamentoEvento proposta) {
+        try {
+            byte[] propostaPdf = orcamentoService.getPDF(proposta);
+            String fileName = "orcamento_"+proposta.getId().toString();
+            Relatorio.exportarPdf(propostaPdf, fileName);
+        } catch (Exception e) {
+            Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
         }
         return null;
     }
@@ -150,10 +220,20 @@ public class ContatoInicialCrudMB extends BasicControl {
         return lazyLista;
     }
 
+    public void carregarDadosProposta() {
+
+        orcamento = orcamentoService.carregarPropostaModelo(orcamento, orcamento.getModeloProposta());
+
+    }
+
     public List<SelectItem> getComboTipoEvento() {
         return selectItemUtils.getComboTipoEvento();
     }
-    
+
+    public List<SelectItem> getComboModelosProposta() {
+        return selectItemUtils.getComboModelosProposta();
+    }
+
     public List<SelectItem> getComboStatusContato() {
         return selectItemUtils.getComboStatusContato();
     }
@@ -196,6 +276,14 @@ public class ContatoInicialCrudMB extends BasicControl {
 
     public void setFiltros(AbstractFilter filtros) {
         this.filtros = filtros;
+    }
+
+    public OrcamentoEvento getOrcamento() {
+        return orcamento;
+    }
+
+    public void setOrcamento(OrcamentoEvento orcamento) {
+        this.orcamento = orcamento;
     }
 
 }

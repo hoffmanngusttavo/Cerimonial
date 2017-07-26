@@ -6,7 +6,9 @@
 package br.com.cerimonial.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -304,5 +306,8 @@ public class ContatoEvento implements Serializable, ModelInterface{
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
+    
+   
+    
     
 }

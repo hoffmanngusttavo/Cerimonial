@@ -434,3 +434,11 @@ function validaFormularioFornecedor(){
 
   console.log(inptTipo);
 }
+
+
+
+//-----------------Contato Inicial-------------------
+
+function alteraEtapaContato(etapa){
+  $('#tabEtapas a[href="#etapa'+etapa+'"]').tab('show');
+}

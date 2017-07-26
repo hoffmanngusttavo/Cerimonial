@@ -17,9 +17,20 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
     </properties>
 
     <dependencies>
+                
+        
+        <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>5.6.1</version>
+        </dependency>
+
+        
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
@@ -127,8 +138,6 @@
         </dependency>
 
 
-
-        
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>             
@@ -156,6 +165,7 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        
     </dependencies>
 
     <build>
@@ -205,6 +215,7 @@
                     </execution>
                 </executions>
             </plugin>
+            
         </plugins>
     </build>
     

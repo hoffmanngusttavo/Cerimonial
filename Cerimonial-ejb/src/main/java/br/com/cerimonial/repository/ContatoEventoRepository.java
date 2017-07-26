@@ -21,16 +21,28 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
 
     @Override
     public ContatoEvento getEntity(Long id) throws Exception {
-        ContatoEvento entity = super.getEntity(id); //To change body of generated methods, choose Tools | Templates.
-        if(entity != null && entity.getTipoIndicacao() != null){
-            entity.getTipoIndicacao().getId();
+        ContatoEvento entity = super.getEntity(id);
+
+        if (entity != null) {
+            if (entity.getTipoIndicacao() != null) {
+                entity.getTipoIndicacao().getId();
+            }
+            if (entity.getStatus() != null) {
+                entity.getStatus().getId();
+            }
+            
+            if (entity.getPropostas() != null) {
+                entity.getPropostas().size();
+                entity.getPropostas().stream().forEach(item -> {
+                    if(item.getModeloProposta() != null){
+                        item.getModeloProposta().getId();
+                    }
+                });
+            }
         }
-        if(entity != null && entity.getStatus() != null){
-            entity.getStatus().getId();
-        }
+
         return entity;
     }
-    
 
     public List<String> getLocaisEvento(String value) throws Exception {
 

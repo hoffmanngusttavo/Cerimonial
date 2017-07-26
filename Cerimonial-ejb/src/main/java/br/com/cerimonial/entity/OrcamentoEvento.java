@@ -69,6 +69,14 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+
+    public OrcamentoEvento(ContatoEvento contatoEvento) {
+        this.contatoEvento = contatoEvento;
+    }
+
+    public OrcamentoEvento() {
+    }
+    
     
     
     @Override

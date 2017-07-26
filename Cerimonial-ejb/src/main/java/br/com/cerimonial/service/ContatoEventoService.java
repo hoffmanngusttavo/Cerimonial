@@ -67,8 +67,10 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
         return new ArrayList<>();
     }
 
-    public void delete(ContatoEvento categoria) throws Exception {
-        repository.delete(categoria);
+    public void delete(ContatoEvento contato) throws Exception {
+        if(contato != null){
+            repository.delete(contato);
+        }
     }
 
     public int countAll() {
