@@ -57,7 +57,6 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     @ManyToOne(fetch = FetchType.LAZY)
     private ModeloProposta modeloProposta;
     
-    @Lob
     @Column(columnDefinition = "TEXT")
     private String proposta;
     

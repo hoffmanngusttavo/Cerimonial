@@ -16,8 +16,6 @@ import br.com.cerimonial.service.OrcamentoEventoService;
 import br.com.cerimonial.service.TipoIndicacaoService;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -25,7 +23,6 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
@@ -162,11 +159,12 @@ public class ContatoInicialCrudMB extends BasicControl {
      */
     public String baixarArquivoOrcamento(OrcamentoEvento proposta) {
         try {
-            byte[] propostaPdf = orcamentoService.getPDF(proposta);
+            byte[] propostaPdf = orcamentoService.getPDFOrcamento(proposta);
             String fileName = "orcamento_"+proposta.getId().toString();
             Relatorio.exportarPdf(propostaPdf, fileName);
         } catch (Exception e) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getMessage());
         }
         return null;
     }

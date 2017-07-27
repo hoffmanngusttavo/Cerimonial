@@ -473,7 +473,8 @@
                                                                          process="@this"
                                                                          title="Baixar Arquivo"
                                                                          actionListener="#{ContatoInicialCrudMB.baixarArquivoOrcamento(proposta)}"
-                                                                         update=":form:groupOrcamentoDialog"
+                                                                         ajax="false"
+                                                                         immediate="true"
                                                                          onstart="PF('statusDialog').show();"
                                                                          oncomplete="PF('statusDialog').hide();"/>
                                                     </td>

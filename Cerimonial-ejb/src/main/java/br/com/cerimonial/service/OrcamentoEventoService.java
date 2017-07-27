@@ -10,6 +10,7 @@ import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
 import br.com.cerimonial.service.invoice.InvoiceUtils;
+import java.io.File;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -28,12 +29,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.faces.context.FacesContext;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 
 /**
  *
@@ -135,7 +132,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
             throw new Exception("Objeto nulo");
         }
         
-        byte[] pdfProposta = getPDF(proposta);
+        byte[] pdfProposta = getPDFOrcamento(proposta);
         
         String body = InvoiceUtils.readFileToString("invoice.html");
         body = body.replaceAll("@@@NOME_CLIENTE@@@", proposta.getContatoEvento().getNomeContato());
@@ -146,11 +143,10 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
         
     }
 
-    public byte[] getPDF(OrcamentoEvento proposta) throws JRException {
+    public byte[] getPDFOrcamento(OrcamentoEvento proposta) throws JRException {
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("parcela", proposta);
-        parameters.put("codigobarras", "51515");
-        InputStream inputStream = OrcamentoEventoService.class.getResourceAsStream("boletoParcela.jrxml");
+        parameters.put("idOrcamento", proposta.getId());
+        InputStream inputStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/jasper/orcamento.jrxml");
         return Relatorio.compileReport(parameters, inputStream);
     }
 

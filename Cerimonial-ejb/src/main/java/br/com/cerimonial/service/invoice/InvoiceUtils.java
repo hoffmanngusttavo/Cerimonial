@@ -7,6 +7,7 @@ package br.com.cerimonial.service.invoice;
 
 import java.io.IOException;
 import java.io.InputStream;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -14,8 +15,8 @@ import java.io.InputStream;
  */
 public class InvoiceUtils {
 
-    public static String readFileToString(String file) throws IOException {
-        InputStream stream = InvoiceUtils.class.getResourceAsStream(file);
+    public static String readFileToString(String fileName) throws IOException {
+        InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/jasper/"+fileName);
         byte[] invoiceBytes = new byte[stream.available()];
         stream.read(invoiceBytes);
         stream.close();
