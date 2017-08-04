@@ -10,7 +10,7 @@ import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
 import br.com.cerimonial.service.invoice.InvoiceUtils;
-import java.io.File;
+import br.com.cerimonial.utils.EmailHelper;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -139,8 +139,11 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
         body = body.replaceAll("@@@PARCELA_DATA@@@", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         body = body.replaceAll("@@@PARCELA_VALOR@@@", new DecimalFormat("#0.00").format(proposta.getValorProposta()));
         
-        callGlassfishJavaMail(body, pdfProposta, proposta.getContatoEvento().getEmailContato());
+        HashMap<String, Object> anexos = new HashMap<>();
+        anexos.put(proposta.getProposta(), pdfProposta);
         
+        EmailHelper emailHelper = new EmailHelper();
+        emailHelper.enviarEmail(proposta.getContatoEvento().getEmailContato(), "Proposta/Orçamento", body, anexos);
     }
 
     public byte[] getPDFOrcamento(OrcamentoEvento proposta) throws JRException {
@@ -150,6 +153,8 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
         return Relatorio.compileReport(parameters, inputStream);
     }
 
+    
+    
     private void callGlassfishJavaMail(String body, byte[] pdfProposta, String emailContato) {
         try {
 //            Multipart multipart = new MimeMultipart();;
