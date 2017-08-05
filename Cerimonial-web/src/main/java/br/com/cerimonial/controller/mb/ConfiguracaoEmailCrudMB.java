@@ -6,11 +6,8 @@
 package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.BasicControl;
-import br.com.cerimonial.entity.Empresa;
-import br.com.cerimonial.entity.Endereco;
-import br.com.cerimonial.entity.Estado;
-import br.com.cerimonial.service.EmpresaService;
-import br.com.cerimonial.service.EnderecoService;
+import br.com.cerimonial.entity.ConfiguracaoEmail;
+import br.com.cerimonial.service.ConfiguracaoEmailService;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,44 +22,32 @@ import javax.faces.model.SelectItem;
  *
  * @author Gustavo Hoffmann
  */
-@ManagedBean(name = "EmpresaCrudMB")
+@ManagedBean(name = "ConfiguracaoEmailCrudMB")
 @ViewScoped
-public class EmpresaCrudMB extends BasicControl {
+public class ConfiguracaoEmailCrudMB extends BasicControl {
 
-    private Empresa entity;
+    private ConfiguracaoEmail entity;
     @EJB
-    private EmpresaService service;
-    @EJB
-    private EnderecoService enderecoService;
-    private final SelectItemUtils selectItemUtils;
-
-    public EmpresaCrudMB() {
-        selectItemUtils = new SelectItemUtils();
-    }
+    private ConfiguracaoEmailService service;
 
     /**
-     * Evento invocado ao abrir o xhtml na edição de uma empresa objetivo de
-     * carregar os dados da empresa
+     * Evento invocado ao abrir o xhtml na edição de uma config. objetivo de
+     * carregar os dados da config de email
      */
     public void init() {
         try {
             if (!entityLoaded) {
-                entity = service.getEmpresa();
+                entity = service.getConfiguracaoEmail();
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            entity = new Empresa();
-        } finally {
-            if (entity.getEndereco() == null) {
-                entity.setEndereco(new Endereco());
-            }
+            entity = new ConfiguracaoEmail();
         }
-
     }
 
     /**
      * Evento invocado pela tela de form para salvar um novo ou edicao de uma
-     * empresa
+     * config. de email
      *
      * @return
      */
@@ -83,34 +68,27 @@ public class EmpresaCrudMB extends BasicControl {
         return null;
     }
 
-    public void buscaCep() {
-        if (entity != null && entity.getEndereco() != null) {
-            try {
-                entity.setEndereco(enderecoService.buscaCep(entity.getEndereco()));
-            } catch (Exception ex) {
-                Logger.getLogger(EmpresaCrudMB.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    /**
+     * Evento invocado selecionar um tipo de email
+     */
+    public void alterarConfiguracao(){
+        entity = service.alterarConfiguracaoEmail(entity, entity.getTipoEmail());
     }
-
-    public Empresa getEntity() {
+    
+    
+     public List<SelectItem> getComboTipoEmail() {
+        return SelectItemUtils.getComboTipoEmail();
+    }
+    
+    
+    public ConfiguracaoEmail getEntity() {
         return entity;
     }
 
-    public void setEntity(Empresa entity) {
+    public void setEntity(ConfiguracaoEmail entity) {
         this.entity = entity;
     }
-
-    public List<SelectItem> getComboTipoPessoa() {
-        return SelectItemUtils.getComboTipoPessoa();
-    }
-
-    public List<SelectItem> getComboCidade(Estado estado) {
-        return selectItemUtils.getComboCidade(estado);
-    }
-
-    public List<SelectItem> getComboEstado() {
-        return selectItemUtils.getComboEstado();
-    }
+    
+    
 
 }

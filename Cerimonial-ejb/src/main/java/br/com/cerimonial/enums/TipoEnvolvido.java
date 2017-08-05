@@ -5,7 +5,7 @@
  */
 package br.com.cerimonial.enums;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,11 +33,7 @@ public enum TipoEnvolvido {
     }
 
     public static List<TipoEnvolvido> getList() {
-        List<TipoEnvolvido> l = new ArrayList<>();
-        for (TipoEnvolvido e : values()) {
-            l.add(e);
-        }
-        return l;
+        return Arrays.asList(values());
     }
 
 }

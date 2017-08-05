@@ -12,17 +12,18 @@ import java.util.List;
  *
  * @author Gustavo Hoffmann
  */
-public enum TipoPessoa {
+public enum TipoEmail {
     
-    FISICA("Física"),
-    JURIDICA("Jurídica");
+    GMAIL("Gmail"),
+    YAHOO("Yahoo"),
+    HOTMAIL("Hotmail/Outlook"),
+    OUTROS("Outros");
     
     private String label;
 
-    private TipoPessoa(String label) {
+    private TipoEmail(String label) {
         this.label = label;
     }
-    
 
     public String getLabel() {
         return label;
@@ -32,8 +33,7 @@ public enum TipoPessoa {
         this.label = label;
     }
     
-    public static List<TipoPessoa> getList() {
+    public static List<TipoEmail> getList() {
         return Arrays.asList(values());
     }
-    
 }

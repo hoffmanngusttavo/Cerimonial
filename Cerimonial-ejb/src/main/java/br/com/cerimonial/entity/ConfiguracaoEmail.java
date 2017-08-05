@@ -5,12 +5,15 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.TipoEmail;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,6 +50,8 @@ public class ConfiguracaoEmail implements Serializable, ModelInterface {
     protected String login;
     @Column
     protected String senha;
+    @Enumerated(EnumType.STRING)
+    protected TipoEmail tipoEmail;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
@@ -130,6 +135,14 @@ public class ConfiguracaoEmail implements Serializable, ModelInterface {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public TipoEmail getTipoEmail() {
+        return tipoEmail;
+    }
+
+    public void setTipoEmail(TipoEmail tipoEmail) {
+        this.tipoEmail = tipoEmail;
     }
     
     

@@ -43,11 +43,11 @@ public class EmpresaService extends BasicService<Empresa>{
     }
     
     public Empresa getEmpresa() throws Exception {
-        List<Empresa> empresas = repository.findAll();
+        List<Empresa> empresas = repository.findRangeListagem(1, 0, null, null);
         if(CerimonialUtils.isListNotBlank(empresas)){
             return empresas.get(0);
         }
-        return null;
+        return new Empresa();
     }
     
 
