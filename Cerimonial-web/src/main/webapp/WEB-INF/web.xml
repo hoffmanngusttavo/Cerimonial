@@ -35,7 +35,7 @@
                 roles.unauthorizedUrl=  /index.xhtml
                 
                 [urls]
-                /admin/** = authc
+                /intranet/** = authc
             </param-value>
         </init-param>
         <init-param>
