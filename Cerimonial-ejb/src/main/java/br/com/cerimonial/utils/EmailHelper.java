@@ -6,6 +6,8 @@
 package br.com.cerimonial.utils;
 
 import br.com.cerimonial.entity.ConfiguracaoEmail;
+import br.com.cerimonial.service.ConfiguracaoEmailService;
+import br.com.cerimonial.service.ContatoEventoService;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.ejb.EJB;
 import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -41,9 +44,14 @@ public class EmailHelper {
     private final MimeMultipart mpContent = new MimeMultipart("alternative");
     private final MimeBodyPart contentPartRoot = new MimeBodyPart();
 
-    public EmailHelper() {
-        //buscar o configurador de email
-
+    public EmailHelper(ConfiguracaoEmailService configuracaoEmailService) {
+        try {
+            //buscar o configurador de email
+            configuracaoEmail = configuracaoEmailService.getConfiguracaoEmail();
+        } catch (Exception ex) {
+            Logger.getLogger(EmailHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     

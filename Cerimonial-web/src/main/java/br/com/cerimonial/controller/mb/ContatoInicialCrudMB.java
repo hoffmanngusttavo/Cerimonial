@@ -40,6 +40,7 @@ public class ContatoInicialCrudMB extends BasicControl {
     protected Long id;
     protected ContatoEvento entity;
     protected OrcamentoEvento orcamento;
+    protected boolean cadastrarOrcamento = false;
     protected List<ContatoEvento> itensSelecionados;
     protected AbstractFilter filtros;
     protected SelectItemUtils selectItemUtils;
@@ -75,6 +76,7 @@ public class ContatoInicialCrudMB extends BasicControl {
 
     public void instanciarOrcamento() {
         orcamento = new OrcamentoEvento(entity);
+        cadastrarOrcamento = true;
     }
 
     /**
@@ -123,6 +125,27 @@ public class ContatoInicialCrudMB extends BasicControl {
             orcamentoService.save(orcamento);
             entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
             orcamento = null;
+            cadastrarOrcamento = false;
+            createFacesInfoMessage("Orçamento gravado com sucesso!");
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
+        } finally {
+            scrollTopMessage();
+        }
+    }
+    
+    
+    /**
+     * Evento invocado pela tela de form para remover um orçamento
+     *
+     */
+    public void deleteOrcamento() {
+        try {
+            orcamentoService.delete(orcamento);
+            entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
+            orcamento = null;
             createFacesInfoMessage("Orçamento gravado com sucesso!");
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         } catch (Exception ex) {
@@ -140,6 +163,7 @@ public class ContatoInicialCrudMB extends BasicControl {
      */
     public synchronized void enviarPropostaEmail(OrcamentoEvento proposta) {
         try {
+            proposta.setPropostaEnviada(true);
             orcamentoService.enviarOrcamentoEmail(proposta);
             createFacesInfoMessage("Proposta enviada com sucesso!");
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -284,4 +308,13 @@ public class ContatoInicialCrudMB extends BasicControl {
         this.orcamento = orcamento;
     }
 
+    public boolean isCadastrarOrcamento() {
+        return cadastrarOrcamento;
+    }
+
+    public void setCadastrarOrcamento(boolean cadastrarOrcamento) {
+        this.cadastrarOrcamento = cadastrarOrcamento;
+    }
+
+    
 }

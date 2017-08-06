@@ -16,7 +16,7 @@ import javax.faces.context.FacesContext;
 public class InvoiceUtils {
 
     public static String readFileToString(String fileName) throws IOException {
-        InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/jasper/"+fileName);
+        InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/invoices/"+fileName);
         byte[] invoiceBytes = new byte[stream.available()];
         stream.read(invoiceBytes);
         stream.close();

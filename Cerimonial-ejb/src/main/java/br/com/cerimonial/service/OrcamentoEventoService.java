@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -40,17 +41,20 @@ import net.sf.jasperreports.engine.JRException;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
-    
-     private OrcamentoEventoRepository repository;
+public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
+
+    private OrcamentoEventoRepository repository;
+
+    @EJB
+    protected ConfiguracaoEmailService configuracaoEmailService;
 
     @PostConstruct
     @PostActivate
     private void postConstruct() {
         repository = new OrcamentoEventoRepository(em);
     }
-    
-      @Override
+
+    @Override
     public OrcamentoEvento getEntity(Long id) throws Exception {
         return repository.getEntity(id);
     }
@@ -58,11 +62,11 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
     @Override
     public OrcamentoEvento save(OrcamentoEvento entity) throws Exception {
         if (entity != null) {
-            
-            if(entity.getContatoEvento() == null){
+
+            if (entity.getContatoEvento() == null) {
                 throw new Exception("Você precisa associar um contato inicial primeiro");
             }
-            
+
             if (entity.getId() == null) {
                 return repository.create(entity);
             } else {
@@ -96,27 +100,26 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
 
     public List<OrcamentoEvento> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return repository.findRangeListagem( max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem(max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-  
     public OrcamentoEvento carregarPropostaModelo(OrcamentoEvento orcamento, ModeloProposta modelo) {
-        
-        if(orcamento != null && modelo != null){
-             orcamento.setModeloProposta(modelo);
-             orcamento.setProposta(modelo.getConteudo());
-             orcamento.setValorProposta(modelo.getValorProposta() != null ? modelo.getValorProposta().doubleValue() : 0 );
+
+        if (orcamento != null && modelo != null) {
+            orcamento.setModeloProposta(modelo);
+            orcamento.setProposta(modelo.getConteudo());
+            orcamento.setValorProposta(modelo.getValorProposta() != null ? modelo.getValorProposta().doubleValue() : 0);
         }
-        
+
         return orcamento;
     }
 
     public List<OrcamentoEvento> findAllByContatoId(Long id) {
-        if(id != null){
+        if (id != null) {
             try {
                 return repository.findAllByContatoId(id);
             } catch (Exception ex) {
@@ -126,23 +129,23 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
         return new ArrayList<>();
     }
 
-    public void enviarOrcamentoEmail(OrcamentoEvento proposta) throws Exception{
-        
-        if(proposta == null){
+    public void enviarOrcamentoEmail(OrcamentoEvento proposta) throws Exception {
+
+        if (proposta == null) {
             throw new Exception("Objeto nulo");
         }
-        
+
         byte[] pdfProposta = getPDFOrcamento(proposta);
-        
+
         String body = InvoiceUtils.readFileToString("invoice.html");
         body = body.replaceAll("@@@NOME_CLIENTE@@@", proposta.getContatoEvento().getNomeContato());
         body = body.replaceAll("@@@PARCELA_DATA@@@", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         body = body.replaceAll("@@@PARCELA_VALOR@@@", new DecimalFormat("#0.00").format(proposta.getValorProposta()));
-        
+
         HashMap<String, Object> anexos = new HashMap<>();
         anexos.put(proposta.getProposta(), pdfProposta);
-        
-        EmailHelper emailHelper = new EmailHelper();
+
+        EmailHelper emailHelper = new EmailHelper(configuracaoEmailService);
         emailHelper.enviarEmail(proposta.getContatoEvento().getEmailContato(), "Proposta/Orçamento", body, anexos);
     }
 
@@ -153,8 +156,6 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
         return Relatorio.compileReport(parameters, inputStream);
     }
 
-    
-    
     private void callGlassfishJavaMail(String body, byte[] pdfProposta, String emailContato) {
         try {
 //            Multipart multipart = new MimeMultipart();;
@@ -179,7 +180,5 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento>{
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
+
 }
