@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.CategoriaEvento;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,9 @@ public class TipoEvento implements Serializable, ModelInterface {
     
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
+    
+    @NotNull(message = "A categoria não pode ser nula")
+    private CategoriaEvento categoria = CategoriaEvento.CASAMENTO;
     
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
@@ -126,6 +130,14 @@ public class TipoEvento implements Serializable, ModelInterface {
 
     public void setContatosEventos(List<ContatoEvento> contatosEventos) {
         this.contatosEventos = contatosEventos;
+    }
+
+    public CategoriaEvento getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaEvento categoria) {
+        this.categoria = categoria;
     }
     
     

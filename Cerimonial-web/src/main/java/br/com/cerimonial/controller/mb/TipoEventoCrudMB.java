@@ -9,6 +9,7 @@ import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.service.TipoEventoService;
+import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -87,6 +89,10 @@ public class TipoEventoCrudMB extends BasicControl{
             scrollTopMessage();
         }
         return null;
+    }
+    
+    public List<SelectItem> getComboCategoriaEvento() {
+        return SelectItemUtils.getComboCategoriaEvento();
     }
     
     

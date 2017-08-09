@@ -7,6 +7,7 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
+import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.service.ModeloPropostaService;
 import br.com.cerimonial.utils.SelectItemUtils;
@@ -21,6 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -30,14 +32,14 @@ import org.primefaces.model.SortOrder;
 @ViewScoped
 public class ModeloPropostaCrudMB extends BasicControl{
     
-    protected LazyDataModel<ModeloProposta> lazyLista;
-    protected Long id;
-    protected ModeloProposta entity;
-    protected List<ModeloProposta> itensSelecionados;
+    private LazyDataModel<ModeloProposta> lazyLista;
+    private Long id;
+    private ModeloProposta entity;
+    private UploadedFile file;
     @EJB
-    protected ModeloPropostaService service;
-    protected AbstractFilter filtros;
-    protected SelectItemUtils selectItemUtils;
+    private ModeloPropostaService service;
+    private AbstractFilter filtros;
+    private SelectItemUtils selectItemUtils;
 
     /**
      * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
@@ -79,6 +81,11 @@ public class ModeloPropostaCrudMB extends BasicControl{
     public synchronized String save() {
         try {
             if (entity != null) {
+                
+                if (file != null && file.getSize() > 0) {
+                    entity.adicionarAnexo(new Arquivo(file.getFileName(), file.getContentType(), file.getContents()));
+                }
+                
                 service.save(entity);
                 createFacesInfoMessage("Dados gravados com sucesso!");
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -89,6 +96,23 @@ public class ModeloPropostaCrudMB extends BasicControl{
             createFacesErrorMessage(ex.getMessage());
         } finally {
             scrollTopMessage();
+        }
+        return null;
+    }
+    
+    /**
+     * Evento invocado pela tela de form para fazer download do arquivo
+     *
+     * @return 
+     */
+    public String baixarArquivo() {
+        try {
+//            byte[] propostaPdf = orcamentoService.getPDFOrcamento(proposta);
+//            String fileName = "orcamento_"+proposta.getId().toString();
+//            Relatorio.exportarPdf(propostaPdf, fileName);
+        } catch (Exception e) {
+            Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getMessage());
         }
         return null;
     }
@@ -170,20 +194,20 @@ public class ModeloPropostaCrudMB extends BasicControl{
         this.entity = entity;
     }
 
-    public List<ModeloProposta> getItensSelecionados() {
-        return itensSelecionados;
-    }
-
-    public void setItensSelecionados(List<ModeloProposta> itensSelecionados) {
-        this.itensSelecionados = itensSelecionados;
-    }
-
     public AbstractFilter getFiltros() {
         return filtros;
     }
 
     public void setFiltros(AbstractFilter filtros) {
         this.filtros = filtros;
+    }
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
     }
 
     

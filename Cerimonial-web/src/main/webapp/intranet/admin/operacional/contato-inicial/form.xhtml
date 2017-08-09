@@ -118,9 +118,6 @@
 
                             <div class="form-group col-md-3">
                                 <label class="control-label ">Data Evento
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
                                 </label>
 
                                 <p:calendar pattern="dd/MM/yyyy"
@@ -129,8 +126,6 @@
                                             style="display: block;"
                                             value="#{ContatoInicialCrudMB.entity.dataEvento}"
                                             label="Data Evento" 
-                                            required="true"
-                                            requiredMessage="Preencha uma data de evento válido"
                                             showOn="button"
                                             navigator="true"
                                             locale="pt"
@@ -145,14 +140,9 @@
                                 <label class="control-label" 
                                        style="width: 100% !important;"
                                        for="inptHoraEvento">Hora Evento
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
                                 </label>
 
                                 <p:inputMask mask="99:99"
-                                             required="true"
-                                             requiredMessage="Preencha uma hora de evento válido"
                                              id="inptHoraEvento"
                                              value="#{ContatoInicialCrudMB.entity.horaEvento}">
                                     <f:convertDateTime pattern="HH:mm"
@@ -167,33 +157,22 @@
                             <div class="form-group col-md-6">
                                 <label for="inptLocal">
                                     Local Evento
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
                                 </label>
                                 <p:autoComplete id="inptLocal" 
                                                 value="#{ContatoInicialCrudMB.entity.localEvento}" 
-                                                required="true"
                                                 style="width: 100% !important;"
                                                 minQueryLength="2"
                                                 completeMethod="#{ContatoInicialCrudMB.completeLocalEvento}"
-                                                requiredMessage="Preencha um local válido"
-                                                label="Local">
+                                                label="Local"/>
 
-                                </p:autoComplete>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="inptLocalFesta">
                                     Local Festa
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
                                 </label>
                                 <p:inputText id="inptLocalFesta" 
                                              value="#{ContatoInicialCrudMB.entity.localFesta}" 
-                                             required="true"
-                                             requiredMessage="Preencha um local de festa válido"
                                              class="form-control"
                                              label="Local"/>
 
@@ -225,15 +204,10 @@
                             <div class="form-group col-md-3">
                                 <label for="inptNome">
                                     Quantidade Convidados
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
                                 </label>
                                 <p:inputText id="inptQtdConvidados" 
                                              value="#{ContatoInicialCrudMB.entity.quantidadeConvidados}" 
                                              class="form-control"
-                                             required="true"
-                                             requiredMessage="Preencha uma quantidade de convidados válido"
                                              label="Quantidade">
                                     <f:convertNumber integerOnly="true"/>
                                     <p:ajax event="change"
@@ -257,10 +231,8 @@
                                                 minQueryLength="2"
                                                 converter="EntityConverter"
                                                 completeMethod="#{ContatoInicialCrudMB.completeTipoIndicacao}"
-                                                requiredMessage="Preencha um tipo de indicação válido"
-                                                label="Local">
+                                                label="Tipo de Indicação"/>
 
-                                </p:autoComplete>
                             </div>
 
                             <div class="form-group col-md-6">
@@ -364,6 +336,7 @@
                                             </span>
                                         </label>
                                         <p:inputText value="#{ContatoInicialCrudMB.orcamento.valorProposta}" 
+                                                     disabled="true"
                                                      class="form-control">
                                             <f:convertNumber maxFractionDigits="2"
                                                              minFractionDigits="2"
@@ -373,8 +346,48 @@
                                                     global="false"/>
                                         </p:inputText>
 
+                                        <p:commandButton icon="fa fa-pencil" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         title="Alterar Valor"
+                                                         actionListener="#{ContatoInicialCrudMB.alterarValorProposta()}"
+                                                         update=":form:groupValorAlterado"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
                                     </div>
                                 </div>
+                                <h:panelGroup id="groupValorAlterado">
+                                    <h:panelGroup rendered="#{ContatoInicialCrudMB.orcamento.valorAlterado gt -1}">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>Valor Alterado
+                                                    <span class="asteriskField">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <p:inputText value="#{ContatoInicialCrudMB.orcamento.valorAlterado}" 
+                                                             class="form-control">
+                                                    <f:convertNumber maxFractionDigits="2"
+                                                                     minFractionDigits="2"
+                                                                     locale="pt_BR"/>
+                                                    <p:ajax process="@this"
+                                                            update="@this"
+                                                            global="false"/>
+                                                </p:inputText>
+                                                <p:commandButton icon="fa fa-times" 
+                                                                 styleClass="bt-acoes"
+                                                                 process="@this"
+                                                                 title="Alterar Valor"
+                                                                 actionListener="#{ContatoInicialCrudMB.cancelarAlterarValorProposta()}"
+                                                                 update=":form:groupValorAlterado"
+                                                                 immediate="true"
+                                                                 onstart="PF('statusDialog').show();"
+                                                                 oncomplete="PF('statusDialog').hide();"/>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </h:panelGroup>
                                 <div class="row">
                                     <div class="form-group col-md-12">
                                         <label class="control-label ">Conteúdo
@@ -439,7 +452,14 @@
                                                         <h:outputText value="#{proposta.modeloProposta.titulo}"/>
                                                     </td>
                                                     <td>
-                                                        <h:outputText value="#{proposta.valorProposta}">
+                                                        <h:outputText value="#{proposta.valorProposta}"
+                                                                      rendered="#{proposta.valorAlterado lt 0}">
+                                                            <f:convertNumber maxFractionDigits="2"
+                                                                             minFractionDigits="2"
+                                                                             locale="pt_BR"/>
+                                                        </h:outputText>
+                                                        <h:outputText value="#{proposta.valorAlterado}"
+                                                                      rendered="#{proposta.valorAlterado gt -1}">
                                                             <f:convertNumber maxFractionDigits="2"
                                                                              minFractionDigits="2"
                                                                              locale="pt_BR"/>
@@ -470,6 +490,7 @@
                                                         <p:commandButton icon="fa fa-download" 
                                                                          styleClass="bt-acoes"
                                                                          process="@this"
+                                                                         rendered="false"
                                                                          title="Baixar Arquivo"
                                                                          actionListener="#{ContatoInicialCrudMB.baixarArquivoOrcamento(proposta)}"
                                                                          ajax="false"

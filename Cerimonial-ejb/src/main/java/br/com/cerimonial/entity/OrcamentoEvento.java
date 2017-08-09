@@ -51,6 +51,10 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     @Column(columnDefinition = "boolean default false")
     private boolean propostaEnviada = false;
     
+    //Se a proposta foi aceita
+    @Column(columnDefinition = "boolean default false")
+    private boolean propostaAceita = false;
+    
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataEnvio;
     
@@ -162,6 +166,14 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
 
     public void setContatoEvento(ContatoEvento contatoEvento) {
         this.contatoEvento = contatoEvento;
+    }
+
+    public boolean isPropostaAceita() {
+        return propostaAceita;
+    }
+
+    public void setPropostaAceita(boolean propostaAceita) {
+        this.propostaAceita = propostaAceita;
     }
     
     

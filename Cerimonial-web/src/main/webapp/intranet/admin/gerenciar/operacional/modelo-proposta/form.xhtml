@@ -21,6 +21,7 @@
         </f:metadata>
 
         <h:form prependId="false"
+                enctype="multipart/form-data"
                 id="form">
 
             <p:focus for="inptNome"/>
@@ -105,6 +106,32 @@
                                 <p:selectBooleanCheckbox value="#{ModeloPropostaCrudMB.entity.ativo}"
                                                          class="checkbox-inline"
                                                          id="inptAtivo"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Anexo
+                                </label>
+
+                                <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
+                                              mode="simple" 
+                                              skinSimple="true"
+                                              label="Selecione"
+                                              />
+
+                                <p:commandButton icon="fa fa-download" 
+                                                 styleClass="bt-acoes"
+                                                 process="@this"
+                                                 rendered="#{ModeloPropostaCrudMB.entity.arquivo != null}"
+                                                 rendered="false"
+                                                 title="Baixar Arquivo"
+                                                 actionListener="#{ModeloPropostaCrudMB.baixarArquivo()}"
+                                                 ajax="false"
+                                                 immediate="true"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+
                             </div>
                         </div>
 

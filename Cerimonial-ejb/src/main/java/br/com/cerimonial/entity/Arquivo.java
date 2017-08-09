@@ -5,10 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
-import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,17 +18,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
-import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -41,45 +33,46 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class ModeloProposta implements Serializable, ModelInterface {
+public class Arquivo implements Serializable, ModelInterface {
+    
+    
 
     @Id
-    @GeneratedValue(generator = "GENERATE_ModeloProposta", strategy = GenerationType.AUTO)
-    @SequenceGenerator(name = "GENERATE_ModeloProposta", sequenceName = "ModeloProposta_pk_seq", allocationSize = 1)
+    @GeneratedValue(generator = "GENERATE_Arquivo", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "GENERATE_Arquivo", sequenceName = "Arquivo_pk_seq", allocationSize = 1)
     private Long id;
+    
+    @NotNull(message = "O nome desse arquivo não pode ser nulo")
+    @Column
+    private String nome;
+    
+    @NotNull(message = "A extensão não pode ser nula")
+    @Column
+    private String extensao;
 
-    @Column(nullable = false)
-    @NotNull(message = "O título não pode ser nulo")
-    @Size(min = 2, max = 255)
-    private String titulo;
-
-    @Column(columnDefinition = "TEXT")
-    private String conteudo;
-
-    @Column(columnDefinition = "boolean default true")
-    private boolean ativo = true;
-
-    @NotNull(message = "O tipo de evento não pode ser nulo")
-    @Valid
-    @ManyToOne
-    private TipoEvento tipoEvento;
+    @NotNull(message = "O conteúdo desse arquivo não pode ser nulo")
+    @Column
+    private byte[] conteudo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    
+    @ManyToMany(mappedBy = "anexos")
+    private List<ModeloProposta> modelosPropostas;
 
-    @DecimalMin(value = "0.0", message = "O valor não pode ser negativo")
-    @Column(precision = 16, scale = 2)
-    private BigDecimal valorProposta = BigDecimal.ZERO;
+    public Arquivo() {
+    }
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Arquivo> anexos;
+    public Arquivo(String nome, String extensao, byte[] conteudo) {
+        this.nome = nome;
+        this.extensao = extensao;
+        this.conteudo = conteudo;
+    }
 
-    @OneToMany(mappedBy = "modeloProposta", fetch = FetchType.LAZY)
-    private List<OrcamentoEvento> orcamentos;
-
+    
     @Override
     public Long getId() {
         return id;
@@ -88,30 +81,6 @@ public class ModeloProposta implements Serializable, ModelInterface {
     @Override
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = StringUtils.isNotBlank(titulo) ? titulo.toUpperCase().trim() : titulo;
-    }
-
-    public String getConteudo() {
-        return conteudo;
-    }
-
-    public void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
     }
 
     @Override
@@ -134,50 +103,40 @@ public class ModeloProposta implements Serializable, ModelInterface {
         this.modificadoPor = modificadoPor;
     }
 
-    public TipoEvento getTipoEvento() {
-        return tipoEvento;
+    public String getNome() {
+        return nome;
     }
 
-    public void setTipoEvento(TipoEvento tipoEvento) {
-        this.tipoEvento = tipoEvento;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public BigDecimal getValorProposta() {
-        return valorProposta;
+    public byte[] getConteudo() {
+        return conteudo;
     }
 
-    public void setValorProposta(BigDecimal valorProposta) {
-        this.valorProposta = valorProposta;
+    public void setConteudo(byte[] conteudo) {
+        this.conteudo = conteudo;
     }
 
-    public List<OrcamentoEvento> getOrcamentos() {
-        return orcamentos;
+    public List<ModeloProposta> getModelosPropostas() {
+        return modelosPropostas;
     }
 
-    public void setOrcamentos(List<OrcamentoEvento> orcamentos) {
-        this.orcamentos = orcamentos;
+    public void setModelosPropostas(List<ModeloProposta> modelosPropostas) {
+        this.modelosPropostas = modelosPropostas;
     }
 
-    public Arquivo getArquivo() {
-        if (CerimonialUtils.isListNotBlank(anexos)) {
-            return anexos.get(0);
-        }
-        return null;
+    public String getExtensao() {
+        return extensao;
     }
 
-    public void adicionarAnexo(Arquivo arquivo) {
-        if (arquivo != null) {
-
-            if (anexos == null) {
-                anexos = new ArrayList<>();
-            }
-            anexos.add(arquivo);
-        }
+    public void setExtensao(String extensao) {
+        this.extensao = extensao;
     }
 
-    public List<Arquivo> getAnexos() {
-        return anexos;
-    }
+   
+    
 
     @PrePersist
     @Override
@@ -222,10 +181,10 @@ public class ModeloProposta implements Serializable, ModelInterface {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ModeloProposta)) {
+        if (!(object instanceof Arquivo)) {
             return false;
         }
-        ModeloProposta other = (ModeloProposta) object;
+        Arquivo other = (Arquivo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -234,7 +193,7 @@ public class ModeloProposta implements Serializable, ModelInterface {
 
     @Override
     public String toString() {
-        return "br.com.cerimonial.entity.ModeloProposta[ id=" + id + " ]";
+        return "br.com.cerimonial.entity.Arquivo[ id=" + id + " ]";
     }
 
 }

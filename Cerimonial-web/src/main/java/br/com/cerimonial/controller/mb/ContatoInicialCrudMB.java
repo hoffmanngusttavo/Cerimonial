@@ -156,6 +156,16 @@ public class ContatoInicialCrudMB extends BasicControl {
         }
     }
     
+    public void alterarValorProposta(){
+        orcamento.setValorAlterado(orcamento.getValorProposta());
+    }
+    
+    public void cancelarAlterarValorProposta(){
+        orcamento.setValorAlterado(-1);
+    }
+    
+    
+    
     /**
      * Evento invocado pela tela de form para enviar email
      *

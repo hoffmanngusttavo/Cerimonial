@@ -48,6 +48,24 @@
 
                     </div>
                     <div class="form-group col-md-6">
+                        <label class="control-label ">Categoria
+                            <span class="asteriskField">
+                                *
+                            </span>
+                        </label>
+
+                        <h:selectOneMenu id="inptTipo" 
+                                         required="true"
+                                         requiredMessage="Selecione uma categoria válido"
+                                         class="form-control"
+                                         value="#{TipoEventoCrudMB.entity.categoria}">
+                            <f:selectItem itemValue="" itemLabel="Selecione"/>
+                            <f:selectItems value="#{TipoEventoCrudMB.comboCategoriaEvento}" />
+                            <p:ajax process="@this" 
+                                    event="change"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label>Ativo ?
                         </label>
 

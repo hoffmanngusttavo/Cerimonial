@@ -57,12 +57,10 @@ public class ContatoEvento implements Serializable, ModelInterface{
     private String emailContato;
     
     @Column(nullable = false)
-    @NotNull
     @Size(min = 2, max = 255)
     private String localEvento;
     
     @Column(nullable = false)
-    @NotNull
     @Size(min = 2, max = 255)
     private String localFesta;
     
@@ -82,7 +80,7 @@ public class ContatoEvento implements Serializable, ModelInterface{
     
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataContato;
+    private Date dataContato = new Date();
     
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
