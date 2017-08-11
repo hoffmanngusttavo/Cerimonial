@@ -117,14 +117,13 @@
                                 <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
                                               mode="simple" 
                                               skinSimple="true"
-                                              label="Selecione"
+                                              label="Selecione Arquivo"
                                               />
 
                                 <p:commandButton icon="fa fa-download" 
                                                  styleClass="bt-acoes"
                                                  process="@this"
                                                  rendered="#{ModeloPropostaCrudMB.entity.arquivo != null}"
-                                                 rendered="false"
                                                  title="Baixar Arquivo"
                                                  actionListener="#{ModeloPropostaCrudMB.baixarArquivo()}"
                                                  ajax="false"
@@ -166,6 +165,7 @@
                                  action="#{ModeloPropostaCrudMB.save()}"
                                  onclick="validaFormularioUsuario()"
                                  icon="fa fa-check" 
+                                 ajax="false"
                                  class="btn btn-success"
                                  style="margin-left: 10px;"
                                  onstart="PF('statusDialog').show();"

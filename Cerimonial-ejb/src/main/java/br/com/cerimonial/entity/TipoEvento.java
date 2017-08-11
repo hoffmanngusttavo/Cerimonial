@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,9 +40,6 @@ import org.hibernate.envers.Audited;
 @Audited
 public class TipoEvento implements Serializable, ModelInterface {
     
-    
-    
-    
     @Id
     @GeneratedValue(generator = "GENERATE_TipoEvento", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_TipoEvento", sequenceName = "TipoEvento_pk_seq", allocationSize = 1)
@@ -55,6 +54,8 @@ public class TipoEvento implements Serializable, ModelInterface {
     private boolean ativo = true;
     
     @NotNull(message = "A categoria não pode ser nula")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private CategoriaEvento categoria = CategoriaEvento.CASAMENTO;
     
     @ManyToOne(fetch = FetchType.LAZY)

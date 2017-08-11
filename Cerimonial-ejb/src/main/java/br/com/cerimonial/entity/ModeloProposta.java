@@ -60,7 +60,6 @@ public class ModeloProposta implements Serializable, ModelInterface {
     private boolean ativo = true;
 
     @NotNull(message = "O tipo de evento não pode ser nulo")
-    @Valid
     @ManyToOne
     private TipoEvento tipoEvento;
 

@@ -26,6 +26,7 @@ import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 /**
  *
@@ -35,8 +36,6 @@ import org.hibernate.envers.Audited;
 @Audited
 public class Arquivo implements Serializable, ModelInterface {
     
-    
-
     @Id
     @GeneratedValue(generator = "GENERATE_Arquivo", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Arquivo", sequenceName = "Arquivo_pk_seq", allocationSize = 1)
@@ -51,6 +50,7 @@ public class Arquivo implements Serializable, ModelInterface {
     private String extensao;
 
     @NotNull(message = "O conteúdo desse arquivo não pode ser nulo")
+    @NotAudited 
     @Column
     private byte[] conteudo;
 
@@ -64,6 +64,7 @@ public class Arquivo implements Serializable, ModelInterface {
     private List<ModeloProposta> modelosPropostas;
 
     public Arquivo() {
+        
     }
 
     public Arquivo(String nome, String extensao, byte[] conteudo) {

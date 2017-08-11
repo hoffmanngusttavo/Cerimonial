@@ -26,6 +26,7 @@ import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.shiro.SecurityUtils;
@@ -51,16 +52,20 @@ public class ContatoEvento implements Serializable, ModelInterface{
     
     @Column(nullable = false)
     @NotNull
-    private String telefoneContato;
+    private String telefonePrincipal;
     
     @Column
-    private String emailContato;
+    private String telefoneSecundario;
     
     @Column(nullable = false)
+    @NotNull
+    private String emailContato;
+    
+    @Column
     @Size(min = 2, max = 255)
     private String localEvento;
     
-    @Column(nullable = false)
+    @Column
     @Size(min = 2, max = 255)
     private String localFesta;
     
@@ -70,11 +75,11 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
     
-    @Column(nullable = false)
+    @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataEvento;
     
-    @Column(nullable = false)
+    @Column
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date horaEvento;
     
@@ -89,6 +94,8 @@ public class ContatoEvento implements Serializable, ModelInterface{
     private Integer quantidadeConvidados;
     
     @ManyToOne
+    @NotNull
+    @Valid
     private TipoEvento tipoEvento;
     
     @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY)
@@ -138,13 +145,23 @@ public class ContatoEvento implements Serializable, ModelInterface{
         this.nomeContato = nomeContato;
     }
 
-    public String getTelefoneContato() {
-        return telefoneContato;
+    public String getTelefonePrincipal() {
+        return telefonePrincipal;
     }
 
-    public void setTelefoneContato(String telefoneContato) {
-        this.telefoneContato = telefoneContato;
+    public void setTelefonePrincipal(String telefonePrincipal) {
+        this.telefonePrincipal = telefonePrincipal;
     }
+
+    public String getTelefoneSecundario() {
+        return telefoneSecundario;
+    }
+
+    public void setTelefoneSecundario(String telefoneSecundario) {
+        this.telefoneSecundario = telefoneSecundario;
+    }
+
+   
 
     public String getEmailContato() {
         return emailContato;
