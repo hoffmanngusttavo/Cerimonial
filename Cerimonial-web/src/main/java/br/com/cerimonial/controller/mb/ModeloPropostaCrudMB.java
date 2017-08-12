@@ -10,6 +10,8 @@ import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.service.ModeloPropostaService;
+import br.com.cerimonial.service.report.Relatorio;
+import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +85,7 @@ public class ModeloPropostaCrudMB extends BasicControl{
             if (entity != null) {
                 
                 if (file != null && file.getSize() > 0) {
-                    entity.adicionarAnexo(new Arquivo(file.getFileName(), file.getContentType(), file.getContents()));
+                    entity.setArquivo(new Arquivo(file.getFileName(), file.getContentType(), file.getContents()));
                 }
                 
                 service.save(entity);
@@ -107,9 +109,7 @@ public class ModeloPropostaCrudMB extends BasicControl{
      */
     public String baixarArquivo() {
         try {
-//            byte[] propostaPdf = orcamentoService.getPDFOrcamento(proposta);
-//            String fileName = "orcamento_"+proposta.getId().toString();
-//            Relatorio.exportarPdf(propostaPdf, fileName);
+            ArquivoUtils.carregarArquivo(entity.getArquivo());
         } catch (Exception e) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
             createFacesErrorMessage(e.getMessage());

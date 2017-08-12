@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -73,7 +74,7 @@ public class ModeloProposta implements Serializable, ModelInterface {
     @Column(precision = 16, scale = 2)
     private BigDecimal valorProposta = BigDecimal.ZERO;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Arquivo> anexos;
 
     @OneToMany(mappedBy = "modeloProposta", fetch = FetchType.LAZY)
@@ -155,6 +156,11 @@ public class ModeloProposta implements Serializable, ModelInterface {
 
     public void setOrcamentos(List<OrcamentoEvento> orcamentos) {
         this.orcamentos = orcamentos;
+    }
+    
+    public void setArquivo(Arquivo file) {
+       anexos =  anexos = new ArrayList<>();
+       adicionarAnexo(file);
     }
 
     public Arquivo getArquivo() {

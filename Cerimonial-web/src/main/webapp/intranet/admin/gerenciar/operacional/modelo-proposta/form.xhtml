@@ -77,6 +77,37 @@
                         </div>
 
                         <div class="row">
+                            <div class="form-group col-md-6">
+                                <label style="width: 100%;">Anexo
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+                                
+                                <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
+                                              mode="simple" 
+                                              skinSimple="true"
+                                              label="Selecione Arquivo"/>
+
+                                <h:panelGroup rendered="#{ModeloPropostaCrudMB.entity.arquivo != null}">
+
+                                    <p:commandButton icon="fa fa-download" 
+                                                     styleClass="bt-acoes"
+                                                     process="@this"
+                                                     title="Baixar Arquivo"
+                                                     actionListener="#{ModeloPropostaCrudMB.baixarArquivo()}"
+                                                     ajax="false"
+                                                     immediate="true"
+                                                     onstart="PF('statusDialog').show();"
+                                                     oncomplete="PF('statusDialog').hide();"/>
+                                    
+                                    <label>#{ModeloPropostaCrudMB.entity.arquivo.nome}</label>
+                                </h:panelGroup>
+
+
+                            </div>
+                            
+                            
                             <div class="form-group col-md-3">
                                 <label>Valor Proposta
                                     <span class="asteriskField">
@@ -107,32 +138,11 @@
                                                          class="checkbox-inline"
                                                          id="inptAtivo"/>
                             </div>
+                            
+                            
                         </div>
 
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label>Anexo
-                                </label>
-
-                                <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
-                                              mode="simple" 
-                                              skinSimple="true"
-                                              label="Selecione Arquivo"
-                                              />
-
-                                <p:commandButton icon="fa fa-download" 
-                                                 styleClass="bt-acoes"
-                                                 process="@this"
-                                                 rendered="#{ModeloPropostaCrudMB.entity.arquivo != null}"
-                                                 title="Baixar Arquivo"
-                                                 actionListener="#{ModeloPropostaCrudMB.baixarArquivo()}"
-                                                 ajax="false"
-                                                 immediate="true"
-                                                 onstart="PF('statusDialog').show();"
-                                                 oncomplete="PF('statusDialog').hide();"/>
-
-                            </div>
-                        </div>
+                        
 
                         <div class="row">
                             <div class="form-group col-md-12">

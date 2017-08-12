@@ -5,13 +5,16 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.repository.ModeloPropostaRepository;
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -31,6 +34,9 @@ import javax.ejb.TransactionManagementType;
 public class ModeloPropostaService extends BasicService<ModeloProposta>{
     
     private ModeloPropostaRepository repository;
+    
+    @EJB
+    private ArquivoService arquivoService;
 
     @PostConstruct
     @PostActivate
@@ -46,6 +52,15 @@ public class ModeloPropostaService extends BasicService<ModeloProposta>{
     @Override
     public ModeloProposta save(ModeloProposta entity) throws Exception {
         if (entity != null) {
+
+            //salvar arquivo
+            if(entity.getArquivo() != null){
+                //remover os arquivos antigos
+                removerArquivosAntigosProposta(entity);
+                arquivoService.save(entity.getArquivo());
+            }
+            
+            //salvar ModeloProposta
             if (entity.getId() == null) {
                 return repository.create(entity);
             } else {
@@ -53,6 +68,21 @@ public class ModeloPropostaService extends BasicService<ModeloProposta>{
             }
         }
         return null;
+    }
+    
+    private void removerArquivosAntigosProposta(ModeloProposta entity) {
+        if (entity.getArquivo().getId() == null && entity.getId() != null) {
+            List<Arquivo> arquivosAntigos = arquivoService.getArquivosByModeloProposta(entity);
+            if (CerimonialUtils.isListNotBlank(arquivosAntigos)) {
+                arquivosAntigos.stream().forEach((arquivosAntigo) -> {
+                    try {
+                        arquivoService.delete(arquivosAntigo);
+                    } catch (Exception ex) {
+                        Logger.getLogger(ModeloPropostaService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+            }
+        }
     }
 
     public List<ModeloProposta> findAll() {
