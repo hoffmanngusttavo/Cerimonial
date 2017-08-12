@@ -252,10 +252,16 @@ public class ContatoInicialCrudMB extends BasicControl {
         return lazyLista;
     }
 
+    /**
+     *Evento vindo da tela de form, quando seleciona um modelo de proposta
+     */
     public void carregarDadosProposta() {
-
-        orcamento = orcamentoService.carregarPropostaModelo(orcamento, orcamento.getModeloProposta());
-
+        try {
+            orcamento = orcamentoService.carregarPropostaModelo(orcamento, orcamento.getModeloProposta());
+        } catch (Exception ex) {
+            Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
+        }
     }
 
     public List<SelectItem> getComboTipoEvento() {

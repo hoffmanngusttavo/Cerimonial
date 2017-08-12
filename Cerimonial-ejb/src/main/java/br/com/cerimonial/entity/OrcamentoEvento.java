@@ -5,12 +5,16 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,6 +22,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -72,6 +77,9 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<Arquivo> anexos;
 
     public OrcamentoEvento(ContatoEvento contatoEvento) {
         this.contatoEvento = contatoEvento;
@@ -175,35 +183,38 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     public void setPropostaAceita(boolean propostaAceita) {
         this.propostaAceita = propostaAceita;
     }
-    
-    
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+    public List<Arquivo> getAnexos() {
+        return anexos;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OrcamentoEvento)) {
-            return false;
+    public void setAnexos(List<Arquivo> anexos) {
+        this.anexos = anexos;
+    }
+    
+     public void setArquivo(Arquivo file) {
+       anexos =  anexos = new ArrayList<>();
+       adicionarAnexo(file);
+    }
+
+    public Arquivo getArquivo() {
+        if (CerimonialUtils.isListNotBlank(anexos)) {
+            return anexos.get(0);
         }
-        OrcamentoEvento other = (OrcamentoEvento) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return null;
     }
 
-    @Override
-    public String toString() {
-        return "br.com.cerimonial.entity.OrcamentoEvento[ id=" + id + " ]";
+    public void adicionarAnexo(Arquivo arquivo) {
+        if (arquivo != null) {
+
+            if (anexos == null) {
+                anexos = new ArrayList<>();
+            }
+            anexos.add(arquivo);
+        }
     }
-    
-    @PrePersist
+
+     @PrePersist
     @Override
     public void prePersistEntity() {
         try {
@@ -236,4 +247,37 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
         }
     }
     
+    
+    
+    
+    
+    
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof OrcamentoEvento)) {
+            return false;
+        }
+        OrcamentoEvento other = (OrcamentoEvento) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "br.com.cerimonial.entity.OrcamentoEvento[ id=" + id + " ]";
+    }
+
+   
+    
+   
 }

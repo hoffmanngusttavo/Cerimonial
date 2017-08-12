@@ -83,31 +83,41 @@
                                         *
                                     </span>
                                 </label>
-                                
+
                                 <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
                                               mode="simple" 
                                               skinSimple="true"
                                               label="Selecione Arquivo"/>
+                                <h:panelGroup id="groupFile">
+                                    <h:panelGroup rendered="#{ModeloPropostaCrudMB.entity.arquivo != null}">
+                                        <p:commandButton icon="fa fa-download" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         title="Baixar Arquivo"
+                                                         actionListener="#{ModeloPropostaCrudMB.baixarArquivo()}"
+                                                         ajax="false"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
 
-                                <h:panelGroup rendered="#{ModeloPropostaCrudMB.entity.arquivo != null}">
+                                        <label>#{ModeloPropostaCrudMB.entity.arquivo.nome}</label>
 
-                                    <p:commandButton icon="fa fa-download" 
-                                                     styleClass="bt-acoes"
-                                                     process="@this"
-                                                     title="Baixar Arquivo"
-                                                     actionListener="#{ModeloPropostaCrudMB.baixarArquivo()}"
-                                                     ajax="false"
-                                                     immediate="true"
-                                                     onstart="PF('statusDialog').show();"
-                                                     oncomplete="PF('statusDialog').hide();"/>
-                                    
-                                    <label>#{ModeloPropostaCrudMB.entity.arquivo.nome}</label>
+                                        <p:commandButton icon="fa fa-trash" 
+                                                         styleClass="bt-acoes"
+                                                         title="Remover anexo"
+                                                         actionListener="#{ModeloPropostaCrudMB.removerArquivo()}"
+                                                         process="@this"
+                                                         update=":form:groupFile"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
+                                    </h:panelGroup>
                                 </h:panelGroup>
 
 
                             </div>
-                            
-                            
+
+
                             <div class="form-group col-md-3">
                                 <label>Valor Proposta
                                     <span class="asteriskField">
@@ -138,11 +148,11 @@
                                                          class="checkbox-inline"
                                                          id="inptAtivo"/>
                             </div>
-                            
-                            
+
+
                         </div>
 
-                        
+
 
                         <div class="row">
                             <div class="form-group col-md-12">

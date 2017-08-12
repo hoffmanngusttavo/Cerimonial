@@ -9,8 +9,8 @@ import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
+import br.com.cerimonial.service.ArquivoService;
 import br.com.cerimonial.service.ModeloPropostaService;
-import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
@@ -32,14 +32,18 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean(name = "ModeloPropostaCrudMB")
 @ViewScoped
-public class ModeloPropostaCrudMB extends BasicControl{
-    
+public class ModeloPropostaCrudMB extends BasicControl {
+
     private LazyDataModel<ModeloProposta> lazyLista;
     private Long id;
     private ModeloProposta entity;
     private UploadedFile file;
+
     @EJB
     private ModeloPropostaService service;
+    @EJB
+    private ArquivoService arquivoService;
+
     private AbstractFilter filtros;
     private SelectItemUtils selectItemUtils;
 
@@ -58,10 +62,10 @@ public class ModeloPropostaCrudMB extends BasicControl{
         } else {
             entity = new ModeloProposta();
         }
-        
-         this.selectItemUtils = new SelectItemUtils();
+
+        this.selectItemUtils = new SelectItemUtils();
     }
-    
+
     /**
      * Evento invocado pela tela de listagem para remover os itens selecionados
      */
@@ -75,19 +79,21 @@ public class ModeloPropostaCrudMB extends BasicControl{
             createFacesErrorMessage(ex.getMessage());
         }
     }
-    
+
     /**
-     *Evento invocado pela tela de form para salvar um novo ou edicao de um fornecedor
-     * @return 
+     * Evento invocado pela tela de form para salvar um novo ou edicao de um
+     * fornecedor
+     *
+     * @return
      */
     public synchronized String save() {
         try {
             if (entity != null) {
-                
+
                 if (file != null && file.getSize() > 0) {
                     entity.setArquivo(new Arquivo(file.getFileName(), file.getContentType(), file.getContents()));
                 }
-                
+
                 service.save(entity);
                 createFacesInfoMessage("Dados gravados com sucesso!");
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -101,26 +107,38 @@ public class ModeloPropostaCrudMB extends BasicControl{
         }
         return null;
     }
-    
+
     /**
      * Evento invocado pela tela de form para fazer download do arquivo
      *
-     * @return 
      */
-    public String baixarArquivo() {
+    public void baixarArquivo() {
         try {
             ArquivoUtils.carregarArquivo(entity.getArquivo());
         } catch (Exception e) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
             createFacesErrorMessage(e.getMessage());
         }
-        return null;
     }
-    
-    
+
     /**
-     *Evento invocado pela tela de index para listar os clientes
-     * @return 
+     * Evento invocado pela tela de form para remover download do arquivo
+     * TODO[FIXME]
+     */
+    public void removerArquivo() {
+        try {
+            entity.setArquivo(null);
+            createFacesInfoMessage("Anexo removido, clique em salvar para concluir a remoção");
+        } catch (Exception e) {
+            Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getMessage());
+        }
+    }
+
+    /**
+     * Evento invocado pela tela de index para listar os clientes
+     *
+     * @return
      */
     public LazyDataModel<ModeloProposta> getLazyDataModel() {
 
@@ -165,7 +183,7 @@ public class ModeloPropostaCrudMB extends BasicControl{
         }
         return lazyLista;
     }
-    
+
     public List<SelectItem> getComboTipoEvento() {
         return selectItemUtils.getComboTipoEvento();
     }
@@ -210,7 +228,4 @@ public class ModeloPropostaCrudMB extends BasicControl{
         this.file = file;
     }
 
-    
-    
-    
 }

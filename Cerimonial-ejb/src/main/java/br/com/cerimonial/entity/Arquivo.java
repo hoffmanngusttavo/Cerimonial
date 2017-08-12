@@ -35,22 +35,22 @@ import org.hibernate.envers.NotAudited;
 @Entity
 @Audited
 public class Arquivo implements Serializable, ModelInterface {
-    
+
     @Id
     @GeneratedValue(generator = "GENERATE_Arquivo", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Arquivo", sequenceName = "Arquivo_pk_seq", allocationSize = 1)
     private Long id;
-    
+
     @NotNull(message = "O nome desse arquivo não pode ser nulo")
     @Column
     private String nome;
-    
+
     @NotNull(message = "A extensão não pode ser nula")
     @Column
     private String extensao;
 
     @NotNull(message = "O conteúdo desse arquivo não pode ser nulo")
-    @NotAudited 
+    @NotAudited
     @Column
     private byte[] conteudo;
 
@@ -59,12 +59,14 @@ public class Arquivo implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    
+
     @ManyToMany(mappedBy = "anexos")
     private List<ModeloProposta> modelosPropostas;
+    @ManyToMany(mappedBy = "anexos")
+    private List<OrcamentoEvento> orcamentos;
 
     public Arquivo() {
-        
+
     }
 
     public Arquivo(String nome, String extensao, byte[] conteudo) {
@@ -73,7 +75,6 @@ public class Arquivo implements Serializable, ModelInterface {
         this.conteudo = conteudo;
     }
 
-    
     @Override
     public Long getId() {
         return id;
@@ -136,8 +137,22 @@ public class Arquivo implements Serializable, ModelInterface {
         this.extensao = extensao;
     }
 
-   
+    public List<OrcamentoEvento> getOrcamentos() {
+        return orcamentos;
+    }
+
+    public void setOrcamentos(List<OrcamentoEvento> orcamentos) {
+        this.orcamentos = orcamentos;
+    }
     
+    
+
+    public Arquivo clonar(Arquivo file) {
+        if (file != null) {
+            return new Arquivo(file.getNome(), file.getExtensao(), file.getConteudo());
+        }
+        return null;
+    }
 
     @PrePersist
     @Override

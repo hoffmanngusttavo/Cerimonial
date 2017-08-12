@@ -31,10 +31,10 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ModeloPropostaService extends BasicService<ModeloProposta>{
-    
+public class ModeloPropostaService extends BasicService<ModeloProposta> {
+
     private ModeloPropostaRepository repository;
-    
+
     @EJB
     private ArquivoService arquivoService;
 
@@ -54,12 +54,12 @@ public class ModeloPropostaService extends BasicService<ModeloProposta>{
         if (entity != null) {
 
             //salvar arquivo
-            if(entity.getArquivo() != null){
+            if (entity.getArquivo() != null) {
                 //remover os arquivos antigos
                 removerArquivosAntigosProposta(entity);
                 arquivoService.save(entity.getArquivo());
             }
-            
+
             //salvar ModeloProposta
             if (entity.getId() == null) {
                 return repository.create(entity);
@@ -69,8 +69,9 @@ public class ModeloPropostaService extends BasicService<ModeloProposta>{
         }
         return null;
     }
-    
+
     private void removerArquivosAntigosProposta(ModeloProposta entity) {
+        
         if (entity.getArquivo().getId() == null && entity.getId() != null) {
             List<Arquivo> arquivosAntigos = arquivoService.getArquivosByModeloProposta(entity);
             if (CerimonialUtils.isListNotBlank(arquivosAntigos)) {
@@ -85,6 +86,8 @@ public class ModeloPropostaService extends BasicService<ModeloProposta>{
         }
     }
 
+   
+    
     public List<ModeloProposta> findAll() {
         try {
             return repository.findAll();
@@ -117,4 +120,5 @@ public class ModeloPropostaService extends BasicService<ModeloProposta>{
     }
 
     
+
 }

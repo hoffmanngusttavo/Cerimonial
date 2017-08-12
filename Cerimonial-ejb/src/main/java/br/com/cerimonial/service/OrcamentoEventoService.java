@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.service.report.Relatorio;
@@ -107,14 +108,25 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         return null;
     }
 
-    public OrcamentoEvento carregarPropostaModelo(OrcamentoEvento orcamento, ModeloProposta modelo) {
-
+    /**
+     * Vai carregar os dados para um orçamento a partir de um modelo selecionado
+     * @param orcamento
+     * @param modelo
+     * @return 
+     * @throws java.lang.Exception 
+     */
+    public OrcamentoEvento carregarPropostaModelo(OrcamentoEvento orcamento, ModeloProposta modelo) throws Exception{
+        
         if (orcamento != null && modelo != null) {
             orcamento.setModeloProposta(modelo);
             orcamento.setProposta(modelo.getConteudo());
             orcamento.setValorProposta(modelo.getValorProposta() != null ? modelo.getValorProposta().doubleValue() : 0);
+            if(modelo.getAnexos() != null){
+                modelo.getAnexos().stream().forEach((Arquivo file) -> {
+                    orcamento.adicionarAnexo(file.clonar(file));
+                });
+            }
         }
-
         return orcamento;
     }
 
