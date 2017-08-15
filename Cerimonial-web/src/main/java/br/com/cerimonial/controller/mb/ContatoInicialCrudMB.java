@@ -10,10 +10,10 @@ import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.TipoIndicacao;
-import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.OrcamentoEventoService;
 import br.com.cerimonial.service.TipoIndicacaoService;
+import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
@@ -27,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -44,6 +45,7 @@ public class ContatoInicialCrudMB extends BasicControl {
     protected List<ContatoEvento> itensSelecionados;
     protected AbstractFilter filtros;
     protected SelectItemUtils selectItemUtils;
+    protected UploadedFile file;
 
     @EJB
     protected ContatoEventoService service;
@@ -74,6 +76,10 @@ public class ContatoInicialCrudMB extends BasicControl {
         this.selectItemUtils = new SelectItemUtils();
     }
 
+    /**
+     * Método invocado pelo botão de criar nova proposta
+     * na tela de form
+     */
     public void instanciarOrcamento() {
         orcamento = new OrcamentoEvento(entity);
         cadastrarOrcamento = true;
@@ -117,7 +123,8 @@ public class ContatoInicialCrudMB extends BasicControl {
     }
 
     /**
-     * Evento invocado pela tela de form para salvar um novo orçamento
+     * Evento invocado pela tela de form para salvar no banco um novo orçamento
+     * e depois recarregar todos as propostas
      *
      */
     public synchronized void saveOrcamento() {
@@ -146,7 +153,7 @@ public class ContatoInicialCrudMB extends BasicControl {
             orcamentoService.delete(orcamento);
             entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
             orcamento = null;
-            createFacesInfoMessage("Orçamento gravado com sucesso!");
+            createFacesInfoMessage("Orçamento removido com sucesso!");
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -185,22 +192,46 @@ public class ContatoInicialCrudMB extends BasicControl {
         }
     }
     
-     /**
+    /**
      * Evento invocado pela tela de form para fazer download do arquivo
      *
-     * @param proposta
-     * @return 
      */
-    public String baixarArquivoOrcamento(OrcamentoEvento proposta) {
+    public void baixarArquivoOrcamento() {
         try {
-            byte[] propostaPdf = orcamentoService.getPDFOrcamento(proposta);
-            String fileName = "orcamento_"+proposta.getId().toString();
-            Relatorio.exportarPdf(propostaPdf, fileName);
+            ArquivoUtils.carregarArquivo(orcamento.getArquivo());
         } catch (Exception e) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
             createFacesErrorMessage(e.getMessage());
         }
-        return null;
+    }
+    
+    /**
+     * Evento invocado pela tela de form para fazer download do arquivo
+     *
+     * @param orcamentoEvento
+     */
+    public void baixarArquivoOrcamento(OrcamentoEvento orcamentoEvento) {
+        try {
+            if(orcamentoEvento != null){
+                ArquivoUtils.carregarArquivo(orcamentoEvento.getArquivo());
+            }
+        } catch (Exception e) {
+            Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getMessage());
+        }
+    }
+
+    /**
+     * Evento invocado pela tela de form para remover download do arquivo
+     */
+    public void removerArquivoOrcamento() {
+        try {
+            orcamento.setArquivo(null);
+            createFacesInfoMessage("Anexo removido, clique em salvar para concluir a remoção");
+        } catch (Exception e) {
+            Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getMessage());
+        }
     }
 
     /**
@@ -330,6 +361,14 @@ public class ContatoInicialCrudMB extends BasicControl {
 
     public void setCadastrarOrcamento(boolean cadastrarOrcamento) {
         this.cadastrarOrcamento = cadastrarOrcamento;
+    }
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
     }
 
     

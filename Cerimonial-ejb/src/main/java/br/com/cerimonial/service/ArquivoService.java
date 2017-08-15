@@ -6,10 +6,8 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
-import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.repository.ArquivoRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,7 +61,9 @@ public class ArquivoService extends BasicService<Arquivo> {
 
     public List<Arquivo> getArquivosByModeloProposta(ModeloProposta entity) {
         try {
-            return repository.getArquivosByModeloProposta(entity);
+            if(entity != null && entity.getId() != null){
+                return repository.getArquivosByModeloProposta(entity);
+            }
         } catch (Exception ex) {
             Logger.getLogger(ArquivoService.class.getName()).log(Level.SEVERE, null, ex);
         }

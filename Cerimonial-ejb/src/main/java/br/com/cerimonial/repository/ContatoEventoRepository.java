@@ -37,6 +37,9 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
                     if(item.getModeloProposta() != null){
                         item.getModeloProposta().getId();
                     }
+                    if(item.getAnexos() != null){
+                        item.getAnexos().size();
+                    }
                 });
             }
         }

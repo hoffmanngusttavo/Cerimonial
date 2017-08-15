@@ -62,11 +62,9 @@ public class ContatoEvento implements Serializable, ModelInterface{
     private String emailContato;
     
     @Column
-    @Size(min = 2, max = 255)
     private String localEvento;
     
     @Column
-    @Size(min = 2, max = 255)
     private String localFesta;
     
     @Column(columnDefinition = "TEXT")
@@ -94,7 +92,7 @@ public class ContatoEvento implements Serializable, ModelInterface{
     private Integer quantidadeConvidados;
     
     @ManyToOne
-    @NotNull
+    @NotNull(message = "Tipo de Evento não pode ser nulo")
     @Valid
     private TipoEvento tipoEvento;
     

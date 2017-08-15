@@ -11,6 +11,7 @@ import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
 import br.com.cerimonial.service.invoice.InvoiceUtils;
+import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.EmailHelper;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -48,6 +49,8 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
     @EJB
     protected ConfiguracaoEmailService configuracaoEmailService;
+    @EJB
+    protected ArquivoService arquivoService;
 
     @PostConstruct
     @PostActivate
@@ -67,6 +70,11 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
             if (entity.getContatoEvento() == null) {
                 throw new Exception("Você precisa associar um contato inicial primeiro");
             }
+            
+            //salvar arquivo
+            if (entity.getArquivo() != null) {
+                arquivoService.save(entity.getArquivo());
+            }
 
             if (entity.getId() == null) {
                 return repository.create(entity);
@@ -76,6 +84,9 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         }
         return null;
     }
+    
+    
+  
 
     public List<OrcamentoEvento> findAll() {
         try {
@@ -121,8 +132,10 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
             orcamento.setModeloProposta(modelo);
             orcamento.setProposta(modelo.getConteudo());
             orcamento.setValorProposta(modelo.getValorProposta() != null ? modelo.getValorProposta().doubleValue() : 0);
-            if(modelo.getAnexos() != null){
-                modelo.getAnexos().stream().forEach((Arquivo file) -> {
+            List<Arquivo> arquivosByModeloProposta = arquivoService.getArquivosByModeloProposta(modelo);
+            orcamento.setArquivo(null);
+            if(CerimonialUtils.isListNotBlank(arquivosByModeloProposta)){
+                arquivosByModeloProposta.stream().forEach((Arquivo file) -> {
                     orcamento.adicionarAnexo(file.clonar(file));
                 });
             }
@@ -130,6 +143,11 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         return orcamento;
     }
 
+    /**
+     * 
+     * @param id do ContatoEvento
+     * @return Uma lista de orçamentos/propostas de um contato
+     */
     public List<OrcamentoEvento> findAllByContatoId(Long id) {
         if (id != null) {
             try {

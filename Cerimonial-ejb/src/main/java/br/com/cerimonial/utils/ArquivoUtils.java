@@ -19,8 +19,12 @@ public class ArquivoUtils {
     
     
     
-    public static void carregarArquivo(Arquivo arquivo) throws IOException {
+    public static void carregarArquivo(Arquivo arquivo) throws Exception {
 
+        if(arquivo == null){
+            throw new Exception("Arquivo nulo");
+        }
+        
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
         ec.responseReset();

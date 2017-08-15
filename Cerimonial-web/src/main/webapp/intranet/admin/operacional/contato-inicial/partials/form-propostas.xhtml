@@ -1,0 +1,415 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:composition>     
+
+        <div class="row">
+            <div class="form-group col-md-3">
+                <h2>Proposta/Orçamento</h2>
+            </div>
+        </div>
+        <h:panelGroup id="groupOrcamento">
+            <h:panelGroup rendered="#{ContatoInicialCrudMB.cadastrarOrcamento}">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Tipo de Evento
+                            <span class="asteriskField">
+                                *
+                            </span>
+                        </label>
+                        <p:inputText value="#{ContatoInicialCrudMB.entity.tipoEvento.nome}" 
+                                     class="form-control"
+                                     disabled="true"
+                                     label="Email"/>
+
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label ">Modelo de Propostas
+                            <span class="asteriskField">
+                                *
+                            </span>
+                        </label>
+                        <h:selectOneMenu id="inptModeloProposta" 
+                                         value="#{ContatoInicialCrudMB.orcamento.modeloProposta}"
+                                         converter="EntityConverter"
+                                         required="true"
+                                         requiredMessage="Preencha um modelo de proposta válido"
+                                         class="form-control"
+                                         label="Tipo de Evento">
+                            <f:selectItem itemValue="" 
+                                          itemLabel="Selecione" /> 
+                            <f:selectItems value="#{ContatoInicialCrudMB.comboModelosProposta}" />
+                            <p:ajax process="@this"
+                                    update="groupOrcamento"
+                                    listener="#{ContatoInicialCrudMB.carregarDadosProposta}"
+                                    global="false"
+                                    event="change"
+                                    onstart="PF('statusDialog').show();"
+                                    oncomplete="PF('statusDialog').hide();"/>
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Valor
+                            <span class="asteriskField">
+                                *
+                            </span>
+                        </label>
+                        <h:panelGroup>
+                            <p:inputText value="#{ContatoInicialCrudMB.orcamento.valorProposta}" 
+                                         disabled="true"
+                                         class="form-control">
+                                <f:convertNumber maxFractionDigits="2"
+                                                 minFractionDigits="2"
+                                                 locale="pt_BR"/>
+                                <p:ajax process="@this"
+                                        update="@this"
+                                        global="false"/>
+                            </p:inputText>
+
+                            <p:commandButton icon="fa fa-pencil" 
+                                             styleClass="bt-acoes"
+                                             process="@this"
+                                             title="Alterar Valor"
+                                             actionListener="#{ContatoInicialCrudMB.alterarValorProposta()}"
+                                             update=":form:groupValorAlterado"
+                                             immediate="true"
+                                             onstart="PF('statusDialog').show();"
+                                             oncomplete="PF('statusDialog').hide();"/>
+                        </h:panelGroup>
+                    </div>
+
+                    <h:panelGroup id="groupValorAlterado">
+                        <h:panelGroup rendered="#{ContatoInicialCrudMB.orcamento.valorAlterado gt -1}">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Valor Alterado
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+                                    <p:inputText value="#{ContatoInicialCrudMB.orcamento.valorAlterado}" 
+                                                 class="form-control">
+                                        <f:convertNumber maxFractionDigits="2"
+                                                         minFractionDigits="2"
+                                                         locale="pt_BR"/>
+                                        <p:ajax process="@this"
+                                                update="@this"
+                                                global="false"/>
+                                    </p:inputText>
+                                    <p:commandButton icon="fa fa-times" 
+                                                     styleClass="bt-acoes"
+                                                     process="@this"
+                                                     title="Alterar Valor"
+                                                     actionListener="#{ContatoInicialCrudMB.cancelarAlterarValorProposta()}"
+                                                     update=":form:groupValorAlterado"
+                                                     immediate="true"
+                                                     onstart="PF('statusDialog').show();"
+                                                     oncomplete="PF('statusDialog').hide();"/>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label style="width: 100%;">Anexo
+                            <span class="asteriskField">
+                                *
+                            </span>
+                        </label>
+
+                        <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
+                                      mode="simple" 
+                                      skinSimple="true"
+                                      label="Selecione Arquivo"/>
+                        <h:panelGroup id="groupFile">
+                            <h:panelGroup rendered="#{ContatoInicialCrudMB.orcamento.arquivo != null}">
+                                <p:commandButton icon="fa fa-download" 
+                                                 styleClass="bt-acoes"
+                                                 process="@this"
+                                                 title="Baixar Arquivo"
+                                                 actionListener="#{ContatoInicialCrudMB.baixarArquivoOrcamento()}"
+                                                 ajax="false"
+                                                 immediate="true"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+
+                                <label>#{ContatoInicialCrudMB.orcamento.arquivo.nome}</label>
+
+                                <p:commandButton icon="fa fa-trash" 
+                                                 styleClass="bt-acoes"
+                                                 title="Remover anexo"
+                                                 actionListener="#{ContatoInicialCrudMB.removerArquivoOrcamento()}"
+                                                 process="@this"
+                                                 update=":form:groupFile"
+                                                 immediate="true"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="control-label ">Conteúdo
+                            <span class="asteriskField">
+                                *
+                            </span>
+                        </label>
+                        <p:editor value="#{ContatoInicialCrudMB.orcamento.proposta}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <p:commandButton value="Salvar Orçamento"
+                                     action="#{ContatoInicialCrudMB.saveOrcamento()}"
+                                     update="groupOrcamento"
+                                     ajax="false"
+                                     process="@this, groupOrcamento"
+                                     style="margin-right: 10px; float: right;"
+                                     icon="fa fa-check" 
+                                     class="btn btn-success"
+                                     onstart="PF('statusDialog').show();"
+                                     oncomplete="PF('statusDialog').hide();"/>
+
+                    <p:commandButton value="Cancelar"
+                                     immediate="true"
+                                     actionListener="#{ContatoInicialCrudMB.setCadastrarOrcamento(false)}"
+                                     process="@this"
+                                     style="margin-right: 10px; float: right;"
+                                     update="groupOrcamento"
+                                     class="btn btn-default"
+                                     icon="fa fa-close"/>
+
+                </div>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{!ContatoInicialCrudMB.cadastrarOrcamento}"
+                          id="groupPropostas">
+                <div class="row">
+                    <p:commandButton process="@this"
+                                     actionListener="#{ContatoInicialCrudMB.instanciarOrcamento()}"
+                                     id="btn-criar-orcamento"
+                                     update="groupOrcamento"
+                                     class="btn btn-info"
+                                     icon="fa fa-plus"
+                                     value="Criar Nova Proposta"/>
+
+                    <table class="table table-hover table-inverse table-striped table-responsive">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>#</th>
+                                <th>Modelo Proposta</th>
+                                <th>Valor</th>
+                                <th>Enviado por email</th>
+                                <th>Proposta Aceita</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <p:repeat value="#{ContatoInicialCrudMB.entity.propostas}" var="proposta">
+                                <tr>
+                                    <th scope="row">
+                                        <h:outputText value="#{proposta.id}"/>
+                                    </th>
+
+                                    <td>
+                                        <h:outputText value="#{proposta.modeloProposta.titulo}"/>
+                                    </td>
+
+                                    <td>
+                                        <h:outputText value="#{proposta.valorProposta}"
+                                                      rendered="#{proposta.valorAlterado lt 0}">
+                                            <f:convertNumber maxFractionDigits="2"
+                                                             minFractionDigits="2"
+                                                             locale="pt_BR"/>
+                                        </h:outputText>
+                                        <h:outputText value="#{proposta.valorAlterado}"
+                                                      rendered="#{proposta.valorAlterado gt -1}">
+                                            <f:convertNumber maxFractionDigits="2"
+                                                             minFractionDigits="2"
+                                                             locale="pt_BR"/>
+                                        </h:outputText>
+                                    </td>
+
+                                    <td>
+                                        <h:outputText value="#{proposta.propostaEnviada ? 'Sim': 'Não'}"/>
+                                    </td>
+
+                                    <td>
+                                        <h:outputText value="#{proposta.propostaAceita ? 'Sim': 'Não'}"/>
+                                    </td>
+
+                                    <td>
+                                        <p:commandButton icon="fa fa-edit" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         title="Visualizar Orçamento"
+                                                         actionListener="#{ContatoInicialCrudMB.setOrcamento(proposta)}"
+                                                         update=":form:groupOrcamentoDialog"
+                                                         oncomplete="$('#orcamentoDialogVar').modal('show');"/>
+
+                                        <p:commandButton icon="fa fa-send" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         title="Enviar E-mail"
+                                                         actionListener="#{ContatoInicialCrudMB.enviarPropostaEmail(proposta)}"
+                                                         update=":form:groupPropostas"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
+
+                                        <p:commandButton icon="fa fa-download" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         title="Baixar Arquivo"
+                                                         rendered="#{proposta.arquivo != null}"
+                                                         actionListener="#{ContatoInicialCrudMB.baixarArquivoOrcamento(proposta)}"
+                                                         ajax="false"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
+
+                                        <p:commandButton icon="fa fa-trash" 
+                                                         styleClass="bt-acoes"
+                                                         actionListener="#{ContatoInicialCrudMB.setOrcamento(proposta)}"
+                                                         process="@this"
+                                                         update=":form:groupRemove"
+                                                         immediate="true"
+                                                         oncomplete="$('#removeDialogVar').modal('show');"/>
+                                    </td>
+                                </tr>
+                            </p:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </h:panelGroup>
+        </h:panelGroup>
+
+        <div class="row">
+            <p:commandButton onclick="alteraEtapaContato(1)"
+                             process="@this"
+                             class="btn btn-info"
+                             icon="fa fa-arrow-left"
+                             value="Voltar Etapa"/>
+
+
+            <p:commandButton value="Voltar"
+                             immediate="true"
+                             action="index?faces-redirect=true"
+                             process="@this"
+                             class="btn btn-default"
+                             style="margin-left: 10px;"
+                             icon="fa fa-close"/>
+        </div>
+
+
+        <div class="modal fade" 
+             id="orcamentoDialogVar" tabindex="-1" 
+             role="dialog" aria-labelledby="myModal" 
+             aria-hidden="true" data-keyboard="false" 
+             data-backdrop="static">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <h:panelGroup id="groupOrcamentoDialog">
+                        <div class="modal-header modal-header-info">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Orçamento</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6 col-md-offset-6">
+                                        <h:outputText value="#{ContatoInicialCrudMB.orcamento.proposta}" 
+                                                      escape="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h:panelGroup layout="block" styleClass="modal-footer">
+                            <p:commandLink value="Fechar"
+                                           immediate="true" 
+                                           styleClass="btn btn-default" 
+                                           oncomplete="$('#orcamentoDialogVar').modal('hide');" />
+
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" 
+             id="removeDialogVar" tabindex="-1" 
+             role="dialog" aria-labelledby="myModal" 
+             aria-hidden="true" data-keyboard="false" 
+             data-backdrop="static">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <h:panelGroup id="groupRemove">
+                        <div class="modal-header modal-header-danger">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Deseja Remover ?</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="control-label ">Id
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3 col-md-offset-3">
+                                        <h:outputText value="#{ContatoInicialCrudMB.orcamento.id}" />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="control-label ">Valor
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3 col-md-offset-3">
+                                        <h:outputText value="#{ContatoInicialCrudMB.orcamento.valorProposta}" >
+                                            <f:convertNumber maxFractionDigits="2"
+                                                             minFractionDigits="2"
+                                                             locale="pt_BR"/>
+                                        </h:outputText>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h:panelGroup layout="block" styleClass="modal-footer">
+                            <p:commandLink value="Fechar"
+                                           immediate="true" 
+                                           styleClass="btn btn-default" 
+                                           oncomplete="$('#removeDialogVar').modal('hide');" />
+
+                            <p:commandLink value="Confirmar" 
+                                           action="#{ContatoInicialCrudMB.deleteOrcamento()}" 
+                                           update="groupPropostas"
+                                           styleClass="btn btn-primary"
+                                           process="groupRemove" 
+                                           onstart="PF('statusDialog').show();"
+                                           oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </div>
+            </div>
+        </div>
+
+
+    </ui:composition>
+</html>
+
