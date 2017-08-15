@@ -41,7 +41,7 @@ public class ContatoInicialCrudMB extends BasicControl {
     protected Long id;
     protected ContatoEvento entity;
     protected OrcamentoEvento orcamento;
-    protected boolean cadastrarOrcamento = false;
+    protected boolean abrirFormOrcamento = false;
     protected List<ContatoEvento> itensSelecionados;
     protected AbstractFilter filtros;
     protected SelectItemUtils selectItemUtils;
@@ -82,7 +82,7 @@ public class ContatoInicialCrudMB extends BasicControl {
      */
     public void instanciarOrcamento() {
         orcamento = new OrcamentoEvento(entity);
-        cadastrarOrcamento = true;
+        abrirFormOrcamento = true;
     }
 
     /**
@@ -132,7 +132,7 @@ public class ContatoInicialCrudMB extends BasicControl {
             orcamentoService.save(orcamento);
             entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
             orcamento = null;
-            cadastrarOrcamento = false;
+            abrirFormOrcamento = false;
             createFacesInfoMessage("Orçamento gravado com sucesso!");
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         } catch (Exception ex) {
@@ -171,7 +171,10 @@ public class ContatoInicialCrudMB extends BasicControl {
         orcamento.setValorAlterado(-1);
     }
     
-    
+    public void visualizarOrcamento(OrcamentoEvento orcamento) {
+        setOrcamento(orcamento);
+        
+    }
     
     /**
      * Evento invocado pela tela de form para enviar email
@@ -180,7 +183,6 @@ public class ContatoInicialCrudMB extends BasicControl {
      */
     public synchronized void enviarPropostaEmail(OrcamentoEvento proposta) {
         try {
-            proposta.setPropostaEnviada(true);
             orcamentoService.enviarOrcamentoEmail(proposta);
             createFacesInfoMessage("Proposta enviada com sucesso!");
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -355,14 +357,14 @@ public class ContatoInicialCrudMB extends BasicControl {
         this.orcamento = orcamento;
     }
 
-    public boolean isCadastrarOrcamento() {
-        return cadastrarOrcamento;
+    public boolean isAbrirFormOrcamento() {
+        return abrirFormOrcamento;
     }
 
-    public void setCadastrarOrcamento(boolean cadastrarOrcamento) {
-        this.cadastrarOrcamento = cadastrarOrcamento;
+    public void setAbrirFormOrcamento(boolean abrirFormOrcamento) {
+        this.abrirFormOrcamento = abrirFormOrcamento;
     }
-
+    
     public UploadedFile getFile() {
         return file;
     }

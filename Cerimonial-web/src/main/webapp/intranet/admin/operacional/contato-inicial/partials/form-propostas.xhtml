@@ -14,7 +14,7 @@
             </div>
         </div>
         <h:panelGroup id="groupOrcamento">
-            <h:panelGroup rendered="#{ContatoInicialCrudMB.cadastrarOrcamento}">
+            <h:panelGroup rendered="#{ContatoInicialCrudMB.abrirFormOrcamento}">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label>Tipo de Evento
@@ -37,6 +37,7 @@
                         </label>
                         <h:selectOneMenu id="inptModeloProposta" 
                                          value="#{ContatoInicialCrudMB.orcamento.modeloProposta}"
+                                         disabled="#{ContatoInicialCrudMB.orcamento.id != null}"
                                          converter="EntityConverter"
                                          required="true"
                                          requiredMessage="Preencha um modelo de proposta válido"
@@ -96,6 +97,7 @@
                                         </span>
                                     </label>
                                     <p:inputText value="#{ContatoInicialCrudMB.orcamento.valorAlterado}" 
+                                                 disabled="#{ContatoInicialCrudMB.orcamento.id != null}"
                                                  class="form-control">
                                         <f:convertNumber maxFractionDigits="2"
                                                          minFractionDigits="2"
@@ -107,6 +109,7 @@
                                     <p:commandButton icon="fa fa-times" 
                                                      styleClass="bt-acoes"
                                                      process="@this"
+                                                     disabled="#{ContatoInicialCrudMB.orcamento.id != null}"
                                                      title="Alterar Valor"
                                                      actionListener="#{ContatoInicialCrudMB.cancelarAlterarValorProposta()}"
                                                      update=":form:groupValorAlterado"
@@ -129,6 +132,7 @@
 
                         <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
                                       mode="simple" 
+                                      disabled="#{ContatoInicialCrudMB.orcamento.id != null}"
                                       skinSimple="true"
                                       label="Selecione Arquivo"/>
                         <h:panelGroup id="groupFile">
@@ -148,6 +152,7 @@
                                 <p:commandButton icon="fa fa-trash" 
                                                  styleClass="bt-acoes"
                                                  title="Remover anexo"
+                                                 disabled="#{ContatoInicialCrudMB.orcamento.id != null}"
                                                  actionListener="#{ContatoInicialCrudMB.removerArquivoOrcamento()}"
                                                  process="@this"
                                                  update=":form:groupFile"
@@ -166,11 +171,13 @@
                                 *
                             </span>
                         </label>
-                        <p:editor value="#{ContatoInicialCrudMB.orcamento.proposta}"/>
+                        <p:editor value="#{ContatoInicialCrudMB.orcamento.proposta}"
+                                  disabled="#{ContatoInicialCrudMB.orcamento.id != null}"/>
                     </div>
                 </div>
                 <div class="row">
                     <p:commandButton value="Salvar Orçamento"
+                                     rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
                                      action="#{ContatoInicialCrudMB.saveOrcamento()}"
                                      update="groupOrcamento"
                                      ajax="false"
@@ -181,9 +188,9 @@
                                      onstart="PF('statusDialog').show();"
                                      oncomplete="PF('statusDialog').hide();"/>
 
-                    <p:commandButton value="Cancelar"
+                    <p:commandButton value="Cancelar/Voltar"
                                      immediate="true"
-                                     actionListener="#{ContatoInicialCrudMB.setCadastrarOrcamento(false)}"
+                                     actionListener="#{ContatoInicialCrudMB.setAbrirFormOrcamento(false)}"
                                      process="@this"
                                      style="margin-right: 10px; float: right;"
                                      update="groupOrcamento"
@@ -193,7 +200,7 @@
                 </div>
             </h:panelGroup>
 
-            <h:panelGroup rendered="#{!ContatoInicialCrudMB.cadastrarOrcamento}"
+            <h:panelGroup rendered="#{!ContatoInicialCrudMB.abrirFormOrcamento}"
                           id="groupPropostas">
                 <div class="row">
                     <p:commandButton process="@this"
@@ -254,8 +261,8 @@
                                                          styleClass="bt-acoes"
                                                          process="@this"
                                                          title="Visualizar Orçamento"
-                                                         actionListener="#{ContatoInicialCrudMB.setOrcamento(proposta)}"
-                                                         update=":form:groupOrcamentoDialog"
+                                                         actionListener="#{ContatoInicialCrudMB.visualizarOrcamento(proposta)}"
+                                                         update=":form:groupOrcamento"
                                                          oncomplete="$('#orcamentoDialogVar').modal('show');"/>
 
                                         <p:commandButton icon="fa fa-send" 
@@ -312,42 +319,6 @@
                              icon="fa fa-close"/>
         </div>
 
-
-        <div class="modal fade" 
-             id="orcamentoDialogVar" tabindex="-1" 
-             role="dialog" aria-labelledby="myModal" 
-             aria-hidden="true" data-keyboard="false" 
-             data-backdrop="static">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <h:panelGroup id="groupOrcamentoDialog">
-                        <div class="modal-header modal-header-info">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title">Orçamento</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col-md-6 col-md-offset-6">
-                                        <h:outputText value="#{ContatoInicialCrudMB.orcamento.proposta}" 
-                                                      escape="false"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <h:panelGroup layout="block" styleClass="modal-footer">
-                            <p:commandLink value="Fechar"
-                                           immediate="true" 
-                                           styleClass="btn btn-default" 
-                                           oncomplete="$('#orcamentoDialogVar').modal('hide');" />
-
-                        </h:panelGroup>
-                    </h:panelGroup>
-                </div>
-            </div>
-        </div>
 
         <div class="modal fade" 
              id="removeDialogVar" tabindex="-1" 

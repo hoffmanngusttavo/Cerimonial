@@ -159,26 +159,41 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         return new ArrayList<>();
     }
 
+    /**
+     * Enviar por email a proposta com anexo se possuir
+     * @param proposta
+     * @throws java.lang.Exception
+     */
     public void enviarOrcamentoEmail(OrcamentoEvento proposta) throws Exception {
 
         if (proposta == null) {
             throw new Exception("Objeto nulo");
         }
 
-        byte[] pdfProposta = getPDFOrcamento(proposta);
-
+        //carregar invoice padrao
         String body = InvoiceUtils.readFileToString("invoice.html");
         body = body.replaceAll("@@@NOME_CLIENTE@@@", proposta.getContatoEvento().getNomeContato());
         body = body.replaceAll("@@@PARCELA_DATA@@@", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         body = body.replaceAll("@@@PARCELA_VALOR@@@", new DecimalFormat("#0.00").format(proposta.getValorProposta()));
 
+        //anexar dados emmail
         HashMap<String, Object> anexos = new HashMap<>();
-        anexos.put(proposta.getProposta(), pdfProposta);
-
+        if(proposta.getAnexos() != null){
+            proposta.getAnexos().stream().forEach((file) -> {
+                anexos.put(file.getId().toString(), file);
+            });
+        }
+        
+        //enviar email
         EmailHelper emailHelper = new EmailHelper(configuracaoEmailService);
         emailHelper.enviarEmail(proposta.getContatoEvento().getEmailContato(), "Proposta/Orçamento", body, anexos);
+        
+        //atualizar no banco que foi enviado o email com sucesso
+        proposta.setPropostaEnviada(true);
+        repository.edit(proposta);
     }
 
+    @Deprecated
     public byte[] getPDFOrcamento(OrcamentoEvento proposta) throws JRException {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("idOrcamento", proposta.getId());
@@ -186,29 +201,6 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         return Relatorio.compileReport(parameters, inputStream);
     }
 
-    private void callGlassfishJavaMail(String body, byte[] pdfProposta, String emailContato) {
-        try {
-//            Multipart multipart = new MimeMultipart();;
-//            Message msg = new MimeMessage(mailSTMP);
-//            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(emailContato));
-//            msg.setFrom(new InternetAddress("consultorioEEDevmedia@gmail.com"));
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//            msg.setSubject("[ConsultorioEE] Invoice para pagamento referente a consulta Odontologica enviado em " + sdf.format(new Date()) + " [/ConsultorioEE]");
-//            // The Message
-//            BodyPart messageBodyPart = new MimeBodyPart();
-//            messageBodyPart.setContent(body, "text/html; charset=ISO-8859-1");
-//            multipart.addBodyPart(messageBodyPart);
-//            // The PDF File
-//            BodyPart boletoBodyPart = new MimeBodyPart();
-//            boletoBodyPart.setFileName("boleto.pdf");
-//            boletoBodyPart.setDataHandler(new DataHandler(new ByteArrayDataSource(pdfProposta, "application/pdf")));
-//            multipart.addBodyPart(boletoBodyPart);
-//            // Attach the Multipart Data
-//            msg.setContent(multipart);
-//            Transport.send(msg);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+   
 
 }
