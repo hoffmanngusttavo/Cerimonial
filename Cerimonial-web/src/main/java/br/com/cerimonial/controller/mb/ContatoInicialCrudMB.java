@@ -163,17 +163,57 @@ public class ContatoInicialCrudMB extends BasicControl {
         }
     }
     
+    /**
+     * Método invocado da tela de form para editar um valor 
+     */
     public void alterarValorProposta(){
         orcamento.setValorAlterado(orcamento.getValorProposta());
     }
     
+     /**
+     * Método invocado da tela de form cancelar edição de um valor 
+     */
     public void cancelarAlterarValorProposta(){
         orcamento.setValorAlterado(-1);
     }
     
+    /**
+     * Método invocado da tela de form para visualizar o orçamento
+     * @param orcamento
+     */
     public void visualizarOrcamento(OrcamentoEvento orcamento) {
         setOrcamento(orcamento);
-        
+        abrirFormOrcamento = true;
+    }
+    
+    /**
+     * Método invocado da tela de form para aprovar um orçamento
+     * e recarregar a listagem de propostas
+     * @param orcamento
+     */
+    public void aceitarProposta(OrcamentoEvento orcamento) {
+        try {
+            orcamentoService.aceitarProposta(orcamento);
+            entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
+            createFacesInfoMessage("Orçamento aprovado com sucesso!");
+        } catch (Exception ex) {
+            Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Método invocado da tela de form para aprovar um orçamento
+     * e recarregar a listagem de propostas
+     * @param orcamento
+     */
+    public void cancelarProposta(OrcamentoEvento orcamento) {
+        try {
+            orcamentoService.cancelarProposta(orcamento);
+            entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
+            createFacesInfoMessage("Orçamento cancelado com sucesso!");
+        } catch (Exception ex) {
+            Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**

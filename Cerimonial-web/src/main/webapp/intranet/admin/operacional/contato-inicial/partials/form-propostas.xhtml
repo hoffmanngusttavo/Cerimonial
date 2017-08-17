@@ -78,6 +78,7 @@
                             <p:commandButton icon="fa fa-pencil" 
                                              styleClass="bt-acoes"
                                              process="@this"
+                                             rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
                                              title="Alterar Valor"
                                              actionListener="#{ContatoInicialCrudMB.alterarValorProposta()}"
                                              update=":form:groupValorAlterado"
@@ -109,7 +110,7 @@
                                     <p:commandButton icon="fa fa-times" 
                                                      styleClass="bt-acoes"
                                                      process="@this"
-                                                     disabled="#{ContatoInicialCrudMB.orcamento.id != null}"
+                                                     rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
                                                      title="Alterar Valor"
                                                      actionListener="#{ContatoInicialCrudMB.cancelarAlterarValorProposta()}"
                                                      update=":form:groupValorAlterado"
@@ -132,7 +133,7 @@
 
                         <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
                                       mode="simple" 
-                                      disabled="#{ContatoInicialCrudMB.orcamento.id != null}"
+                                      rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
                                       skinSimple="true"
                                       label="Selecione Arquivo"/>
                         <h:panelGroup id="groupFile">
@@ -152,7 +153,7 @@
                                 <p:commandButton icon="fa fa-trash" 
                                                  styleClass="bt-acoes"
                                                  title="Remover anexo"
-                                                 disabled="#{ContatoInicialCrudMB.orcamento.id != null}"
+                                                 rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
                                                  actionListener="#{ContatoInicialCrudMB.removerArquivoOrcamento()}"
                                                  process="@this"
                                                  update=":form:groupFile"
@@ -262,8 +263,7 @@
                                                          process="@this"
                                                          title="Visualizar Orçamento"
                                                          actionListener="#{ContatoInicialCrudMB.visualizarOrcamento(proposta)}"
-                                                         update=":form:groupOrcamento"
-                                                         oncomplete="$('#orcamentoDialogVar').modal('show');"/>
+                                                         update=":form:groupOrcamento"/>
 
                                         <p:commandButton icon="fa fa-send" 
                                                          styleClass="bt-acoes"
@@ -286,10 +286,29 @@
                                                          onstart="PF('statusDialog').show();"
                                                          oncomplete="PF('statusDialog').hide();"/>
 
+                                        <p:commandButton icon="fa fa-check" 
+                                                         styleClass="bt-acoes"
+                                                         actionListener="#{ContatoInicialCrudMB.aceitarProposta(proposta)}"
+                                                         process="@this"
+                                                         rendered="#{!proposta.propostaAceita}"
+                                                         title="Aceitar Proposta"
+                                                         update=":form:groupPropostas"
+                                                         immediate="true"/>
+                                        
+                                        <p:commandButton icon="fa fa-times" 
+                                                         styleClass="bt-acoes"
+                                                         actionListener="#{ContatoInicialCrudMB.cancelarProposta(proposta)}"
+                                                         process="@this"
+                                                         rendered="#{proposta.propostaAceita}"
+                                                         title="Cancelar Proposta"
+                                                         update=":form:groupPropostas"
+                                                         immediate="true"/>
+                                        
                                         <p:commandButton icon="fa fa-trash" 
                                                          styleClass="bt-acoes"
                                                          actionListener="#{ContatoInicialCrudMB.setOrcamento(proposta)}"
                                                          process="@this"
+                                                         title="Remover"
                                                          update=":form:groupRemove"
                                                          immediate="true"
                                                          oncomplete="$('#removeDialogVar').modal('show');"/>

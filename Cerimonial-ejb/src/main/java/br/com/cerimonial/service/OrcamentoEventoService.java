@@ -68,9 +68,9 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         if (entity != null) {
 
             if (entity.getContatoEvento() == null) {
-                throw new Exception("Você precisa associar um contato inicial primeiro");
+                throw new Exception("VocÃª precisa associar um contato inicial primeiro");
             }
-            
+
             //salvar arquivo
             if (entity.getArquivo() != null) {
                 arquivoService.save(entity.getArquivo());
@@ -84,9 +84,6 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         }
         return null;
     }
-    
-    
-  
 
     public List<OrcamentoEvento> findAll() {
         try {
@@ -120,21 +117,22 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     }
 
     /**
-     * Vai carregar os dados para um orçamento a partir de um modelo selecionado
+     * Vai carregar os dados para um orÃ§amento a partir de um modelo selecionado
+     *
      * @param orcamento
      * @param modelo
-     * @return 
-     * @throws java.lang.Exception 
+     * @return
+     * @throws java.lang.Exception
      */
-    public OrcamentoEvento carregarPropostaModelo(OrcamentoEvento orcamento, ModeloProposta modelo) throws Exception{
-        
+    public OrcamentoEvento carregarPropostaModelo(OrcamentoEvento orcamento, ModeloProposta modelo) throws Exception {
+
         if (orcamento != null && modelo != null) {
             orcamento.setModeloProposta(modelo);
             orcamento.setProposta(modelo.getConteudo());
             orcamento.setValorProposta(modelo.getValorProposta() != null ? modelo.getValorProposta().doubleValue() : 0);
             List<Arquivo> arquivosByModeloProposta = arquivoService.getArquivosByModeloProposta(modelo);
             orcamento.setArquivo(null);
-            if(CerimonialUtils.isListNotBlank(arquivosByModeloProposta)){
+            if (CerimonialUtils.isListNotBlank(arquivosByModeloProposta)) {
                 arquivosByModeloProposta.stream().forEach((Arquivo file) -> {
                     orcamento.adicionarAnexo(file.clonar(file));
                 });
@@ -144,7 +142,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     }
 
     /**
-     * 
+     *
      * @param id do ContatoEvento
      * @return Uma lista de orçamentos/propostas de um contato
      */
@@ -161,6 +159,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
     /**
      * Enviar por email a proposta com anexo se possuir
+     *
      * @param proposta
      * @throws java.lang.Exception
      */
@@ -178,16 +177,16 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
         //anexar dados emmail
         HashMap<String, Object> anexos = new HashMap<>();
-        if(proposta.getAnexos() != null){
+        if (proposta.getAnexos() != null) {
             proposta.getAnexos().stream().forEach((file) -> {
                 anexos.put(file.getId().toString(), file);
             });
         }
-        
+
         //enviar email
         EmailHelper emailHelper = new EmailHelper(configuracaoEmailService);
-        emailHelper.enviarEmail(proposta.getContatoEvento().getEmailContato(), "Proposta/Orçamento", body, anexos);
-        
+        emailHelper.enviarEmail(proposta.getContatoEvento().getEmailContato(), "Proposta/OrÃ§amento", body, anexos);
+
         //atualizar no banco que foi enviado o email com sucesso
         proposta.setPropostaEnviada(true);
         repository.edit(proposta);
@@ -201,6 +200,39 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         return Relatorio.compileReport(parameters, inputStream);
     }
 
-   
+    /**
+     * Aceitar/Aprovar um orçamento que não está aprovado ainda.
+     * É verificado se já existe um orçamento aprovado
+     * 
+     * @param orcamento
+     * @throws java.lang.Exception
+     */
+    public void aceitarProposta(OrcamentoEvento orcamento) throws Exception {
+        if (orcamento != null && orcamento.getId() != null && !orcamento.isPropostaAceita()) {
+            List<OrcamentoEvento> orcamentos = findAllByContatoId(orcamento.getContatoEvento().getId());
+            if (CerimonialUtils.isListNotBlank(orcamentos)) {
+                for (OrcamentoEvento proposta : orcamentos) {
+                    if (proposta.isPropostaAceita()) {
+                        throw new Exception("Já existe um orçamento aprovado");
+                    }
+                }
+                orcamento.setPropostaAceita(true);
+                repository.edit(orcamento);
+            }
+        }
+    }
+
+    /**
+     * Cancelar um orçamento que está aprovado.
+     * 
+     * @param orcamento
+     * @throws java.lang.Exception
+     */
+    public void cancelarProposta(OrcamentoEvento orcamento) throws Exception {
+        if (orcamento != null && orcamento.getId() != null && orcamento.isPropostaAceita()) {
+            orcamento.setPropostaAceita(false);
+            repository.edit(orcamento);
+        } 
+    }
 
 }

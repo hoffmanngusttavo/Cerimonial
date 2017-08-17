@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -257,7 +258,14 @@ public class ContatoEvento implements Serializable, ModelInterface{
         this.status = status;
     }
     
-    
+    public boolean isPropostaAceita(){
+        if(CerimonialUtils.isListNotBlank(propostas)){
+            if (propostas.stream().anyMatch((proposta) -> (proposta.isPropostaAceita()))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public int hashCode() {
