@@ -135,7 +135,9 @@
                                       mode="simple" 
                                       rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
                                       skinSimple="true"
+                                      fileUploadListener="#{ContatoInicialCrudMB.handleFileUpload}"
                                       label="Selecione Arquivo"/>
+                        
                         <h:panelGroup id="groupFile">
                             <h:panelGroup rendered="#{ContatoInicialCrudMB.orcamento.arquivo != null}">
                                 <p:commandButton icon="fa fa-download" 
@@ -153,7 +155,6 @@
                                 <p:commandButton icon="fa fa-trash" 
                                                  styleClass="bt-acoes"
                                                  title="Remover anexo"
-                                                 rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
                                                  actionListener="#{ContatoInicialCrudMB.removerArquivoOrcamento()}"
                                                  process="@this"
                                                  update=":form:groupFile"
@@ -180,8 +181,7 @@
                     <p:commandButton value="Salvar Orçamento"
                                      rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
                                      action="#{ContatoInicialCrudMB.saveOrcamento()}"
-                                     update="groupOrcamento"
-                                     ajax="false"
+                                     update=":form:groupOrcamento"
                                      process="@this, groupOrcamento"
                                      style="margin-right: 10px; float: right;"
                                      icon="fa fa-check" 

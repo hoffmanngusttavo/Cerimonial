@@ -7,6 +7,7 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
+import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.TipoIndicacao;
@@ -14,7 +15,6 @@ import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.OrcamentoEventoService;
 import br.com.cerimonial.service.TipoIndicacaoService;
 import br.com.cerimonial.utils.ArquivoUtils;
-import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +25,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.UploadedFile;
@@ -63,9 +64,6 @@ public class ContatoInicialCrudMB extends BasicControl {
         if (id != null) {
             try {
                 entity = service.getEntity(id);
-                if (CerimonialUtils.isListBlank(entity.getPropostas())) {
-                    instanciarOrcamento();
-                }
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
@@ -129,6 +127,11 @@ public class ContatoInicialCrudMB extends BasicControl {
      */
     public synchronized void saveOrcamento() {
         try {
+            
+            if (file != null && file.getSize() > 0) {
+                orcamento.setArquivo(new Arquivo(file.getFileName(), file.getContentType(), file.getContents()));
+            }
+            
             orcamentoService.save(orcamento);
             entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
             orcamento = null;
@@ -198,6 +201,7 @@ public class ContatoInicialCrudMB extends BasicControl {
             createFacesInfoMessage("Orçamento aprovado com sucesso!");
         } catch (Exception ex) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
         }
     }
     
@@ -275,6 +279,12 @@ public class ContatoInicialCrudMB extends BasicControl {
             createFacesErrorMessage(e.getMessage());
         }
     }
+    
+    public void handleFileUpload(FileUploadEvent event) {
+        file = event.getFile();
+        //application code
+    }
+    
 
     /**
      * Evento invocado pela tela de index para listar os clientes

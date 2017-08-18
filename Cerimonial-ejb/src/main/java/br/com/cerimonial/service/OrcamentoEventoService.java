@@ -94,8 +94,14 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         return new ArrayList<>();
     }
 
-    public void delete(OrcamentoEvento categoria) throws Exception {
-        repository.delete(categoria);
+    public void delete(OrcamentoEvento proposta) throws Exception {
+        if(proposta != null ){
+            if(proposta.isPropostaAceita()){
+                throw new Exception("Não pode remover um orçamento aprovado");
+            }else{
+                repository.delete(proposta);
+            }
+        }
     }
 
     public int countAll() {
