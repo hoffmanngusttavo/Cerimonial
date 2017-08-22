@@ -20,11 +20,20 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
         super(entityManager, OrcamentoEvento.class);
     }
 
+    
+    
+     /**
+     *
+     * @param id do ContatoEvento
+     * @return Uma lista de orçamentos/propostas de um contato ordenados
+     * @throws java.lang.Exception
+     */
     public List<OrcamentoEvento> findAllByContatoId(Long id) throws Exception {
         StringBuilder sql = new StringBuilder("select o from OrcamentoEvento o  ");
         sql.append("INNER JOIN o.contatoEvento contato");
         sql.append(" where 1=1");
         sql.append(" and contato.id = ?1");
+        sql.append(" order by o.id desc");
         List<OrcamentoEvento> propostas = getPureList(OrcamentoEvento.class, sql.toString(), id);
         if (CerimonialUtils.isListNotBlank(propostas)) {
             propostas.stream().forEach(item -> {

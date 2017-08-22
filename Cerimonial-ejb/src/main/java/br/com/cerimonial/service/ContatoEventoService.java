@@ -7,12 +7,13 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.repository.ContatoEventoRepository;
+import br.com.cerimonial.utils.CerimonialUtils;
+import com.fasterxml.jackson.databind.util.Comparators;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -33,22 +34,36 @@ import org.apache.commons.lang.StringUtils;
 public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     private ContatoEventoRepository repository;
-    
+
     @PostConstruct
     @PostActivate
     private void postConstruct() {
         repository = new ContatoEventoRepository(em);
     }
 
+    
+    /**
+     * TODO[Ordenar tipo desc]
+     * Retorna contato pesquisado por um id
+     * e ordenado as propostas de forma desc
+     * @param id
+     * @return 
+     * @throws java.lang.Exception
+     */
     @Override
     public ContatoEvento getEntity(Long id) throws Exception {
-        return repository.getEntity(id);
+        ContatoEvento entity = repository.getEntity(id);
+        if (entity != null && CerimonialUtils.isListNotBlank(entity.getPropostas())) {
+           
+        }
+
+        return entity;
     }
 
     @Override
     public ContatoEvento save(ContatoEvento entity) throws Exception {
         if (entity != null) {
-            
+
             if (entity.getId() == null) {
                 return repository.create(entity);
             } else {
@@ -68,7 +83,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     }
 
     public void delete(ContatoEvento contato) throws Exception {
-        if(contato != null){
+        if (contato != null) {
             repository.delete(contato);
         }
     }

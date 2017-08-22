@@ -128,10 +128,6 @@ public class ContatoInicialCrudMB extends BasicControl {
     public synchronized void saveOrcamento() {
         try {
             
-            if (file != null && file.getSize() > 0) {
-                orcamento.setArquivo(new Arquivo(file.getFileName(), file.getContentType(), file.getContents()));
-            }
-            
             orcamentoService.save(orcamento);
             entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
             orcamento = null;
@@ -280,9 +276,16 @@ public class ContatoInicialCrudMB extends BasicControl {
         }
     }
     
+    /**
+     * Evento ao selecionar um pdf na tela de form
+     * @param event
+     */
     public void handleFileUpload(FileUploadEvent event) {
         file = event.getFile();
-        //application code
+        if (file != null && file.getSize() > 0) {
+            orcamento.setArquivo(new Arquivo(file.getFileName(), file.getContentType(), file.getContents()));
+        }
+        createFacesInfoMessage("Arquivo anexado com sucesso");
     }
     
 
@@ -423,5 +426,6 @@ public class ContatoInicialCrudMB extends BasicControl {
         this.file = file;
     }
 
+    
     
 }

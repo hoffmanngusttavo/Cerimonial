@@ -131,13 +131,24 @@
                             </span>
                         </label>
 
-                        <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
-                                      mode="simple" 
-                                      rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
-                                      skinSimple="true"
-                                      fileUploadListener="#{ContatoInicialCrudMB.handleFileUpload}"
-                                      label="Selecione Arquivo"/>
-                        
+                        <p:fileUpload fileUploadListener="#{ContatoInicialCrudMB.handleFileUpload}"
+                                      id="uploadFile"
+                                      mode="advanced"                                                                                                    
+                                      label="Procurar..."                           
+                                      uploadLabel="Carregar"
+                                      cancelLabel="Cancelar"                              
+                                      dragDropSupport="true"
+                                      fileLimit="1"
+                                      fileLimitMessage="Limite máximo de upload 1."
+                                      invalidSizeMessage="Tamanho máximo 20mb"
+                                      sizeLimit="20971520"
+                                      allowTypes="/(\.|\/)(pdf)$/"
+                                      required="true" 
+                                      invalidFileMessage="Arquivo inválido somente é aceito pdf."
+                                      requiredMessage="Por favor fazer upload de documento."
+                                      auto="true" />
+
+
                         <h:panelGroup id="groupFile">
                             <h:panelGroup rendered="#{ContatoInicialCrudMB.orcamento.arquivo != null}">
                                 <p:commandButton icon="fa fa-download" 
@@ -146,6 +157,7 @@
                                                  title="Baixar Arquivo"
                                                  actionListener="#{ContatoInicialCrudMB.baixarArquivoOrcamento()}"
                                                  ajax="false"
+                                                 rendered="#{ContatoInicialCrudMB.orcamento.arquivo.id != null}"
                                                  immediate="true"
                                                  onstart="PF('statusDialog').show();"
                                                  oncomplete="PF('statusDialog').hide();"/>
@@ -155,6 +167,7 @@
                                 <p:commandButton icon="fa fa-trash" 
                                                  styleClass="bt-acoes"
                                                  title="Remover anexo"
+                                                 rendered="#{!ContatoInicialCrudMB.entity.propostaAceita}"
                                                  actionListener="#{ContatoInicialCrudMB.removerArquivoOrcamento()}"
                                                  process="@this"
                                                  update=":form:groupFile"
@@ -182,7 +195,6 @@
                                      rendered="#{ContatoInicialCrudMB.orcamento.id == null}"
                                      action="#{ContatoInicialCrudMB.saveOrcamento()}"
                                      update=":form:groupOrcamento"
-                                     process="@this, groupOrcamento"
                                      style="margin-right: 10px; float: right;"
                                      icon="fa fa-check" 
                                      class="btn btn-success"
@@ -294,7 +306,7 @@
                                                          title="Aceitar Proposta"
                                                          update=":form:groupPropostas"
                                                          immediate="true"/>
-                                        
+
                                         <p:commandButton icon="fa fa-times" 
                                                          styleClass="bt-acoes"
                                                          actionListener="#{ContatoInicialCrudMB.cancelarProposta(proposta)}"
@@ -303,7 +315,7 @@
                                                          title="Cancelar Proposta"
                                                          update=":form:groupPropostas"
                                                          immediate="true"/>
-                                        
+
                                         <p:commandButton icon="fa fa-trash" 
                                                          styleClass="bt-acoes"
                                                          actionListener="#{ContatoInicialCrudMB.setOrcamento(proposta)}"
