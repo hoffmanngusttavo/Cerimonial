@@ -94,7 +94,7 @@ public class ConfiguracaoEmail implements Serializable, ModelInterface {
     }
 
     public void setSmtp(String smtp) {
-        this.smtp = smtp;
+        this.smtp = smtp != null ? smtp.trim() : smtp;
     }
 
     public String getImap() {
@@ -110,7 +110,7 @@ public class ConfiguracaoEmail implements Serializable, ModelInterface {
     }
 
     public void setPortaSmtp(String portaSmtp) {
-        this.portaSmtp = portaSmtp;
+        this.portaSmtp = portaSmtp != null ? portaSmtp.trim() : portaSmtp;;
     }
 
     public String getPortaImap() {

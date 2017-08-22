@@ -191,7 +191,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
         //enviar email
         EmailHelper emailHelper = new EmailHelper(configuracaoEmailService);
-        emailHelper.enviarEmail(proposta.getContatoEvento().getEmailContato(), "Proposta/OrÃ§amento", body, anexos);
+        emailHelper.enviarEmailOld(proposta.getContatoEvento().getEmailContato(), "Proposta/OrÃ§amento", body, anexos);
 
         //atualizar no banco que foi enviado o email com sucesso
         proposta.setPropostaEnviada(true);
