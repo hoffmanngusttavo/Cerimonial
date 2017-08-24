@@ -42,7 +42,7 @@ public class ClienteCrudMB extends PessoaMB{
     public synchronized String save() {
         try {
             if (entity != null) {
-                service.saveCliente(entity);
+                service.editCliente(entity);
                 createFacesInfoMessage("Dados gravados com sucesso!");
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
                 return "index.xhtml?faces-redirect=true";

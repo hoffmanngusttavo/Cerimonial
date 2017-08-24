@@ -6,8 +6,10 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
+import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
 import br.com.cerimonial.service.invoice.InvoiceUtils;
@@ -51,6 +53,9 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     protected ConfiguracaoEmailService configuracaoEmailService;
     @EJB
     protected ArquivoService arquivoService;
+    @EJB
+    protected PessoaService pessoaService;
+    
 
     @PostConstruct
     @PostActivate
@@ -239,6 +244,25 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
             orcamento.setPropostaAceita(false);
             repository.edit(orcamento);
         } 
+    }
+
+    
+    /**
+     * Vai criar um evento a partir de uma proposta aceita. Vai Criar um cliente
+     * e um usuário para acesso ao sistema. Vai enviar por email ao cliente os
+     * acessos.
+     *
+     * @param entity
+     * @throws java.lang.Exception
+     */
+    public void criarEvento(OrcamentoEvento entity) throws Exception {
+
+        if (entity == null || !entity.isPropostaAceita()) {
+            throw new Exception("Proposta não aceita");
+        }
+
+        Pessoa cliente = pessoaService.criarClientePropostaAceita(entity);
+        
     }
 
 }

@@ -7,9 +7,7 @@ package br.com.cerimonial.entity;
 
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;

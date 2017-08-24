@@ -218,11 +218,21 @@
                 <div class="row">
                     <p:commandButton process="@this"
                                      actionListener="#{ContatoInicialCrudMB.instanciarOrcamento()}"
+                                     rendered="#{!ContatoInicialCrudMB.entity.propostaAceita}"
                                      id="btn-criar-orcamento"
                                      update="groupOrcamento"
                                      class="btn btn-info"
                                      icon="fa fa-plus"
                                      value="Criar Nova Proposta"/>
+                    
+                    <p:commandButton process="@this"
+                                     actionListener="#{ContatoInicialCrudMB.criarEvento()}"
+                                     rendered="#{ContatoInicialCrudMB.entity.propostaAceita}"
+                                     id="btn-criar-criar-ficha"
+                                     update="groupOrcamento"
+                                     class="btn btn-info"
+                                     icon="fa fa-plus"
+                                     value="Enviar Ficha Cadastratl"/>
 
                     <table class="table table-hover table-inverse table-striped table-responsive">
                         <thead class="thead-inverse">

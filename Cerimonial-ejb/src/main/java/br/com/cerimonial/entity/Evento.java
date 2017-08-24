@@ -51,13 +51,10 @@ public class Evento implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
     
-    @Column(nullable = false)
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataEvento;
+    @ManyToOne
+    private Pessoa contratante;
     
-    @Column(nullable = false)
-    @Temporal(javax.persistence.TemporalType.TIME)
-    private Date hora;
+   
 
     @Override
     public Long getId() {
@@ -89,30 +86,20 @@ public class Evento implements Serializable, ModelInterface {
         this.dataUltimaAlteracao = data;
     }
 
-    public Date getDataEvento() {
-        return dataEvento;
-    }
-
-    public void setDataEvento(Date dataEvento) {
-        this.dataEvento = dataEvento;
-    }
-    
-    
-
-    public Date getHora() {
-        return hora;
-    }
-
-    public void setHora(Date hora) {
-        this.hora = hora;
-    }
-
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Pessoa getContratante() {
+        return contratante;
+    }
+
+    public void setContratante(Pessoa contratante) {
+        this.contratante = contratante;
     }
     
     

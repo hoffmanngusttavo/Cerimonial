@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -37,6 +38,9 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Usuario implements Serializable, ModelInterface {
+    
+    
+    
     
     
     
@@ -86,8 +90,8 @@ public class Usuario implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Login> logins;
     
-    @OneToMany(mappedBy = "usuarioCliente", fetch = FetchType.LAZY)
-    private List<Pessoa> clientes;
+    @OneToOne(mappedBy = "usuarioCliente")
+    private Pessoa cliente;
 
     @Override
     public Long getId() {
@@ -151,14 +155,15 @@ public class Usuario implements Serializable, ModelInterface {
         this.ativo = ativo;
     }
 
-   
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+    public Pessoa getCliente() {
+        return cliente;
     }
+
+    public void setCliente(Pessoa cliente) {
+        this.cliente = cliente;
+    }
+
+   
 
     public String getSalt() {
         return salt;
@@ -192,8 +197,17 @@ public class Usuario implements Serializable, ModelInterface {
         this.logins = logins;
     }
 
+    
+
    
     
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
     
 
     @Override

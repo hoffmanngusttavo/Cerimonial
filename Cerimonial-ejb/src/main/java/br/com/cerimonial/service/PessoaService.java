@@ -5,9 +5,12 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.ContatoEvento;
+import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.enums.TipoEnvolvido;
+import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.repository.PessoaRepository;
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +90,7 @@ public class PessoaService extends BasicService<Pessoa> {
     
     //-----------Clientes----------------------
     
-    public Pessoa saveCliente(Pessoa entity) throws Exception {
+    private Pessoa saveCliente(Pessoa entity) throws Exception {
         if (entity != null) {
             entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
             
@@ -103,6 +106,36 @@ public class PessoaService extends BasicService<Pessoa> {
             } else {
                 return repository.edit(entity);
             }
+        }
+        return null;
+    }
+    
+    /**
+     * Somente pode salvar um cliente já cadastrado
+     * @param entity
+     * @return 
+     * @throws java.lang.Exception
+     */
+    public Pessoa editCliente(Pessoa entity) throws Exception {
+        if (entity != null) {
+            if(entity.getId() == null){
+                throw new Exception("Não pode gravar um novo cliente");
+            }
+            return saveCliente(entity);
+        }
+        return null;
+    }
+    
+    /**
+     * Somente pode salvar um cliente novo
+     * @param entity
+     * @return 
+     * @throws java.lang.Exception
+     */
+    public Pessoa createCliente(Pessoa entity) throws Exception {
+        if (entity != null) {
+            entity.setId(null);
+            return saveCliente(entity);
         }
         return null;
     }
@@ -218,6 +251,28 @@ public class PessoaService extends BasicService<Pessoa> {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    /**
+     * 
+     * @param entity
+     * @return 
+     * @throws java.lang.Exception 
+     */
+    public Pessoa criarClientePropostaAceita(OrcamentoEvento entity) throws Exception{
+        Pessoa cliente = new Pessoa();
+        try {
+            cliente.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
+            cliente.setAtivo(true);
+            cliente.setEmail(entity.getContatoEvento().getEmailContato());
+            cliente.setNome(entity.getContatoEvento().getNomeContato());
+            cliente.setTelefone1(entity.getContatoEvento().getTelefonePrincipal());
+            cliente.setTelefone2(entity.getContatoEvento().getTelefoneSecundario());
+            cliente.setTipoPessoa(TipoPessoa.FISICA);
+        } catch (Exception e) {
+            throw new Exception("Não Foi possivel criar um cliente a partir de um contato");
+        }
+        return cliente;
     }
     
     

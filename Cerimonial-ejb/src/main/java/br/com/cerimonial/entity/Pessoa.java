@@ -25,6 +25,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -86,6 +87,9 @@ public class Pessoa implements Serializable, ModelInterface {
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
+    @OneToOne
+    private Usuario usuarioCliente;
+    
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
@@ -116,8 +120,10 @@ public class Pessoa implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataNascimento;
 
-    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Usuario usuarioCliente;
+    
+    
+    @OneToMany(mappedBy = "contratante", fetch = FetchType.LAZY)
+    private List<Evento> eventos;
    
 
     public Pessoa() {
@@ -302,6 +308,18 @@ public class Pessoa implements Serializable, ModelInterface {
         this.usuarioCliente = usuarioCliente;
     }
 
+
+
+    public List<Evento> getEventos() {
+        return eventos;
+    }
+
+    public void setEventos(List<Evento> eventos) {
+        this.eventos = eventos;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 7;
