@@ -65,7 +65,7 @@ public class AutenticacaoMB extends BasicControl {
      */
     public void criarUsuarioMaster() {
         try {
-            Usuario user = usuarioService.criarUsuarioMaster();
+            Usuario user = usuarioService.criarSalvarUsuarioMaster();
             createFacesInfoMessage("Usuário "+user.getNome()+" criado com sucesso");
         } catch (Exception ex) {
             Logger.getLogger(AutenticacaoMB.class.getSimpleName()).log(Level.WARNING, null, ex);

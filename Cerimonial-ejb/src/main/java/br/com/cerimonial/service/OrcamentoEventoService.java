@@ -7,9 +7,11 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ContatoEvento;
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
 import br.com.cerimonial.service.invoice.InvoiceUtils;
@@ -55,6 +57,10 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     protected ArquivoService arquivoService;
     @EJB
     protected PessoaService pessoaService;
+    @EJB
+    protected UsuarioService usuarioService;
+    @EJB
+    protected EventoService eventoService;
     
 
     @PostConstruct
@@ -248,9 +254,10 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
     
     /**
-     * Vai criar um evento a partir de uma proposta aceita. Vai Criar um cliente
-     * e um usuário para acesso ao sistema. Vai enviar por email ao cliente os
-     * acessos.
+     * Vai criar um evento a partir de uma proposta aceita. 
+     * Vai Criar um cliente e um usuário para acesso ao sistema. 
+     * Vai enviar por email ao cliente os acessos.
+     * Vai criar o evento do cliente
      *
      * @param entity
      * @throws java.lang.Exception
@@ -261,8 +268,21 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
             throw new Exception("Proposta não aceita");
         }
 
-        Pessoa cliente = pessoaService.criarClientePropostaAceita(entity);
+        Pessoa cliente = pessoaService.criarClienteFromContato(entity);
+        Usuario usuarioCliente = usuarioService.criarUsuarioCliente(cliente);
+        String senha = usuarioCliente.getSenha();
+        usuarioCliente = usuarioService.save(usuarioCliente);
+        cliente.setUsuarioCliente(usuarioCliente);
+        pessoaService.saveCliente(cliente);
         
+        usuarioService.enviarEmailBoasVindas(usuarioCliente, senha);
+        
+        Evento evento = new Evento();
+        evento.setContratante(cliente);
+        evento.setNome(entity.getContatoEvento().getTipoEvento().getCategoria().getLabel() +" "+cliente.getNome());
+        evento.setOrcamento(entity);
+        
+        eventoService.save(evento);
     }
 
 }

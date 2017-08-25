@@ -22,6 +22,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.util.ByteSource;
 
@@ -60,11 +61,11 @@ public class UsuarioService extends BasicService<Usuario> {
         }
         return null;
     }
-    
-    public void delete(Usuario user) throws Exception{
-        
-        if(user != null){
-            if(user.isMaster()){
+
+    public void delete(Usuario user) throws Exception {
+
+        if (user != null) {
+            if (user.isMaster()) {
                 throw new Exception("Usuário master não pode ser removido");
             }
             repository.delete(user);
@@ -72,13 +73,27 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     public Usuario getUsuarioByLoginSenha(String login, String senha) throws Exception {
-        Usuario usuarioSalt = this.getUsuarioByLogin(login);
+        Usuario usuarioSalt = this.getUsuarioByLoginAtivo(login);
         String senhaMd5 = Criptografia.md5(senha + usuarioSalt.getSalt());
         return repository.getUsuarioByLoginSenha(login, senhaMd5, Boolean.TRUE);
     }
 
+    public Usuario getUsuarioByLoginAtivo(String login) throws Exception {
+        
+        if (StringUtils.isBlank(login)) {
+            throw new Exception("O login está vazio");
+        }
+        
+        return repository.getUsuarioByLoginAtivo(login, Boolean.TRUE);
+    }
+    
     public Usuario getUsuarioByLogin(String login) throws Exception {
-        return repository.getUsuarioByLogin(login, Boolean.TRUE);
+        
+        if (StringUtils.isBlank(login)) {
+            throw new Exception("O login está vazio");
+        }
+        
+        return repository.getUsuarioByLogin(login);
     }
 
     public synchronized Usuario alterarSenha(Usuario entity) throws Exception {
@@ -95,25 +110,51 @@ public class UsuarioService extends BasicService<Usuario> {
         entity.setSalt(salt.toString());
     }
 
+    public Usuario criarSalvarUsuarioMaster() throws Exception {
+        Usuario usuario = criarUsuarioMaster();
+        return save(usuario);
+    }
+    
     public Usuario criarUsuarioMaster() throws Exception {
 
-        Usuario usuario = new Usuario();
+        Usuario usuario = this.getUsuarioByLogin("master");
+        
+        if(usuario == null){
+            usuario = new Usuario();
+        }
         usuario.setNome("Master");
         usuario.setLogin("master");
         usuario.setSenha("master");
         usuario.setEmail("hoffmann.gusttavo@gmail.com");
         usuario.setMaster(true);
-        return save(usuario);
+        usuario.setAtivo(true);
+        
+        return usuario;
     }
     
+
+    /**
+     * Verifica se já existe um usuario cadastrado com esse login 
+     * Se não existir, instancia um novo e gera uma senha aleatoria.
+     *
+     * @param cliente
+     * @return
+     * @throws java.lang.Exception
+     */
     public Usuario criarUsuarioCliente(Pessoa cliente) throws Exception {
-        if(cliente == null){
+        if (cliente == null) {
             throw new Exception("Cliente Null");
         }
-        Usuario usuario = new Usuario();
+        
+        Usuario usuario = this.getUsuarioByLogin(cliente.getEmail());
+        
+        if(usuario == null){
+            usuario = new Usuario();
+        }
+        usuario.setAtivo(true);
         usuario.setNome(cliente.getNome());
         usuario.setLogin(cliente.getEmail());
-        usuario.setSenha(CerimonialUtils.removerNaoDigitos(cliente.getCpf()));
+        usuario.setSenha(cliente.getEmail());
         usuario.setEmail(cliente.getEmail());
         usuario.setMaster(false);
         return usuario;
@@ -127,7 +168,7 @@ public class UsuarioService extends BasicService<Usuario> {
         }
         return 0;
     }
-   
+
     public int countListagem(HashMap<String, Object> filter) {
         try {
             if (filter != null) {
@@ -148,7 +189,7 @@ public class UsuarioService extends BasicService<Usuario> {
         return null;
     }
 
-   public void enviarEmailBoasVindas(Usuario user, String senha) {
-        
+    public void enviarEmailBoasVindas(Usuario user, String senha) {
+
     }
 }

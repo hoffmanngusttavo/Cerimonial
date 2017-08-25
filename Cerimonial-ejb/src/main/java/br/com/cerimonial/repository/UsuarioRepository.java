@@ -25,9 +25,15 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
         return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1 and usr.senha = ?2 and usr.ativo = ?3", login, senhaMd5, ativo);
     }
 
-    public Usuario getUsuarioByLogin(String login, boolean ativo) throws Exception {
+    public Usuario getUsuarioByLoginAtivo(String login, boolean ativo) throws Exception {
         return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1 and usr.ativo = ?2", login, ativo);
     }
+    
+    public Usuario getUsuarioByLogin(String login) throws Exception {
+        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1", login);
+    }
+    
+   
 
     @Override
     public int countListagem(HashMap<String, Object> filter) throws Exception {

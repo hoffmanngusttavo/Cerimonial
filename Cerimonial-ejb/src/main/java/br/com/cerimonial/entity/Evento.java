@@ -17,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -39,34 +40,35 @@ public class Evento implements Serializable, ModelInterface {
     @GeneratedValue(generator = "GENERATE_Evento", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Evento", sequenceName = "Evento_pk_seq", allocationSize = 1)
     private Long id;
-    
+
     @Column(nullable = false)
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
-    
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    
+
     @ManyToOne
     private Pessoa contratante;
-    
-   
+
+    @OneToOne(mappedBy = "evento")
+    private OrcamentoEvento orcamento;
 
     @Override
     public Long getId() {
         return id;
     }
 
-     @Override
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
-     @Override
+    @Override
     public Usuario getModificadoPor() {
         return modificadoPor;
     }
@@ -101,10 +103,18 @@ public class Evento implements Serializable, ModelInterface {
     public void setContratante(Pessoa contratante) {
         this.contratante = contratante;
     }
+
+    public OrcamentoEvento getOrcamento() {
+        return orcamento;
+    }
+
+    public void setOrcamento(OrcamentoEvento orcamento) {
+        this.orcamento = orcamento;
+    }
     
     
 
-   @PrePersist
+    @PrePersist
     @Override
     public void prePersistEntity() {
         try {
@@ -164,8 +174,4 @@ public class Evento implements Serializable, ModelInterface {
         return "Evento{" + "id=" + id + '}';
     }
 
-    
-    
-    
-    
 }

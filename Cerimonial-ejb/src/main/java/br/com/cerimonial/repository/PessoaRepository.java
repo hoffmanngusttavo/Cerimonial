@@ -6,6 +6,8 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Usuario;
+import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.HashMap;
@@ -81,6 +83,10 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
             }
         }
         return entity;
+    }
+    
+    public Pessoa getClienteByEmail(String email) throws Exception {
+        return getPurePojo(Pessoa.class, "select usr from Pessoa usr where usr.email = ?1 and usr.tipoEnvolvido = ?2", email, TipoEnvolvido.CLIENTE);
     }
 
 }

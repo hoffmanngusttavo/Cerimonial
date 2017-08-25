@@ -124,8 +124,18 @@ public class Pessoa implements Serializable, ModelInterface {
     
     @OneToMany(mappedBy = "contratante", fetch = FetchType.LAZY)
     private List<Evento> eventos;
+
+    public Pessoa(TipoEnvolvido tipoEnvolvido, TipoPessoa tipoPessoa) {
+        this.tipoEnvolvido = tipoEnvolvido;
+        this.tipoPessoa = tipoPessoa;
+        endereco = new Endereco();
+    }
+
    
 
+    
+   
+    
     public Pessoa() {
         endereco = new Endereco();
     }

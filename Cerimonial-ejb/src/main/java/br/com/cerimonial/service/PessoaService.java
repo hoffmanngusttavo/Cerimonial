@@ -5,10 +5,8 @@
  */
 package br.com.cerimonial.service;
 
-import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
-import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.repository.PessoaRepository;
@@ -25,6 +23,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -36,12 +35,6 @@ import javax.ejb.TransactionManagementType;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class PessoaService extends BasicService<Pessoa> {
 
-    @EJB
-    private UsuarioService usuarioService;
-    
-    @EJB
-    private EnderecoService enderecoService;
-    
     private PessoaRepository repository;
 
     @PostConstruct
@@ -54,8 +47,7 @@ public class PessoaService extends BasicService<Pessoa> {
     public Pessoa getEntity(Long id) throws Exception {
         return repository.getPessoa(id);
     }
-    
-    
+
     public Pessoa getEntityFornecedorCategoria(Long id) throws Exception {
         return repository.getEntityFornecedorCategoria(id);
     }
@@ -87,49 +79,41 @@ public class PessoaService extends BasicService<Pessoa> {
         return 0;
     }
 
-    
     //-----------Clientes----------------------
-    
-    private Pessoa saveCliente(Pessoa entity) throws Exception {
+    public Pessoa saveCliente(Pessoa entity) throws Exception {
         if (entity != null) {
             entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
-            
             if (entity.getId() == null) {
-                //criar novo usuario
-                Usuario user = usuarioService.criarUsuarioCliente(entity);
-                String senha = user.getSenha();
-                user = usuarioService.save(user);
-                entity.setUsuarioCliente(user);
-                repository.create(entity);
-                usuarioService.enviarEmailBoasVindas(user,senha);
-                return entity;
+                return repository.create(entity);
             } else {
                 return repository.edit(entity);
             }
         }
         return null;
     }
-    
+
     /**
-     * Somente pode salvar um cliente já cadastrado
+     * Somente pode salvar um cliente jÃ¡ cadastrado
+     *
      * @param entity
-     * @return 
+     * @return
      * @throws java.lang.Exception
      */
     public Pessoa editCliente(Pessoa entity) throws Exception {
         if (entity != null) {
-            if(entity.getId() == null){
-                throw new Exception("Não pode gravar um novo cliente");
+            if (entity.getId() == null) {
+                throw new Exception("NÃ£o pode gravar um novo cliente");
             }
             return saveCliente(entity);
         }
         return null;
     }
-    
+
     /**
      * Somente pode salvar um cliente novo
+     *
      * @param entity
-     * @return 
+     * @return
      * @throws java.lang.Exception
      */
     public Pessoa createCliente(Pessoa entity) throws Exception {
@@ -139,7 +123,7 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         return null;
     }
-    
+
     public int countListagemClientes(HashMap<String, Object> filter) {
         try {
             if (filter == null) {
@@ -167,14 +151,11 @@ public class PessoaService extends BasicService<Pessoa> {
         return null;
     }
 
-    
     //-----------Fornecedores----------------------
-    
-    
     public Pessoa saveFornecedor(Pessoa entity) throws Exception {
         if (entity != null) {
             entity.setTipoEnvolvido(TipoEnvolvido.FORNECEDOR);
-            
+
             if (entity.getId() == null) {
                 return repository.create(entity);
             } else {
@@ -183,7 +164,7 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         return null;
     }
-    
+
     public int countListagemFornecedor(HashMap<String, Object> filter) {
         try {
             if (filter == null) {
@@ -212,11 +193,10 @@ public class PessoaService extends BasicService<Pessoa> {
     }
 
     //--------------------COLABORADOR----------------------------
-
     public Pessoa saveColaborador(Pessoa entity) throws Exception {
         if (entity != null) {
             entity.setTipoEnvolvido(TipoEnvolvido.COLABORADOR);
-            
+
             if (entity.getId() == null) {
                 return repository.create(entity);
             } else {
@@ -225,7 +205,7 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         return null;
     }
-    
+
     public int countListagemColaborador(HashMap<String, Object> filter) {
         try {
             if (filter == null) {
@@ -254,27 +234,36 @@ public class PessoaService extends BasicService<Pessoa> {
     }
 
     /**
-     * 
+     * Verifica se já existe um cliente cadastrado com esse email Se não houver
+     * cadastrado, instancia um novo
+     *
      * @param entity
-     * @return 
-     * @throws java.lang.Exception 
+     * @return
+     * @throws java.lang.Exception
      */
-    public Pessoa criarClientePropostaAceita(OrcamentoEvento entity) throws Exception{
-        Pessoa cliente = new Pessoa();
+    public Pessoa criarClienteFromContato(OrcamentoEvento entity) throws Exception {
+        Pessoa cliente = this.getClienteByEmail(entity.getContatoEvento().getEmailContato());
         try {
-            cliente.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
-            cliente.setAtivo(true);
+            if (cliente == null) {
+                cliente = new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA);
+            }
+            
             cliente.setEmail(entity.getContatoEvento().getEmailContato());
             cliente.setNome(entity.getContatoEvento().getNomeContato());
             cliente.setTelefone1(entity.getContatoEvento().getTelefonePrincipal());
             cliente.setTelefone2(entity.getContatoEvento().getTelefoneSecundario());
-            cliente.setTipoPessoa(TipoPessoa.FISICA);
+            cliente.setAtivo(true);
         } catch (Exception e) {
-            throw new Exception("Não Foi possivel criar um cliente a partir de um contato");
+            throw new Exception("NÃ£o Foi possivel criar um cliente a partir de um contato");
         }
         return cliente;
     }
-    
-    
+
+    private Pessoa getClienteByEmail(String emailContato) throws Exception {
+        if (StringUtils.isBlank(emailContato)) {
+            throw new Exception("O email está vazio");
+        }
+        return repository.getClienteByEmail(emailContato);
+    }
 
 }

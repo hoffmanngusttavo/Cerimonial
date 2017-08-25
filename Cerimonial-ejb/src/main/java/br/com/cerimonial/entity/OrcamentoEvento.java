@@ -24,6 +24,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -71,6 +72,9 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     
     @ManyToOne
     private ContatoEvento contatoEvento;
+    
+    @OneToOne
+    private Evento evento;
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
@@ -213,6 +217,16 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
             anexos.add(arquivo);
         }
     }
+
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+    
+    
 
      @PrePersist
     @Override
