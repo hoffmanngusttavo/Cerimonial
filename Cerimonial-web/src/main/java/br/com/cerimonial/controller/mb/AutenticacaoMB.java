@@ -29,6 +29,8 @@ public class AutenticacaoMB extends BasicControl {
 
     protected String login;
     protected String senha;
+    protected String email;
+    protected boolean exibirLogin = true;
     protected boolean remember = false;
     protected Usuario usuarioLogado = null;
 
@@ -36,13 +38,14 @@ public class AutenticacaoMB extends BasicControl {
     private UsuarioService usuarioService;
 
     public AutenticacaoMB() {
-        if(usuarioLogado == null){
+        if (usuarioLogado == null) {
             usuarioLogado = getUsuario();
         }
     }
 
     /**
-     *Evento vindo da tela de login para autenticação
+     * Evento vindo da tela de login para autenticação
+     *
      * @return vai redirecionar para dentro do sistema, se estiver autenticado,
      * caso contrário, volta para o login.
      */
@@ -57,29 +60,29 @@ public class AutenticacaoMB extends BasicControl {
         }
         return null;
     }
-    
+
     /**
-     *evento vindo da tela de login para criar um usuário master
-     * exibido somente uma vez para ter acesso ao sistema.
-     * login: master, senha:master
+     * evento vindo da tela de login para criar um usuário master exibido
+     * somente uma vez para ter acesso ao sistema. login: master, senha:master
      */
     public void criarUsuarioMaster() {
         try {
             Usuario user = usuarioService.criarSalvarUsuarioMaster();
-            createFacesInfoMessage("Usuário "+user.getNome()+" criado com sucesso");
+            createFacesInfoMessage("Usuário " + user.getNome() + " criado com sucesso");
         } catch (Exception ex) {
             Logger.getLogger(AutenticacaoMB.class.getSimpleName()).log(Level.WARNING, null, ex);
             createFacesErrorMessage("Não foi possível criar usuario master");
-        }finally{
+        } finally {
             scrollTopMessage();
         }
     }
 
     /**
-     *Evento vindo de qualquer view para identificar se o usuário tem 
+     * Evento vindo de qualquer view para identificar se o usuário tem
      * determinada permissão
+     *
      * @param permissao
-     * @return 
+     * @return
      */
     public boolean hasPermission(String permissao) {
         if (SecurityUtils.getSubject() != null && SecurityUtils.getSubject().getPrincipal() != null) {
@@ -91,8 +94,8 @@ public class AutenticacaoMB extends BasicControl {
     }
 
     /**
-     *Evento invocado do menu pelo usuário identificando que ele 
-     * deseja fazer logout. retornando para o login;
+     * Evento invocado do menu pelo usuário identificando que ele deseja fazer
+     * logout. retornando para o login;
      */
     public void sair() {
         try {
@@ -111,12 +114,13 @@ public class AutenticacaoMB extends BasicControl {
                 createFacesErrorMessage(ex.getLocalizedMessage());
             }
         }
-        
+
     }
 
     /**
-     *metodo que recupera o usuário logado 
-     * @return 
+     * metodo que recupera o usuário logado
+     *
+     * @return
      */
     private Usuario getUsuario() {
         try {
@@ -129,6 +133,19 @@ public class AutenticacaoMB extends BasicControl {
         }
 
         return null;
+    }
+
+    /**
+     * metodo invocado pela tela de login para enviar senha por email
+     */
+    public void enviarLembrarSenha() {
+        try {
+            usuarioService.enviarLembreteSenha(email);
+            exibirLogin = true;
+        } catch (Exception ex) {
+            Logger.getLogger(AutenticacaoMB.class.getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getLocalizedMessage());
+        }
     }
 
     public String getLogin() {
@@ -163,6 +180,20 @@ public class AutenticacaoMB extends BasicControl {
         this.usuarioLogado = usuarioLogado;
     }
 
-    
-    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isExibirLogin() {
+        return exibirLogin;
+    }
+
+    public void setExibirLogin(boolean exibirLogin) {
+        this.exibirLogin = exibirLogin;
+    }
+
 }

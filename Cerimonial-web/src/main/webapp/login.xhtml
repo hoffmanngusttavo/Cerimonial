@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <f:view contentType="text/html;" >   
+
+        <h1 class="text-center">Login</h1>
+        <div class="form-group">
+            <label class="sr-only" for="login">Usuário</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-user"></span>
+                </div>
+
+                <p:inputText value="#{AutenticacaoMB.login}" 
+                             required="true" 
+                             placeholder="Seu login de usuário"
+                             class="form-control"
+                             id="login">
+                    <p:ajax event="change" 
+                            partialSubmit="true" 
+                            process="@this"/>
+                </p:inputText>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="sr-only" for="senha">Senha</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-lock"></span>
+                </div>
+
+                <p:password value="#{AutenticacaoMB.senha}" 
+                            required="true"
+                            feedback="false" 
+                            id="senha" 
+                            class="form-control" 
+                            placeholder="Digite sua senha">
+                    <p:ajax event="change" 
+                            partialSubmit="true" 
+                            process="@this"/>
+                </p:password>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <p:commandButton value="Entrar" 
+                             class="btn btn-success form-control"
+                             id="btnEntrar"
+                             action="#{AutenticacaoMB.logar()}" />
+        </div>
+        <div class="form-group">
+            <p:commandButton value="Criar Usuário Padrão" 
+                             class="btn btn-default form-control"
+                             rendered="true"
+                             id="btnCriar"
+                             update="messages"
+                             process="@this"
+                             action="#{AutenticacaoMB.criarUsuarioMaster()}" />
+        </div>
+
+        <div class="form-group">
+            <p:commandLink styleClass="text" 
+                           style="color: #434D53;margin-top: 15px;font-size: 11px;float: left;" 
+                           value="Esqueci minha senha"
+                           actionListener="#{AutenticacaoMB.setExibirLogin(false)}"
+                           update="@form"
+                           process="@this" />
+        </div>
+    </f:view>
+</html>

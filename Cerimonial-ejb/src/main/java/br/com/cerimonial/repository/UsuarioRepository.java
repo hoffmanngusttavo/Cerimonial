@@ -33,6 +33,10 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
         return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1", login);
     }
     
+   public Usuario getUsuarioByEmail(String email) throws Exception{
+        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.email = ?1", email);
+    }
+    
    
 
     @Override
@@ -62,4 +66,6 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
 
         return super.findRangeListagem(modelFilter); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 }

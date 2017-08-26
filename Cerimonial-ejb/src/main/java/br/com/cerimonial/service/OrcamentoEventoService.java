@@ -275,14 +275,14 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         cliente.setUsuarioCliente(usuarioCliente);
         pessoaService.saveCliente(cliente);
         
-        usuarioService.enviarEmailBoasVindas(usuarioCliente, senha);
-        
         Evento evento = new Evento();
         evento.setContratante(cliente);
         evento.setNome(entity.getContatoEvento().getTipoEvento().getCategoria().getLabel() +" "+cliente.getNome());
         evento.setOrcamento(entity);
         
         eventoService.save(evento);
+        
+        usuarioService.enviarEmailBoasVindas(usuarioCliente, senha);
     }
 
 }

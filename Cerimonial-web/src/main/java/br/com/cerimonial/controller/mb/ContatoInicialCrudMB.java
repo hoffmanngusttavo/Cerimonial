@@ -86,10 +86,11 @@ public class ContatoInicialCrudMB extends BasicControl {
     /**
      * MÃ©todo invocado pelo botÃ£o de criar evento
      * na tela de form
+     * @param orcamentoEvento
      */
-    public void criarEvento() {
+    public void criarEvento(OrcamentoEvento orcamentoEvento) {
         try {
-            orcamentoService.criarEvento(orcamento);
+            orcamentoService.criarEvento(orcamentoEvento);
         } catch (Exception ex) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
         }

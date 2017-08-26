@@ -14,6 +14,7 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -93,4 +94,18 @@ public class CerimonialUtils {
         return "";
     }
 
+    
+    public static String gerarAlfaNumericoAleatoria() {
+        UUID uuid = UUID.randomUUID();
+        String random = uuid.toString();
+        return random.substring(0, 6);
+    }
+    
+    
+    public static void validarEmail(String email) throws Exception{
+        if(StringUtils.isBlank(email)){
+            throw new Exception("Preencha um email válido");
+        }
+    }
+    
 }

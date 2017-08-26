@@ -224,15 +224,8 @@
                                      class="btn btn-info"
                                      icon="fa fa-plus"
                                      value="Criar Nova Proposta"/>
-                    
-                    <p:commandButton process="@this"
-                                     actionListener="#{ContatoInicialCrudMB.criarEvento()}"
-                                     rendered="#{ContatoInicialCrudMB.entity.propostaAceita}"
-                                     id="btn-criar-criar-ficha"
-                                     update="groupOrcamento"
-                                     class="btn btn-info"
-                                     icon="fa fa-plus"
-                                     value="Enviar Ficha Cadastratl"/>
+
+
 
                     <table class="table table-hover table-inverse table-striped table-responsive">
                         <thead class="thead-inverse">
@@ -325,6 +318,17 @@
                                                          title="Cancelar Proposta"
                                                          update=":form:groupPropostas"
                                                          immediate="true"/>
+
+                                        <p:commandButton process="@this"
+                                                         actionListener="#{ContatoInicialCrudMB.criarEvento()}"
+                                                         rendered="#{ContatoInicialCrudMB.entity.propostaAceita}"
+                                                         id="btn-criar-criar-ficha"
+                                                         icon="fa fa-doc" 
+                                                         styleClass="bt-acoes"
+                                                         update="groupOrcamento"
+                                                         class="btn btn-info"
+                                                         icon="fa fa-plus"
+                                                         title="Enviar Ficha Cadastratl"/>
 
                                         <p:commandButton icon="fa fa-trash" 
                                                          styleClass="bt-acoes"

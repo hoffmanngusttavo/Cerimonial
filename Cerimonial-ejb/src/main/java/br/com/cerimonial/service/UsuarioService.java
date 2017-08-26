@@ -12,6 +12,7 @@ import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.Criptografia;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -79,20 +80,21 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     public Usuario getUsuarioByLoginAtivo(String login) throws Exception {
-        
         if (StringUtils.isBlank(login)) {
             throw new Exception("O login está vazio");
         }
-        
         return repository.getUsuarioByLoginAtivo(login, Boolean.TRUE);
     }
     
+    public Usuario getUsuarioByEmail(String email) throws Exception{
+        CerimonialUtils.validarEmail(email);
+        return repository.getUsuarioByEmail(email.trim());
+    }
+
     public Usuario getUsuarioByLogin(String login) throws Exception {
-        
         if (StringUtils.isBlank(login)) {
             throw new Exception("O login está vazio");
         }
-        
         return repository.getUsuarioByLogin(login);
     }
 
@@ -114,28 +116,29 @@ public class UsuarioService extends BasicService<Usuario> {
         Usuario usuario = criarUsuarioMaster();
         return save(usuario);
     }
-    
+
     public Usuario criarUsuarioMaster() throws Exception {
 
         Usuario usuario = this.getUsuarioByLogin("master");
-        
-        if(usuario == null){
+
+        if (usuario == null) {
             usuario = new Usuario();
+            usuario.setNome("Master");
+            usuario.setLogin("master");
+            usuario.setSenha("master");
+            usuario.setEmail("hoffmann.gusttavo@gmail.com");
+            
         }
-        usuario.setNome("Master");
-        usuario.setLogin("master");
-        usuario.setSenha("master");
-        usuario.setEmail("hoffmann.gusttavo@gmail.com");
+
         usuario.setMaster(true);
         usuario.setAtivo(true);
-        
+
         return usuario;
     }
-    
 
     /**
-     * Verifica se já existe um usuario cadastrado com esse login 
-     * Se não existir, instancia um novo e gera uma senha aleatoria.
+     * Verifica se já existe um usuario cadastrado com esse login Se não
+     * existir, instancia um novo e gera uma senha aleatoria.
      *
      * @param cliente
      * @return
@@ -145,18 +148,20 @@ public class UsuarioService extends BasicService<Usuario> {
         if (cliente == null) {
             throw new Exception("Cliente Null");
         }
-        
+
         Usuario usuario = this.getUsuarioByLogin(cliente.getEmail());
-        
-        if(usuario == null){
+
+        if (usuario == null) {
             usuario = new Usuario();
+            usuario.setLogin(cliente.getEmail());
+            usuario.setSenha(CerimonialUtils.gerarAlfaNumericoAleatoria());
+            usuario.setEmail(cliente.getEmail());
         }
-        usuario.setAtivo(true);
+        
         usuario.setNome(cliente.getNome());
-        usuario.setLogin(cliente.getEmail());
-        usuario.setSenha(cliente.getEmail());
-        usuario.setEmail(cliente.getEmail());
+        usuario.setAtivo(true);
         usuario.setMaster(false);
+        
         return usuario;
     }
 
@@ -189,7 +194,50 @@ public class UsuarioService extends BasicService<Usuario> {
         return null;
     }
 
+    /**
+     * Enviar email de boas vindas quando cadastrar um cliente novo
+     * @param user
+     * @param senha
+     */
     public void enviarEmailBoasVindas(Usuario user, String senha) {
 
     }
+    
+    /**
+     * Enviar email quando usuario esquecer a senha
+     * @param user
+     * @param senha
+     */
+    public void enviarEmailEsqueciMinhaSenha(Usuario user, String senha) {
+
+    }
+
+    /**
+     * método para enviar email com a senha para o usuário
+     * quando ele esquecer
+     * @param email
+     * @throws java.lang.Exception
+     */
+    public void enviarLembreteSenha(String email) throws Exception{
+        
+      CerimonialUtils.validarEmail(email);
+        
+       Usuario usuario = this.getUsuarioByEmail(email);
+       if(usuario == null){
+           throw new Exception("Usuário inválido");
+       }
+       if(!usuario.isAtivo()){
+           throw new Exception("Seu usuário está inativo, entre em contato com seu cerimonial");
+       }
+       
+       String novaSenha = CerimonialUtils.gerarAlfaNumericoAleatoria();
+        System.out.println(novaSenha);
+       usuario.setSenha(novaSenha);
+       
+       this.alterarSenha(usuario);
+        
+       this.enviarEmailEsqueciMinhaSenha(usuario, novaSenha);
+    }
+
+    
 }
