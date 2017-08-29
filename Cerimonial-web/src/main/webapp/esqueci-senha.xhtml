@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
-
-    <f:view contentType="text/html;" >   
-
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:composition>     
 
         <div class="form-group">
             <label class="sr-only" for="email">Email</label>
             <div class="input-group">
-                <p:inputText value="#{AutenticacaoMB.email}" 
+                <p:inputText value="#{AcessoSistemaMB.email}" 
                              required="true" 
                              requiredMessage="Preencha um email válido"
                              placeholder="Seu email"
@@ -27,20 +27,18 @@
         <div class="form-group">
             <p:commandButton value="Enviar" 
                              class="btn btn-success form-control"
-                             update="@form"
-                             action="#{AutenticacaoMB.enviarLembrarSenha()}" />
+                             action="#{AcessoSistemaMB.enviarLembrarSenha()}" />
         </div>
 
         <div class="form-group">
             <p:commandLink styleClass="text" 
                            style="color: #434D53;margin-top: 15px;font-size: 11px;float: left;" 
-                           value="Voltar para tela login"
-                           actionListener="#{AutenticacaoMB.setExibirLogin(true)}"
+                           value="Voltar"
+                           actionListener="#{AcessoSistemaMB.setExibirLogin(true)}"
                            update="@form"
                            process="@this" />
         </div>
 
-
-
-    </f:view>
+    </ui:composition>
 </html>
+

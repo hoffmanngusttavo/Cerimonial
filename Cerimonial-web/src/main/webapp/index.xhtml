@@ -1,50 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/admin/layout/bootstrap/login.xhtml">
 
-        <meta charset="utf-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <ui:define name="titleOfPage">
+            Login
+        </ui:define>
 
-        <title>Login</title>
+        <ui:define name="content">
 
-        <h:outputStylesheet name="./css/style.css"/>
-        <h:outputStylesheet name="./css/bootstrap.min.css"/>   
-    </h:head>
-
-    <h:body>
-        <h:form prependId="false"
-                id="form">
-
-            <p:growl autoUpdate="true"
+            <p:growl autoUpdate="true" 
                      id="messages"/>
-
+            
             <div id="form-container">
                 <div class="panel" 
                      id="form-box">
 
                     <h:panelGroup id="cadastro"
-                                  rendered="#{AutenticacaoMB.exibirLogin}">
-                        
+                                  rendered="#{AcessoSistemaMB.exibirLogin}">
+
                         <p:focus for="login" context="login"/>
-                        
+
                         <ui:include src="./login.xhtml"/>
                     </h:panelGroup>                                    
 
                     <h:panelGroup id="criarCadastro"
-                                  rendered="#{!AutenticacaoMB.exibirLogin}">
-                        
+                                  rendered="#{!AcessoSistemaMB.exibirLogin}">
+
                         <p:focus for="email" context="email"/>
-                        
+
                         <ui:include src="./esqueci-senha.xhtml"/>
                     </h:panelGroup>
                 </div>
             </div>
-        </h:form>
-    </h:body>
+
+        </ui:define>
+    </ui:decorate>
 </html>
 

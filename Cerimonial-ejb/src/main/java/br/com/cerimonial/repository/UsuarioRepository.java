@@ -9,6 +9,8 @@ import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 
 /**
@@ -29,8 +31,13 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
         return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1 and usr.ativo = ?2", login, ativo);
     }
     
-    public Usuario getUsuarioByLogin(String login) throws Exception {
-        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1", login);
+    public Usuario getUsuarioByLogin(String login) {
+        try {
+            return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1", login);
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
    public Usuario getUsuarioByEmail(String email) throws Exception{

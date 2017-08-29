@@ -35,7 +35,7 @@ public class EmpresaCrudMB extends BasicControl {
     @EJB
     private EnderecoService enderecoService;
     private final SelectItemUtils selectItemUtils;
-
+    
     public EmpresaCrudMB() {
         selectItemUtils = new SelectItemUtils();
     }

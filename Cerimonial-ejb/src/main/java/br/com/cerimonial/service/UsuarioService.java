@@ -106,7 +106,7 @@ public class UsuarioService extends BasicService<Usuario> {
         return repository.edit(entity);
     }
 
-    private void alterarSaltSenha(Usuario entity) {
+    public void alterarSaltSenha(Usuario entity) {
         ByteSource salt = new SecureRandomNumberGenerator().nextBytes();
         entity.setSenha(Criptografia.md5(entity.getSenha() + salt.toString()));
         entity.setSalt(salt.toString());
@@ -222,7 +222,7 @@ public class UsuarioService extends BasicService<Usuario> {
         
       CerimonialUtils.validarEmail(email);
         
-       Usuario usuario = this.getUsuarioByEmail(email);
+       Usuario usuario = getUsuarioByEmail(email);
        if(usuario == null){
            throw new Exception("Usuário inválido");
        }
@@ -231,10 +231,10 @@ public class UsuarioService extends BasicService<Usuario> {
        }
        
        String novaSenha = CerimonialUtils.gerarAlfaNumericoAleatoria();
-        System.out.println(novaSenha);
-       usuario.setSenha(novaSenha);
+       System.out.println(novaSenha);
+       usuario.setSenha("master");
        
-       this.alterarSenha(usuario);
+       this.alterarSaltSenha(usuario);
         
        this.enviarEmailEsqueciMinhaSenha(usuario, novaSenha);
     }
