@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.cerimonial.service.invoice;
+package br.com.cerimonial.service.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

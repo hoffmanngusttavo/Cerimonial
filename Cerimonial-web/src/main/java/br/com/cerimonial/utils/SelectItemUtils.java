@@ -20,6 +20,7 @@ import br.com.cerimonial.service.EstadoService;
 import br.com.cerimonial.service.ModeloPropostaService;
 import br.com.cerimonial.service.StatusContatoService;
 import br.com.cerimonial.service.TipoEventoService;
+import br.com.cerimonial.service.utils.ServiceLookupUtil;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,22 +35,6 @@ import javax.naming.NamingException;
  * @author Gustavo Hoffmann
  */
 public class SelectItemUtils {
-    
-
-    private final StatusContatoService statusContatoService = lookupStatusContatoServiceBean();
-    
-    private final TipoEventoService tipoEventoService = lookupTipoEventoServiceBean();
-
-    private final EstadoService estadoService = lookupEstadoServiceBean();
-
-    private final CidadeService cidadeService = lookupCidadeServiceBean();
-
-    private final CategoriaFornecedorService categoriaFornecedorService = lookupCategoriaFornecedorServiceBean();
-    
-    private final ModeloPropostaService modeloPropostaService = lookupModeloPropostaServiceBean();
-    
-    
-    
 
     public static List<SelectItem> getComboTipoPessoa() {
         List<SelectItem> items = new LinkedList<>();
@@ -58,7 +43,7 @@ public class SelectItemUtils {
         });
         return items;
     }
-    
+
     public static List<SelectItem> getComboCategoriaEvento() {
         List<SelectItem> items = new LinkedList<>();
         CategoriaEvento.getList().stream().forEach((item) -> {
@@ -66,7 +51,7 @@ public class SelectItemUtils {
         });
         return items;
     }
-    
+
     public static List<SelectItem> getComboTipoEmail() {
         List<SelectItem> items = new LinkedList<>();
         TipoEmail.getList().stream().forEach((item) -> {
@@ -77,8 +62,12 @@ public class SelectItemUtils {
 
     public List<SelectItem> getComboCidade(Estado estado) {
         List<SelectItem> items = new LinkedList<>();
+
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        CidadeService service = lookupUtil.lookupService(CidadeService.class);
+
         try {
-            for (Cidade item : cidadeService.findByEstado(estado)) {
+            for (Cidade item : service.findByEstado(estado)) {
                 items.add(new SelectItem(item, item.getNome()));
             }
         } catch (Exception ex) {
@@ -89,8 +78,12 @@ public class SelectItemUtils {
 
     public List<SelectItem> getComboEstado() {
         List<SelectItem> items = new LinkedList<>();
+
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        EstadoService service = lookupUtil.lookupService(EstadoService.class);
+
         try {
-            for (Estado item : estadoService.findAll()) {
+            for (Estado item : service.findAll()) {
                 items.add(new SelectItem(item, item.getSigla()));
             }
         } catch (Exception ex) {
@@ -101,8 +94,12 @@ public class SelectItemUtils {
 
     public List<SelectItem> getComboCategoriasFornecedor() {
         List<SelectItem> items = new LinkedList<>();
+
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        CategoriaFornecedorService service = lookupUtil.lookupService(CategoriaFornecedorService.class);
+
         try {
-            for (CategoriaFornecedor item : categoriaFornecedorService.findAll()) {
+            for (CategoriaFornecedor item : service.findAll()) {
                 items.add(new SelectItem(item, item.getNome()));
             }
         } catch (Exception ex) {
@@ -110,11 +107,14 @@ public class SelectItemUtils {
         }
         return items;
     }
-    
+
     public List<SelectItem> getComboTipoEvento() {
         List<SelectItem> items = new LinkedList<>();
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        TipoEventoService service = lookupUtil.lookupService(TipoEventoService.class);
+
         try {
-            for (TipoEvento item : tipoEventoService.findAll()) {
+            for (TipoEvento item : service.findAll()) {
                 items.add(new SelectItem(item, item.getNome()));
             }
         } catch (Exception ex) {
@@ -122,11 +122,15 @@ public class SelectItemUtils {
         }
         return items;
     }
-    
+
     public List<SelectItem> getComboModelosProposta() {
         List<SelectItem> items = new LinkedList<>();
+
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        ModeloPropostaService service = lookupUtil.lookupService(ModeloPropostaService.class);
+
         try {
-            for (ModeloProposta item : modeloPropostaService.findAll()) {
+            for (ModeloProposta item : service.findAll()) {
                 items.add(new SelectItem(item, item.getTitulo()));
             }
         } catch (Exception ex) {
@@ -134,11 +138,15 @@ public class SelectItemUtils {
         }
         return items;
     }
-    
+
     public List<SelectItem> getComboStatusContato() {
         List<SelectItem> items = new LinkedList<>();
+
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        StatusContatoService service = lookupUtil.lookupService(StatusContatoService.class);
+
         try {
-            for (StatusContato item : statusContatoService.findAll()) {
+            for (StatusContato item : service.findAll()) {
                 items.add(new SelectItem(item, item.getNome()));
             }
         } catch (Exception ex) {
@@ -146,67 +154,5 @@ public class SelectItemUtils {
         }
         return items;
     }
-
-    private CidadeService lookupCidadeServiceBean() {
-        try {
-            Context c = new InitialContext();
-            return (CidadeService) c.lookup("java:global/" + ConstantsProject.appName + "/" + ConstantsProject.moduleEjbName + "/CidadeService!br.com.cerimonial.service.CidadeService");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
-    private EstadoService lookupEstadoServiceBean() {
-        try {
-            Context c = new InitialContext();
-            return (EstadoService) c.lookup("java:global/" + ConstantsProject.appName + "/" + ConstantsProject.moduleEjbName + "/EstadoService!br.com.cerimonial.service.EstadoService");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
-    private CategoriaFornecedorService lookupCategoriaFornecedorServiceBean() {
-        try {
-            Context c = new InitialContext();
-            return (CategoriaFornecedorService) c.lookup("java:global/" + ConstantsProject.appName + "/" + ConstantsProject.moduleEjbName + "/CategoriaFornecedorService!br.com.cerimonial.service.CategoriaFornecedorService");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
-    private TipoEventoService lookupTipoEventoServiceBean() {
-        try {
-            Context c = new InitialContext();
-            return (TipoEventoService) c.lookup("java:global/" + ConstantsProject.appName + "/" + ConstantsProject.moduleEjbName + "/TipoEventoService!br.com.cerimonial.service.TipoEventoService");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
-    private StatusContatoService lookupStatusContatoServiceBean() {
-        try {
-            Context c = new InitialContext();
-            return (StatusContatoService) c.lookup("java:global/" + ConstantsProject.appName + "/" + ConstantsProject.moduleEjbName + "/StatusContatoService!br.com.cerimonial.service.StatusContatoService");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
-    private ModeloPropostaService lookupModeloPropostaServiceBean() {
-        try {
-            Context c = new InitialContext();
-            return (ModeloPropostaService) c.lookup("java:global/" + ConstantsProject.appName + "/" + ConstantsProject.moduleEjbName + "/ModeloPropostaService!br.com.cerimonial.service.ModeloPropostaService");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
-    
 
 }

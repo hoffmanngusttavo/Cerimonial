@@ -7,22 +7,17 @@ package br.com.cerimonial.utils;
 
 import br.com.cerimonial.entity.ConfiguracaoEmail;
 import br.com.cerimonial.service.ConfiguracaoEmailService;
-import java.io.File;
+import br.com.cerimonial.service.ModeloPropostaService;
+import br.com.cerimonial.service.utils.ServiceLookupUtil;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Message;
-import javax.mail.Message.RecipientType;
 import javax.mail.Multipart;
-import javax.mail.Part;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -30,7 +25,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -38,20 +32,23 @@ import org.apache.commons.io.FileUtils;
  */
 public class EmailHelper {
 
-    private ConfiguracaoEmail configuracaoEmail;
+    private final ConfiguracaoEmail configuracaoEmail;
 
     private final MimeMultipart mpRoot = new MimeMultipart("mixed");
     private final MimeMultipart mpContent = new MimeMultipart("alternative");
     private final MimeBodyPart contentPartRoot = new MimeBodyPart();
 
-    public EmailHelper(ConfiguracaoEmailService configuracaoEmailService) {
-        try {
-            //buscar o configurador de email
-            configuracaoEmail = configuracaoEmailService.getConfiguracaoEmail();
-        } catch (Exception ex) {
-            Logger.getLogger(EmailHelper.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public EmailHelper() throws Exception {
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        ConfiguracaoEmailService service = lookupUtil.lookupService(ConfiguracaoEmailService.class);
+        configuracaoEmail = service.getConfiguracaoEmail();
+        
+    }
 
+    public static void validarConfiguracaoEmail() throws Exception {
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        ConfiguracaoEmailService service = lookupUtil.lookupService(ConfiguracaoEmailService.class);
+        service.getConfiguracaoEmail();
     }
 
     /**
@@ -124,7 +121,6 @@ public class EmailHelper {
 //                    }
 //                }
 //            }
-            
             msg.setContent(mpRoot);
 
             msg.saveChanges();
@@ -139,14 +135,14 @@ public class EmailHelper {
         }
     }
 
-     /**
+    /**
      * @param destinatario
      * @param assunto
      * @param htmlMessage
      * @param anexos
      * @throws java.lang.Exception
      */
-    public void enviarEmailOld( String destinatario, String assunto, String htmlMessage, HashMap<String, Object> anexos) throws Exception {
+    public void enviarEmailOld(String destinatario, String assunto, String htmlMessage, HashMap<String, Object> anexos) throws Exception {
         //objeto para definicao das propriedades de configuracao do provider
         Properties props = getProperties();
 
@@ -180,7 +176,7 @@ public class EmailHelper {
         attachment0.setContent(htmlMessage, "text/html; charset=UTF-8");
         //adicionando na multipart
         multipart.addBodyPart(attachment0);
-        
+
         //adicionando anexos
 //        if (anexos != null && anexos.size() > 0) {
 //            for (Map.Entry e : anexos.entrySet()) {
@@ -202,7 +198,6 @@ public class EmailHelper {
 //                }
 //            }
 //        }
-
         //adicionando a multipart como conteudo da mensagem 
         message.setContent(multipart);
 
@@ -223,13 +218,12 @@ public class EmailHelper {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.socketFactory.port", configuracaoEmail.getPortaSmtp());//465, 587
         props.put("mail.smtp.socketFactory.fallback", "false");
-        
+
         if (!"587".equals(configuracaoEmail.getPortaSmtp())) {
             props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         }
-        
-//        props.put("mail.transport.protocol", "smtp");
 
+//        props.put("mail.transport.protocol", "smtp");
         return props;
     }
 

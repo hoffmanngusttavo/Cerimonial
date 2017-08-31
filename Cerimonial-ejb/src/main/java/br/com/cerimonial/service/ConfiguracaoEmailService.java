@@ -50,7 +50,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail>{
         if(CerimonialUtils.isListNotBlank(emails)){
             return emails.get(0);
         }
-        return new ConfiguracaoEmail();
+        throw new Exception("Não há nenhuma configuração de email cadastrada");
     }
     
     @Override
@@ -111,7 +111,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail>{
         
         switch (tipoEmail) {
             case GMAIL:
-                return getConfiguracaoServidorEmail(entity, "smtp.gmail.com", "imap.gmail.com", "465 ", "993");
+                return getConfiguracaoServidorEmail(entity, "smtp.gmail.com", "imap.gmail.com", "587 ", "993");
             case HOTMAIL:
                 return getConfiguracaoServidorEmail(entity, "smtp-mail.outlook.com", "imap-mail.outlook.com", "587", "993");
             case YAHOO:

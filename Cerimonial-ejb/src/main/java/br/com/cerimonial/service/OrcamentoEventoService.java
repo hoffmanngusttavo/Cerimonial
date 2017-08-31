@@ -14,7 +14,7 @@ import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
-import br.com.cerimonial.service.invoice.InvoiceUtils;
+import br.com.cerimonial.service.utils.InvoiceUtils;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.EmailHelper;
 import java.io.InputStream;
@@ -201,7 +201,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         }
 
         //enviar email
-        EmailHelper emailHelper = new EmailHelper(configuracaoEmailService);
+        EmailHelper emailHelper = new EmailHelper();
         emailHelper.enviarEmailOld(proposta.getContatoEvento().getEmailContato(), "Proposta/OrÃ§amento", body, anexos);
 
         //atualizar no banco que foi enviado o email com sucesso

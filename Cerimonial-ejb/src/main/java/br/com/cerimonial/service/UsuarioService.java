@@ -8,8 +8,13 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;
+import br.com.cerimonial.service.utils.InvoiceUtils;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.Criptografia;
+import br.com.cerimonial.utils.EmailHelper;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -85,8 +90,8 @@ public class UsuarioService extends BasicService<Usuario> {
         }
         return repository.getUsuarioByLoginAtivo(login, Boolean.TRUE);
     }
-    
-    public Usuario getUsuarioByEmail(String email) throws Exception{
+
+    public Usuario getUsuarioByEmail(String email) throws Exception {
         CerimonialUtils.validarEmail(email);
         return repository.getUsuarioByEmail(email.trim());
     }
@@ -101,6 +106,16 @@ public class UsuarioService extends BasicService<Usuario> {
     public synchronized Usuario alterarSenha(Usuario entity) throws Exception {
         Usuario usuario = this.getEntity(entity.getId());
         if (usuario != null && !usuario.getSenha().equals(entity.getSenha())) {
+            alterarSaltSenha(entity);
+        }
+        return repository.edit(entity);
+    }
+
+    public synchronized Usuario alterarSenha(Usuario entity, String novaSenha) throws Exception {
+        Usuario usuario = this.getEntity(entity.getId());
+
+        if (usuario != null && !usuario.getSenha().equals(novaSenha)) {
+            entity.setSenha(novaSenha);
             alterarSaltSenha(entity);
         }
         return repository.edit(entity);
@@ -127,7 +142,7 @@ public class UsuarioService extends BasicService<Usuario> {
             usuario.setLogin("master");
             usuario.setSenha("master");
             usuario.setEmail("hoffmann.gusttavo@gmail.com");
-            
+
         }
 
         usuario.setMaster(true);
@@ -157,11 +172,11 @@ public class UsuarioService extends BasicService<Usuario> {
             usuario.setSenha(CerimonialUtils.gerarAlfaNumericoAleatoria());
             usuario.setEmail(cliente.getEmail());
         }
-        
+
         usuario.setNome(cliente.getNome());
         usuario.setAtivo(true);
         usuario.setMaster(false);
-        
+
         return usuario;
     }
 
@@ -196,48 +211,60 @@ public class UsuarioService extends BasicService<Usuario> {
 
     /**
      * Enviar email de boas vindas quando cadastrar um cliente novo
+     *
      * @param user
      * @param senha
      */
     public void enviarEmailBoasVindas(Usuario user, String senha) {
 
     }
-    
+
     /**
      * Enviar email quando usuario esquecer a senha
+     *
      * @param user
      * @param senha
+     * @throws java.lang.Exception
      */
-    public void enviarEmailEsqueciMinhaSenha(Usuario user, String senha) {
+    public void enviarEmailEsqueciMinhaSenha(Usuario user, String senha) throws Exception {
+        if (user == null) {
+            throw new Exception("Objeto nulo");
+        }
 
+        //carregar invoice padrao
+        String body = InvoiceUtils.readFileToString("esqueci-minha-senha.html");
+        body = body.replaceAll("@@@NOME_USUARIO@@@", user.getNome());
+        body = body.replaceAll("@@@SENHA_USUARIO@@@", senha);
+
+        //enviar email
+        EmailHelper emailHelper = new EmailHelper();
+        emailHelper.enviarEmail(user.getEmail(), "Lembrar Senha", body);
+        
     }
 
     /**
-     * método para enviar email com a senha para o usuário
-     * quando ele esquecer
+     * método para enviar email com a senha para o usuário quando ele esquecer
+     *
      * @param email
      * @throws java.lang.Exception
      */
-    public void enviarLembreteSenha(String email) throws Exception{
-        
-      CerimonialUtils.validarEmail(email);
-        
-       Usuario usuario = getUsuarioByEmail(email);
-       if(usuario == null){
-           throw new Exception("Usuário inválido");
-       }
-       if(!usuario.isAtivo()){
-           throw new Exception("Seu usuário está inativo, entre em contato com seu cerimonial");
-       }
-       
-       String novaSenha = CerimonialUtils.gerarAlfaNumericoAleatoria();
-       System.out.println(novaSenha);
-       usuario.setSenha("master");
-       
-       this.alterarSaltSenha(usuario);
-        
-       this.enviarEmailEsqueciMinhaSenha(usuario, novaSenha);
+    public void enviarLembreteSenha(String email) throws Exception {
+
+        EmailHelper.validarConfiguracaoEmail();
+        CerimonialUtils.validarEmail(email);
+
+        Usuario usuario = getUsuarioByEmail(email);
+        if (usuario == null) {
+            throw new Exception("Usuário inválido");
+        }
+        if (!usuario.isAtivo()) {
+            throw new Exception("Seu usuário está inativo, entre em contato com seu cerimonial");
+        }
+
+        String senhaNova = CerimonialUtils.gerarAlfaNumericoAleatoria();
+        alterarSenha(usuario, senhaNova);
+
+        this.enviarEmailEsqueciMinhaSenha(usuario, senhaNova);
     }
 
-    
 }
