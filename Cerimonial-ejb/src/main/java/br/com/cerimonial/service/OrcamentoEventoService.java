@@ -14,6 +14,7 @@ import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
+import br.com.cerimonial.service.utils.EmpresaCache;
 import br.com.cerimonial.service.utils.InvoiceUtils;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.EmailHelper;
@@ -187,10 +188,11 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         }
 
         //carregar invoice padrao
-        String body = InvoiceUtils.readFileToString("invoice.html");
-        body = body.replaceAll("@@@NOME_CLIENTE@@@", proposta.getContatoEvento().getNomeContato());
-        body = body.replaceAll("@@@PARCELA_DATA@@@", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-        body = body.replaceAll("@@@PARCELA_VALOR@@@", new DecimalFormat("#0.00").format(proposta.getValorProposta()));
+        String body = InvoiceUtils.readFileToString("proposta-orcamento.html");
+        body = body.replaceAll("@@@NOME_CONTATO@@@", proposta.getContatoEvento().getNomeContato());
+        body = body.replaceAll("@@@NOME_PLANO@@@", proposta.getModeloProposta().getTitulo());
+        body = body.replaceAll("@@@NOME_EMPRESA@@@", EmpresaCache.getEmpresa().getNome());
+        body = body.replaceAll("@@@PROPOSTA_VALOR@@@", new DecimalFormat("#0.00").format(proposta.getValorProposta()));
 
         //anexar dados emmail
         HashMap<String, Object> anexos = new HashMap<>();
@@ -202,7 +204,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
         //enviar email
         EmailHelper emailHelper = new EmailHelper();
-        emailHelper.enviarEmailOld(proposta.getContatoEvento().getEmailContato(), "Proposta/OrÃ§amento", body, anexos);
+        emailHelper.enviarEmail(proposta.getContatoEvento().getEmailContato(), "Proposta/Orçamento", body, anexos);
 
         //atualizar no banco que foi enviado o email com sucesso
         proposta.setPropostaEnviada(true);

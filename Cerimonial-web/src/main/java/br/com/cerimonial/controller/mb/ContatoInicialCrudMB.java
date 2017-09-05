@@ -84,7 +84,7 @@ public class ContatoInicialCrudMB extends BasicControl {
     }
     
     /**
-     * MÃ©todo invocado pelo botÃ£o de criar evento
+     * Método invocado pelo botÃ£o de criar evento
      * na tela de form
      * @param orcamentoEvento
      */
