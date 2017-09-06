@@ -321,13 +321,12 @@
 
                                         <p:commandButton process="@this"
                                                          actionListener="#{ContatoInicialCrudMB.criarEvento(proposta)}"
-                                                         rendered="#{ContatoInicialCrudMB.entity.propostaAceita}"
+                                                         rendered="#{proposta.propostaAceita}"
                                                          id="btn-criar-criar-ficha"
-                                                         icon="fa fa-doc" 
+                                                         icon="fa fa-universal-access" 
                                                          styleClass="bt-acoes"
                                                          update="groupOrcamento"
-                                                         class="btn btn-info"
-                                                         title="Enviar Ficha Cadastratl"/>
+                                                         title="Criar Evento"/>
 
                                         <p:commandButton icon="fa fa-trash" 
                                                          styleClass="bt-acoes"

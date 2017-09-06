@@ -207,7 +207,7 @@ public class ContatoInicialCrudMB extends BasicControl {
         try {
             orcamentoService.aceitarProposta(orcamento);
             entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
-            createFacesInfoMessage("OrÃ§amento aprovado com sucesso!");
+            createFacesInfoMessage("Orçamento aprovado com sucesso!");
         } catch (Exception ex) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
@@ -223,7 +223,7 @@ public class ContatoInicialCrudMB extends BasicControl {
         try {
             orcamentoService.cancelarProposta(orcamento);
             entity.setPropostas(orcamentoService.findAllByContatoId(entity.getId()));
-            createFacesInfoMessage("OrÃ§amento cancelado com sucesso!");
+            createFacesInfoMessage("Orçamento cancelado com sucesso!");
         } catch (Exception ex) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
         }

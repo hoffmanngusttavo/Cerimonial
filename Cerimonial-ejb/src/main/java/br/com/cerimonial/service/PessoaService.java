@@ -254,7 +254,7 @@ public class PessoaService extends BasicService<Pessoa> {
             cliente.setTelefone2(entity.getContatoEvento().getTelefoneSecundario());
             cliente.setAtivo(true);
         } catch (Exception e) {
-            throw new Exception("NÃ£o Foi possivel criar um cliente a partir de um contato");
+            throw new Exception("Não Foi possivel criar um cliente a partir de um contato");
         }
         return cliente;
     }

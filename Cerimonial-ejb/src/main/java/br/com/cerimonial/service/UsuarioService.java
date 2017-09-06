@@ -8,6 +8,7 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;
+import br.com.cerimonial.service.utils.EmpresaCache;
 import br.com.cerimonial.service.utils.InvoiceUtils;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.Criptografia;
@@ -214,8 +215,31 @@ public class UsuarioService extends BasicService<Usuario> {
      *
      * @param user
      * @param senha
+     * @throws java.lang.Exception
      */
-    public void enviarEmailBoasVindas(Usuario user, String senha) {
+    public void enviarEmailBoasVindas(Usuario user, String senha) throws Exception {
+
+        if (user == null) {
+            throw new Exception("Objeto nulo");
+        }
+        
+        CerimonialUtils.validarEmail(user.getEmail());
+        
+        if(StringUtils.isBlank(senha)){
+            throw new Exception("Preencha uma senha válida");
+        }
+
+        //carregar invoice padrao
+        String body = InvoiceUtils.readFileToString("boas-vindas-cliente.html");
+        body = body.replaceAll("@@@NOME_USUARIO@@@", user.getNome());
+        body = body.replaceAll("@@@LOGIN_USUARIO@@@", user.getLogin());
+        body = body.replaceAll("@@@SENHA_USUARIO@@@", senha);
+        body = body.replaceAll("@@@URL_ACESSO@@@", senha);
+        body = body.replaceAll("@@@NOME_EMPRESA@@@", EmpresaCache.getEmpresa().getNome());
+
+        //enviar email
+        EmailHelper emailHelper = new EmailHelper();
+        emailHelper.enviarEmail(user.getEmail(), "Boas vindas", body);
 
     }
 
@@ -239,7 +263,7 @@ public class UsuarioService extends BasicService<Usuario> {
         //enviar email
         EmailHelper emailHelper = new EmailHelper();
         emailHelper.enviarEmail(user.getEmail(), "Lembrar Senha", body);
-        
+
     }
 
     /**

@@ -28,6 +28,7 @@ import javax.persistence.Temporal;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -165,7 +166,7 @@ public class ContatoEvento implements Serializable, ModelInterface{
     }
 
     public void setEmailContato(String emailContato) {
-        this.emailContato = emailContato;
+        this.emailContato = StringUtils.isNotBlank(emailContato) ? emailContato.trim() : emailContato;
     }
 
     public String getLocalEvento() {

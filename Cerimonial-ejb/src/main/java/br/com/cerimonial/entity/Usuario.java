@@ -39,11 +39,6 @@ import org.hibernate.envers.Audited;
 @Audited
 public class Usuario implements Serializable, ModelInterface {
     
-    
-    
-    
-    
-    
 
     @Id
     @GeneratedValue(generator = "GENERATE_Usuario", strategy = GenerationType.AUTO)
