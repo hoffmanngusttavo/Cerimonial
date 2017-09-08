@@ -55,6 +55,11 @@ public class PessoaService extends BasicService<Pessoa> {
     @Override
     public synchronized Pessoa save(Pessoa entity) throws Exception {
         if (entity != null) {
+            
+            if(entity.getEndereco() != null && !entity.getEndereco().isValid()){
+                entity.setEndereco(null);
+            }
+            
             if (entity.getId() == null) {
                 return repository.create(entity);
             } else {
@@ -82,7 +87,13 @@ public class PessoaService extends BasicService<Pessoa> {
     //-----------Clientes----------------------
     public Pessoa saveCliente(Pessoa entity) throws Exception {
         if (entity != null) {
+            
+            if(entity.getEndereco() != null && !entity.getEndereco().isValid()){
+                entity.setEndereco(null);
+            }
+            
             entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
+            
             if (entity.getId() == null) {
                 return repository.create(entity);
             } else {
@@ -154,6 +165,11 @@ public class PessoaService extends BasicService<Pessoa> {
     //-----------Fornecedores----------------------
     public Pessoa saveFornecedor(Pessoa entity) throws Exception {
         if (entity != null) {
+            
+            if(entity.getEndereco() != null && !entity.getEndereco().isValid()){
+                entity.setEndereco(null);
+            }
+            
             entity.setTipoEnvolvido(TipoEnvolvido.FORNECEDOR);
 
             if (entity.getId() == null) {
@@ -195,6 +211,11 @@ public class PessoaService extends BasicService<Pessoa> {
     //--------------------COLABORADOR----------------------------
     public Pessoa saveColaborador(Pessoa entity) throws Exception {
         if (entity != null) {
+            
+            if(entity.getEndereco() != null && !entity.getEndereco().isValid()){
+                entity.setEndereco(null);
+            }
+            
             entity.setTipoEnvolvido(TipoEnvolvido.COLABORADOR);
 
             if (entity.getId() == null) {
@@ -242,12 +263,20 @@ public class PessoaService extends BasicService<Pessoa> {
      * @throws java.lang.Exception
      */
     public Pessoa criarClienteFromContato(OrcamentoEvento entity) throws Exception {
-        Pessoa cliente = this.getClienteByEmail(entity.getContatoEvento().getEmailContato());
+        Pessoa cliente = null;
+        
         try {
+            cliente = this.getClienteByEmail(entity.getContatoEvento().getEmailContato());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+
+        try {
+            
             if (cliente == null) {
                 cliente = new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA);
             }
-            
+
             cliente.setEmail(entity.getContatoEvento().getEmailContato());
             cliente.setNome(entity.getContatoEvento().getNomeContato());
             cliente.setTelefone1(entity.getContatoEvento().getTelefonePrincipal());

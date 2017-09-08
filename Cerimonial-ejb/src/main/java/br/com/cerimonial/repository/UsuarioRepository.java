@@ -40,8 +40,13 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
         return null;
     }
     
-   public Usuario getUsuarioByEmail(String email) throws Exception{
-        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.email = ?1", email);
+   public Usuario getUsuarioByEmail(String email) {
+        try {
+            return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.email = ?1", email);
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
    

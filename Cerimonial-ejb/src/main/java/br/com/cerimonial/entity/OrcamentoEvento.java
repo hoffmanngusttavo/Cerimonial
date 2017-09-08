@@ -24,6 +24,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -40,48 +41,47 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class OrcamentoEvento implements Serializable, ModelInterface {
-    
 
     @Id
     @GeneratedValue(generator = "GENERATE_OrcamentoEvento", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_OrcamentoEvento", sequenceName = "OrcamentoEvento_pk_seq", allocationSize = 1)
     private Long id;
-    
+
     @Column(precision = 16, scale = 2)
     private double valorProposta = 0;
-    
+
     @Column(precision = 16, scale = 2)
     private double valorAlterado = -1;
-    
+
     //Se a proposta foi enviada por email
     @Column(columnDefinition = "boolean default false")
     private boolean propostaEnviada = false;
-    
+
     //Se a proposta foi aceita
     @Column(columnDefinition = "boolean default false")
     private boolean propostaAceita = false;
-    
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataEnvio;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     private ModeloProposta modeloProposta;
-    
+
     @Column(columnDefinition = "TEXT")
     private String proposta;
-    
+
     @ManyToOne
     private ContatoEvento contatoEvento;
-    
-    @OneToOne
-    private Evento evento;
-    
+
+    @OneToMany(mappedBy = "orcamentoEvento")
+    private List<Evento> eventos;
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
-    
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Arquivo> anexos;
 
@@ -91,9 +91,7 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
 
     public OrcamentoEvento() {
     }
-    
-    
-    
+
     @Override
     public Long getId() {
         return id;
@@ -103,7 +101,7 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public Date getDataUltimaAlteracao() {
         return dataUltimaAlteracao;
@@ -195,10 +193,10 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     public void setAnexos(List<Arquivo> anexos) {
         this.anexos = anexos;
     }
-    
-     public void setArquivo(Arquivo file) {
-       anexos =  anexos = new ArrayList<>();
-       adicionarAnexo(file);
+
+    public void setArquivo(Arquivo file) {
+        anexos = anexos = new ArrayList<>();
+        adicionarAnexo(file);
     }
 
     public Arquivo getArquivo() {
@@ -219,16 +217,31 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     }
 
     public Evento getEvento() {
-        return evento;
+
+        if (CerimonialUtils.isListNotBlank(eventos)) {
+            return eventos.get(0);
+        }
+
+        return null;
     }
 
     public void setEvento(Evento evento) {
-        this.evento = evento;
-    }
-    
-    
 
-     @PrePersist
+        if (CerimonialUtils.isListNotBlank(eventos)) {
+            
+            eventos.set(0, evento);
+            
+        } else {
+
+            if (eventos == null) {
+                eventos = new ArrayList<>();
+            }
+
+            eventos.add(evento);
+        }
+    }
+
+    @PrePersist
     @Override
     public void prePersistEntity() {
         try {
@@ -260,12 +273,7 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
-    
-    
-    
-    
-    
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -291,7 +299,4 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
         return "br.com.cerimonial.entity.OrcamentoEvento[ id=" + id + " ]";
     }
 
-   
-    
-   
 }

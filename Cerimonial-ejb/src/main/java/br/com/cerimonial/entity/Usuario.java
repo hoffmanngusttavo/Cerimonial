@@ -39,6 +39,7 @@ import org.hibernate.envers.Audited;
 @Audited
 public class Usuario implements Serializable, ModelInterface {
     
+    
 
     @Id
     @GeneratedValue(generator = "GENERATE_Usuario", strategy = GenerationType.AUTO)
@@ -85,7 +86,7 @@ public class Usuario implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Login> logins;
     
-    @OneToOne(mappedBy = "usuarioCliente")
+    @ManyToOne
     private Pessoa cliente;
 
     @Override
@@ -157,9 +158,7 @@ public class Usuario implements Serializable, ModelInterface {
     public void setCliente(Pessoa cliente) {
         this.cliente = cliente;
     }
-
-   
-
+    
     public String getSalt() {
         return salt;
     }

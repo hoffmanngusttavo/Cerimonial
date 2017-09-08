@@ -273,16 +273,21 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         Pessoa cliente = pessoaService.criarClienteFromContato(entity);
         
         Usuario usuarioCliente = usuarioService.criarUsuarioCliente(cliente);
+        usuarioCliente.setCliente(cliente);
         
         String senha = usuarioCliente.getSenha();
-        usuarioCliente = usuarioService.save(usuarioCliente);
-        cliente.setUsuarioCliente(usuarioCliente);
+        
+        usuarioService.alterarSaltSenha(usuarioCliente);
+        
+//        usuarioCliente = usuarioService.save(usuarioCliente);
+        
+        
         pessoaService.saveCliente(cliente);
         
         Evento evento = new Evento();
         evento.setContratante(cliente);
         evento.setNome(entity.getContatoEvento().getTipoEvento().getCategoria().getLabel() +" "+cliente.getNome());
-        evento.setOrcamento(entity);
+        evento.setOrcamentoEvento(entity);
         
         eventoService.save(evento);
         

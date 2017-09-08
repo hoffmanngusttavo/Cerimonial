@@ -25,6 +25,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -218,6 +219,22 @@ public class Endereco implements Serializable, ModelInterface {
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
+    }
+
+    public boolean isValid() {
+        
+        if(StringUtils.isBlank(cep)){
+            return false;
+        }
+        if(StringUtils.isBlank(logradouro)){
+            return false;
+        }
+        if(StringUtils.isBlank(bairro)){
+            return false;
+        }
+        
+        return true;
+        
     }
 
 }

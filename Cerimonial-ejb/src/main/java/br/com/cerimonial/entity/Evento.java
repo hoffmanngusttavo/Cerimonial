@@ -35,6 +35,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Evento implements Serializable, ModelInterface {
+    
 
     @Id
     @GeneratedValue(generator = "GENERATE_Evento", strategy = GenerationType.AUTO)
@@ -55,8 +56,8 @@ public class Evento implements Serializable, ModelInterface {
     @ManyToOne
     private Pessoa contratante;
 
-    @OneToOne(mappedBy = "evento")
-    private OrcamentoEvento orcamento;
+    @ManyToOne
+    private OrcamentoEvento orcamentoEvento;
 
     @Override
     public Long getId() {
@@ -104,13 +105,15 @@ public class Evento implements Serializable, ModelInterface {
         this.contratante = contratante;
     }
 
-    public OrcamentoEvento getOrcamento() {
-        return orcamento;
+    public OrcamentoEvento getOrcamentoEvento() {
+        return orcamentoEvento;
     }
 
-    public void setOrcamento(OrcamentoEvento orcamento) {
-        this.orcamento = orcamento;
+    public void setOrcamentoEvento(OrcamentoEvento orcamentoEvento) {
+        this.orcamentoEvento = orcamentoEvento;
     }
+
+   
     
     
 

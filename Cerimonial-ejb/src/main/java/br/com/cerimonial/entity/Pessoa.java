@@ -7,7 +7,9 @@ package br.com.cerimonial.entity;
 
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -87,8 +89,9 @@ public class Pessoa implements Serializable, ModelInterface {
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
-    @OneToOne
-    private Usuario usuarioCliente;
+   
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    private List<Usuario> usuariosClientes;
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
@@ -311,11 +314,27 @@ public class Pessoa implements Serializable, ModelInterface {
     }
 
     public Usuario getUsuarioCliente() {
-        return usuarioCliente;
+        
+        if(CerimonialUtils.isListNotBlank(usuariosClientes)){
+            return usuariosClientes.get(0);
+        }
+        
+        return null;
     }
 
     public void setUsuarioCliente(Usuario usuarioCliente) {
-        this.usuarioCliente = usuarioCliente;
+
+        if (CerimonialUtils.isListNotBlank(usuariosClientes)) {
+            usuariosClientes.set(0, usuarioCliente);
+        } else {
+
+            if (usuariosClientes == null) {
+                usuariosClientes = new ArrayList<>();
+            }
+
+            usuariosClientes.add(usuarioCliente);
+        }
+
     }
 
 

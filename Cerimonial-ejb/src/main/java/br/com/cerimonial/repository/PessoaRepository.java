@@ -12,6 +12,8 @@ import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 
 /**
@@ -84,9 +86,16 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
         }
         return entity;
     }
-    
-    public Pessoa getClienteByEmail(String email) throws Exception {
-        return getPurePojo(Pessoa.class, "select usr from Pessoa usr where usr.email = ?1 and usr.tipoEnvolvido = ?2", email, TipoEnvolvido.CLIENTE);
+
+    public Pessoa getClienteByEmail(String email) {
+        Pessoa pessoa = null;
+        try {
+            pessoa = getPurePojo(Pessoa.class, "select usr from Pessoa usr where usr.email = ?1 and usr.tipoEnvolvido = ?2", email, TipoEnvolvido.CLIENTE);
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+
+        return pessoa;
     }
 
 }
