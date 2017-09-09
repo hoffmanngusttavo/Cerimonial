@@ -88,14 +88,14 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
     }
 
     public Pessoa getClienteByEmail(String email) {
-        Pessoa pessoa = null;
+
         try {
-            pessoa = getPurePojo(Pessoa.class, "select usr from Pessoa usr where usr.email = ?1 and usr.tipoEnvolvido = ?2", email, TipoEnvolvido.CLIENTE);
+            return getPurePojo(Pessoa.class, "select usr from Pessoa usr where usr.email = ?1 and usr.tipoEnvolvido = ?2", email, TipoEnvolvido.CLIENTE);
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
 
-        return pessoa;
+        return null;
     }
 
 }

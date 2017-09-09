@@ -91,8 +91,10 @@ public class ContatoInicialCrudMB extends BasicControl {
     public void criarEvento(OrcamentoEvento orcamentoEvento) {
         try {
             orcamentoService.criarEvento(orcamentoEvento);
+            createFacesInfoMessage("Evento criado com sucesso!");
         } catch (Exception ex) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage("Não foi possível criar o evento, entre em contato com o suporte do sistema");
         }
     }
 

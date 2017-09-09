@@ -6,7 +6,10 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.repository.EventoRepository;
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +23,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -98,5 +102,38 @@ public class EventoService extends BasicService<Evento>{
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
        return new ArrayList<Evento>();
+    }
+
+   public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento, Pessoa cliente) throws Exception {
+        
+        if (orcamento == null) {
+            throw new Exception("Orcamento Nulo");
+        }
+        
+        List<Evento> eventos = this.getEventoByOrcamento(orcamento);
+        
+        Evento evento = null;
+        if(CerimonialUtils.isListNotBlank(eventos)){
+            evento = eventos.get(0);
+        }else{
+            evento = new Evento();
+        }
+        
+        evento.setContratante(cliente);
+        evento.setNome(orcamento.getContatoEvento().getTipoEvento().getCategoria().getLabel() +" "+cliente.getNome());
+        evento.setOrcamentoEvento(orcamento);
+        
+        return evento;
+    }
+
+   
+    public List<Evento> getEventoByOrcamento(OrcamentoEvento orcamento) throws Exception {
+        
+        if (orcamento == null || orcamento.getId() == null) {
+            throw new Exception("Orçamento nulo");
+        }
+        
+        return repository.getEventosByOrcamento(orcamento);
+        
     }
 }
