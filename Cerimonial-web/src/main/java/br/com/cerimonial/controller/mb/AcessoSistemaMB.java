@@ -46,7 +46,7 @@ public class AcessoSistemaMB extends BasicControl {
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(login, senha.toCharArray(), false);
             SecurityUtils.getSubject().login(token);
-            return "/intranet/admin/index.xhtml?faces-redirect=true";
+            return "/intranet/index.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(AutenticacaoMB.class.getSimpleName()).log(Level.WARNING, null, ex);
             createFacesErrorMessage("Login ou senha inválidos");

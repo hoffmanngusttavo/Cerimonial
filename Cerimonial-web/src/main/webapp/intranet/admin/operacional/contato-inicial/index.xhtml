@@ -13,6 +13,7 @@
 
     <ui:define name="content">
         <h:form prependId="false"
+                rendered="#{AutenticacaoMB.hasPermission('ADMIN')}"
                 id="form">
 
             <div class="fixed-rounded-button">

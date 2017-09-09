@@ -9,6 +9,7 @@ import br.com.cerimonial.entity.Login;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.LoginService;
 import br.com.cerimonial.service.UsuarioService;
+import br.com.cerimonial.service.utils.ServiceLookupUtil;
 import br.com.cerimonial.utils.ConstantsProject;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,10 +40,6 @@ import org.apache.shiro.util.ByteSource;
  * @author Gustavo Hoffmann
  */
 public class Realm extends AuthorizingRealm {
-    
-    private final UsuarioService usuarioService = lookupUsuarioServiceBean();
-    private final LoginService loginService = lookupLoginServiceBean();
-    
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection pc) {
@@ -50,19 +47,23 @@ public class Realm extends AuthorizingRealm {
         Usuario usuario = (Usuario) SecurityUtils.getSubject().getPrincipal();
 
         if (usuario != null) {
+
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-            SimpleAuthorizationInfo infoGrupo = new SimpleAuthorizationInfo();
 
-            if (!usuario.isMaster()) {
-                //Nome do grupo
-                infoGrupo.addRole("CLIENTE");
+            List<String> listaPermissoes = new ArrayList<String>();
 
-                //lista de permissoes
-                List<String> listaPermissoes = new ArrayList<String>();
-                listaPermissoes.add("TESTE");
+            if (usuario.isMaster()) {
                 
-                info.addStringPermissions(new ArrayList<String>(new HashSet<String>(listaPermissoes)));
+                listaPermissoes.add("ADMIN");
+                
+            } else {
+                
+                listaPermissoes.add("CLIENTE");
+            
             }
+
+            //lista de permissoes
+            info.addStringPermissions(new ArrayList<String>(new HashSet<String>(listaPermissoes)));
 
             return info;
         } else {
@@ -78,6 +79,9 @@ public class Realm extends AuthorizingRealm {
             for (char c : (char[]) at.getCredentials()) {
                 senha += c;
             }
+
+            ServiceLookupUtil lookupUtilUser = new ServiceLookupUtil();
+            UsuarioService usuarioService = lookupUtilUser.lookupService(UsuarioService.class);
 
             Usuario usuario = usuarioService.getUsuarioByLoginSenha(at.getPrincipal().toString(), senha);
             if (usuario != null) {
@@ -99,6 +103,9 @@ public class Realm extends AuthorizingRealm {
                     }
 
                     login.setCabecalho(headers);
+
+                    ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+                    LoginService loginService = lookupUtil.lookupService(LoginService.class);
 
                     loginService.save(login);
 
@@ -143,29 +150,4 @@ public class Realm extends AuthorizingRealm {
         }
     }
 
-    private UsuarioService lookupUsuarioServiceBean() {
-        try {
-            Context c = new InitialContext();
-            return (UsuarioService) c.lookup("java:global/"+ConstantsProject.appName+"/"+ConstantsProject.moduleEjbName+"/UsuarioService!br.com.cerimonial.service.UsuarioService");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
-    private LoginService lookupLoginServiceBean() {
-        try {
-            Context c = new InitialContext();
-            return (LoginService) c.lookup("java:global/"+ConstantsProject.appName+"/"+ConstantsProject.moduleEjbName+"/LoginService!br.com.cerimonial.service.LoginService");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
-    
-
-    
-
-    
 }

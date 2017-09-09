@@ -20,83 +20,88 @@
                 </li>
 
                 <li class="active">
-                    <p:link href="/intranet/admin/index.xhtml">
+                    <p:link href="/intranet/index.xhtml">
                         <i class="fa fa-home"></i>
                         <span>Home</span>
                     </p:link>
                 </li>
-                
-                <li>
-                    <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml">
-                        <i class="fa fa-list"></i>
-                        <span>Contato Inicial</span>
-                    </p:link>
-                </li>
 
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/empresa/index.xhtml">
-                        <i class="fa fa-building"></i>
-                        <span>Empresa</span>
-                    </p:link>
-                </li>
-               
 
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/usuario/index.xhtml">
-                        <i class="fa fa-user"></i>
-                        <span>Usuários</span>
-                    </p:link>
-                </li>
+                <h:panelGroup rendered="#{AutenticacaoMB.hasPermission('ADMIN')}">
 
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/cliente/index.xhtml">
-                        <i class="fa fa-group"></i>
-                        <span>Clientes</span>
-                    </p:link>
-                </li>
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/fornecedor/index.xhtml">
-                        <i class="fa fa-list"></i>
-                        <span>Fornecedores</span>
-                    </p:link>
-                </li>
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/colaborador/index.xhtml">
-                        <i class="fa fa-list"></i>
-                        <span>Colaboradores</span>
-                    </p:link>
-                </li>
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/tipo-evento/index.xhtml">
-                        <i class="fa fa-list"></i>
-                        <span>Tipo Evento</span>
-                    </p:link>
-                </li>
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/tipo-indicacao/index.xhtml">
-                        <i class="fa fa-list"></i>
-                        <span>Tipo Indicação</span>
-                    </p:link>
-                </li>
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/modelo-proposta/index.xhtml">
-                        <i class="fa fa-list"></i>
-                        <span>Modelos Proposta</span>
-                    </p:link>
-                </li>
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/status-contato/index.xhtml">
-                        <i class="fa fa-list"></i>
-                        <span>Status Contato</span>
-                    </p:link>
-                </li>
-                <li>
-                    <p:link href="/intranet/admin/gerenciar/operacional/configuracao-email/index.xhtml">
-                        <i class="fa fa-envelope"></i>
-                        <span>Config. Email</span>
-                    </p:link>
-                </li>
-                
+                    <li>
+                        <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml">
+                            <i class="fa fa-list"></i>
+                            <span>Contato Inicial</span>
+                        </p:link>
+                    </li>
+
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/empresa/index.xhtml">
+                            <i class="fa fa-building"></i>
+                            <span>Empresa</span>
+                        </p:link>
+                    </li>
+
+
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/usuario/index.xhtml">
+                            <i class="fa fa-user"></i>
+                            <span>Usuários</span>
+                        </p:link>
+                    </li>
+
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/cliente/index.xhtml">
+                            <i class="fa fa-group"></i>
+                            <span>Clientes</span>
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/fornecedor/index.xhtml">
+                            <i class="fa fa-list"></i>
+                            <span>Fornecedores</span>
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/colaborador/index.xhtml">
+                            <i class="fa fa-list"></i>
+                            <span>Colaboradores</span>
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/tipo-evento/index.xhtml">
+                            <i class="fa fa-list"></i>
+                            <span>Tipo Evento</span>
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/tipo-indicacao/index.xhtml">
+                            <i class="fa fa-list"></i>
+                            <span>Tipo Indicação</span>
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/modelo-proposta/index.xhtml">
+                            <i class="fa fa-list"></i>
+                            <span>Modelos Proposta</span>
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/status-contato/index.xhtml">
+                            <i class="fa fa-list"></i>
+                            <span>Status Contato</span>
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link href="/intranet/admin/gerenciar/operacional/configuracao-email/index.xhtml">
+                            <i class="fa fa-envelope"></i>
+                            <span>Config. Email</span>
+                        </p:link>
+                    </li>
+
+                </h:panelGroup>
+
             </ul>
 
         </h:form>

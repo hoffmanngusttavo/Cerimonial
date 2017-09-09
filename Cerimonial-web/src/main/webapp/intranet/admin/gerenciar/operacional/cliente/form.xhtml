@@ -21,6 +21,7 @@
         </f:metadata>
 
         <h:form prependId="false"
+                rendered="#{AutenticacaoMB.hasPermission('ADMIN')}"
                 id="form">
 
             <p:focus for="inptNome"/>

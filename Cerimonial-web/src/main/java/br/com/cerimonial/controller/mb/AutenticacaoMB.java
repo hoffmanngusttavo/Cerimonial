@@ -7,31 +7,25 @@ package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Usuario;
-import br.com.cerimonial.service.UsuarioService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.primefaces.context.RequestContext;
 
 /**
  *
  * @author Gustavo Hoffmann
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "AutenticacaoMB")
 public class AutenticacaoMB extends BasicControl {
 
     private Usuario usuarioLogado = null;
 
-    @EJB
-    private UsuarioService usuarioService;
 
     public AutenticacaoMB() {
 
