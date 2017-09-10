@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 
 /**
@@ -87,7 +88,20 @@ public class MeusDadosMB extends BasicControl {
     public synchronized String trocarSenha() {
         try {
             if (entity != null) {
-                service.save(entity);
+                
+                if(StringUtils.isNotBlank(entity.getSenha()) && StringUtils.isNotBlank(confirmarSenha)){
+                    
+                    if(!entity.getSenha().equals(confirmarSenha)){
+                        createFacesWarnMessage("As senhas estão diferentes, preencha corretamente");
+                        return null;
+                    }
+                    
+                }else{
+                    createFacesWarnMessage("As senhas estão diferentes, preencha corretamente");
+                    return null;
+                }
+                
+                service.alterarSenha(entity);
                 createFacesInfoMessage("Dados gravados com sucesso!");
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
                 return "index.xhtml?faces-redirect=true";

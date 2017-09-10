@@ -21,9 +21,9 @@
 
         <h:form prependId="false"
                 id="form">
-            
+
             <p:focus for="inptNome"/>
-            
+
             <div class="row">
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
@@ -48,7 +48,7 @@
                                          label="Nome"/>
 
                         </div>
-                        
+
                         <div class="form-group col-md-6">
                             <label>Login
                                 <span class="asteriskField">
@@ -83,34 +83,39 @@
                                 <f:validator validatorId="EmailValidate"/>
                             </p:inputText>
                         </div>
-                        
-                        <div class="form-group col-md-6">
-                            <label>
-                            </label>
 
-                            <p:link href="/troca-senha.xhtml" >
-                                <span>Trocar Senha</span>
+                        <div class="form-group col-md-6">
+
+                            <p:link href="/intranet/meus-dados/troca-senha.xhtml" >
+                                <span>Clique aqui para trocar Senha</span>
                             </p:link>
 
                         </div>
-                        
+                    </div>
 
-                        <p:commandButton value="Voltar"
-                                         immediate="true"
-                                         action="index?faces-redirect=true"
-                                         process="@this"
-                                         class="btn btn-default"
-                                         icon="fa fa-close"/>
+                    <div class="row">
+
+                        <div class="form-group col-md-6">
 
 
-                        <p:commandButton value="Salvar"
-                                         action="#{MeusDadosMB.save()}"
-                                         icon="fa fa-check" 
-                                         class="btn btn-success"
-                                         style="margin-left: 10px;"
-                                         onstart="PF('statusDialog').show();"
-                                         oncomplete="PF('statusDialog').hide();"/>
 
+                            <p:commandButton value="Voltar"
+                                             immediate="true"
+                                             action="index?faces-redirect=true"
+                                             process="@this"
+                                             class="btn btn-default"
+                                             icon="fa fa-close"/>
+
+
+                            <p:commandButton value="Salvar"
+                                             action="#{MeusDadosMB.save()}"
+                                             icon="fa fa-check" 
+                                             class="btn btn-success"
+                                             style="margin-left: 10px;"
+                                             onstart="PF('statusDialog').show();"
+                                             oncomplete="PF('statusDialog').hide();"/>
+
+                        </div>
                     </div>
                 </div>
             </div>
