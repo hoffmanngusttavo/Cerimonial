@@ -15,15 +15,15 @@
 
         <f:metadata>
             <!--use view action if you are in a Java EE 7 server: -->
-            <f:viewAction action="#{MeusDadosMB.init()}"/>
+            <f:viewAction action="#{MeusDadosMB.initSenha()}"/>
             <!--<f:event type="preRenderView" listener="{MeusDadosMB.init}"/>-->
         </f:metadata>
 
         <h:form prependId="false"
                 id="form">
-            
+
             <p:focus for="inptNome"/>
-            
+
             <div class="row">
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
@@ -43,12 +43,13 @@
                             <p:inputText id="inptNome" 
                                          value="#{MeusDadosMB.entity.nome}" 
                                          required="true"
+                                         disabled="true"
                                          requiredMessage="Preencha um nome válido"
                                          class="form-control"
                                          label="Nome"/>
 
                         </div>
-                        
+
                         <div class="form-group col-md-6">
                             <label>Login
                                 <span class="asteriskField">
@@ -77,23 +78,45 @@
                                          value="#{MeusDadosMB.entity.email}" 
                                          class="form-control"
                                          required="true"
+                                         disabled="true"
                                          requiredMessage="Preencha um e-mail válido"
                                          placeholder="Ex: teste@teste.com"
                                          label="Email">
                                 <f:validator validatorId="EmailValidate"/>
                             </p:inputText>
                         </div>
-                        
+
+
                         <div class="form-group col-md-6">
-                            <label>
+                            <label>Senha
+                                <span class="asteriskField">
+                                    *
+                                </span>
                             </label>
 
-                            <p:link href="/troca-senha.xhtml" >
-                                <span>Trocar Senha</span>
-                            </p:link>
+                            <p:password value="#{MeusDadosMB.entity.senha}"
+                                        id="inptSenha"
+                                        required="true"
+                                        class="form-control"
+                                        requiredMessage="Preencha uma senha válida"
+                                        label="Senha"/>
 
                         </div>
-                        
+
+                        <div class="form-group col-md-6">
+                            <label>Confirme Senha
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+
+                            <p:password value="#{MeusDadosMB.confirmarSenha}"
+                                        id="inptConfirmSenha"
+                                        class="form-control"
+                                        requiredMessage="Preencha uma senha válida"
+                                        required="true"/>
+
+                        </div>
 
                         <p:commandButton value="Voltar"
                                          immediate="true"
@@ -104,7 +127,7 @@
 
 
                         <p:commandButton value="Salvar"
-                                         action="#{MeusDadosMB.save()}"
+                                         action="#{MeusDadosMB.trocarSenha()}"
                                          icon="fa fa-check" 
                                          class="btn btn-success"
                                          style="margin-left: 10px;"
