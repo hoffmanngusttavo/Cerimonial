@@ -7,6 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.StatusContato;
 import br.com.cerimonial.repository.StatusContatoRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,8 +30,8 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class StatusContatoService extends BasicService<StatusContato>{
-    
+public class StatusContatoService extends BasicService<StatusContato> {
+
     private StatusContatoRepository repository;
 
     @PostConstruct
@@ -45,14 +47,14 @@ public class StatusContatoService extends BasicService<StatusContato>{
 
     @Override
     public StatusContato save(StatusContato entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
     }
 
     public List<StatusContato> findAll() {
@@ -65,7 +67,10 @@ public class StatusContatoService extends BasicService<StatusContato>{
     }
 
     public void delete(StatusContato categoria) throws Exception {
-        repository.delete(categoria);
+
+        isValid(categoria);
+
+        repository.delete(categoria.getId());
     }
 
     public int countAll() {
@@ -79,11 +84,19 @@ public class StatusContatoService extends BasicService<StatusContato>{
 
     public List<StatusContato> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return repository.findRangeListagem( max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem(max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
+    @Override
+    public boolean isValid(StatusContato entity) {
+        if (entity == null) {
+            throw new DAOException("Status nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
+    }
+
 }

@@ -7,6 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Empresa;
 import br.com.cerimonial.repository.EmpresaRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -26,42 +28,47 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class EmpresaService extends BasicService<Empresa>{
+public class EmpresaService extends BasicService<Empresa> {
 
     private EmpresaRepository repository;
-    
+
     @PostConstruct
     @PostActivate
     private void postConstruct() {
         repository = new EmpresaRepository(em);
     }
-    
-    
+
     @Override
     public Empresa getEntity(Long id) throws Exception {
         return repository.getEntity(id);
     }
-    
+
     public Empresa getEmpresa() throws Exception {
         List<Empresa> empresas = repository.findRangeListagem(1, 0, null, null);
-        if(CerimonialUtils.isListNotBlank(empresas)){
+        if (CerimonialUtils.isListNotBlank(empresas)) {
             return empresas.get(0);
         }
         return new Empresa();
     }
-    
 
     @Override
     public Empresa save(Empresa entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
     }
 
-    
+    @Override
+    public boolean isValid(Empresa entity) {
+        if (entity == null) {
+            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
+    }
+
 }

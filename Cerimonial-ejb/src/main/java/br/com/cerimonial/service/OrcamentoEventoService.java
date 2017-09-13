@@ -6,7 +6,6 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
-import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.OrcamentoEvento;
@@ -14,15 +13,15 @@ import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import br.com.cerimonial.service.utils.EmpresaCache;
 import br.com.cerimonial.service.utils.InvoiceUtils;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.EmailHelper;
 import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +61,6 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     protected UsuarioService usuarioService;
     @EJB
     protected EventoService eventoService;
-    
 
     @PostConstruct
     @PostActivate
@@ -107,12 +105,13 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     }
 
     public void delete(OrcamentoEvento proposta) throws Exception {
-        if(proposta != null ){
-            if(proposta.isPropostaAceita()){
-                throw new Exception("Não pode remover um orçamento aprovado");
-            }else{
-                repository.delete(proposta);
-            }
+
+        isValid(proposta);
+
+        if (proposta.isPropostaAceita()) {
+            throw new Exception("Não pode remover um orçamento aprovado");
+        } else {
+            repository.delete(proposta.getId());
         }
     }
 
@@ -135,7 +134,8 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     }
 
     /**
-     * Vai carregar os dados para um orÃ§amento a partir de um modelo selecionado
+     * Vai carregar os dados para um orÃ§amento a partir de um modelo
+     * selecionado
      *
      * @param orcamento
      * @param modelo
@@ -183,9 +183,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      */
     public void enviarOrcamentoEmail(OrcamentoEvento proposta) throws Exception {
 
-        if (proposta == null) {
-            throw new Exception("Objeto nulo");
-        }
+        isValid(proposta);
 
         //carregar invoice padrao
         String body = InvoiceUtils.readFileToString("proposta-orcamento.html");
@@ -220,9 +218,9 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     }
 
     /**
-     * Aceitar/Aprovar um orçamento que não está aprovado ainda.
-     * É verificado se já existe um orçamento aprovado
-     * 
+     * Aceitar/Aprovar um orçamento que não está aprovado ainda. É verificado se
+     * já existe um orçamento aprovado
+     *
      * @param orcamento
      * @throws java.lang.Exception
      */
@@ -243,7 +241,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
     /**
      * Cancelar um orçamento que está aprovado.
-     * 
+     *
      * @param orcamento
      * @throws java.lang.Exception
      */
@@ -251,15 +249,13 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         if (orcamento != null && orcamento.getId() != null && orcamento.isPropostaAceita()) {
             orcamento.setPropostaAceita(false);
             repository.edit(orcamento);
-        } 
+        }
     }
 
-    
     /**
-     * Vai criar um evento a partir de uma proposta aceita. 
-     * Vai Criar um cliente e um usuário para acesso ao sistema. 
-     * Vai criar o evento do cliente
-     * Vai enviar por email ao cliente os acessos.
+     * Vai criar um evento a partir de uma proposta aceita. Vai Criar um cliente
+     * e um usuário para acesso ao sistema. Vai criar o evento do cliente Vai
+     * enviar por email ao cliente os acessos.
      *
      * @param entity
      * @throws java.lang.Exception
@@ -272,16 +268,24 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
         Pessoa cliente = pessoaService.criarClienteFromContato(entity);
         pessoaService.saveCliente(cliente);
-        
+
         Usuario usuarioCliente = usuarioService.criarUsuarioCliente(cliente);
         String senha = usuarioCliente.getSenha();
         usuarioCliente.setCliente(cliente);
         usuarioCliente = usuarioService.save(usuarioCliente);
-        
+
         Evento evento = eventoService.criarEventoFromOrcamento(entity, cliente);
         eventoService.save(evento);
-        
+
         usuarioService.enviarEmailBoasVindas(usuarioCliente, senha);
+    }
+
+    @Override
+    public boolean isValid(OrcamentoEvento entity) {
+        if (entity == null) {
+            throw new DAOException("Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
     }
 
 }

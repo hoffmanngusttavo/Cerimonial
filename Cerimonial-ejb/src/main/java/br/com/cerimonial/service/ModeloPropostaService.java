@@ -8,6 +8,8 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.repository.ModeloPropostaRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,27 +53,26 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
 
     @Override
     public ModeloProposta save(ModeloProposta entity) throws Exception {
-        if (entity != null) {
 
-            //salvar arquivo
-            if (entity.getArquivo() != null) {
-                //remover os arquivos antigos
-                removerArquivosAntigosProposta(entity);
-                arquivoService.save(entity.getArquivo());
-            }
+        isValid(entity);
 
-            //salvar ModeloProposta
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+        //salvar arquivo
+        if (entity.getArquivo() != null) {
+            //remover os arquivos antigos
+            removerArquivosAntigosProposta(entity);
+            arquivoService.save(entity.getArquivo());
         }
-        return null;
+
+        //salvar ModeloProposta
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
+        }
     }
 
     private void removerArquivosAntigosProposta(ModeloProposta entity) {
-        
+
         if (entity.getArquivo().getId() == null && entity.getId() != null) {
             List<Arquivo> arquivosAntigos = arquivoService.getArquivosByModeloProposta(entity);
             if (CerimonialUtils.isListNotBlank(arquivosAntigos)) {
@@ -86,8 +87,6 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
         }
     }
 
-   
-    
     public List<ModeloProposta> findAll() {
         try {
             return repository.findAll();
@@ -98,7 +97,10 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
     }
 
     public void delete(ModeloProposta categoria) throws Exception {
-        repository.delete(categoria);
+
+        isValid(categoria);
+
+        repository.delete(categoria.getId());
     }
 
     public int countAll() {
@@ -119,6 +121,12 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
         return null;
     }
 
-    
+    @Override
+    public boolean isValid(ModeloProposta entity) {
+        if (entity == null) {
+            throw new DAOException("Modelo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
+    }
 
 }

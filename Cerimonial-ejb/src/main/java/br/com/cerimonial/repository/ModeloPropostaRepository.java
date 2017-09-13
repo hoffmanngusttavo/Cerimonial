@@ -19,7 +19,7 @@ public class ModeloPropostaRepository extends AbstractRepository<ModeloProposta>
     }
 
     @Override
-    public ModeloProposta getEntity(Long id) throws Exception {
+    public ModeloProposta getEntity(Long id) {
          ModeloProposta modeloProposta = super.getEntity(id); 
          if(modeloProposta != null && modeloProposta.getAnexos() != null){
              modeloProposta.getAnexos().size();

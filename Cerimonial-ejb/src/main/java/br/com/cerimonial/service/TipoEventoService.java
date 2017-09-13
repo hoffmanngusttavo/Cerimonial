@@ -7,6 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.repository.TipoEventoRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -45,14 +47,14 @@ public class TipoEventoService extends BasicService<TipoEvento> {
 
     @Override
     public TipoEvento save(TipoEvento entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
     }
 
     public List<TipoEvento> findAll() {
@@ -65,7 +67,10 @@ public class TipoEventoService extends BasicService<TipoEvento> {
     }
 
     public void delete(TipoEvento categoria) throws Exception {
-        repository.delete(categoria);
+        
+        isValid(categoria);
+        
+        repository.delete(categoria.getId());
     }
 
     public int countAll() {
@@ -79,13 +84,19 @@ public class TipoEventoService extends BasicService<TipoEvento> {
 
     public List<TipoEvento> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return repository.findRangeListagem( max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem(max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-   
+    @Override
+    public boolean isValid(TipoEvento entity) {
+        if (entity == null) {
+            throw new DAOException("Tipo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
+    }
 
 }

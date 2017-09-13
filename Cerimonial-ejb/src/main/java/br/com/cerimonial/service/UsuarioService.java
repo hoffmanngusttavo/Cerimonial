@@ -8,6 +8,8 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import br.com.cerimonial.service.utils.EmpresaCache;
 import br.com.cerimonial.service.utils.InvoiceUtils;
 import br.com.cerimonial.utils.CerimonialUtils;
@@ -54,25 +56,26 @@ public class UsuarioService extends BasicService<Usuario> {
 
     @Override
     public synchronized Usuario save(Usuario entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                alterarSaltSenha(entity);
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            alterarSaltSenha(entity);
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
     }
 
     public void delete(Usuario user) throws Exception {
 
-        if (user != null) {
-            if (user.isMaster()) {
-                throw new Exception("Usuário master não pode ser removido");
-            }
-            repository.delete(user);
+        isValid(user);
+
+        if (user.isMaster()) {
+            throw new Exception("Usuário master não pode ser removido");
         }
+        
+        repository.delete(user.getId());
     }
 
     public Usuario getUsuarioByLoginSenha(String login, String senha) throws Exception {
@@ -215,13 +218,11 @@ public class UsuarioService extends BasicService<Usuario> {
      */
     public void enviarEmailBoasVindas(Usuario user, String senha) throws Exception {
 
-        if (user == null) {
-            throw new Exception("Objeto nulo");
-        }
-        
+        isValid(user);
+
         CerimonialUtils.validarEmail(user.getEmail());
-        
-        if(StringUtils.isBlank(senha)){
+
+        if (StringUtils.isBlank(senha)) {
             throw new Exception("Preencha uma senha válida");
         }
 
@@ -247,9 +248,8 @@ public class UsuarioService extends BasicService<Usuario> {
      * @throws java.lang.Exception
      */
     public void enviarEmailEsqueciMinhaSenha(Usuario user, String senha) throws Exception {
-        if (user == null) {
-            throw new Exception("Objeto nulo");
-        }
+        
+        isValid(user);
 
         //carregar invoice padrao
         String body = InvoiceUtils.readFileToString("esqueci-minha-senha.html");
@@ -274,9 +274,7 @@ public class UsuarioService extends BasicService<Usuario> {
         CerimonialUtils.validarEmail(email);
 
         Usuario usuario = getUsuarioByEmail(email);
-        if (usuario == null) {
-            throw new Exception("Usuário inválido");
-        }
+        isValid(usuario);
         if (!usuario.isAtivo()) {
             throw new Exception("Seu usuário está inativo, entre em contato com seu cerimonial");
         }
@@ -285,6 +283,14 @@ public class UsuarioService extends BasicService<Usuario> {
         alterarSenha(usuario, senhaNova);
 
         this.enviarEmailEsqueciMinhaSenha(usuario, senhaNova);
+    }
+
+    @Override
+    public boolean isValid(Usuario entity) {
+        if (entity == null) {
+            throw new DAOException("Usuário nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
     }
 
 }

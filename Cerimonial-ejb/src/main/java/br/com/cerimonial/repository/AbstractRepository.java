@@ -5,6 +5,8 @@
  */
 package br.com.cerimonial.repository;
 
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,52 +29,62 @@ public class AbstractRepository<T> extends BasicRepository {
         this.clazz = clazz;
     }
 
-    public T create(T entity) throws Exception {
+    public T create(T entity) {
         addEntity(clazz, entity);
         return entity;
     }
 
-    public T edit(T entity) throws Exception {
+    public T edit(T entity) {
         return (T) setEntity(clazz, entity);
     }
 
-    public T getEntity(Long id) throws Exception {
+    public T getEntity(Long id) {
+
+        if (id == null) {
+            throw new DAOException("O id é nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (id <= 0) {
+            throw new DAOException("O id precisa ser maior do que 0.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
         return (T) getEntity(clazz, id);
     }
 
-    public List<T> findAll() throws Exception {
+    public List<T> findAll() {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT * FROM ").append(clazz.getSimpleName()).append(" emp ");
         return getPureListNative(clazz, sb.toString());
     }
 
-    public int countAll() throws Exception {
+    public int countAll() {
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(clazz);
         return getCount(modelFilter.getSqlCountBase());
     }
-    
-    public int countListagem(HashMap<String, Object> filter) throws Exception {
+
+    public int countListagem(HashMap<String, Object> filter) {
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(clazz);
         modelFilter.addFilter(filter);
         return getCount(modelFilter.getSqlCountBase());
     }
-    
-    public int countListagem(ModelFilter modelFilter) throws Exception {
+
+    public int countListagem(ModelFilter modelFilter) {
         modelFilter.setEntidade(clazz);
         return getCount(modelFilter.getSqlCountBase());
     }
 
-    public void delete(T entity) throws Exception {
+    public void delete(Long id) {
+        T entity = getEntity(id);
         removeEntity(entity);
     }
 
-    public List<T> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) throws Exception {
+    public List<T> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         return findRangeListagem(null, max, offset, sortField, sortAscDesc);
     }
 
-    public List<T> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
+    public List<T> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(clazz);
         if (params != null) {
@@ -87,14 +99,9 @@ public class AbstractRepository<T> extends BasicRepository {
         return findRangeListagem(modelFilter);
     }
 
-    public List<T> findRangeListagem(ModelFilter modelFilter) throws Exception {
-        try {
-            modelFilter.setEntidade(clazz);
-            return getPureListRange(clazz, modelFilter.getSqlBase(), modelFilter.getLimit(), modelFilter.getOffSet());
-        } catch (Exception ex) {
-            Logger.getLogger(LoginRepository.class.getName()).log(Level.SEVERE, null, ex);
-            return new ArrayList<>();
-        }
+    public List<T> findRangeListagem(ModelFilter modelFilter) {
+        modelFilter.setEntidade(clazz);
+        return getPureListRange(clazz, modelFilter.getSqlBase(), modelFilter.getLimit(), modelFilter.getOffSet());
     }
 
 }

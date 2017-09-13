@@ -7,13 +7,14 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.repository.ContatoEventoRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -32,8 +33,6 @@ import org.apache.commons.lang.StringUtils;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ContatoEventoService extends BasicService<ContatoEvento> {
-
-    
 
     private ContatoEventoRepository repository;
 
@@ -63,15 +62,14 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     @Override
     public ContatoEvento save(ContatoEvento entity) throws Exception {
-        if (entity != null) {
 
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
     }
 
     public List<ContatoEvento> findAll() {
@@ -84,9 +82,10 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     }
 
     public void delete(ContatoEvento contato) throws Exception {
-        if (contato != null) {
-            repository.delete(contato);
-        }
+
+        isValid(contato);
+
+        repository.delete(contato.getId());
     }
 
     public int countAll() {
@@ -118,6 +117,12 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
         return null;
     }
 
-    
+    @Override
+    public boolean isValid(ContatoEvento entity) {
+        if (entity == null) {
+            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
+    }
 
 }

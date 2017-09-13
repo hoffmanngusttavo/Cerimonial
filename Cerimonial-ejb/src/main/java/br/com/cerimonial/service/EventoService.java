@@ -9,6 +9,8 @@ import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.repository.EventoRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +25,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -33,9 +34,8 @@ import org.apache.commons.lang.StringUtils;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class EventoService extends BasicService<Evento>{
- 
-    
+public class EventoService extends BasicService<Evento> {
+
     private EventoRepository repository;
 
     @PostConstruct
@@ -51,14 +51,15 @@ public class EventoService extends BasicService<Evento>{
 
     @Override
     public Evento save(Evento entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
+
     }
 
     public List<Evento> findAll() {
@@ -71,7 +72,10 @@ public class EventoService extends BasicService<Evento>{
     }
 
     public void delete(Evento categoria) throws Exception {
-        repository.delete(categoria);
+
+        isValid(categoria);
+
+        repository.delete(categoria.getId());
     }
 
     public int countAll() {
@@ -94,46 +98,53 @@ public class EventoService extends BasicService<Evento>{
 
     public List<Evento> findEventosDia(Date dataSelecionada) {
         try {
-            if(dataSelecionada == null){
+            if (dataSelecionada == null) {
                 return new ArrayList<Evento>();
             }
             return repository.findEventosDia(dataSelecionada);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
-       return new ArrayList<Evento>();
+        return new ArrayList<Evento>();
     }
 
-   public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento, Pessoa cliente) throws Exception {
-        
+    public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento, Pessoa cliente) throws Exception {
+
         if (orcamento == null) {
             throw new Exception("Orcamento Nulo");
         }
-        
+
         List<Evento> eventos = this.getEventoByOrcamento(orcamento);
-        
+
         Evento evento = null;
-        if(CerimonialUtils.isListNotBlank(eventos)){
+        if (CerimonialUtils.isListNotBlank(eventos)) {
             evento = eventos.get(0);
-        }else{
+        } else {
             evento = new Evento();
         }
-        
+
         evento.setContratante(cliente);
-        evento.setNome(orcamento.getContatoEvento().getTipoEvento().getCategoria().getLabel() +" "+cliente.getNome());
+        evento.setNome(orcamento.getContatoEvento().getTipoEvento().getCategoria().getLabel() + " " + cliente.getNome());
         evento.setOrcamentoEvento(orcamento);
-        
+
         return evento;
     }
 
-   
     public List<Evento> getEventoByOrcamento(OrcamentoEvento orcamento) throws Exception {
-        
+
         if (orcamento == null || orcamento.getId() == null) {
             throw new Exception("Orçamento nulo");
         }
-        
+
         return repository.getEventosByOrcamento(orcamento);
-        
+
+    }
+
+    @Override
+    public boolean isValid(Evento entity) {
+        if (entity == null) {
+            throw new DAOException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
     }
 }

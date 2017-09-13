@@ -7,6 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Login;
 import br.com.cerimonial.repository.LoginRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,18 +43,17 @@ public class LoginService extends BasicService<Login> {
 
     @Override
     public Login getEntity(Long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return repository.getEntity(id);
     }
 
     @Override
     public Login save(Login entity) throws Exception {
-        if (entity != null) {
-            return repository.create(entity);
-        }
-        return null;
+
+        isValid(entity);
+
+        return repository.create(entity);
     }
-    
-    
+
     public List<Login> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
         try {
             if (params == null) {
@@ -63,6 +64,14 @@ public class LoginService extends BasicService<Login> {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public boolean isValid(Login entity) {
+        if (entity == null) {
+            throw new DAOException("Login nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
     }
 
 }

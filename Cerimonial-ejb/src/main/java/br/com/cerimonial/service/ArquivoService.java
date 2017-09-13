@@ -8,6 +8,8 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.repository.ArquivoRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,29 +47,43 @@ public class ArquivoService extends BasicService<Arquivo> {
 
     @Override
     public Arquivo save(Arquivo entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
+
     }
 
     public void delete(Arquivo categoria) throws Exception {
-        repository.delete(categoria);
+
+        isValid(categoria);
+
+        repository.delete(categoria.getId());
     }
 
     public List<Arquivo> getArquivosByModeloProposta(ModeloProposta entity) {
         try {
-            if(entity != null && entity.getId() != null){
+            if (entity != null && entity.getId() != null) {
                 return repository.getArquivosByModeloProposta(entity);
             }
         } catch (Exception ex) {
             Logger.getLogger(ArquivoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public boolean isValid(Arquivo entity) {
+
+        if (entity == null) {
+            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        return true;
     }
 
 }

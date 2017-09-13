@@ -8,6 +8,8 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.repository.CidadeRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,28 +31,26 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class CidadeService  extends BasicService<Cidade>{
+public class CidadeService extends BasicService<Cidade> {
 
-    
     private CidadeRepository repository;
-    
-    
+
     @PostConstruct
     @PostActivate
     private void postConstruct() {
         repository = new CidadeRepository(em);
     }
-    
+
     @Override
     public Cidade getEntity(Long id) throws Exception {
-       return repository.getEntity(id);
+        return repository.getEntity(id);
     }
 
     public List<Cidade> findAll() throws Exception {
-       return repository.findAll();
+        return repository.findAll();
     }
-    
-    public Cidade findByNomeEstado(String city, String sigla){
+
+    public Cidade findByNomeEstado(String city, String sigla) {
         try {
             return repository.findByNomeEstado(city, sigla);
         } catch (Exception ex) {
@@ -58,9 +58,9 @@ public class CidadeService  extends BasicService<Cidade>{
         }
         return null;
     }
-    
+
     public List<Cidade> findByEstado(Estado estado) {
-        if(estado != null){
+        if (estado != null) {
             try {
                 return repository.findByEstado(estado);
             } catch (Exception ex) {
@@ -69,7 +69,7 @@ public class CidadeService  extends BasicService<Cidade>{
         }
         return new ArrayList<>();
     }
-    
+
     /**
      *
      * @param entity
@@ -77,21 +77,25 @@ public class CidadeService  extends BasicService<Cidade>{
      */
     @Override
     public Cidade save(Cidade entity) {
-        try {
-            if (entity != null) {
-                if (entity.getId() == null) {
-                    return repository.create(entity);
 
-                } else {
-                    return repository.edit(entity);
-                }
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(EstadoService.class.getName()).log(Level.SEVERE, null, ex);
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            
+            return repository.create(entity);
+
+        } else {
+            
+            return repository.edit(entity);
         }
-        return null;
     }
 
-    
-    
+    @Override
+    public boolean isValid(Cidade entity) {
+        if (entity == null) {
+            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
+    }
+
 }

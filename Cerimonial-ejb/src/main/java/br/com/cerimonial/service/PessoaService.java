@@ -10,12 +10,13 @@ import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.repository.PessoaRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -54,25 +55,25 @@ public class PessoaService extends BasicService<Pessoa> {
 
     @Override
     public synchronized Pessoa save(Pessoa entity) throws Exception {
-        if (entity != null) {
 
-            if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
-                entity.setEndereco(null);
-            }
+        isValid(entity);
 
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+        if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
+            entity.setEndereco(null);
         }
-        return null;
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
+        }
     }
 
     public void delete(Pessoa entity) throws Exception {
-        if (entity != null) {
-            repository.delete(entity);
-        }
+
+        isValid(entity);
+
+        repository.delete(entity.getId());
     }
 
     public int countAll() {
@@ -86,21 +87,20 @@ public class PessoaService extends BasicService<Pessoa> {
 
     //-----------Clientes----------------------
     public Pessoa saveCliente(Pessoa entity) throws Exception {
-        if (entity != null) {
 
-            if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
-                entity.setEndereco(null);
-            }
+        isValid(entity);
 
-            entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
-
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+        if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
+            entity.setEndereco(null);
         }
-        return null;
+
+        entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
+        }
     }
 
     /**
@@ -111,13 +111,14 @@ public class PessoaService extends BasicService<Pessoa> {
      * @throws java.lang.Exception
      */
     public Pessoa editCliente(Pessoa entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                throw new Exception("NÃ£o pode gravar um novo cliente");
-            }
-            return saveCliente(entity);
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            throw new Exception("Não pode gravar um novo cliente");
         }
-        return null;
+
+        return saveCliente(entity);
     }
 
     /**
@@ -128,11 +129,11 @@ public class PessoaService extends BasicService<Pessoa> {
      * @throws java.lang.Exception
      */
     public Pessoa createCliente(Pessoa entity) throws Exception {
-        if (entity != null) {
-            entity.setId(null);
-            return saveCliente(entity);
-        }
-        return null;
+
+        isValid(entity);
+
+        entity.setId(null);
+        return saveCliente(entity);
     }
 
     public int countListagemClientes(HashMap<String, Object> filter) {
@@ -164,21 +165,20 @@ public class PessoaService extends BasicService<Pessoa> {
 
     //-----------Fornecedores----------------------
     public Pessoa saveFornecedor(Pessoa entity) throws Exception {
-        if (entity != null) {
 
-            if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
-                entity.setEndereco(null);
-            }
+        isValid(entity);
 
-            entity.setTipoEnvolvido(TipoEnvolvido.FORNECEDOR);
-
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+        if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
+            entity.setEndereco(null);
         }
-        return null;
+
+        entity.setTipoEnvolvido(TipoEnvolvido.FORNECEDOR);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
+        }
     }
 
     public int countListagemFornecedor(HashMap<String, Object> filter) {
@@ -210,21 +210,20 @@ public class PessoaService extends BasicService<Pessoa> {
 
     //--------------------COLABORADOR----------------------------
     public Pessoa saveColaborador(Pessoa entity) throws Exception {
-        if (entity != null) {
 
-            if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
-                entity.setEndereco(null);
-            }
+        isValid(entity);
 
-            entity.setTipoEnvolvido(TipoEnvolvido.COLABORADOR);
-
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+        if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
+            entity.setEndereco(null);
         }
-        return null;
+
+        entity.setTipoEnvolvido(TipoEnvolvido.COLABORADOR);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
+        }
     }
 
     public int countListagemColaborador(HashMap<String, Object> filter) {
@@ -276,7 +275,7 @@ public class PessoaService extends BasicService<Pessoa> {
             cliente.setTelefone1(entity.getContatoEvento().getTelefonePrincipal());
             cliente.setTelefone2(entity.getContatoEvento().getTelefoneSecundario());
             cliente.setAtivo(true);
-            
+
         } catch (Exception e) {
             throw new Exception("Não Foi possivel criar um cliente a partir de um contato");
         }
@@ -288,6 +287,16 @@ public class PessoaService extends BasicService<Pessoa> {
             throw new Exception("O email está vazio");
         }
         return repository.getClienteByEmail(emailContato);
+    }
+
+    @Override
+    public boolean isValid(Pessoa entity) {
+
+        if (entity == null) {
+            throw new DAOException("Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
+
     }
 
 }

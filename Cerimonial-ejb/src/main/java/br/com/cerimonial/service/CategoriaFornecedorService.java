@@ -7,6 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.repository.CategoriaFornecedorRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -55,7 +57,7 @@ public class CategoriaFornecedorService extends BasicService<CategoriaFornecedor
         }
         return null;
     }
-    
+
     public List<CategoriaFornecedor> findAll() {
         try {
             return repository.findAll();
@@ -65,12 +67,13 @@ public class CategoriaFornecedorService extends BasicService<CategoriaFornecedor
         return new ArrayList<>();
     }
 
-    public void delete(CategoriaFornecedor categoria) throws Exception{
-         repository.delete(categoria);
+    public void delete(CategoriaFornecedor categoria) throws Exception {
+        isValid(categoria);
+        repository.delete(categoria.getId());
     }
 
     public int countAll() {
-         try {
+        try {
             return repository.countAll();
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -89,13 +92,21 @@ public class CategoriaFornecedorService extends BasicService<CategoriaFornecedor
 
     public List<CategoriaFornecedor> findAllByNome(String nome) {
         try {
-            if(StringUtils.isNotEmpty(nome)){
+            if (StringUtils.isNotEmpty(nome)) {
                 return repository.findAllByNome(nome.toUpperCase());
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public boolean isValid(CategoriaFornecedor entity) {
+        if (entity == null) {
+            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
     }
 
 }

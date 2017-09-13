@@ -24,4 +24,6 @@ abstract class BasicService<T> implements Serializable {
     
     public abstract T save(T entity) throws Exception;
     
+    public abstract boolean isValid(T entity);
+    
 }

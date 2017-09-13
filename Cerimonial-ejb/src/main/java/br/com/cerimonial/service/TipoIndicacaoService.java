@@ -7,6 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.TipoIndicacao;
 import br.com.cerimonial.repository.TipoIndicacaoRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,30 +32,30 @@ import org.apache.commons.lang.StringUtils;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
-    
-     private TipoIndicacaoRepository repository;
+
+    private TipoIndicacaoRepository repository;
 
     @PostConstruct
     @PostActivate
     private void postConstruct() {
         repository = new TipoIndicacaoRepository(em);
     }
-    
-      @Override
+
+    @Override
     public TipoIndicacao getEntity(Long id) throws Exception {
         return repository.getEntity(id);
     }
 
     @Override
     public TipoIndicacao save(TipoIndicacao entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
     }
 
     public List<TipoIndicacao> findAll() {
@@ -66,7 +68,10 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
     }
 
     public void delete(TipoIndicacao categoria) throws Exception {
-        repository.delete(categoria);
+
+        isValid(categoria);
+
+        repository.delete(categoria.getId());
     }
 
     public int countAll() {
@@ -80,7 +85,7 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
 
     public List<TipoIndicacao> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return repository.findRangeListagem( max, offset, sortField, sortAscDesc);
+            return repository.findRangeListagem(max, offset, sortField, sortAscDesc);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
@@ -97,5 +102,13 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
         }
         return null;
     }
-    
+
+    @Override
+    public boolean isValid(TipoIndicacao entity) {
+        if (entity == null) {
+            throw new DAOException("Tipo Indicação nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
+    }
+
 }

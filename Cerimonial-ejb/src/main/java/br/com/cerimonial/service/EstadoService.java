@@ -7,7 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.repository.EstadoRepository;
-import br.com.cerimonial.repository.UsuarioRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,6 +21,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -55,28 +57,37 @@ public class EstadoService extends BasicService<Estado> {
 
     @Override
     public Estado save(Estado entity) {
-        try {
-            if (entity != null) {
-                if (entity.getId() == null) {
-                    return repository.create(entity);
 
-                } else {
-                    return repository.edit(entity);
-                }
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(EstadoService.class.getName()).log(Level.SEVERE, null, ex);
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+
+        } else {
+            return repository.edit(entity);
         }
-        return null;
     }
 
     public Estado findBySigla(String uf) {
+        
+        if(StringUtils.isBlank(uf)){
+            throw new DAOException("A sigla de estado está nula", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
         try {
             return repository.findBySigla(uf);
         } catch (Exception ex) {
             Logger.getLogger(EstadoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public boolean isValid(Estado entity) {
+        if (entity == null) {
+            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
     }
 
 }

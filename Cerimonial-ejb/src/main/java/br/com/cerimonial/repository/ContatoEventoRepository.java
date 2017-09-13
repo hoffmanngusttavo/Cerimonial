@@ -6,10 +6,7 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.ContatoEvento;
-import br.com.cerimonial.entity.OrcamentoEvento;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 
 /**
@@ -23,7 +20,7 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
     }
 
     @Override
-    public ContatoEvento getEntity(Long id) throws Exception {
+    public ContatoEvento getEntity(Long id)  {
         ContatoEvento entity = super.getEntity(id);
 
         if (entity != null) {

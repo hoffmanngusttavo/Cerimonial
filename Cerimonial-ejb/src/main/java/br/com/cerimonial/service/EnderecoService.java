@@ -9,6 +9,8 @@ import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.repository.EnderecoRepository;
+import br.com.cerimonial.repository.exceptions.DAOException;
+import br.com.cerimonial.repository.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -94,19 +96,27 @@ public class EnderecoService extends BasicService<Endereco> {
 
     @Override
     public Endereco getEntity(Long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return repository.getEntity(id);
     }
 
     @Override
     public Endereco save(Endereco entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
+    }
+
+    @Override
+    public boolean isValid(Endereco entity) {
+        if (entity == null) {
+            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        return true;
     }
 
 }
