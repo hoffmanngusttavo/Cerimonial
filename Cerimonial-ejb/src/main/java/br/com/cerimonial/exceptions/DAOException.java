@@ -9,11 +9,11 @@ package br.com.cerimonial.exceptions;
  *
  * @author hoffmann
  */
-public class ServiceExceptions extends RuntimeException{
+public class DAOException extends RuntimeException{
     
-    private int code;
+     private int code;
 
-    public ServiceExceptions(int code, String string) {
+    public DAOException( String string, int code) {
         super(string);
         this.code = code;
     }
@@ -21,8 +21,5 @@ public class ServiceExceptions extends RuntimeException{
     public int getCode() {
         return code;
     }
-    
-    
-    
     
 }

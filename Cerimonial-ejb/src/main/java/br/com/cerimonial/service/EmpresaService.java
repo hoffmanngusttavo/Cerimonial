@@ -7,8 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Empresa;
 import br.com.cerimonial.repository.EmpresaRepository;
-import br.com.cerimonial.repository.exceptions.DAOException;
-import br.com.cerimonial.repository.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
 import javax.annotation.PostConstruct;

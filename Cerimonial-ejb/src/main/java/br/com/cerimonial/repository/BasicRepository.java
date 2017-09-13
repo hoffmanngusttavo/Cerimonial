@@ -5,8 +5,8 @@
  */
 package br.com.cerimonial.repository;
 
-import br.com.cerimonial.repository.exceptions.DAOException;
-import br.com.cerimonial.repository.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.ErrorCode;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;

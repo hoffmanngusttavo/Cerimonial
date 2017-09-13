@@ -7,8 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.repository.CategoriaFornecedorRepository;
-import br.com.cerimonial.repository.exceptions.DAOException;
-import br.com.cerimonial.repository.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
