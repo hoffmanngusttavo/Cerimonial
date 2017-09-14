@@ -8,16 +8,16 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Cadastro de Modelo de Propostas
+        Cadastro de Modelo de Contratos
     </ui:define>
 
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="id" value="#{ModeloPropostaCrudMB.id}" converter="javax.faces.Long"/>
+            <f:viewParam name="id" value="#{ModeloContratoCrudMB.id}" converter="javax.faces.Long"/>
             <!--use view action if you are in a Java EE 7 server: -->
-            <f:viewAction action="#{ModeloPropostaCrudMB.init()}"/>
-            <!--<f:event type="preRenderView" listener="{ModeloPropostaCrudMB.init}"/>-->
+            <f:viewAction action="#{ModeloContratoCrudMB.init()}"/>
+            <!--<f:event type="preRenderView" listener="{ModeloContratoCrudMB.init}"/>-->
         </f:metadata>
 
         <h:form prependId="false"
@@ -31,7 +31,7 @@
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <h2>Modelo de Proposta</h2>
+                                <h2>Modelo de Contrato</h2>
                             </div>
                         </div>
 
@@ -44,7 +44,7 @@
                                 </label>
 
                                 <p:inputText id="inptNome" 
-                                             value="#{ModeloPropostaCrudMB.entity.titulo}" 
+                                             value="#{ModeloContratoCrudMB.entity.titulo}" 
                                              required="true"
                                              requiredMessage="Preencha um título válido"
                                              class="form-control"
@@ -59,7 +59,7 @@
                                     </span>
                                 </label>
                                 <h:selectOneMenu id="inptTipoEvento" 
-                                                 value="#{ModeloPropostaCrudMB.entity.tipoEvento}"
+                                                 value="#{ModeloContratoCrudMB.entity.tipoEvento}"
                                                  converter="EntityConverter"
                                                  rendered="true"
                                                  requiredMessage="Preencha um tipo de evento válido"
@@ -67,7 +67,7 @@
                                                  label="Tipo de Evento">
                                     <f:selectItem itemValue="" 
                                                   itemLabel="Selecione" /> 
-                                    <f:selectItems value="#{ModeloPropostaCrudMB.comboTipoEvento}" />
+                                    <f:selectItems value="#{ModeloContratoCrudMB.comboTipoEvento}" />
                                     <p:ajax process="@this"
                                             update="@this"
                                             global="false"/>
@@ -77,82 +77,15 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <label style="width: 100%;">Anexo
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
-
-                                <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
-                                              mode="simple" 
-                                              skinSimple="true"
-                                              label="Selecione Arquivo"/>
-                                <h:panelGroup id="groupFile">
-                                    <h:panelGroup rendered="#{ModeloPropostaCrudMB.entity.arquivo != null}">
-                                        <p:commandButton icon="fa fa-download" 
-                                                         styleClass="bt-acoes"
-                                                         process="@this"
-                                                         title="Baixar Arquivo"
-                                                         actionListener="#{ModeloPropostaCrudMB.baixarArquivo()}"
-                                                         ajax="false"
-                                                         immediate="true"
-                                                         onstart="PF('statusDialog').show();"
-                                                         oncomplete="PF('statusDialog').hide();"/>
-
-                                        <label>#{ModeloPropostaCrudMB.entity.arquivo.nome}</label>
-
-                                        <p:commandButton icon="fa fa-trash" 
-                                                         styleClass="bt-acoes"
-                                                         title="Remover anexo"
-                                                         actionListener="#{ModeloPropostaCrudMB.removerArquivo()}"
-                                                         process="@this"
-                                                         update=":form:groupFile"
-                                                         immediate="true"
-                                                         onstart="PF('statusDialog').show();"
-                                                         oncomplete="PF('statusDialog').hide();"/>
-                                    </h:panelGroup>
-                                </h:panelGroup>
-
-
-                            </div>
-
-
-                            <div class="form-group col-md-3">
-                                <label>Valor Proposta
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
-                                <p:inputText id="inptValor" 
-                                             value="#{ModeloPropostaCrudMB.entity.valorProposta}" 
-                                             required="true"
-                                             requiredMessage="Preencha um valor válido"
-                                             class="form-control currency"
-                                             label="Valor">
-                                    <f:convertNumber maxFractionDigits="2"
-                                                     minFractionDigits="2"
-                                                     locale="pt_BR"/>
-                                    <p:ajax process="@this"
-                                            update="@this"
-                                            global="false"/>
-                                </p:inputText>
-
-                            </div>
-
                             <div class="form-group col-md-3" style="margin-top: 28px;">
                                 <label>Ativo ?
                                 </label>
 
-                                <p:selectBooleanCheckbox value="#{ModeloPropostaCrudMB.entity.ativo}"
+                                <p:selectBooleanCheckbox value="#{ModeloContratoCrudMB.entity.ativo}"
                                                          class="checkbox-inline"
                                                          id="inptAtivo"/>
                             </div>
-
-
                         </div>
-
-
 
                         <div class="row">
                             <div class="form-group col-md-12">
@@ -163,7 +96,7 @@
                                 </label>
 
                                 <p:editor id="inptConteudo" 
-                                          value="#{ModeloPropostaCrudMB.entity.conteudo}" 
+                                          value="#{ModeloContratoCrudMB.entity.conteudo}" 
                                           required="true"
                                           requiredMessage="Preencha um texto válido"/>
 
@@ -182,7 +115,7 @@
 
 
                 <p:commandButton value="Salvar"
-                                 action="#{ModeloPropostaCrudMB.save()}"
+                                 action="#{ModeloContratoCrudMB.save()}"
                                  icon="fa fa-check" 
                                  ajax="false"
                                  class="btn btn-success"

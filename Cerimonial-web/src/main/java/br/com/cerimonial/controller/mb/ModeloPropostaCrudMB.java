@@ -9,7 +9,6 @@ import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
-import br.com.cerimonial.service.ArquivoService;
 import br.com.cerimonial.service.ModeloPropostaService;
 import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
@@ -41,8 +40,6 @@ public class ModeloPropostaCrudMB extends BasicControl {
 
     @EJB
     private ModeloPropostaService service;
-    @EJB
-    private ArquivoService arquivoService;
 
     private AbstractFilter filtros;
     private SelectItemUtils selectItemUtils;

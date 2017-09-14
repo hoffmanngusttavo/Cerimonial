@@ -52,7 +52,7 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
    
 
     @Override
-    public int countListagem(HashMap<String, Object> filter) throws Exception {
+    public int countListagem(HashMap<String, Object> filter) {
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(Usuario.class);
         modelFilter.addFilter(filter);
@@ -62,7 +62,7 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
 
 //   
     @Override
-    public List<Usuario> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
+    public List<Usuario> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
 
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(Usuario.class);

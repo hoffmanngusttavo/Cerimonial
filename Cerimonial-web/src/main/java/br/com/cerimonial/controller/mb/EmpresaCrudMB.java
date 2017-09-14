@@ -76,7 +76,7 @@ public class EmpresaCrudMB extends BasicControl {
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage(ex.getMessage());
+            createFacesErrorMessage(ex.getCause().getMessage());
         } finally {
             scrollTopMessage();
         }

@@ -136,6 +136,25 @@
             <artifactId>json</artifactId>
             <version>20170516</version>
         </dependency>
+        
+        <!-- JARXS JERSEY-->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-jetty-servlet</artifactId>
+            <version>2.26-b08</version>
+        </dependency>
+	
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.26-b08</version>
+        </dependency>  
+	
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>2.26-b08</version>
+        </dependency>
 
 
         <dependency>

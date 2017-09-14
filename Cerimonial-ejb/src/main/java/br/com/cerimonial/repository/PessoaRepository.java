@@ -35,7 +35,7 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
     }
 
     @Override
-    public int countListagem(HashMap<String, Object> filter) throws Exception {
+    public int countListagem(HashMap<String, Object> filter)  {
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(Pessoa.class);
         modelFilter.addFilter(filter);
@@ -44,7 +44,7 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
     }
 
     @Override
-    public List<Pessoa> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
+    public List<Pessoa> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
 
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(Pessoa.class);
