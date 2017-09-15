@@ -7,7 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.StatusContato;
 import br.com.cerimonial.repository.StatusContatoRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +94,7 @@ public class StatusContatoService extends BasicService<StatusContato> {
     @Override
     public boolean isValid(StatusContato entity) {
         if (entity == null) {
-            throw new DAOException("Status nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Status nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

@@ -9,11 +9,11 @@ package br.com.cerimonial.exceptions;
  *
  * @author hoffmann
  */
-public class DAOException extends RuntimeException{
+public class GenericException extends RuntimeException{
     
      private int code;
 
-    public DAOException( String string, int code) {
+    public GenericException( String string, int code) {
         super(string);
         this.code = code;
     }

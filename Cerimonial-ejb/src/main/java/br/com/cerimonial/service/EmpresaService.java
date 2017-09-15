@@ -7,7 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Empresa;
 import br.com.cerimonial.repository.EmpresaRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
@@ -66,7 +66,7 @@ public class EmpresaService extends BasicService<Empresa> {
     @Override
     public boolean isValid(Empresa entity) {
         if (entity == null) {
-            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

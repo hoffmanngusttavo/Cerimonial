@@ -5,7 +5,7 @@
  */
 package br.com.cerimonial.repository;
 
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.ArrayList;
@@ -41,11 +41,11 @@ public class AbstractRepository<T> extends BasicRepository {
     public T getEntity(Long id) {
 
         if (id == null) {
-            throw new DAOException("O id é nulo", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("O id é nulo", ErrorCode.BAD_REQUEST.getCode());
         }
         
         if (id <= 0) {
-            throw new DAOException("O id precisa ser maior do que 0.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("O id precisa ser maior do que 0.", ErrorCode.BAD_REQUEST.getCode());
         }
 
         return (T) getEntity(clazz, id);

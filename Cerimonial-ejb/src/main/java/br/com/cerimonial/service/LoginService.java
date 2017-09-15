@@ -7,7 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Login;
 import br.com.cerimonial.repository.LoginRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +69,7 @@ public class LoginService extends BasicService<Login> {
     @Override
     public boolean isValid(Login entity) {
         if (entity == null) {
-            throw new DAOException("Login nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Login nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

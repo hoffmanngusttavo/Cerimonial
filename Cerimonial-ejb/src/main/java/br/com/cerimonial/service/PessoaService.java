@@ -10,7 +10,7 @@ import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.repository.PessoaRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.HashMap;
 import java.util.List;
@@ -293,7 +293,7 @@ public class PessoaService extends BasicService<Pessoa> {
     public boolean isValid(Pessoa entity) {
 
         if (entity == null) {
-            throw new DAOException("Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
 

@@ -9,7 +9,7 @@ import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.repository.EnderecoRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import javax.annotation.PostConstruct;
@@ -114,7 +114,7 @@ public class EnderecoService extends BasicService<Endereco> {
     @Override
     public boolean isValid(Endereco entity) {
         if (entity == null) {
-            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

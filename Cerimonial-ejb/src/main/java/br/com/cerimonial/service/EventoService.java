@@ -9,7 +9,7 @@ import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.repository.EventoRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
@@ -143,7 +143,7 @@ public class EventoService extends BasicService<Evento> {
     @Override
     public boolean isValid(Evento entity) {
         if (entity == null) {
-            throw new DAOException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

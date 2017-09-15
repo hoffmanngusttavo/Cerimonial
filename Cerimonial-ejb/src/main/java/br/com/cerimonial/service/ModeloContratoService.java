@@ -8,7 +8,7 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloContrato;
 import br.com.cerimonial.entity.ModeloContrato;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.repository.ModeloContratoRepository;
 import br.com.cerimonial.utils.CerimonialUtils;
@@ -102,7 +102,7 @@ public class ModeloContratoService extends BasicService<ModeloContrato>{
     @Override
     public boolean isValid(ModeloContrato entity) {
         if (entity == null) {
-            throw new DAOException("Modelo Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Modelo Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

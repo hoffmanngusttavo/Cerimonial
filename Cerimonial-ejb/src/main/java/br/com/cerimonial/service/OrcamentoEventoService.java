@@ -13,7 +13,7 @@ import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.service.utils.EmpresaCache;
 import br.com.cerimonial.service.utils.InvoiceUtils;
@@ -283,7 +283,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     @Override
     public boolean isValid(OrcamentoEvento entity) {
         if (entity == null) {
-            throw new DAOException("Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

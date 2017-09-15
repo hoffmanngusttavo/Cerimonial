@@ -8,7 +8,7 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.ConfiguracaoEmail;
 import br.com.cerimonial.enums.TipoEmail;
 import br.com.cerimonial.repository.ConfiguracaoEmailRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
@@ -136,7 +136,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
     @Override
     public boolean isValid(ConfiguracaoEmail entity) {
         if (entity == null) {
-            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

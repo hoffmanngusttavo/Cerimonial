@@ -6,7 +6,6 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Pessoa;
-import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.ModelFilter;

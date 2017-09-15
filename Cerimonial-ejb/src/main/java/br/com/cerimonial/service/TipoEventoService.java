@@ -7,7 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.repository.TipoEventoRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +94,7 @@ public class TipoEventoService extends BasicService<TipoEvento> {
     @Override
     public boolean isValid(TipoEvento entity) {
         if (entity == null) {
-            throw new DAOException("Tipo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Tipo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

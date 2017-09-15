@@ -5,7 +5,7 @@
  */
 package br.com.cerimonial.repository;
 
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import java.io.Serializable;
 import java.util.List;
@@ -35,7 +35,7 @@ abstract class BasicRepository implements Serializable {
         try {
             getEntityManager().persist(entity);
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao salvar no banco de dados: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao salvar no banco de dados: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
 
         return (T) entity;
@@ -51,12 +51,12 @@ abstract class BasicRepository implements Serializable {
 
         } catch (RuntimeException e) {
 
-            throw new DAOException("Erro ao buscar por id no banco de dados: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao buscar por id no banco de dados: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
 
         }
 
         if (find == null) {
-            throw new DAOException("Objeto de id " + pk + " não existe.", ErrorCode.NOT_FOUND.getCode());
+            throw new GenericException("Objeto de id " + pk + " não existe.", ErrorCode.NOT_FOUND.getCode());
         }
 
         return find;
@@ -70,7 +70,7 @@ abstract class BasicRepository implements Serializable {
             updatedObj = getEntityManager().merge(entity);
 
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao atualizar no banco de dados: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao atualizar no banco de dados: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
 
         return (T) updatedObj;
@@ -82,9 +82,9 @@ abstract class BasicRepository implements Serializable {
             getEntityManager().remove(entity);
 
         } catch (IllegalArgumentException ex) {
-            throw new DAOException("Objeto informado para remoção não existe: " + ex.getMessage(), ErrorCode.NOT_FOUND.getCode());
+            throw new GenericException("Objeto informado para remoção não existe: " + ex.getMessage(), ErrorCode.NOT_FOUND.getCode());
         } catch (RuntimeException ex) {
-            throw new DAOException("Erro ao remover objeto do banco de dados: " + ex.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao remover objeto do banco de dados: " + ex.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
 
     }
@@ -95,7 +95,7 @@ abstract class BasicRepository implements Serializable {
             Query qr = createQuery(query, values);
             resultList = qr.getResultList();
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao recuperar os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao recuperar os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
 
         return resultList;
@@ -107,7 +107,7 @@ abstract class BasicRepository implements Serializable {
             Query qr = createQuery(query, null);
             resultList = qr.getResultList();
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao recuperar os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao recuperar os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
         return resultList;
     }
@@ -118,7 +118,7 @@ abstract class BasicRepository implements Serializable {
             Query qr = getEntityManager().createNativeQuery(query, classToCast);
             resultList = qr.getResultList();
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao recuperar todos os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao recuperar todos os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
 
         return resultList;
@@ -130,7 +130,7 @@ abstract class BasicRepository implements Serializable {
             Query qr = getEntityManager().createNativeQuery(query);
             resultList = qr.getResultList();
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao recuperar todos os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao recuperar todos os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
         return resultList;
     }
@@ -141,7 +141,7 @@ abstract class BasicRepository implements Serializable {
             Query qr = createQuery(query, limit, offSet);
             resultList = qr.getResultList();
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao recuperar todos os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao recuperar todos os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
 
         return resultList;
@@ -153,7 +153,7 @@ abstract class BasicRepository implements Serializable {
             Query qr = createQuery(query, values);
             singleResult = qr.getSingleResult();
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao recuperar objeto do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao recuperar objeto do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
 
         return (T) singleResult;
@@ -165,7 +165,7 @@ abstract class BasicRepository implements Serializable {
             Query qr = createQuery(query, values);
             executeUpdate = qr.executeUpdate();
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao executar comando no banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao executar comando no banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
 
         return executeUpdate;
@@ -177,7 +177,7 @@ abstract class BasicRepository implements Serializable {
             Query qr = getEntityManager().createQuery(query);
             intValue = ((Number) qr.getSingleResult()).intValue();
         } catch (RuntimeException e) {
-            throw new DAOException("Erro ao contabilizar objeto no banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao contabilizar objeto no banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
         
         return intValue;

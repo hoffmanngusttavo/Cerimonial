@@ -8,7 +8,7 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.service.utils.EmpresaCache;
 import br.com.cerimonial.service.utils.InvoiceUtils;
@@ -288,7 +288,7 @@ public class UsuarioService extends BasicService<Usuario> {
     @Override
     public boolean isValid(Usuario entity) {
         if (entity == null) {
-            throw new DAOException("Usuário nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Usuário nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

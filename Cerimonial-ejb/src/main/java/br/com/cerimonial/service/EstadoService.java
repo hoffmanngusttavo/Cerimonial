@@ -7,7 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.repository.EstadoRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,7 +71,7 @@ public class EstadoService extends BasicService<Estado> {
     public Estado findBySigla(String uf) {
         
         if(StringUtils.isBlank(uf)){
-            throw new DAOException("A sigla de estado está nula", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("A sigla de estado está nula", ErrorCode.BAD_REQUEST.getCode());
         }
         
         try {
@@ -85,7 +85,7 @@ public class EstadoService extends BasicService<Estado> {
     @Override
     public boolean isValid(Estado entity) {
         if (entity == null) {
-            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

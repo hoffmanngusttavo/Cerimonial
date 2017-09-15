@@ -8,7 +8,7 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.repository.ModeloPropostaRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
     @Override
     public boolean isValid(ModeloProposta entity) {
         if (entity == null) {
-            throw new DAOException("Modelo nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Modelo nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

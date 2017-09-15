@@ -8,7 +8,7 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.repository.ArquivoRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.List;
 import java.util.logging.Level;
@@ -80,7 +80,7 @@ public class ArquivoService extends BasicService<Arquivo> {
     public boolean isValid(Arquivo entity) {
 
         if (entity == null) {
-            throw new DAOException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 
         return true;

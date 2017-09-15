@@ -7,7 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.TipoIndicacao;
 import br.com.cerimonial.repository.TipoIndicacaoRepository;
-import br.com.cerimonial.exceptions.DAOException;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +106,7 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
     @Override
     public boolean isValid(TipoIndicacao entity) {
         if (entity == null) {
-            throw new DAOException("Tipo Indicação nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Tipo Indicação nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }
