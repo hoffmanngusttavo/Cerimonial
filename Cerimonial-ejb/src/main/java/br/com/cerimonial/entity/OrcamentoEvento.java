@@ -227,17 +227,22 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
 
     public void setEvento(Evento evento) {
 
-        if (CerimonialUtils.isListNotBlank(eventos)) {
-            
-            eventos.set(0, evento);
-            
+        if (evento == null) {
+            eventos = null;
         } else {
 
-            if (eventos == null) {
-                eventos = new ArrayList<>();
-            }
+            if (CerimonialUtils.isListNotBlank(eventos)) {
 
-            eventos.add(evento);
+                eventos.set(0, evento);
+
+            } else {
+
+                if (eventos == null) {
+                    eventos = new ArrayList<>();
+                }
+
+                eventos.add(evento);
+            }
         }
     }
 

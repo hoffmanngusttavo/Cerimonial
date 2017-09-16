@@ -89,10 +89,9 @@ public class Pessoa implements Serializable, ModelInterface {
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
-   
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private List<Usuario> usuariosClientes;
-    
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
@@ -123,8 +122,6 @@ public class Pessoa implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataNascimento;
 
-    
-    
     @OneToMany(mappedBy = "contratante", fetch = FetchType.LAZY)
     private List<Evento> eventos;
 
@@ -134,11 +131,6 @@ public class Pessoa implements Serializable, ModelInterface {
         endereco = new Endereco();
     }
 
-   
-
-    
-   
-    
     public Pessoa() {
         endereco = new Endereco();
     }
@@ -182,7 +174,7 @@ public class Pessoa implements Serializable, ModelInterface {
     }
 
     public void setNome(String nome) {
-        this.nome = StringUtils.isNotBlank(nome) ? nome.toUpperCase().trim(): nome;
+        this.nome = StringUtils.isNotBlank(nome) ? nome.toUpperCase().trim() : nome;
     }
 
     public String getCpf() {
@@ -314,30 +306,33 @@ public class Pessoa implements Serializable, ModelInterface {
     }
 
     public Usuario getUsuarioCliente() {
-        
-        if(CerimonialUtils.isListNotBlank(usuariosClientes)){
+
+        if (CerimonialUtils.isListNotBlank(usuariosClientes)) {
             return usuariosClientes.get(0);
         }
-        
+
         return null;
     }
 
     public void setUsuarioCliente(Usuario usuarioCliente) {
 
-        if (CerimonialUtils.isListNotBlank(usuariosClientes)) {
-            usuariosClientes.set(0, usuarioCliente);
+        if (usuarioCliente == null) {
+            usuariosClientes = null;
         } else {
 
-            if (usuariosClientes == null) {
-                usuariosClientes = new ArrayList<>();
-            }
+            if (CerimonialUtils.isListNotBlank(usuariosClientes)) {
+                usuariosClientes.set(0, usuarioCliente);
+            } else {
 
-            usuariosClientes.add(usuarioCliente);
+                if (usuariosClientes == null) {
+                    usuariosClientes = new ArrayList<>();
+                }
+
+                usuariosClientes.add(usuarioCliente);
+            }
         }
 
     }
-
-
 
     public List<Evento> getEventos() {
         return eventos;
@@ -347,8 +342,6 @@ public class Pessoa implements Serializable, ModelInterface {
         this.eventos = eventos;
     }
 
-    
-    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -370,8 +363,6 @@ public class Pessoa implements Serializable, ModelInterface {
         }
         return true;
     }
-
-    
 
     @Override
     public String toString() {
@@ -411,24 +402,24 @@ public class Pessoa implements Serializable, ModelInterface {
         }
     }
 
-    public void adicionarCategoria(CategoriaFornecedor categoriaFornecedor) throws Exception{
-        if(categoriaFornecedor == null){
+    public void adicionarCategoria(CategoriaFornecedor categoriaFornecedor) throws Exception {
+        if (categoriaFornecedor == null) {
             throw new Exception("Categoria Inválida");
         }
-        if(this.getCategoriasFornecedor() == null){
+        if (this.getCategoriasFornecedor() == null) {
             this.setCategoriasFornecedor(new LinkedList<>());
         }
-        
-        if(!this.getCategoriasFornecedor().contains(categoriaFornecedor)){
+
+        if (!this.getCategoriasFornecedor().contains(categoriaFornecedor)) {
             this.getCategoriasFornecedor().add(categoriaFornecedor);
         }
     }
-    
-    public void removerCategoria(CategoriaFornecedor categoriaFornecedor) throws Exception{
-        if(categoriaFornecedor == null){
+
+    public void removerCategoria(CategoriaFornecedor categoriaFornecedor) throws Exception {
+        if (categoriaFornecedor == null) {
             throw new Exception("Categoria Inválida");
         }
-        if(this.getCategoriasFornecedor().isEmpty()){
+        if (this.getCategoriasFornecedor().isEmpty()) {
             throw new Exception("Lista de Categorias está vazia");
         }
         this.getCategoriasFornecedor().remove(categoriaFornecedor);

@@ -5,8 +5,11 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +20,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -34,7 +38,6 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Evento implements Serializable, ModelInterface {
-    
 
     @Id
     @GeneratedValue(generator = "GENERATE_Evento", strategy = GenerationType.AUTO)
@@ -52,20 +55,23 @@ public class Evento implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Pessoa contratante;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private OrcamentoEvento orcamentoEvento;
-    
+
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
-    
+
     @Column(columnDefinition = "boolean default false")
     private boolean cancelado = false;
-    
+
     @Column(columnDefinition = "boolean default false")
     private boolean finalizado = false;
+
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
+    private List<ContratoEvento> contratos;
 
     @Override
     public Long getId() {
@@ -145,9 +151,32 @@ public class Evento implements Serializable, ModelInterface {
         this.finalizado = finalizado;
     }
 
-   
-    
-    
+    public ContratoEvento getContrato() {
+
+        if (CerimonialUtils.isListNotBlank(contratos)) {
+            return contratos.get(0);
+        }
+
+        return null;
+    }
+
+    public void setContratos(ContratoEvento contrato) {
+
+        if (contrato == null) {
+            contratos = null;
+        } else {
+
+            if (CerimonialUtils.isListNotBlank(contratos)) {
+                contratos.set(0, contrato);
+            }
+
+            if (contratos == null) {
+                contratos = new ArrayList<>();
+            }
+
+            contratos.add(contrato);
+        }
+    }
 
     @PrePersist
     @Override

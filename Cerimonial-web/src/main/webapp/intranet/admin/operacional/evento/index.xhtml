@@ -16,6 +16,24 @@
                 id="form">
 
             <div id="event-module">
+                <div class="row no-margim">
+                    <div class="col-md-12">
+                        <h1 class="module-title">
+                            Eventos
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row" style="margin-top: 10px;">
                     <div >
@@ -55,13 +73,6 @@
                                     <h:outputText value="#{item.nome}" />
                                 </p:column>
                                 
-                                <p:column id="tipoEvento" 
-                                          exportable="true"
-                                          sortBy="#{item.orcamentoEvento.contatoEvento.tipoEvento.nome}"
-                                          headerText="Tipo Evento">
-                                    <h:outputText value="#{item.orcamentoEvento.contatoEvento.tipoEvento.nome}" />
-                                </p:column>
-
                                 <p:column id="ativo" 
                                           exportable="true"
                                           width="80"

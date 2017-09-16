@@ -21,9 +21,6 @@ import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -33,33 +30,29 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class ModeloContrato implements Serializable, ModelInterface {
-
+public class ContratoEvento implements Serializable, ModelInterface {
+    
+    
     @Id
-    @GeneratedValue(generator = "GENERATE_ModeloContrato", strategy = GenerationType.AUTO)
-    @SequenceGenerator(name = "GENERATE_ModeloContrato", sequenceName = "ModeloContrato_pk_seq", allocationSize = 1)
+    @GeneratedValue(generator = "GENERATE_ContratoEvento", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "GENERATE_ContratoEvento", sequenceName = "ContratoEvento_pk_seq", allocationSize = 1)
     private Long id;
-
-    @Column(nullable = false)
-    @NotNull(message = "O título não pode ser nulo")
-    @Size(min = 2, max = 255)
-    private String titulo;
-
+    
     @Column(columnDefinition = "TEXT")
     private String conteudo;
-
-    @Column(columnDefinition = "boolean default true")
-    private boolean ativo = true;
-
-    @NotNull(message = "O tipo de evento não pode ser nulo")
-    @ManyToOne
-    private TipoEvento tipoEvento;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataImpressao;
+    
+    @ManyToOne
+    private Evento evento;
+    
 
     @Override
     public Long getId() {
@@ -70,31 +63,7 @@ public class ModeloContrato implements Serializable, ModelInterface {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = StringUtils.isNotBlank(titulo) ? titulo.toUpperCase().trim() : titulo;
-    }
-
-    public String getConteudo() {
-        return conteudo;
-    }
-
-    public void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
+    
     @Override
     public Date getDataUltimaAlteracao() {
         return dataUltimaAlteracao;
@@ -115,14 +84,32 @@ public class ModeloContrato implements Serializable, ModelInterface {
         this.modificadoPor = modificadoPor;
     }
 
-    public TipoEvento getTipoEvento() {
-        return tipoEvento;
+    public String getConteudo() {
+        return conteudo;
     }
 
-    public void setTipoEvento(TipoEvento tipoEvento) {
-        this.tipoEvento = tipoEvento;
+    public void setConteudo(String conteudo) {
+        this.conteudo = conteudo;
     }
 
+    public Date getDataImpressao() {
+        return dataImpressao;
+    }
+
+    public void setDataImpressao(Date dataImpressao) {
+        this.dataImpressao = dataImpressao;
+    }
+
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+    
+    
+    
     @PrePersist
     @Override
     public void prePersistEntity() {
@@ -166,10 +153,10 @@ public class ModeloContrato implements Serializable, ModelInterface {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ModeloContrato)) {
+        if (!(object instanceof ContratoEvento)) {
             return false;
         }
-        ModeloContrato other = (ModeloContrato) object;
+        ContratoEvento other = (ContratoEvento) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -178,7 +165,7 @@ public class ModeloContrato implements Serializable, ModelInterface {
 
     @Override
     public String toString() {
-        return "br.com.cerimonial.entity.ModeloContrato[ id=" + id + " ]";
+        return "br.com.cerimonial.entity.ContratoEvento[ id=" + id + " ]";
     }
-
+    
 }
