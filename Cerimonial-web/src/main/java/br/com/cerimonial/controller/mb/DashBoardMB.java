@@ -31,6 +31,7 @@ public class DashBoardMB extends BasicControl{
     
     private List<Login> ultimosLogins;
     private List<Evento> eventosDia;
+    private List<Evento> eventosAtivos;
     
     private Date dataSelecionada;
     
@@ -46,6 +47,10 @@ public class DashBoardMB extends BasicControl{
     
     public void carregarEventosDoDia(){
         eventosDia = eventoService.findEventosDia(dataSelecionada);
+    }
+    
+    public void carregarEventosAtivos(){
+        eventosAtivos = eventoService.findEventosAtivos(5);
     }
     
     
@@ -76,6 +81,14 @@ public class DashBoardMB extends BasicControl{
 
     public void setEventosDia(List<Evento> eventosDia) {
         this.eventosDia = eventosDia;
+    }
+
+    public List<Evento> getEventosAtivos() {
+        return eventosAtivos;
+    }
+
+    public void setEventosAtivos(List<Evento> eventosAtivos) {
+        this.eventosAtivos = eventosAtivos;
     }
     
     

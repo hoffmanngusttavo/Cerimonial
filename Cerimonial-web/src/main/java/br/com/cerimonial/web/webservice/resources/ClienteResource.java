@@ -10,7 +10,6 @@ import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.web.webservice.resources.beans.ClienteFilterBean;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;

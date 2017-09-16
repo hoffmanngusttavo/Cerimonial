@@ -107,6 +107,20 @@ public class EventoService extends BasicService<Evento> {
         }
         return new ArrayList<Evento>();
     }
+    
+    /**
+     * Vai retornar todos os eventos ativos de acordo com o limit
+     * @param limit
+     * @return 
+     */
+    public List<Evento> findEventosAtivos(int limit) {
+        try {
+            return repository.findEventosAtivos(limit);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<Evento>();
+    }
 
     public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento, Pessoa cliente) throws Exception {
 

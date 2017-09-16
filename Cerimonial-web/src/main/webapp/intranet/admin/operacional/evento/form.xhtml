@@ -8,29 +8,12 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        DashBoard
+        Evento
     </ui:define>
 
     <ui:define name="content">
         <h:form prependId="false"
-                rendered="#{AutenticacaoMB.hasPermission('ADMIN')}"
                 id="form">
-
-            <div class="fixed-rounded-button">
-                <span class="glyphicon"
-                      style="margin-top: -9px;margin-left: -10px;">
-                    <p:commandButton action="/intranet/admin/operacional/contato-inicial/form?faces-redirect=true" 
-                                     ajax="false"
-                                     title="Criar Novo Contato"
-                                     process="@this"
-                                     immediate="true"
-                                     icon="fa fa-plus"
-                                     styleClass="bt-acoes-add"
-                                     onstart="PF('statusDialog').show();"
-                                     oncomplete="PF('statusDialog').hide();"/>
-                </span>
-            </div>
-
 
             <div class="container-fluid">
                 <div class="row">
@@ -142,39 +125,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        #{DashBoardMB.carregarEventosAtivos()}
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Eventos Ativos</h3>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table table-hover">
-                                    <tbody>
-                                        <p:repeat value="#{DashBoardMB.eventosAtivos}" var="eve">
-                                            <tr>
-                                                <td>
-                                                    <p:link href="/intranet/admin/operacional/evento/form.xhtml?id=#{eve.id}" >
-                                                        <span>#{eve.nome}</span>
-                                                    </p:link>
-                                                </td>
-                                            </tr>
-                                        </p:repeat>
-                                        <tr>
-                                            <td colspan="2">
-                                                <p:link href="/intranet/admin/operacional/evento/index.xhtml" >
-                                                    <span>Visualizar Todos</span>
-                                                </p:link>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+
+
                 </div>
             </div>
         </h:form>

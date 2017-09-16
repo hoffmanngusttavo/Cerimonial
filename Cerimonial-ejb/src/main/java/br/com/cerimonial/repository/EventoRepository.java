@@ -7,7 +7,6 @@ package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.OrcamentoEvento;
-import br.com.cerimonial.entity.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +32,20 @@ public class EventoRepository extends AbstractRepository<Evento> {
     public List<Evento> findEventosDia(Date dataSelecionada)  {
         try {
             return getPureList(Evento.class, "select event from Evento event where event.dataEvento = ?1", dataSelecionada);
+        } catch (Exception ex) {
+            Logger.getLogger(EventoRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<Evento>();
+    }
+    
+    /**
+     * Vai retornar todos os eventos ativos
+     * @param limit
+     * @return 
+     */
+    public List<Evento> findEventosAtivos(int limit)  {
+        try {
+            return getPureListRange(Evento.class, "select event from Evento event where event.ativo = true", limit, 0);
         } catch (Exception ex) {
             Logger.getLogger(EventoRepository.class.getName()).log(Level.SEVERE, null, ex);
         }

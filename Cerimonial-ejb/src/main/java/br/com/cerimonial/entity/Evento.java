@@ -57,6 +57,15 @@ public class Evento implements Serializable, ModelInterface {
 
     @ManyToOne
     private OrcamentoEvento orcamentoEvento;
+    
+    @Column(columnDefinition = "boolean default true")
+    private boolean ativo = true;
+    
+    @Column(columnDefinition = "boolean default false")
+    private boolean cancelado = false;
+    
+    @Column(columnDefinition = "boolean default false")
+    private boolean finalizado = false;
 
     @Override
     public Long getId() {
@@ -110,6 +119,30 @@ public class Evento implements Serializable, ModelInterface {
 
     public void setOrcamentoEvento(OrcamentoEvento orcamentoEvento) {
         this.orcamentoEvento = orcamentoEvento;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public boolean isCancelado() {
+        return cancelado;
+    }
+
+    public void setCancelado(boolean cancelado) {
+        this.cancelado = cancelado;
+    }
+
+    public boolean isFinalizado() {
+        return finalizado;
+    }
+
+    public void setFinalizado(boolean finalizado) {
+        this.finalizado = finalizado;
     }
 
    
