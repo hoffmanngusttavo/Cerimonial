@@ -135,8 +135,13 @@ public class ContratoEventoService extends BasicService<ContratoEvento>{
         if (entity == null) {
             throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
+        
         if (entity.getEvento() == null) {
             throw new GenericException("Evento do Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (entity.getModeloContrato() == null) {
+            throw new GenericException("Modelo de Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

@@ -8,6 +8,7 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloContrato;
 import br.com.cerimonial.entity.ModeloContrato;
+import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.repository.ModeloContratoRepository;
@@ -105,6 +106,16 @@ public class ModeloContratoService extends BasicService<ModeloContrato>{
             throw new GenericException("Modelo Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
+    }
+
+    public List<ModeloContrato> findModelosContratoByTipoEvento(TipoEvento tipoEvento) {
+        
+        if (tipoEvento == null || tipoEvento.getId() == null) {
+            throw new GenericException("Tipo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        return repository.findModelosContratoByTipoEvento(tipoEvento);
+        
     }
     
 }

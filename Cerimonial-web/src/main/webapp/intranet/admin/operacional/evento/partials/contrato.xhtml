@@ -15,9 +15,7 @@
 
         <f:metadata>
             <f:viewParam name="idEvento" value="#{ContratoEventoMB.id}" converter="javax.faces.Long"/>
-            <!--use view action if you are in a Java EE 7 server: -->
             <f:viewAction action="#{ContratoEventoMB.init()}"/>
-            <!--<f:event type="preRenderView" listener="{ContratoEventoMB.init}"/>-->
         </f:metadata>
 
         <h:form prependId="false"
@@ -29,7 +27,12 @@
                 <div class="col-md-12 text-center">
                     <div class="panel panel-danger">
                         <div class="panel-heading">
-                            <h3 class="panel-title">#{ContratoEventoMB.entity.evento.nome}</h3>
+                            <h3 class="panel-title">
+                                <p:link href="/intranet/admin/operacional/evento/form.xhtml?id=#{ContratoEventoMB.entity.evento.id}">
+                                    <i class="fa fa-list"></i>
+                                    <span>#{ContratoEventoMB.entity.evento.nome}</span>
+                                </p:link>
+                            </h3>
                         </div>
                         <div class="panel-body">
                             <div style="margin-left: 28px;">
@@ -56,7 +59,21 @@
                                         *
                                     </span>
                                 </label>
-
+                                
+                                <h:selectOneMenu id="inptModeloContrato" 
+                                                 value="#{ContratoEventoMB.entity.modeloContrato}"
+                                                 converter="EntityConverter"
+                                                 required="true"
+                                                 requiredMessage="Preencha um modelo de contrato válido"
+                                                 class="form-control"
+                                                 label="Modelo de Contrato">
+                                    <f:selectItem itemValue="" 
+                                                  itemLabel="Selecione" /> 
+                                    <f:selectItems value="#{ContratoEventoMB.comboModeloContrato}" />
+                                    <p:ajax process="@this"
+                                            update="@this"
+                                            global="false"/>
+                                </h:selectOneMenu>
 
                             </div>
                         </div>
@@ -80,9 +97,9 @@
                 </div>
             </div>
             <div class="row">
+
                 <p:commandButton value="Voltar"
                                  immediate="true"
-                                 action="form.xhtml"
                                  process="@this"
                                  class="btn btn-default"
                                  icon="fa fa-close"/>

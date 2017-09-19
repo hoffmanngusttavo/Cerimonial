@@ -15,9 +15,7 @@
 
         <f:metadata>
             <f:viewParam name="id" value="#{EventoCrudMB.id}" converter="javax.faces.Long"/>
-            <!--use view action if you are in a Java EE 7 server: -->
             <f:viewAction action="#{EventoCrudMB.init()}"/>
-            <!--<f:event type="preRenderView" listener="{ContatoInicialCrudMB.init}"/>-->
         </f:metadata>
 
 

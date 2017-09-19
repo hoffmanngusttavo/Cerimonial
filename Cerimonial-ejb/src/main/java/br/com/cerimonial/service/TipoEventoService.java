@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.repository.TipoEventoRepository;
 import br.com.cerimonial.exceptions.GenericException;
@@ -21,6 +22,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import static org.json.XMLTokener.entity;
 
 /**
  *
@@ -97,6 +99,16 @@ public class TipoEventoService extends BasicService<TipoEvento> {
             throw new GenericException("Tipo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
+    }
+
+    public TipoEvento findTipoEventoByEvento(Evento evento) {
+       
+        if (evento == null || evento.getId() == null) {
+            throw new GenericException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        return repository.findTipoEventoByEvento(evento);
+        
     }
 
 }

@@ -53,6 +53,9 @@ public class ContratoEvento implements Serializable, ModelInterface {
     @ManyToOne(optional = false)
     private Evento evento;
     
+    
+    @ManyToOne
+    private ModeloContrato modeloContrato;
 
     @Override
     public Long getId() {
@@ -106,6 +109,14 @@ public class ContratoEvento implements Serializable, ModelInterface {
 
     public void setEvento(Evento evento) {
         this.evento = evento;
+    }
+
+    public ModeloContrato getModeloContrato() {
+        return modeloContrato;
+    }
+
+    public void setModeloContrato(ModeloContrato modeloContrato) {
+        this.modeloContrato = modeloContrato;
     }
     
     

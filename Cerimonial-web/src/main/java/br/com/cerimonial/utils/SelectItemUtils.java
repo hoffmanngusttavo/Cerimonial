@@ -8,6 +8,7 @@ package br.com.cerimonial.utils;
 import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Estado;
+import br.com.cerimonial.entity.ModeloContrato;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.StatusContato;
 import br.com.cerimonial.entity.TipoEvento;
@@ -17,6 +18,7 @@ import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.service.CategoriaFornecedorService;
 import br.com.cerimonial.service.CidadeService;
 import br.com.cerimonial.service.EstadoService;
+import br.com.cerimonial.service.ModeloContratoService;
 import br.com.cerimonial.service.ModeloPropostaService;
 import br.com.cerimonial.service.StatusContatoService;
 import br.com.cerimonial.service.TipoEventoService;
@@ -114,6 +116,22 @@ public class SelectItemUtils {
             for (TipoEvento item : service.findAll()) {
                 items.add(new SelectItem(item, item.getNome()));
             }
+        } catch (Exception ex) {
+            Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return items;
+    }
+
+    public List<SelectItem> getComboModeloContratoByTipoEvento(TipoEvento tipoEvento) {
+        List<SelectItem> items = new LinkedList<>();
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        ModeloContratoService service = lookupUtil.lookupService(ModeloContratoService.class);
+
+        try {
+            service.findModelosContratoByTipoEvento(tipoEvento).stream().forEach((item) -> {
+                items.add(new SelectItem(item, item.getTitulo()));
+            });
+            
         } catch (Exception ex) {
             Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
         }

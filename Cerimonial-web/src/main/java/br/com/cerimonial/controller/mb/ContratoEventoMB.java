@@ -8,14 +8,20 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.service.ContratoEventoService;
 import br.com.cerimonial.service.EventoService;
+import br.com.cerimonial.service.TipoEventoService;
+import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -30,31 +36,39 @@ public class ContratoEventoMB extends BasicControl {
      */
     protected Long id;
     protected ContratoEvento entity;
-    
+
     @EJB
     protected ContratoEventoService service;
-    
+
     @EJB
     protected EventoService eventoService;
-    
-    
-    
+
+    @EJB
+    protected TipoEventoService tipoEventoService;
+
+    protected SelectItemUtils selectItemUtils;
+
+    protected List<SelectItem> comboModeloContrato;
 
     /**
      * Evento invocado ao abrir o xhtml carregar os dados do contrato do evento
      */
     public void init() {
 
+        this.selectItemUtils = new SelectItemUtils();
+
         if (id != null) {
             try {
                 entity = service.getContratoByEvento(id);
-                
-                if(entity == null){
+
+                if (entity == null) {
                     entity = new ContratoEvento();
                     Evento evento = eventoService.getEntity(id);
                     entity.setEvento(evento);
                 }
                 
+                postConstruct();
+
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
                 createFacesErrorMessage(ex.getCause().getMessage());
@@ -63,8 +77,22 @@ public class ContratoEventoMB extends BasicControl {
         }
 
     }
-    
-    
+
+    private void postConstruct() {
+
+        try {
+            TipoEvento tipoEvento = tipoEventoService.findTipoEventoByEvento(entity.getEvento());
+
+            comboModeloContrato = selectItemUtils.getComboModeloContratoByTipoEvento(tipoEvento);
+            
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getCause().getMessage());
+            scrollTopMessage();
+        }
+
+    }
+
     /**
      * Evento invocado pela tela de form para salvar um novo ou edicao de um
      * contato
@@ -88,6 +116,10 @@ public class ContratoEventoMB extends BasicControl {
         return null;
     }
 
+    public List<SelectItem> getComboModeloContrato() {
+        return comboModeloContrato;
+    }
+
     public Long getId() {
         return id;
     }
@@ -103,10 +135,5 @@ public class ContratoEventoMB extends BasicControl {
     public void setEntity(ContratoEvento entity) {
         this.entity = entity;
     }
-    
-    
-    
-    
-    
 
 }

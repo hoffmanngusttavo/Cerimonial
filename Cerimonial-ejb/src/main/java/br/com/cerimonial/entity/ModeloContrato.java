@@ -7,6 +7,7 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -34,6 +36,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class ModeloContrato implements Serializable, ModelInterface {
+    
 
     @Id
     @GeneratedValue(generator = "GENERATE_ModeloContrato", strategy = GenerationType.AUTO)
@@ -60,6 +63,9 @@ public class ModeloContrato implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    
+    @OneToMany(mappedBy = "modeloContrato", fetch = FetchType.LAZY)
+    private List<ContratoEvento> contratosEvento;
 
     @Override
     public Long getId() {
@@ -122,6 +128,16 @@ public class ModeloContrato implements Serializable, ModelInterface {
     public void setTipoEvento(TipoEvento tipoEvento) {
         this.tipoEvento = tipoEvento;
     }
+
+    public List<ContratoEvento> getContratosEvento() {
+        return contratosEvento;
+    }
+
+    public void setContratosEvento(List<ContratoEvento> contratosEvento) {
+        this.contratosEvento = contratosEvento;
+    }
+    
+    
 
     @PrePersist
     @Override
