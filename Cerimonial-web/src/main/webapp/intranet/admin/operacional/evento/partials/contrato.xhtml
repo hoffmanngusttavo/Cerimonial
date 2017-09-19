@@ -8,84 +8,96 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Contrato
+        Contrato Evento
     </ui:define>
 
     <ui:define name="content">
-        
+
         <f:metadata>
-            <f:viewParam name="id" value="#{EventoCrudMB.id}" converter="javax.faces.Long"/>
+            <f:viewParam name="idEvento" value="#{ContratoEventoMB.id}" converter="javax.faces.Long"/>
             <!--use view action if you are in a Java EE 7 server: -->
-            <f:viewAction action="#{EventoCrudMB.init()}"/>
-            <!--<f:event type="preRenderView" listener="{ContatoInicialCrudMB.init}"/>-->
+            <f:viewAction action="#{ContratoEventoMB.init()}"/>
+            <!--<f:event type="preRenderView" listener="{ContratoEventoMB.init}"/>-->
         </f:metadata>
-        
-        
+
         <h:form prependId="false"
+                enctype="multipart/form-data"
                 id="form">
 
-            <div class="container-fluid">
-                
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <div class="panel panel-danger">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">#{EventoCrudMB.entity.nome}</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div style="margin-left: 28px;">
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    
-                    <div class="col-md-4 text-center">
-                        
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Contrato</h3>
-                            </div>
-                            <div class="panel-body">
-                                
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4 text-center">
-                        
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    Ficha Cadastral
-                                </h3>
-                            </div>
-                            <div class="panel-body">
-                                
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">#{ContratoEventoMB.entity.evento.nome}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div style="margin-left: 28px;">
+
                             </div>
                         </div>
                     </div>
-                    
-                    
-                    <div class="col-md-4 text-center">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Orçamento</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div style="margin-left: 28px;">
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
                 </div>
             </div>
+
+            <div class="row">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="etapa1">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <h2>Contrato</h2>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Modelo de Contrato
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label>Conteúdo
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:editor id="inptConteudo" 
+                                          value="#{ContratoEventoMB.entity.conteudo}" 
+                                          required="true"
+                                          requiredMessage="Preencha um texto válido"/>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <p:commandButton value="Voltar"
+                                 immediate="true"
+                                 action="form.xhtml"
+                                 process="@this"
+                                 class="btn btn-default"
+                                 icon="fa fa-close"/>
+
+
+                <p:commandButton value="Salvar"
+                                 action="#{ContratoEventoMB.save()}"
+                                 icon="fa fa-check" 
+                                 ajax="false"
+                                 class="btn btn-success"
+                                 style="margin-left: 10px;"
+                                 onstart="PF('statusDialog').show();"
+                                 oncomplete="PF('statusDialog').hide();"/>
+            </div>
+
         </h:form>
     </ui:define>
 

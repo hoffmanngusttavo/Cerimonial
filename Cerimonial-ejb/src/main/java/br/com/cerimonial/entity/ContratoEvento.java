@@ -50,7 +50,7 @@ public class ContratoEvento implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataImpressao;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Evento evento;
     
 

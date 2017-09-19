@@ -56,6 +56,32 @@ public class ContratoEventoService extends BasicService<ContratoEvento>{
 
         return entity;
     }
+    
+    /**
+     * Método vai buscar todos os contratos de um evento, que por sinal só deve trazer 1
+     * Traz em lista devido ao mapeamento lazy
+     * @param idEvento do Evento
+     * @return
+     * @throws java.lang.Exception
+     */
+    public ContratoEvento getContratoByEvento(Long idEvento) throws Exception {
+
+        if(idEvento == null){
+            throw new GenericException("Id nulo do evento ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(idEvento < 0){
+            throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        List<ContratoEvento> contratos = repository.getContratosByEvento(idEvento);
+
+        if(CerimonialUtils.isListNotBlank(contratos)){
+            return contratos.get(0);
+        }
+        
+        return null;
+    }
 
     @Override
     public ContratoEvento save(ContratoEvento entity) throws Exception {
@@ -108,6 +134,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento>{
     public boolean isValid(ContratoEvento entity) {
         if (entity == null) {
             throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        if (entity.getEvento() == null) {
+            throw new GenericException("Evento do Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }
