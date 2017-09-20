@@ -6,6 +6,7 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
+import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.OrcamentoEvento;
@@ -72,6 +73,29 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     public OrcamentoEvento getEntity(Long id) throws Exception {
         return repository.getEntity(id);
     }
+    
+    
+    /**
+     * Método vai buscar todos os contratos de um evento, que por sinal só deve trazer 1
+     * Traz em lista devido ao mapeamento lazy
+     * @param idEvento do Evento
+     * @return
+     * @throws java.lang.Exception
+     */
+    public OrcamentoEvento getOrcamentoByEvento(Long idEvento) throws Exception {
+
+        if(idEvento == null){
+            throw new GenericException("Id nulo do evento ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(idEvento < 0){
+            throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        return  repository.getOrcamentoByEvento(idEvento);
+    }
+    
+    
 
     @Override
     public OrcamentoEvento save(OrcamentoEvento entity) throws Exception {

@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.repository;
 
+import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
@@ -48,6 +49,23 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
 
         return propostas;
 
+    }
+    
+    
+    public OrcamentoEvento getOrcamentoByEvento(Long idEvento) {
+
+        StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
+        sql.append("INNER JOIN orc.eventos evento");
+        sql.append(" WHERE 1=1");
+        sql.append(" AND evento.id = ?1");
+        
+        OrcamentoEvento orcamento = getPurePojo(OrcamentoEvento.class, sql.toString(), idEvento);
+        
+        if(orcamento != null && orcamento.getEvento() != null){
+            
+        }
+        
+        return orcamento;
     }
 
    
