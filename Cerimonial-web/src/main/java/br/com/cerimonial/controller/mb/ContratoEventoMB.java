@@ -22,6 +22,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -66,7 +67,7 @@ public class ContratoEventoMB extends BasicControl {
                     Evento evento = eventoService.getEntity(id);
                     entity.setEvento(evento);
                 }
-                
+
                 postConstruct();
 
             } catch (Exception ex) {
@@ -78,13 +79,31 @@ public class ContratoEventoMB extends BasicControl {
 
     }
 
-    private void postConstruct() {
+    /**
+     * Evento invocado ao abrir o xhtml de impressao do contrato
+     */
+    public void initImpressao() {
 
+        if (id != null) {
+            try {
+
+                entity = service.getEntity(id);
+
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                createFacesErrorMessage(ex.getCause().getMessage());
+                scrollTopMessage();
+            }
+        }
+
+    }
+
+    private void postConstruct() {
         try {
             TipoEvento tipoEvento = tipoEventoService.findTipoEventoByEvento(entity.getEvento());
 
             comboModeloContrato = selectItemUtils.getComboModeloContratoByTipoEvento(tipoEvento);
-            
+
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
             createFacesErrorMessage(e.getCause().getMessage());
@@ -94,26 +113,64 @@ public class ContratoEventoMB extends BasicControl {
     }
 
     /**
+     * Evento do combo após selecionar um modelo de contrato
+     */
+    public void carregarModeloContrato() {
+        try {
+
+            service.carregarContratoDeModelo(entity);
+
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage("Não foi possível carregar o contrato: " + e.getCause().getMessage());
+            scrollTopMessage();
+        }
+    }
+
+    /**
      * Evento invocado pela tela de form para salvar um novo ou edicao de um
      * contato
      *
-     * @return
      */
-    public synchronized String save() {
+    public synchronized void save() {
         try {
-            if (entity != null) {
-                service.save(entity);
-                createFacesInfoMessage("Dados gravados com sucesso!");
-                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-                return "index.xhtml?faces-redirect=true";
-            }
+            service.save(entity);
+            createFacesInfoMessage("Dados gravados com sucesso!");
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
+            RequestContext rc = RequestContext.getCurrentInstance();
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/intranet/admin/operacional/evento/partials/contrato.xhtml?idEvento=" + entity.getEvento().getId();
+            rc.execute("window.location = '" + url + "'");
+
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
         } finally {
             scrollTopMessage();
         }
-        return null;
+    }
+
+    /**
+     * Evento invocado pela tela de contrato para imprimir
+     *
+     */
+    public synchronized void imprimirContrato() {
+        try {
+
+            service.imprimirContrato(entity);
+
+            RequestContext rc = RequestContext.getCurrentInstance();
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/intranet/admin/operacional/evento/partials/impressao-contrato.xhtml?id=" + entity.getId();
+
+            rc.execute("printWindow = window.open('" + url + "');");
+            rc.execute("printWindow.print()");
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
+        } finally {
+            scrollTopMessage();
+        }
     }
 
     public List<SelectItem> getComboModeloContrato() {

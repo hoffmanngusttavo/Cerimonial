@@ -6,12 +6,12 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ContratoEvento;
-import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContratoEventoRepository;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +23,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -94,6 +93,15 @@ public class ContratoEventoService extends BasicService<ContratoEvento>{
             return repository.edit(entity);
         }
     }
+    
+    public void imprimirContrato(ContratoEvento entity) throws Exception {
+
+        isValid(entity);
+        
+        entity.setDataImpressao(new Date());
+        
+        save(entity);
+    }
 
     public List<ContratoEvento> findAll() {
         try {
@@ -144,6 +152,22 @@ public class ContratoEventoService extends BasicService<ContratoEvento>{
             throw new GenericException("Modelo de Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
+    }
+
+    /**
+     * Vai preencher o conteudo do contrato do evento de acordo com o modelo
+     * específico
+     * TODO[substituir variaves de acordo com hashTags]
+     * @param entity
+     */
+    public void carregarContratoDeModelo(ContratoEvento entity) {
+        
+        isValid(entity);
+        
+        String conteudo = entity.getModeloContrato().getConteudo();
+        
+        entity.setConteudo(conteudo);
+        
     }
     
 }

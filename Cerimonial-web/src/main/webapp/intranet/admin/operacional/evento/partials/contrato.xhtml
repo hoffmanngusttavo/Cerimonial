@@ -59,7 +59,7 @@
                                         *
                                     </span>
                                 </label>
-                                
+
                                 <h:selectOneMenu id="inptModeloContrato" 
                                                  value="#{ContratoEventoMB.entity.modeloContrato}"
                                                  converter="EntityConverter"
@@ -71,7 +71,8 @@
                                                   itemLabel="Selecione" /> 
                                     <f:selectItems value="#{ContratoEventoMB.comboModeloContrato}" />
                                     <p:ajax process="@this"
-                                            update="@this"
+                                            listener="#{ContratoEventoMB.carregarModeloContrato()}"
+                                            update="@this, inptConteudo"
                                             global="false"/>
                                 </h:selectOneMenu>
 
@@ -98,17 +99,22 @@
             </div>
             <div class="row">
 
-                <p:commandButton value="Voltar"
-                                 immediate="true"
-                                 process="@this"
-                                 class="btn btn-default"
-                                 icon="fa fa-close"/>
-
-
-                <p:commandButton value="Salvar"
-                                 action="#{ContratoEventoMB.save()}"
+                <p:commandButton value="Imprimir"
+                                 actionListener="#{ContratoEventoMB.imprimirContrato()}"
+                                 rendered="#{ContratoEventoMB.entity.id != null}"
                                  icon="fa fa-check" 
                                  ajax="false"
+                                 id="btn-imprimir-contrato"
+                                 class="btn btn-success"
+                                 style="margin-left: 10px;"
+                                 onstart="PF('statusDialog').show();"
+                                 oncomplete="PF('statusDialog').hide();"/>
+                
+                 <p:commandButton value="Salvar"
+                                 action="#{ContratoEventoMB.save()}"
+                                 icon="fa fa-check" 
+                                 update="@form"
+                                 id="btn-salvar-contrato"
                                  class="btn btn-success"
                                  style="margin-left: 10px;"
                                  onstart="PF('statusDialog').show();"
