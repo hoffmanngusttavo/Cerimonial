@@ -8,6 +8,7 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.service.OrcamentoEventoService;
+import br.com.cerimonial.utils.ArquivoUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -45,6 +46,20 @@ public class OrcamentoEventoMB extends BasicControl {
         }
 
     }
+    
+    /**
+     * Evento invocado pela tela de form para fazer download do arquivo
+     *
+     */
+    public void baixarArquivoOrcamento() {
+        try {
+            ArquivoUtils.carregarArquivo(entity.getArquivo());
+        } catch (Exception e) {
+            Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getMessage());
+        }
+    }
+    
 
     public Long getId() {
         return id;

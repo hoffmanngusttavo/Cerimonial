@@ -241,6 +241,16 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
             }
         }
     }
+    
+    public double getValorFinal(){
+        if(valorAlterado > -1){
+            return valorAlterado;
+        }else{
+            return valorProposta;
+        }
+    }
+    
+    
 
     @PrePersist
     @Override

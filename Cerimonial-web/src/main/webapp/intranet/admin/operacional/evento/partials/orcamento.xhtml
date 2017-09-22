@@ -48,33 +48,60 @@
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <h2>Contrato</h2>
+                                <h2>Orçamento Aprovado</h2>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>Modelo de Contrato
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
+                                <label>Tipo de Evento</label>
 
-                                
-
+                                <h:outputText value="#{OrcamentoEventoMB.entity.contatoEvento.tipoEvento.nome}"
+                                              class="form-control"/>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label>Conteúdo
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
 
-                               
+                            <div class="form-group col-md-6">
+                                <label>Modelo de Proposta</label>
 
+                                <h:outputText value="#{OrcamentoEventoMB.entity.modeloProposta.titulo}"
+                                              class="form-control"/>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Valor Orçamento</label>
+
+                                <h:outputText value="#{OrcamentoEventoMB.entity.valorFinal}"
+                                              class="form-control">
+                                    <f:convertNumber locale="pt_BR"
+                                                     maxFractionDigits="2"
+                                                     minFractionDigits="2"/>
+                                </h:outputText>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Data Orçamento enviado</label>
+
+                                <h:outputText value="#{OrcamentoEventoMB.entity.dataEnvio}"
+                                              class="form-control">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+                                                       locale="pt_BR"/>
+                                </h:outputText>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Arquivo Orçamento</label>
+
+                                <p:commandButton icon="fa fa-download" 
+                                                 styleClass="bt-acoes"
+                                                 process="@this"
+                                                 title="Baixar Arquivo"
+                                                 actionListener="#{OrcamentoEventoMB.baixarArquivoOrcamento()}"
+                                                 ajax="false"
+                                                 rendered="#{OrcamentoEventoMB.entity.arquivo.id != null}"
+                                                 immediate="true"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
                             </div>
                         </div>
                     </div>

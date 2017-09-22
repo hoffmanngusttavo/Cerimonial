@@ -52,6 +52,11 @@ public class ContatoEvento implements Serializable, ModelInterface{
     
     @Column(nullable = false)
     @NotNull
+    @Size(min = 2, max = 255, message = "Nome deve estar entre 2 a 255 caracteres")
+    private String nomeEvento;
+    
+    @Column(nullable = false)
+    @NotNull
     private String telefonePrincipal;
     
     @Column
@@ -265,6 +270,16 @@ public class ContatoEvento implements Serializable, ModelInterface{
         }
         return false;
     }
+
+    public String getNomeEvento() {
+        return nomeEvento;
+    }
+
+    public void setNomeEvento(String nomeEvento) {
+        this.nomeEvento = nomeEvento;
+    }
+    
+    
 
     @Override
     public int hashCode() {

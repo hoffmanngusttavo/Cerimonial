@@ -21,9 +21,7 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
         super(entityManager, OrcamentoEvento.class);
     }
 
-    
-    
-     /**
+    /**
      *
      * @param id do ContatoEvento
      * @return Uma lista de orçamentos/propostas de um contato ordenados
@@ -50,24 +48,34 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
         return propostas;
 
     }
-    
-    
+
     public OrcamentoEvento getOrcamentoByEvento(Long idEvento) {
 
         StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
-        sql.append("INNER JOIN orc.eventos evento");
+        sql.append(" INNER JOIN orc.eventos evento");
+        sql.append(" LEFT JOIN orc.modeloProposta mp");
+        sql.append(" LEFT JOIN orc.anexos arq");
         sql.append(" WHERE 1=1");
         sql.append(" AND evento.id = ?1");
-        
+
         OrcamentoEvento orcamento = getPurePojo(OrcamentoEvento.class, sql.toString(), idEvento);
-        
-        if(orcamento != null && orcamento.getEvento() != null){
+
+        if (orcamento != null) {
+
+            if (orcamento.getEvento() != null) {
+                orcamento.getEvento().getId();
+            }
             
+            if (orcamento.getAnexos() != null) {
+                orcamento.getAnexos().size();
+            }
+
+            if (orcamento.getModeloProposta() != null) {
+                orcamento.getModeloProposta().getId();
+            }
+
         }
-        
         return orcamento;
     }
-
-   
 
 }
