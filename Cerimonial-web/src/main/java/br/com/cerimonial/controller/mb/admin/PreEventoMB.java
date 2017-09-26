@@ -21,11 +21,11 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "PreEventoMB")
 @ViewScoped
-public class PreEventoMB extends BasicControl{
-    
+public class PreEventoMB extends BasicControl {
+
     protected ContatoEvento entity;
     protected Long id;
-    
+
     @EJB
     protected ContatoEventoService service;
 
@@ -35,16 +35,12 @@ public class PreEventoMB extends BasicControl{
      */
     public void init() {
 
-        if (id != null) {
-            try {
-                entity = service.getEntity(id);
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            entity = new ContatoEvento();
+        try {
+            entity = service.getEntity(id);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage("Não foi possível carregar o evento: "+ex.getCause().getMessage());
         }
-
     }
 
     public ContatoEvento getEntity() {
@@ -54,7 +50,7 @@ public class PreEventoMB extends BasicControl{
     public void setEntity(ContatoEvento entity) {
         this.entity = entity;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -62,13 +58,5 @@ public class PreEventoMB extends BasicControl{
     public void setId(Long id) {
         this.id = id;
     }
-    
-    
-    
-    
 
-    
-    
-    
-    
 }

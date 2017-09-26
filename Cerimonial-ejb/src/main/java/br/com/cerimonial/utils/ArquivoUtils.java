@@ -6,7 +6,8 @@
 package br.com.cerimonial.utils;
 
 import br.com.cerimonial.entity.Arquivo;
-import java.io.IOException;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import java.io.OutputStream;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -22,7 +23,7 @@ public class ArquivoUtils {
     public static void carregarArquivo(Arquivo arquivo) throws Exception {
 
         if(arquivo == null){
-            throw new Exception("Arquivo nulo");
+            throw new GenericException( "Arquivo nulo", ErrorCode.BAD_REQUEST.getCode());
         }
         
         FacesContext fc = FacesContext.getCurrentInstance();

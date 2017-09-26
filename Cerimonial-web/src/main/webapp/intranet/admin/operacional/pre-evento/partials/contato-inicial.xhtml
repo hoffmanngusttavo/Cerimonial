@@ -23,7 +23,30 @@
                 enctype="multipart/form-data"
                 id="form">
 
-            <p:focus for="inptNome"/>
+            <h:panelGroup rendered="#{ContatoInicialCrudMB.entity.id != null}">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{ContatoInicialCrudMB.entity.id}">
+                                        <i class="fa fa-list"></i>
+                                        <span>#{ContatoInicialCrudMB.entity.nomeEvento}</span>
+                                    </p:link>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div style="margin-left: 28px;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+
+
+            <p:focus for="inptNomeEvento"/>
 
             <div class="row">
                 <!-- Nav tabs -->
@@ -33,10 +56,29 @@
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
                         <h2>Contato Inicial</h2>
 
+
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="inptNomeEvento">
+                                    Nome Evento
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+                                <p:inputText id="inptNomeEvento" 
+                                             value="#{ContatoInicialCrudMB.entity.nomeEvento}" 
+                                             required="true"
+                                             requiredMessage="Preencha um nome do evento válido"
+                                             class="form-control"
+                                             label="Nome"/>
+
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="inptNome">
-                                    Nome
+                                    Nome Contato
                                     <span class="asteriskField">
                                         *
                                     </span>
@@ -44,7 +86,7 @@
                                 <p:inputText id="inptNome" 
                                              value="#{ContatoInicialCrudMB.entity.nomeContato}" 
                                              required="true"
-                                             requiredMessage="Preencha um nome válido"
+                                             requiredMessage="Preencha um nome do contato válido"
                                              class="form-control"
                                              label="Nome"/>
 
@@ -124,10 +166,6 @@
                         </div>
 
                         <div class="row">
-
-
-
-
                             <div class="form-group col-md-3">
                                 <label class="control-label ">Data Evento
                                 </label>

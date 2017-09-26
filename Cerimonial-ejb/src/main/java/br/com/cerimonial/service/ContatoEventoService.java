@@ -53,10 +53,6 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     @Override
     public ContatoEvento getEntity(Long id) throws Exception {
         ContatoEvento entity = repository.getEntity(id);
-        if (entity != null && CerimonialUtils.isListNotBlank(entity.getPropostas())) {
-
-        }
-
         return entity;
     }
 
@@ -121,6 +117,12 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     public boolean isValid(ContatoEvento entity) {
         if (entity == null) {
             throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        if (StringUtils.isBlank(entity.getNomeContato())) {
+            throw new GenericException("Contato sem nome.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        if (StringUtils.isBlank(entity.getNomeEvento())) {
+            throw new GenericException("Contato sem nome de evento.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

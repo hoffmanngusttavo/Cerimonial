@@ -31,19 +31,19 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
                 entity.getStatus().getId();
             }
             
-            if (entity.getPropostas() != null) {
-                entity.getPropostas().size();
-                entity.getPropostas().stream().forEach(item -> {
-                    if(item.getModeloProposta() != null){
-                        item.getModeloProposta().getId();
-                    }
-                    if(item.getAnexos() != null){
-                        item.getAnexos().size();
-                    }
-                });
-                
-                
-            }
+//            if (entity.getPropostas() != null) {
+//                entity.getPropostas().size();
+//                entity.getPropostas().stream().forEach(item -> {
+//                    if(item.getModeloProposta() != null){
+//                        item.getModeloProposta().getId();
+//                    }
+//                    if(item.getAnexos() != null){
+//                        item.getAnexos().size();
+//                    }
+//                });
+//                
+//                
+//            }
         }
 
         return entity;
