@@ -52,7 +52,8 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
         if (CerimonialUtils.isListNotBlank(emails)) {
             return emails.get(0);
         }
-        throw new Exception("Não há nenhuma configuração de email cadastrada");
+        
+        throw new GenericException("Não há nenhuma configuração de email cadastrada", ErrorCode.BAD_REQUEST.getCode());
     }
 
     @Override
@@ -136,7 +137,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
     @Override
     public boolean isValid(ConfiguracaoEmail entity) {
         if (entity == null) {
-            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Configuração de email nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

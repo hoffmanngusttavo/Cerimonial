@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.repository;
 
+import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import java.util.ArrayList;
@@ -26,10 +27,11 @@ public class EventoRepository extends AbstractRepository<Evento> {
 
     /**
      * Vai retornar todos os eventos do dia
+     *
      * @param dataSelecionada
-     * @return 
+     * @return
      */
-    public List<Evento> findEventosDia(Date dataSelecionada)  {
+    public List<Evento> findEventosDia(Date dataSelecionada) {
         try {
             return getPureList(Evento.class, "select event from Evento event where event.dataEvento = ?1", dataSelecionada);
         } catch (Exception ex) {
@@ -37,13 +39,14 @@ public class EventoRepository extends AbstractRepository<Evento> {
         }
         return new ArrayList<Evento>();
     }
-    
+
     /**
      * Vai retornar todos os eventos ativos
+     *
      * @param limit
-     * @return 
+     * @return
      */
-    public List<Evento> findEventosAtivos(int limit)  {
+    public List<Evento> findEventosAtivos(int limit) {
         try {
             return getPureListRange(Evento.class, "select event from Evento event where event.ativo = true", limit, 0);
         } catch (Exception ex) {
@@ -54,19 +57,46 @@ public class EventoRepository extends AbstractRepository<Evento> {
 
     /**
      * Recuperar um evento a partir de um orçamento
+     *
      * @param orcamento
-     * @return 
+     * @return
      */
     public List<Evento> getEventosByOrcamento(OrcamentoEvento orcamento) {
-        
-         try {
+
+        try {
             return getPureList(Evento.class, "select eve from Evento eve where eve.orcamentoEvento.id = ?1", orcamento.getId());
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
-         
+
         return null;
-        
+
+    }
+
+    /**
+     * Recuperar um evento a partir de um contato
+     *
+     * @param contato
+     * @return
+     */
+    public List<Evento> getEventosByContatoEvento(ContatoEvento contato) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            
+            sb.append("SELECT eve FROM Evento eve ");
+            sb.append("INNER JOIN eve.orcamentoEvento orc ");
+            sb.append("INNER JOIN orc.contatoEvento con ");
+            sb.append("WHERE 1=1 ");
+            sb.append("AND con.id =?1");
+            
+            return getPureList(Evento.class, sb.toString(), contato.getId());
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+
     }
 
 }

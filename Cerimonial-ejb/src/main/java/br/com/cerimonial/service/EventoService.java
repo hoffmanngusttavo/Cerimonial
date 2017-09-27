@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
@@ -107,11 +108,12 @@ public class EventoService extends BasicService<Evento> {
         }
         return new ArrayList<Evento>();
     }
-    
+
     /**
      * Vai retornar todos os eventos ativos de acordo com o limit
+     *
      * @param limit
-     * @return 
+     * @return
      */
     public List<Evento> findEventosAtivos(int limit) {
         try {
@@ -125,32 +127,51 @@ public class EventoService extends BasicService<Evento> {
     public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento, Pessoa cliente) throws Exception {
 
         if (orcamento == null) {
-            throw new Exception("Orcamento Nulo");
+            throw new GenericException("Orçamento Nulo", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        List<Evento> eventos = this.getEventoByOrcamento(orcamento);
-
-        Evento evento = null;
-        if (CerimonialUtils.isListNotBlank(eventos)) {
-            evento = eventos.get(0);
-        } else {
+        Evento evento = this.getEventoByOrcamento(orcamento);
+        
+        if (evento == null) {
             evento = new Evento();
         }
 
         evento.setContratante(cliente);
-        evento.setNome(orcamento.getContatoEvento().getTipoEvento().getCategoria().getLabel() + " " + cliente.getNome());
+        evento.setNome(orcamento.getContatoEvento().getNomeEvento());
         evento.setOrcamentoEvento(orcamento);
 
         return evento;
     }
 
-    public List<Evento> getEventoByOrcamento(OrcamentoEvento orcamento) throws Exception {
+    public Evento getEventoByOrcamento(OrcamentoEvento orcamento) throws Exception {
 
         if (orcamento == null || orcamento.getId() == null) {
-            throw new Exception("Orçamento nulo");
+            throw new GenericException("Orçamento nulo", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        return repository.getEventosByOrcamento(orcamento);
+        List<Evento> eventos = repository.getEventosByOrcamento(orcamento);
+
+        if (CerimonialUtils.isListNotBlank(eventos)) {
+            return eventos.get(0);
+        }
+
+        return null;
+
+    }
+    
+    public Evento getEventoByContatoInicial(ContatoEvento contatoEvento) throws Exception {
+
+        if (contatoEvento == null || contatoEvento.getId() == null) {
+            throw new GenericException("Contato nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        List<Evento> eventos = repository.getEventosByContatoEvento(contatoEvento);
+
+        if (CerimonialUtils.isListNotBlank(eventos)) {
+            return eventos.get(0);
+        }
+
+        return null;
 
     }
 

@@ -7,8 +7,9 @@ package br.com.cerimonial.controller.mb.admin;
 
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.ContatoEvento;
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.service.ContatoEventoService;
-import br.com.cerimonial.utils.SelectItemUtils;
+import br.com.cerimonial.service.EventoService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -24,19 +25,25 @@ import javax.faces.bean.ViewScoped;
 public class PreEventoMB extends BasicControl {
 
     protected ContatoEvento entity;
+    protected Evento evento;
+    
     protected Long id;
 
     @EJB
     protected ContatoEventoService service;
+    @EJB
+    protected EventoService eventoService;
 
     /**
-     * Evento invocado ao abrir o xhtml na ediÃ§Ã£o de um cliente objetivo de
-     * carregar os dados do cliente
+     * Evento invocado ao abrir o xhtml de um contato inicial de pre evento
      */
     public void init() {
-
         try {
+
             entity = service.getEntity(id);
+            
+            evento = eventoService.getEventoByContatoInicial(entity);
+        
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível carregar o evento: "+ex.getCause().getMessage());
@@ -58,5 +65,15 @@ public class PreEventoMB extends BasicControl {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+    
+    
 
 }

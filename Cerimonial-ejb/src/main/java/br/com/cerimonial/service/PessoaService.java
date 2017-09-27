@@ -12,6 +12,7 @@ import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.repository.PessoaRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -277,15 +278,16 @@ public class PessoaService extends BasicService<Pessoa> {
             cliente.setAtivo(true);
 
         } catch (Exception e) {
-            throw new Exception("Não Foi possivel criar um cliente a partir de um contato");
+            
+            throw new GenericException("Não Foi possivel criar um cliente a partir de um contato", ErrorCode.BAD_REQUEST.getCode());
         }
         return cliente;
     }
 
     private Pessoa getClienteByEmail(String emailContato) throws Exception {
-        if (StringUtils.isBlank(emailContato)) {
-            throw new Exception("O email está vazio");
-        }
+        
+        CerimonialUtils.validarEmail(emailContato);
+        
         return repository.getClienteByEmail(emailContato);
     }
 

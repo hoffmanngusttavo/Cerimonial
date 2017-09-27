@@ -73,51 +73,44 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     public OrcamentoEvento getEntity(Long id) throws Exception {
         return repository.getEntity(id);
     }
-    
-    
+
     /**
-     * Método vai buscar todos os contratos de um evento, que por sinal só deve trazer 1
-     * Traz em lista devido ao mapeamento lazy
+     * Método vai buscar todos os contratos de um evento, que por sinal só deve
+     * trazer 1 Traz em lista devido ao mapeamento lazy
+     *
      * @param idEvento do Evento
      * @return
      * @throws java.lang.Exception
      */
     public OrcamentoEvento getOrcamentoByEvento(Long idEvento) throws Exception {
 
-        if(idEvento == null){
+        if (idEvento == null) {
             throw new GenericException("Id nulo do evento ", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        if(idEvento < 0){
+
+        if (idEvento < 0) {
             throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        return  repository.getOrcamentoByEvento(idEvento);
+
+        return repository.getOrcamentoByEvento(idEvento);
     }
-    
-  
-    
 
     @Override
     public OrcamentoEvento save(OrcamentoEvento entity) throws Exception {
-        if (entity != null) {
 
-            if (entity.getContatoEvento() == null) {
-                throw new Exception("VocÃª precisa associar um contato inicial primeiro");
-            }
+        isValid(entity);
 
-            //salvar arquivo
-            if (entity.getArquivo() != null) {
-                arquivoService.save(entity.getArquivo());
-            }
-
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+        //salvar arquivo
+        if (entity.getArquivo() != null) {
+            arquivoService.save(entity.getArquivo());
         }
-        return null;
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
+        }
+
     }
 
     public List<OrcamentoEvento> findAll() {
@@ -134,7 +127,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         isValid(proposta);
 
         if (proposta.isPropostaAceita()) {
-            throw new Exception("Não pode remover um orçamento aprovado");
+            throw new GenericException("Não pode remover um orçamento aprovado", ErrorCode.BAD_REQUEST.getCode());
         } else {
             repository.delete(proposta.getId());
         }
@@ -255,7 +248,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
             if (CerimonialUtils.isListNotBlank(orcamentos)) {
                 for (OrcamentoEvento proposta : orcamentos) {
                     if (proposta.isPropostaAceita()) {
-                        throw new Exception("Já existe um orçamento aprovado");
+                        throw new GenericException("Já existe um orçamento aprovado", ErrorCode.BAD_REQUEST.getCode());
                     }
                 }
                 orcamento.setPropostaAceita(true);
@@ -287,8 +280,10 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      */
     public void criarEvento(OrcamentoEvento entity) throws Exception {
 
-        if (entity == null || !entity.isPropostaAceita()) {
-            throw new Exception("Proposta não aceita");
+        isValid(entity);
+
+        if (!entity.isPropostaAceita()) {
+            throw new GenericException("Proposta não aceita", ErrorCode.BAD_REQUEST.getCode());
         }
 
         Pessoa cliente = pessoaService.criarClienteFromContato(entity);
@@ -309,6 +304,10 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     public boolean isValid(OrcamentoEvento entity) {
         if (entity == null) {
             throw new GenericException("Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (entity.getContatoEvento() == null) {
+            throw new GenericException("Orçamento possui um contato nulo", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
     }

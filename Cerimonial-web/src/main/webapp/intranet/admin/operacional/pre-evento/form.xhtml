@@ -55,7 +55,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-4 text-center">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
@@ -71,37 +71,38 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
-                   
-                    <div class="col-md-4 text-center">
 
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Contrato</h3>
-                            </div>
-                            <div class="panel-body">
-                                <p:link href="/intranet/admin/operacional/pre-evento/partials/contrato.xhtml?idEvento=#{PreEventoMB.entity.id}">
-                                    <i class="fa fa-list"></i>
-                                    <span></span>
-                                </p:link>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4 text-center">
-
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    Ficha Cadastral
-                                </h3>
-                            </div>
-                            <div class="panel-body">
-
+                    <h:panelGroup rendered="#{PreEventoMB.evento != null}">
+                        <div class="col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Contrato</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/contrato.xhtml?idEvento=#{PreEventoMB.evento.id}">
+                                        <i class="fa fa-list"></i>
+                                        <span></span>
+                                    </p:link>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{PreEventoMB.evento.id != null}">
+                        <div class="col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Ficha Cadastral
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
 
                 </div>
             </div>

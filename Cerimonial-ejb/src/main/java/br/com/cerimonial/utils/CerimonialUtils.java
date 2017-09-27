@@ -5,6 +5,8 @@
  */
 package br.com.cerimonial.utils;
 
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -104,7 +106,7 @@ public class CerimonialUtils {
     
     public static void validarEmail(String email) throws Exception{
         if(StringUtils.isBlank(email)){
-            throw new Exception("Preencha um email válido");
+            throw new GenericException("Preencha um email válido", ErrorCode.BAD_REQUEST.getCode());
         }
     }
     

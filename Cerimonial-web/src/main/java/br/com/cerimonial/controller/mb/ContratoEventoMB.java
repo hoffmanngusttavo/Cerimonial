@@ -130,20 +130,23 @@ public class ContratoEventoMB extends BasicControl {
      * Evento invocado pela tela de form para salvar um novo ou edicao de um
      * contato
      *
+     * @return 
      */
-    public synchronized void save() {
+    public synchronized String save() {
         try {
+            
             service.save(entity);
+            
             createFacesInfoMessage("Dados gravados com sucesso!");
+            
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-            RequestContext rc = RequestContext.getCurrentInstance();
-            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/intranet/admin/operacional/evento/partials/contrato.xhtml?idEvento=" + entity.getEvento().getId();
-            rc.execute("window.location = '" + url + "'");
+            return "/intranet/admin/operacional/pre-evento/partials/contrato.xhtml?idEvento=" + id + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
+            return null;
         } finally {
             scrollTopMessage();
         }
@@ -159,7 +162,7 @@ public class ContratoEventoMB extends BasicControl {
             service.imprimirContrato(entity);
 
             RequestContext rc = RequestContext.getCurrentInstance();
-            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/intranet/admin/operacional/evento/partials/impressao-contrato.xhtml?id=" + entity.getId();
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/intranet/admin/operacional/pre-evento/partials/impressao-contrato.xhtml?id=" + entity.getId();
 
             rc.execute("printWindow = window.open('" + url + "');");
             rc.execute("printWindow.print()");

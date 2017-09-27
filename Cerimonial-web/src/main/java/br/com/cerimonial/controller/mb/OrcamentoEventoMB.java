@@ -161,7 +161,7 @@ public class OrcamentoEventoMB extends BasicControl {
             orcamentos = service.findAllByContatoId(contatoEvento.getId());
             entity = null;
             abrirFormOrcamento = false;
-            createFacesInfoMessage("OrÃ§amento gravado com sucesso!");
+            createFacesInfoMessage("Orçamento gravado com sucesso!");
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -192,7 +192,7 @@ public class OrcamentoEventoMB extends BasicControl {
             createFacesInfoMessage("Evento criado com sucesso!");
         } catch (Exception ex) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível criar o evento, entre em contato com o suporte do sistema");
+            createFacesErrorMessage("Não foi possível criar o evento, entre em contato com o suporte do sistema: "+ex.getCause().getMessage());
         }
     }
 
@@ -243,7 +243,7 @@ public class OrcamentoEventoMB extends BasicControl {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage(ex.getMessage());
+            createFacesErrorMessage("Não foi possível enviar o email com a proposta: "+ex.getCause().getMessage());
         } finally {
             scrollTopMessage();
         }
@@ -261,11 +261,11 @@ public class OrcamentoEventoMB extends BasicControl {
 
             entity = null;
 
-            createFacesInfoMessage("OrÃ§amento removido com sucesso!");
+            createFacesInfoMessage("Orçamento removido com sucesso!");
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage(ex.getMessage());
+            createFacesErrorMessage("Não foi possível remover o orçamento: "+ex.getCause().getMessage());
         } finally {
             scrollTopMessage();
         }
