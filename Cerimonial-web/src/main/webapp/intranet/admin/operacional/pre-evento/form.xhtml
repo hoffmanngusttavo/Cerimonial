@@ -16,6 +16,9 @@
         <f:metadata>
             <f:viewParam name="id" value="#{PreEventoMB.id}" converter="javax.faces.Long"/>
             <f:viewAction action="#{PreEventoMB.init()}"/>
+        
+            <f:viewParam name="idEvento" value="#{PreEventoMB.idEvento}" converter="javax.faces.Long"/>
+            <f:viewAction action="#{PreEventoMB.initEvento()}"/>
         </f:metadata>
 
 

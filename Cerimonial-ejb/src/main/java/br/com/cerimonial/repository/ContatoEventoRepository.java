@@ -6,7 +6,10 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.ContatoEvento;
+import br.com.cerimonial.entity.Evento;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 
 /**
@@ -60,6 +63,27 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
         sql.append(" GROUP BY localevento");
 
         return getPureListNative(sql.toString());
+    }
+
+    public ContatoEvento getContatoInicialByEvento(Evento evento) {
+
+        try {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("SELECT con FROM ContatoEvento con ");
+            sb.append("INNER JOIN con.propostas pro ");
+            sb.append("INNER JOIN pro.eventos eve ");
+            sb.append("WHERE 1=1 ");
+            sb.append("AND eve.id =?1");
+
+            return getPurePojo(ContatoEvento.class, sb.toString(), evento.getId());
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+
     }
 
 }

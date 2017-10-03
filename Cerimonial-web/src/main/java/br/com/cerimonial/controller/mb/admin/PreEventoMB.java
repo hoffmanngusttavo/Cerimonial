@@ -26,8 +26,9 @@ public class PreEventoMB extends BasicControl {
 
     protected ContatoEvento entity;
     protected Evento evento;
-    
+
     protected Long id;
+    protected Long idEvento;
 
     @EJB
     protected ContatoEventoService service;
@@ -39,14 +40,34 @@ public class PreEventoMB extends BasicControl {
      */
     public void init() {
         try {
+            if (id != null) {
 
-            entity = service.getEntity(id);
-            
-            evento = eventoService.getEventoByContatoInicial(entity);
-        
+                entity = service.getEntity(id);
+
+                evento = eventoService.getEventoByContatoInicial(entity);
+
+            }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível carregar o evento: "+ex.getCause().getMessage());
+            createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
+        }
+    }
+
+    /**
+     * Evento invocado ao abrir o xhtml de um contato inicial de pre evento
+     */
+    public void initEvento() {
+        try {
+            if (idEvento != null) {
+
+                evento = eventoService.getEntity(idEvento);
+
+                entity = service.getContatoInicialByEvento(evento);
+
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
         }
     }
 
@@ -73,7 +94,13 @@ public class PreEventoMB extends BasicControl {
     public void setEvento(Evento evento) {
         this.evento = evento;
     }
-    
-    
+
+    public Long getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(Long idEvento) {
+        this.idEvento = idEvento;
+    }
 
 }

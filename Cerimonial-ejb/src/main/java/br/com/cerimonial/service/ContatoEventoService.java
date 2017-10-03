@@ -6,6 +6,7 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ContatoEvento;
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.repository.ContatoEventoRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
@@ -125,6 +126,16 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
             throw new GenericException("Contato sem nome de evento.", ErrorCode.BAD_REQUEST.getCode());
         }
         return true;
+    }
+
+    public ContatoEvento getContatoInicialByEvento(Evento evento) {
+        
+         if (evento == null || evento.getId() == null) {
+            throw new GenericException("Evento nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        return  repository.getContatoInicialByEvento(evento);
+
     }
 
 }
