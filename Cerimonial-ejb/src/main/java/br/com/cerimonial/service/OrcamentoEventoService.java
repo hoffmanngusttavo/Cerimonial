@@ -292,6 +292,9 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         Usuario usuarioCliente = usuarioService.criarUsuarioCliente(cliente);
         String senha = usuarioCliente.getSenha();
         usuarioCliente.setCliente(cliente);
+        if(usuarioCliente.getId() != null){
+            usuarioService.alterarSaltSenha(usuarioCliente);
+        }
         usuarioCliente = usuarioService.save(usuarioCliente);
 
         Evento evento = eventoService.criarEventoFromOrcamento(entity, cliente);

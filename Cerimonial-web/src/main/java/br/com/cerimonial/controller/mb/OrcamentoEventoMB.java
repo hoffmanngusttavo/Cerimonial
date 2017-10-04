@@ -8,10 +8,12 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ContatoEvento;
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.service.ContatoEventoService;
+import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.OrcamentoEventoService;
 import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.CerimonialUtils;
@@ -37,6 +39,7 @@ public class OrcamentoEventoMB extends BasicControl {
 
     protected Long idContato;
     protected ContatoEvento contatoEvento;
+    protected Evento evento;
 
     protected OrcamentoEvento entity;
     protected List<OrcamentoEvento> orcamentos;
@@ -50,6 +53,9 @@ public class OrcamentoEventoMB extends BasicControl {
 
     @EJB
     protected ContatoEventoService contatoEventoService;
+    
+    @EJB
+    protected EventoService eventoService;
 
     /**
      * Evento invocado ao abrir o xhtml carregar os dados do contrato do evento
@@ -60,6 +66,8 @@ public class OrcamentoEventoMB extends BasicControl {
             try {
 
                 contatoEvento = contatoEventoService.getEntity(idContato);
+                
+                evento = eventoService.getEventoByContatoInicial(contatoEvento);
 
                 if(contatoEvento == null){
                     throw new GenericException("Não foi possível encontrar o Contato Inicial com esse Id", ErrorCode.NOT_FOUND.getCode());
@@ -209,7 +217,7 @@ public class OrcamentoEventoMB extends BasicControl {
             createFacesInfoMessage("Orçamento aprovado com sucesso!");
         } catch (Exception ex) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage(ex.getMessage());
+            createFacesErrorMessage(ex.getCause().getMessage());
         }
     }
 
@@ -340,4 +348,13 @@ public class OrcamentoEventoMB extends BasicControl {
         this.file = file;
     }
 
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+
+    
 }

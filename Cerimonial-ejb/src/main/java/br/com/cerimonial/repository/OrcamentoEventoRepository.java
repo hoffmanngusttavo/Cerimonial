@@ -34,6 +34,7 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
         sql.append(" and contato.id = ?1");
         sql.append(" order by o.id desc");
         List<OrcamentoEvento> propostas = getPureList(OrcamentoEvento.class, sql.toString(), id);
+        //carregar lazy
         if (CerimonialUtils.isListNotBlank(propostas)) {
             propostas.stream().forEach(item -> {
                 if (item.getModeloProposta() != null) {
@@ -42,6 +43,7 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
                 if (item.getAnexos() != null) {
                     item.getAnexos().size();
                 }
+                
             });
         }
 

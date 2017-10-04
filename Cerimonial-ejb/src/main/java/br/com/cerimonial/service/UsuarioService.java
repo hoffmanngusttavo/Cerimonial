@@ -169,10 +169,10 @@ public class UsuarioService extends BasicService<Usuario> {
         if (usuario == null) {
             usuario = new Usuario();
             usuario.setLogin(cliente.getEmail());
-            usuario.setSenha(CerimonialUtils.gerarAlfaNumericoAleatoria());
             usuario.setEmail(cliente.getEmail());
         }
 
+        usuario.setSenha(CerimonialUtils.gerarAlfaNumericoAleatoria());
         usuario.setNome(cliente.getNome());
         usuario.setAtivo(true);
         usuario.setMaster(false);
