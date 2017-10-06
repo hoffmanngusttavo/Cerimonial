@@ -8,6 +8,7 @@ package br.com.cerimonial.repository;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.entity.Pessoa;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,6 +57,23 @@ public class EventoRepository extends AbstractRepository<Evento> {
     }
 
     /**
+     * Vai retornar todos os eventos ativos de um cliente
+     *
+     * @param cliente
+     * @return
+     */
+    public List<Evento> findEventosAtivosCliente(Pessoa cliente) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT eve FROM Evento eve ");
+        sb.append("INNER JOIN eve.contratante cli ");
+        sb.append("WHERE eve.ativo = ?1 ");
+        sb.append("cli.id = ?2 ");
+
+        return getPureList(Evento.class, sb.toString(), Boolean.TRUE, cliente.getId());
+    }
+
+    /**
      * Recuperar um evento a partir de um orçamento
      *
      * @param orcamento
@@ -82,13 +100,13 @@ public class EventoRepository extends AbstractRepository<Evento> {
     public List<Evento> getEventosByContatoEvento(ContatoEvento contato) {
         try {
             StringBuilder sb = new StringBuilder();
-            
+
             sb.append("SELECT eve FROM Evento eve ");
             sb.append("INNER JOIN eve.orcamentoEvento orc ");
             sb.append("INNER JOIN orc.contatoEvento con ");
             sb.append("WHERE 1=1 ");
             sb.append("AND con.id =?1");
-            
+
             return getPureList(Evento.class, sb.toString(), contato.getId());
 
         } catch (Exception ex) {

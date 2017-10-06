@@ -6,6 +6,7 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.ModelFilter;
@@ -95,6 +96,27 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
         }
 
         return null;
+    }
+
+    
+    public Pessoa getClienteByUsuario(Usuario usuarioLogado) {
+        
+        try {
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT cli FROM Pessoa cli ");
+            sb.append("INNER JOIN cli.usuariosClientes user ");
+            sb.append("WHERE user.id = ?1 ");
+            sb.append("cli.tipoEnvolvido = ?2 ");
+            
+            return getPurePojo(Pessoa.class, sb.toString(), usuarioLogado.getId(), TipoEnvolvido.CLIENTE);
+            
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+
+        return null;
+        
     }
 
 }

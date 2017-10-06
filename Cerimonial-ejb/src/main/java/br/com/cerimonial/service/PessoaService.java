@@ -7,6 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.repository.PessoaRepository;
@@ -25,7 +26,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -163,6 +163,21 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         return null;
     }
+    
+     /**
+      * Retorna o cliente de acordo com o usuario logado
+     * @param usuarioLogado
+     * @return 
+      */
+     public Pessoa getClienteByUsuario(Usuario usuarioLogado) {
+        
+         if(usuarioLogado == null || usuarioLogado.getId() == null){
+             throw new GenericException("Não foi possível carregar cliente, usuário nulo", ErrorCode.BAD_REQUEST.getCode());
+         }
+        
+        return repository.getClienteByUsuario(usuarioLogado);
+    }
+    
 
     //-----------Fornecedores----------------------
     public Pessoa saveFornecedor(Pessoa entity) throws Exception {
@@ -290,6 +305,8 @@ public class PessoaService extends BasicService<Pessoa> {
         
         return repository.getClienteByEmail(emailContato);
     }
+    
+   
 
     @Override
     public boolean isValid(Pessoa entity) {
@@ -300,5 +317,7 @@ public class PessoaService extends BasicService<Pessoa> {
         return true;
 
     }
+
+    
 
 }

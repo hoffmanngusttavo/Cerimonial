@@ -15,137 +15,32 @@
         <h:form prependId="false"
                 id="form">
 
-            <div class="fixed-rounded-button">
-                <span class="glyphicon"
-                      style="margin-top: -9px;margin-left: -10px;">
-                    <p:commandButton action="/admin/cadastros/contato-inicial/form?faces-redirect=true" 
-                                     ajax="false"
-                                     title="Novo Contato"
-                                     process="@this"
-                                     immediate="true"
-                                     icon="fa fa-plus"
-                                     styleClass="bt-acoes-add"
-                                     onstart="PF('statusDialog').show();"
-                                     oncomplete="PF('statusDialog').hide();"/>
-                </span>
-            </div>
+            <div class="row">
 
-
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <div class="panel panel-danger">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Verificar Disponibilidade de Evento</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div style="margin-left: 28px;">
-                                    <p:calendar mode="inline"
-                                                value="#{DashBoardMB.dataSelecionada}"
-                                                locale="pt"
-                                                navigator="true">
-                                        <p:ajax event="dateSelect"
-                                                process="@this"
-                                                onstart="PF('statusDialog').show();"
-                                                oncomplete="PF('statusDialog').hide();"
-                                                listener="#{DashBoardMB.carregarEventosDoDia()}"
-                                                update="groupEvento,dataEvento"/>
-                                    </p:calendar>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <p:repeat value="#{DashBoardClienteMB.eventosAtivos}"
+                          var="evento">
 
                     <div class="col-md-4 text-center">
-                        #{DashBoardMB.carregarEventosDoDia()}
-                        <div class="panel panel-warning">
+
+                        <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
-                                    Eventos do Dia
-                                    <h:outputText value="#{DashBoardMB.dataSelecionada}" id="dataEvento">
-                                        <f:convertDateTime locale="pt_BR"
-                                                           pattern="dd/MM/yyyy"/>
-                                    </h:outputText>
+                                    #{evento.nome}
                                 </h3>
                             </div>
                             <div class="panel-body">
-                                <h:panelGroup id="groupEvento">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Evento</th>
-                                                <th>Hora</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <p:repeat value="#{DashBoardMB.eventosDia}" var="evento">
-                                                <tr>
-                                                    <td>
-                                                        <h:outputText value="#{evento.nome}"/>
-                                                    </td>
-                                                    <td>
-                                                        <h:outputText value="#{evento.hora}">
-                                                            <f:convertDateTime pattern="HH:mm"
-                                                                               locale="pt_BR"
-                                                                               timeZone="GMT-3"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                </tr>
-                                            </p:repeat>
-                                        </tbody>
-                                    </table>
-                                </h:panelGroup>
+                                <p:link href="/intranet/cliente/evento/form.xhtml?id=#{evento.id}">
+                                    <i class="fa fa-list"></i>
+                                    <span></span>
+                                </p:link>
                             </div>
                         </div>
                     </div>
+                </p:repeat>
 
-
-                    <div class="col-md-4 text-center">
-                        #{DashBoardMB.carregarLogins()}
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Últimos acessos</h3>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Usuário</th>
-                                            <th>Data</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <p:repeat value="#{DashBoardMB.ultimosLogins}" var="login">
-                                            <tr>
-                                                <td>
-                                                    #{login.usuario.nome}
-                                                </td>
-                                                <td>
-                                                    <h:outputText value="#{login.dataLogin}">
-                                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                           locale="pt_BR"
-                                                                           timeZone="GMT-3"/>
-                                                    </h:outputText>
-                                                    <p:spacer width="10"/>
-                                                    <h:outputText value="#{login.hora}">
-                                                        <f:convertDateTime pattern="HH:mm"
-                                                                           locale="pt_BR"
-                                                                           timeZone="GMT-3"/>
-                                                    </h:outputText>
-                                                </td>
-
-                                            </tr>
-                                        </p:repeat>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                </div>
             </div>
+
+
         </h:form>
     </ui:define>
 

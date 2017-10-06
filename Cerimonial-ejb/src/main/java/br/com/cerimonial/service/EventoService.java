@@ -123,6 +123,23 @@ public class EventoService extends BasicService<Evento> {
         }
         return new ArrayList<Evento>();
     }
+    
+     /**
+     * Vai retornar todos os eventos ativos do cliente
+     *
+     * @param cliente
+     * @return
+     */
+    public List<Evento> findEventosAtivosCliente(Pessoa cliente) {
+        
+        if(cliente == null || cliente.getId() == null){
+            throw  new GenericException("Não foi possível carregar os eventos, cliente nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        return repository.findEventosAtivosCliente(cliente);
+        
+    }
+    
 
     public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento, Pessoa cliente) throws Exception {
 
@@ -182,4 +199,8 @@ public class EventoService extends BasicService<Evento> {
         }
         return true;
     }
+
+   
+
+    
 }
