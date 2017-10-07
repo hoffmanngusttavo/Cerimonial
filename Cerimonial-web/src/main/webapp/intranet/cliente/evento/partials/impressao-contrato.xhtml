@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view encoding="UTF-8"
+            contentType="text/html;" 
+            locale="pt_BR">  
+
+        <h:head>
+            <title>Impressão Contrato</title>
+
+        </h:head>
+
+        <h:body style="background: #fff; margin:0;" 
+                onload="window.print();">
+
+            <f:metadata>
+                <f:viewParam name="id" value="#{ImpressaoContratoClienteMB.idEvento}" converter="javax.faces.Long"/>
+                <f:viewAction action="#{ImpressaoContratoClienteMB.init()}"/>
+            </f:metadata>
+
+            <h:panelGroup layout="block">
+
+                <h:form prependId="false" 
+                        id="formulario" 
+                        style="margin-bottom: 0px;"
+                        enctype="multipart/form-data">   
+
+
+                    <p:growl autoUpdate="true"
+                             showDetail="true"/>
+
+                    <h:outputText value="#{ImpressaoContratoClienteMB.contrato.conteudo}" 
+                                  escape="false" />
+
+                </h:form>
+            </h:panelGroup>
+
+            <style type="text/css">
+                #formulario{
+                    font-size: 12px;
+                }
+
+            </style>
+
+        </h:body>
+    </f:view>
+</html>
+

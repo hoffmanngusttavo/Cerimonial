@@ -117,4 +117,24 @@ public class EventoRepository extends AbstractRepository<Evento> {
 
     }
 
+    /**
+     * Vai retornar o evento que pertence a somente esse cliente
+     * 
+     * @param idEvento
+     * @param contratante
+     * @return
+     */
+    public Evento getEventoByIdEventoContratante(Long idEvento, Pessoa contratante) {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT eve FROM Evento eve ");
+        sb.append("INNER JOIN eve.contratante con ");
+        sb.append("WHERE 1=1 ");
+        sb.append("AND eve.id =?1 ");
+        sb.append("AND con.id =?2");
+
+        return  getPurePojo(Evento.class, sb.toString(), contratante.getId());
+    }
+
 }

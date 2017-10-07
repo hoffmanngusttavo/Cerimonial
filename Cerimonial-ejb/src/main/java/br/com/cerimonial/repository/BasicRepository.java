@@ -152,6 +152,8 @@ abstract class BasicRepository implements Serializable {
         try {
             Query qr = createQuery(query, values);
             singleResult = qr.getSingleResult();
+        } catch (IllegalArgumentException ex) {
+            throw new GenericException("Objeto não existe: " + ex.getMessage(), ErrorCode.NOT_FOUND.getCode());
         } catch (RuntimeException e) {
             throw new GenericException("Erro ao recuperar objeto do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
@@ -179,7 +181,7 @@ abstract class BasicRepository implements Serializable {
         } catch (RuntimeException e) {
             throw new GenericException("Erro ao contabilizar objeto no banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
-        
+
         return intValue;
     }
 

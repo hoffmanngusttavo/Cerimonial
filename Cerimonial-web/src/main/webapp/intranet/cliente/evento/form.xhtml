@@ -14,8 +14,8 @@
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="id" value="#{PreEventoMB.id}" converter="javax.faces.Long"/>
-            <f:viewAction action="#{PreEventoMB.init()}"/>
+            <f:viewParam name="id" value="#{EventoClienteMB.idEvento}" converter="javax.faces.Long"/>
+            <f:viewAction action="#{EventoClienteMB.initEvento()}"/>
         </f:metadata>
 
 
@@ -28,7 +28,7 @@
                     <div class="col-md-12 text-center">
                         <div class="panel panel-danger">
                             <div class="panel-heading">
-                                <h3 class="panel-title">#{PreEventoMB.entity.nomeEvento}</h3>
+                                <h3 class="panel-title">#{EventoClienteMB.evento.nome}</h3>
                             </div>
                             <div class="panel-body">
                                 <div style="margin-left: 28px;">
@@ -42,28 +42,13 @@
                 <div class="row">
 
                     <div class="col-md-4 text-center">
-
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Contato Inicial</h3>
-                            </div>
-                            <div class="panel-body">
-                                <p:link href="/intranet/admin/operacional/pre-evento/partials/contato-inicial.xhtml?id=#{PreEventoMB.entity.id}">
-                                    <i class="fa fa-list"></i>
-                                    <span></span>
-                                </p:link>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 text-center">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Orçamento</h3>
                             </div>
                             <div class="panel-body">
                                 <div style="margin-left: 28px;">
-                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/orcamento.xhtml?idContato=#{PreEventoMB.entity.id}">
+                                    <p:link href="/intranet/cliente/evento/partials/orcamento.xhtml?idEvento=#{EventoClienteMB.evento.id}">
                                         <i class="fa fa-dollar"></i>
                                         <span></span>
                                     </p:link>
@@ -72,15 +57,15 @@
                         </div>
                     </div>
 
-
-                    <h:panelGroup rendered="#{PreEventoMB.evento != null}">
+                    <h:panelGroup rendered="#{EventoClienteMB.evento.contrato.dataImpressao != null}">
                         <div class="col-md-4 text-center">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Contrato</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/contrato.xhtml?idEvento=#{PreEventoMB.evento.id}">
+                                    
+                                    <p:link onclick="window.open('#{facesContext.externalContext.requestContextPath}/intranet/cliente/evento/partials/impressao-contrato?idEvento=#{EventoClienteMB.evento.id}')">
                                         <i class="fa fa-list"></i>
                                         <span></span>
                                     </p:link>
@@ -89,20 +74,18 @@
                         </div>
                     </h:panelGroup>
 
-                    <h:panelGroup rendered="#{PreEventoMB.evento.id != null}">
-                        <div class="col-md-4 text-center">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">
-                                        Ficha Cadastral
-                                    </h3>
-                                </div>
-                                <div class="panel-body">
+                    <div class="col-md-4 text-center">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    Ficha Cadastral
+                                </h3>
+                            </div>
+                            <div class="panel-body">
 
-                                </div>
                             </div>
                         </div>
-                    </h:panelGroup>
+                    </div>
 
                 </div>
             </div>

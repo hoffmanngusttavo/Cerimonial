@@ -5,8 +5,10 @@
  */
 package br.com.cerimonial.controller.mb.cliente;
 
+import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.Evento;
-import br.com.cerimonial.service.EventoService;
+import br.com.cerimonial.service.ContratoEventoService;
+import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -17,27 +19,32 @@ import javax.faces.bean.ViewScoped;
  *
  * @author hoffmann
  */
-@ManagedBean(name = "EventoClienteMB")
+@ManagedBean(name = "ImpressaoContratoClienteMB")
 @ViewScoped
-public class EventoClienteMB extends ClienteControl {
-
-    protected Long idEvento;
-    protected Evento evento;
-
-    @EJB
-    protected EventoService eventoService;
+public class ImpressaoContratoClienteMB extends ClienteControl {
 
     /**
-     * Evento invocado ao abrir o xhtml de um contato inicial de pre evento
+     * Id do Evento
      */
-    public void initEvento() {
+    protected Long idEvento;
+    protected ContratoEvento contrato;
+
+    @EJB
+    protected ContratoEventoService service;
+
+    /**
+     * Evento invocado ao abrir o xhtml de impressão de contrato do cliente
+     */
+    public void init() {
+
         try {
             
-            evento = eventoService.getEventoByIdEventoContratante(idEvento, cliente);
+            contrato = service.getContratoByEventoContratante(idEvento, cliente);
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
+            createFacesErrorMessage(ex.getCause().getMessage());
+            scrollTopMessage();
         }
     }
 
@@ -49,12 +56,15 @@ public class EventoClienteMB extends ClienteControl {
         this.idEvento = idEvento;
     }
 
-    public Evento getEvento() {
-        return evento;
+    public ContratoEvento getContrato() {
+        return contrato;
     }
 
-    public void setEvento(Evento evento) {
-        this.evento = evento;
+    public void setContrato(ContratoEvento contrato) {
+        this.contrato = contrato;
     }
+    
+    
+    
 
 }

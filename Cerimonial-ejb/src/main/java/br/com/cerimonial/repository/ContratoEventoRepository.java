@@ -6,6 +6,7 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.ContratoEvento;
+import br.com.cerimonial.entity.Pessoa;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -27,6 +28,19 @@ public class ContratoEventoRepository extends AbstractRepository<ContratoEvento>
         sql.append(" and evento.id = ?1");
         
         return getPureList(ContratoEvento.class, sql.toString(), idEvento);
+    }
+    
+    
+    public List<ContratoEvento> getContratoByEventoContratante(Long idEvento, Pessoa contratante) {
+
+        StringBuilder sql = new StringBuilder("select contrato from ContratoEvento contrato  ");
+        sql.append("INNER JOIN contrato.evento evento");
+        sql.append("INNER JOIN evento.contratante cliente");
+        sql.append(" where 1=1");
+        sql.append(" and evento.id = ?1");
+        sql.append(" and cliente.id = ?1");
+        
+        return getPureList(ContratoEvento.class, sql.toString(), idEvento, contratante.getId());
     }
 
 }

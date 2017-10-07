@@ -200,6 +200,35 @@ public class EventoService extends BasicService<Evento> {
         return true;
     }
 
+    /**
+     * Vai retornar o evento que pertence a somente esse cliente
+     * Carregar em lazy o contrato
+     * @param idEvento
+     * @param contratante
+     * @return 
+     */
+    public Evento getEventoByIdEventoContratante(Long idEvento, Pessoa contratante) {
+        
+        if(idEvento == null){
+            throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(contratante == null || contratante.getId() == null){
+            throw new GenericException("Cliente contratante nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
+        
+         if(evento != null){
+            if(evento.getContrato() != null){
+                evento.getContrato().getId();
+            }
+        }
+         
+         return evento;
+        
+    }
+
    
 
     

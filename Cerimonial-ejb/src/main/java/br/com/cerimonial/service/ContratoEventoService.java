@@ -6,6 +6,7 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ContratoEvento;
+import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContratoEventoRepository;
@@ -74,6 +75,38 @@ public class ContratoEventoService extends BasicService<ContratoEvento>{
         }
         
         List<ContratoEvento> contratos = repository.getContratosByEvento(idEvento);
+
+        if(CerimonialUtils.isListNotBlank(contratos)){
+            return contratos.get(0);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Método vai buscar todos os contratos de um evento e contratante exclusivo, 
+     * que por sinal só deve trazer 1
+     * Traz em lista devido ao mapeamento lazy
+     * @param idEvento do Evento
+     * @param contratante
+     * @return
+     * @throws java.lang.Exception
+     */
+    public ContratoEvento getContratoByEventoContratante(Long idEvento, Pessoa contratante) throws Exception {
+
+        if(idEvento == null){
+            throw new GenericException("Id nulo do evento ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(idEvento < 0){
+            throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(contratante == null || contratante.getId() == null){
+            throw new GenericException("Contratante nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        List<ContratoEvento> contratos = repository.getContratoByEventoContratante(idEvento, contratante);
 
         if(CerimonialUtils.isListNotBlank(contratos)){
             return contratos.get(0);
