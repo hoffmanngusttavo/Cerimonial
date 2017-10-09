@@ -35,7 +35,7 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
     }
 
     @Override
-    public int countListagem(HashMap<String, Object> filter)  {
+    public int countListagem(HashMap<String, Object> filter) {
         ModelFilter modelFilter = ModelFilter.getInstance();
         modelFilter.setEntidade(Pessoa.class);
         modelFilter.addFilter(filter);
@@ -98,25 +98,41 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
         return null;
     }
 
-    
     public Pessoa getClienteByUsuario(Usuario usuarioLogado) {
-        
+
         try {
-            
+
             StringBuilder sb = new StringBuilder();
             sb.append("SELECT cli FROM Pessoa cli ");
             sb.append("INNER JOIN cli.usuariosClientes user ");
             sb.append("WHERE user.id = ?1 ");
             sb.append("cli.tipoEnvolvido = ?2 ");
-            
+
             return getPurePojo(Pessoa.class, sb.toString(), usuarioLogado.getId(), TipoEnvolvido.CLIENTE);
-            
+
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
 
         return null;
+
+    }
+
+    /**
+     * Vai retornar o contratante de um evento
+     * @param idEvento
+     * @return 
+     */
+    public Pessoa getContratanteEvento(Long idEvento) {
+
+        StringBuilder sb = new StringBuilder();
         
+        sb.append("SELECT cli FROM Pessoa cli ");
+        sb.append("INNER JOIN cli.eventos eve ");
+        sb.append("WHERE eve.id = ?1 ");
+
+        return getPurePojo(Pessoa.class, sb.toString(), idEvento);
+
     }
 
 }

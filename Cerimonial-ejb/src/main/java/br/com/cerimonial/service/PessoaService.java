@@ -116,7 +116,7 @@ public class PessoaService extends BasicService<Pessoa> {
         isValid(entity);
 
         if (entity.getId() == null) {
-            throw new Exception("Não pode gravar um novo cliente");
+            throw new GenericException("Não pode gravar um novo cliente", ErrorCode.BAD_REQUEST.getCode());
         }
 
         return saveCliente(entity);
@@ -316,6 +316,21 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         return true;
 
+    }
+
+    /**
+     * Vai retornar o Contratante do evento
+     * @param idEvento
+     * @return 
+     */
+    public Pessoa getContratanteEvento(Long idEvento) {
+        
+        if (idEvento == null) {
+            throw new GenericException("Id evento nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        return repository.getContratanteEvento(idEvento);
+        
     }
 
     

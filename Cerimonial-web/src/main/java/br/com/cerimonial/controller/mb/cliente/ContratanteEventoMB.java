@@ -5,8 +5,8 @@
  */
 package br.com.cerimonial.controller.mb.cliente;
 
-import br.com.cerimonial.entity.ContratoEvento;
-import br.com.cerimonial.service.ContratoEventoService;
+import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.service.PessoaService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -17,27 +17,24 @@ import javax.faces.bean.ViewScoped;
  *
  * @author hoffmann
  */
-@ManagedBean(name = "ImpressaoContratoClienteMB")
+@ManagedBean(name = "ContratanteEventoMB")
 @ViewScoped
-public class ImpressaoContratoClienteMB extends ClienteControl {
-
-    /**
-     * Id do Evento
-     */
+public class ContratanteEventoMB extends ClienteControl{
+    
     protected Long idEvento;
-    protected ContratoEvento contrato;
-
+    protected Pessoa contratante;
+    
     @EJB
-    protected ContratoEventoService service;
-
-    /**
+    protected PessoaService service;
+   
+     /**
      * Evento invocado ao abrir o xhtml de impressão de contrato do cliente
      */
     public void init() {
 
         try {
             
-            contrato = service.getContratoByEventoContratante(idEvento, cliente);
+            contratante = service.getContratanteEvento(idEvento);
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -54,15 +51,15 @@ public class ImpressaoContratoClienteMB extends ClienteControl {
         this.idEvento = idEvento;
     }
 
-    public ContratoEvento getContrato() {
-        return contrato;
+    public Pessoa getContratante() {
+        return contratante;
     }
 
-    public void setContrato(ContratoEvento contrato) {
-        this.contrato = contrato;
+    public void setContratante(Pessoa contratante) {
+        this.contratante = contratante;
     }
     
     
     
-
+    
 }
