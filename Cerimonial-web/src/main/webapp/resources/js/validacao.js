@@ -442,3 +442,96 @@ function validaFormularioFornecedor(){
 function alteraEtapaContato(etapa){
   $('#tabEtapas a[href="#etapa'+etapa+'"]').tab('show');
 }
+
+
+
+//---------------------CONTRATANTE -------------------------------------
+
+function validaFormularioContratante(){
+  var inptNome = $('#inptNome').val();
+  var inptCpf = $('#inptCpf').val();
+  var inptRg = $('#inptRg').val();
+  var inptEmail = $('#inptEmail').val();
+  var inptTelefone1 = $('#inptTelefone1').val();
+  var inptTelefone2 = $('#inptTelefone2').val();
+  
+ if(inptNome === ''){
+    alteraEtapaContratante(1);
+    $('#inptNome').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+ 
+  if(inptCpf === ''){
+    alteraEtapaContratante(1);
+    $('#inptCpf').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  if(inptRg === ''){
+    alteraEtapaContratante(1);
+    $('#inptRg').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  if(inptEmail === ''){
+    alteraEtapaContratante(1);
+    $('#inptEmail').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  
+  if(inptTelefone1 === '' || inptTelefone2 === ''){
+    alteraEtapaContratante(1);
+    $('#inptTelefone1').focus();
+    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
+    return;
+  }
+  
+  var inptCep = $('#inptCep').val();
+  var inptBairro = $('#inptBairro').val();
+  var inptLog = $('#inptLog').val();
+  var inptEstado = $('#inptEstado').val();
+  var inptCidade = $('#inptCidade').val();
+
+  if(inptCep === ''){
+    alteraEtapaContratante(2);
+    $('#inptCep').focus();
+    return;
+  }  
+  if(inptBairro === ''){
+    alteraEtapaContratante(2);
+    $('#inptBairro').focus();
+    return;
+  } 
+  
+  if(inptCep === ''){
+    alteraEtapaContratante(2);
+    $('#inptCep').focus();
+    return;
+  } 
+  
+  if(inptLog === ''){
+    alteraEtapaContratante(2);
+    $('#inptLog').focus();
+    return;
+  }  
+  
+  if(inptEstado === ''){
+    alteraEtapaContratante(2);
+    $('#inptEstado').focus();
+    return;
+  } 
+  
+  if(inptCidade === ''){
+    alteraEtapaContratante(2);
+    $('#inptCidade').focus();
+    return;
+  }  
+
+}
+
+
+function alteraEtapaContratante(etapa){
+  $('#tabEtapas a[href="#etapa'+etapa+'"]').tab('show');
+}

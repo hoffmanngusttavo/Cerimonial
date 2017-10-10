@@ -120,18 +120,24 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
 
     /**
      * Vai retornar o contratante de um evento
+     *
      * @param idEvento
-     * @return 
+     * @return
      */
     public Pessoa getContratanteEvento(Long idEvento) {
 
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append("SELECT cli FROM Pessoa cli ");
-        sb.append("INNER JOIN cli.eventos eve ");
-        sb.append("WHERE eve.id = ?1 ");
+        try {
+            StringBuilder sb = new StringBuilder();
 
-        return getPurePojo(Pessoa.class, sb.toString(), idEvento);
+            sb.append("SELECT cli FROM Pessoa cli ");
+            sb.append("INNER JOIN cli.eventos eve ");
+            sb.append("WHERE eve.id = ?1 ");
+
+            return getPurePojo(Pessoa.class, sb.toString(), idEvento);
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+        return null;
 
     }
 

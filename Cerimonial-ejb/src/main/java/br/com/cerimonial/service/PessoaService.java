@@ -288,8 +288,8 @@ public class PessoaService extends BasicService<Pessoa> {
 
             cliente.setEmail(entity.getContatoEvento().getEmailContato());
             cliente.setNome(entity.getContatoEvento().getNomeContato());
-            cliente.setTelefone1(entity.getContatoEvento().getTelefonePrincipal());
-            cliente.setTelefone2(entity.getContatoEvento().getTelefoneSecundario());
+            cliente.setTelefoneResidencial(entity.getContatoEvento().getTelefonePrincipal());
+            cliente.setTelefoneCelular(entity.getContatoEvento().getTelefoneSecundario());
             cliente.setAtivo(true);
 
         } catch (Exception e) {

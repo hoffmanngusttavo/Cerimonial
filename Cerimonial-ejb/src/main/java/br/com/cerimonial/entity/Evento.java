@@ -54,6 +54,18 @@ public class Evento implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataInicio;
+    
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataTermino;
+    
+    @Temporal(javax.persistence.TemporalType.TIME)
+    private Date horaInicio;
+    
+    @Column
+    private Integer quantidadeConvidados;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Pessoa contratante;
@@ -72,6 +84,9 @@ public class Evento implements Serializable, ModelInterface {
 
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
     private List<ContratoEvento> contratos;
+    
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
+    private List<CerimoniaEvento> cerimonias;
 
     @Override
     public Long getId() {
@@ -151,6 +166,48 @@ public class Evento implements Serializable, ModelInterface {
         this.finalizado = finalizado;
     }
 
+    public Date getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public Date getDataTermino() {
+        return dataTermino;
+    }
+
+    public void setDataTermino(Date dataTermino) {
+        this.dataTermino = dataTermino;
+    }
+
+    public Date getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(Date horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public Integer getQuantidadeConvidados() {
+        return quantidadeConvidados;
+    }
+
+    public void setQuantidadeConvidados(Integer quantidadeConvidados) {
+        this.quantidadeConvidados = quantidadeConvidados;
+    }
+
+    public List<ContratoEvento> getContratos() {
+        return contratos;
+    }
+
+    public void setContratos(List<ContratoEvento> contratos) {
+        this.contratos = contratos;
+    }
+
+    
+    
     public ContratoEvento getContrato() {
 
         if (CerimonialUtils.isListNotBlank(contratos)) {
@@ -175,6 +232,33 @@ public class Evento implements Serializable, ModelInterface {
             }
 
             contratos.add(contrato);
+        }
+    }
+    
+    public CerimoniaEvento getCerimoniaEvento() {
+
+        if (CerimonialUtils.isListNotBlank(cerimonias)) {
+            return cerimonias.get(0);
+        }
+
+        return null;
+    }
+
+    public void setCerimoniaEvento(CerimoniaEvento cerimonia) {
+
+        if (cerimonia == null) {
+            cerimonias = null;
+        } else {
+
+            if (CerimonialUtils.isListNotBlank(cerimonias)) {
+                cerimonias.set(0, cerimonia);
+            }
+
+            if (cerimonias == null) {
+                cerimonias = new ArrayList<>();
+            }
+
+            cerimonias.add(cerimonia);
         }
     }
 

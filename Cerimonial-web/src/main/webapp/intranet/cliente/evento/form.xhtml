@@ -64,7 +64,6 @@
                                     <h3 class="panel-title">Contrato</h3>
                                 </div>
                                 <div class="panel-body">
-                                    
                                     <p:link onclick="window.open('#{facesContext.externalContext.requestContextPath}/intranet/cliente/evento/partials/impressao-contrato?idEvento=#{EventoClienteMB.evento.id}')">
                                         <i class="fa fa-list"></i>
                                         <span></span>
@@ -78,11 +77,30 @@
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
+                                    Dados Contratante
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <p:link href="/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                    <i class="fa fa-dollar"></i>
+                                    <span></span>
+                                </p:link>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 text-center">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
                                     Ficha Cadastral
                                 </h3>
                             </div>
                             <div class="panel-body">
-
+                                <p:link href="/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                    <i class="fa fa-dollar"></i>
+                                    <span></span>
+                                </p:link>
                             </div>
                         </div>
                     </div>

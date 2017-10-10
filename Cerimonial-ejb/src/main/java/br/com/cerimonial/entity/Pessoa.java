@@ -76,12 +76,14 @@ public class Pessoa implements Serializable, ModelInterface {
     @Column
     private String instagram;
 
-    @Column(nullable = false)
-    @NotNull
-    private String telefone1;
+    @Column
+    private String telefoneResidencial;
+    
+    @Column
+    private String telefoneComercial;
 
     @Column
-    private String telefone2;
+    private String telefoneCelular;
 
     @Column(columnDefinition = "TEXT")
     private String observacao;
@@ -217,21 +219,39 @@ public class Pessoa implements Serializable, ModelInterface {
         this.instagram = instagram;
     }
 
-    public String getTelefone1() {
-        return telefone1;
+    public String getTelefoneResidencial() {
+        return telefoneResidencial;
     }
 
-    public void setTelefone1(String telefone1) {
-        this.telefone1 = telefone1;
+    public void setTelefoneResidencial(String telefoneResidencial) {
+        this.telefoneResidencial = telefoneResidencial;
     }
 
-    public String getTelefone2() {
-        return telefone2;
+    public String getTelefoneComercial() {
+        return telefoneComercial;
     }
 
-    public void setTelefone2(String telefone2) {
-        this.telefone2 = telefone2;
+    public void setTelefoneComercial(String telefoneComercial) {
+        this.telefoneComercial = telefoneComercial;
     }
+
+    public String getTelefoneCelular() {
+        return telefoneCelular;
+    }
+
+    public void setTelefoneCelular(String telefoneCelular) {
+        this.telefoneCelular = telefoneCelular;
+    }
+
+    public List<Usuario> getUsuariosClientes() {
+        return usuariosClientes;
+    }
+
+    public void setUsuariosClientes(List<Usuario> usuariosClientes) {
+        this.usuariosClientes = usuariosClientes;
+    }
+
+    
 
     public String getObservacao() {
         return observacao;

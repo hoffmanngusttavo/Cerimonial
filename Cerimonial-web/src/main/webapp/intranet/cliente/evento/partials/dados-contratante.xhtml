@@ -8,20 +8,17 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Cadastro de Cliente
+        Dados do Contratante
     </ui:define>
 
     <ui:define name="content">
 
         <f:metadata>
             <f:viewParam name="id" value="#{ContratanteEventoMB.idEvento}" converter="javax.faces.Long"/>
-            <!--use view action if you are in a Java EE 7 server: -->
             <f:viewAction action="#{ContratanteEventoMB.init()}"/>
-            <!--<f:event type="preRenderView" listener="{ContratanteEventoMB.init}"/>-->
         </f:metadata>
 
         <h:form prependId="false"
-                rendered="#{AutenticacaoMB.hasPermission('ADMIN')}"
                 id="form">
 
             <p:focus for="inptNome"/>
@@ -108,15 +105,13 @@
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label>Telefone 1
+                            <label>Telefone Residencial
                                 <span class="asteriskField">
                                     *
                                 </span>
                             </label>
 
-                            <p:inputText value="#{ContratanteEventoMB.contratante.telefone1}"
-                                         required="true"
-                                         requiredMessage="Preencha um telefone válido"
+                            <p:inputText value="#{ContratanteEventoMB.contratante.telefoneResidencial}"
                                          onfocus="functionMaskPhone();"
                                          styleClass="phone"
                                          class="form-control phone"
@@ -125,10 +120,10 @@
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label>Telefone 2
+                            <label>Telefone Celular
                             </label>
 
-                            <p:inputText value="#{ContratanteEventoMB.contratante.telefone2}"
+                            <p:inputText value="#{ContratanteEventoMB.contratante.telefoneCelular}"
                                          onfocus="functionMaskPhone();"
                                          styleClass="phone"
                                          class="form-control phone"
@@ -136,26 +131,6 @@
                                          label="Telefone 2"/>
                         </div>
 
-
-                        <div class="form-group col-md-6">
-                            <label class="control-label ">Data Nascimento
-                            </label>
-
-                            <p:calendar pattern="dd/MM/yyyy"
-                                        mask="true" 
-                                        id="inptNascimento"
-                                        style="display: block;"
-                                        value="#{ContratanteEventoMB.contratante.dataNascimento}"
-                                        label="Data Nascimento" 
-                                        showOn="button"
-                                        navigator="true"
-                                        locale="pt"
-                                        timeZone="GMT-3">
-                                <f:convertDateTime pattern="dd/MM/yyyy"
-                                                   locale="pt_BR"
-                                                   timeZone="GMT-3"/>
-                            </p:calendar>
-                        </div>
 
                         <div class="form-group col-md-6">
                             <label class="control-label ">Facebook
@@ -178,17 +153,7 @@
                         </div>
 
                         <div class="form-group col-md-12">
-                            <label class="control-label ">Observação
-                            </label>
-
-                            <p:inputTextarea id="inptObs" 
-                                             class="form-control"
-                                             value="#{ContratanteEventoMB.contratante.observacao}" 
-                                             label="Observação"/>
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <p:commandButton onclick="alteraEtapaCliente(2)"
+                            <p:commandButton onclick="alteraEtapaContratante(2)"
                                              process="@this"
                                              class="btn btn-info"
                                              icon="fa fa-arrow-right"
@@ -196,7 +161,7 @@
 
                             <p:commandButton value="Salvar"
                                              action="#{ContratanteEventoMB.save()}"
-                                             onclick="validaFormularioCliente()"
+                                             onclick="validaFormularioContratante()()"
                                              icon="fa fa-check" 
                                              style="margin-left: 10px;"
                                              id="btn-salvar-cliente"
@@ -204,13 +169,6 @@
                                              onstart="PF('statusDialog').show();"
                                              oncomplete="PF('statusDialog').hide();"/>
                             
-                            <p:commandButton value="Voltar"
-                                         immediate="true"
-                                         action="index?faces-redirect=true"
-                                         process="@this"
-                                         style="margin-left: 10px;"
-                                         class="btn btn-default"
-                                         icon="fa fa-close"/>
                         </div>
 
                     </div>
@@ -348,7 +306,7 @@
                             </div>
                         </h:panelGroup>
 
-                        <p:commandButton onclick="alteraEtapaCliente(1)"
+                        <p:commandButton onclick="alteraEtapaContratante(1)"
                                          process="@this"
                                          class="btn btn-info"
                                          icon="fa fa-arrow-left"
@@ -356,20 +314,13 @@
                         
                         <p:commandButton value="Salvar"
                                          action="#{ContratanteEventoMB.save()}"
-                                         onclick="validaFormularioCliente()"
+                                         onclick="validaFormularioContratante()"
                                          icon="fa fa-check" 
                                          class="btn btn-success"
                                          style="margin-left: 10px;"
                                          onstart="PF('statusDialog').show();"
                                          oncomplete="PF('statusDialog').hide();"/>
                         
-                        <p:commandButton value="Voltar"
-                                         immediate="true"
-                                         action="index?faces-redirect=true"
-                                         process="@this"
-                                         class="btn btn-default"
-                                         style="margin-left: 10px;"
-                                         icon="fa fa-close"/>
 
                     </div>
                 </div>

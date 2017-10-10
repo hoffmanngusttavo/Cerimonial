@@ -68,7 +68,7 @@ public class CerimonialUtils {
             URL url = new URL(paramUrl);
             urlConn = url.openConnection();
             if (urlConn != null) {
-                urlConn.setReadTimeout(60 * 1000);
+                urlConn.setReadTimeout(1000);
             }
             if (urlConn != null && urlConn.getInputStream() != null) {
                 in = new InputStreamReader(urlConn.getInputStream(), Charset.defaultCharset());
