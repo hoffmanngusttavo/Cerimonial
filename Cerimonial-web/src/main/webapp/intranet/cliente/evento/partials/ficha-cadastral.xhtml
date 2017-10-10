@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="#{LayoutMB.layout}"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Ficha Cadastral
+    </ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam name="id" value="#{FichaCadastralEventoClienteMB.idEvento}" converter="javax.faces.Long"/>
+            <f:viewAction action="#{FichaCadastralEventoClienteMB.initEvento()}"/>
+        </f:metadata>
+
+        <h:form prependId="false"
+                id="form">
+
+            <p:focus for="inptNome"/>
+
+            
+            <div class="row">
+                <!-- Nav tabs -->
+                <ul id="tabEtapas" class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#etapa1" aria-controls="etapa1" role="tab" data-toggle="tab">Dados Gerais</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#etapa2" aria-controls="etapa2" role="tab" data-toggle="tab">Endereço</a>
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="etapa1">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <h2>Dados Gerais</h2>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label class="control-label ">Nome
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+
+                            <p:inputText id="inptNome" 
+                                         value="#{FichaCadastralEventoClienteMB.evento.nome}" 
+                                         required="true"
+                                         requiredMessage="Preencha um nome válido"
+                                         class="form-control"
+                                         label="Nome"/>
+
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <p:commandButton value="Salvar"
+                                             action="#{FichaCadastralEventoClienteMB.save()}"
+                                             icon="fa fa-check" 
+                                             style="margin-left: 10px;"
+                                             id="btn-salvar-cliente"
+                                             class="btn btn-success"
+                                             onstart="PF('statusDialog').show();"
+                                             oncomplete="PF('statusDialog').hide();"/>
+                            
+                        </div>
+
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="etapa2">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <h2>Endereço</h2>
+                            </div>
+
+                        </div>
+
+                        <h:panelGroup id="enderecoGroup">
+
+                            <div class="form-group col-md-6">
+                                <label>Cep
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputMask mask="99.999-999"
+                                             value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.cep}"
+                                             required="true"
+                                             requiredMessage="Preencha um cep válido"
+                                             class="form-control"
+                                             id="inptCep"
+                                             label="Cep">
+                                    <p:ajax id="eventCep" 
+                                            event="change" 
+                                            listener="#{FichaCadastralEventoClienteMB.buscaCepCerimoniaEvento()}" 
+                                            process="@this"
+                                            update="enderecoGroup"
+                                            onstart="PF('statusDialog').show();"
+                                            oncomplete="PF('statusDialog').hide();"
+                                            partialSubmit="true"/>
+                                </p:inputMask>
+
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Bairro
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputText id="inptBairro" 
+                                             value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.bairro}" 
+                                             required="true"
+                                             requiredMessage="Preencha um bairro válido"
+                                             class="form-control"
+                                             label="Bairro"/>
+
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <label>Logradouro
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputText id="inptLog" 
+                                             value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.logradouro}" 
+                                             required="true"
+                                             requiredMessage="Preencha um logradouro válido"
+                                             class="form-control"
+                                             label="Logradouro"/>
+
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Número</label>
+
+                                <p:inputText id="inptNumero" 
+                                             value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.numero}" 
+                                             class="form-control"
+                                             label="Número"/>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Complemento</label>
+
+                                <p:inputText id="inptComplemento" 
+                                             value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.complemento}" 
+                                             class="form-control"
+                                             label="Complemento"/>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Estado 
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <h:selectOneMenu id="inptEstado" 
+                                                 value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.estado}"
+                                                 converter="EntityConverter"
+                                                 rendered="true"
+                                                 requiredMessage="Preencha um estado válido"
+                                                 class="form-control"
+                                                 label="Estado">
+                                    <f:selectItem itemValue="" 
+                                                  itemLabel="Selecione" /> 
+                                    <f:selectItems value="#{FichaCadastralEventoClienteMB.comboEstado}" />
+                                    <p:ajax process="@this"
+                                            update="@this, inptCidade"
+                                            global="false"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Cidade 
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <h:selectOneMenu id="inptCidade" 
+                                                 value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.cidade}"
+                                                 converter="EntityConverter"
+                                                 required="true"
+                                                 requiredMessage="Preencha uma cidade válida"
+                                                 class="form-control"
+                                                 label="Cidade">
+                                    <f:selectItem itemValue="" 
+                                                  itemLabel="Selecione" /> 
+                                    <f:selectItems value="#{FichaCadastralEventoClienteMB.getComboCidade(FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.estado)}" />
+                                    <p:ajax process="@this"
+                                            update="@this"
+                                            global="false"/>
+                                </h:selectOneMenu>
+                            </div>
+                        </h:panelGroup>
+
+                        <p:commandButton value="Salvar"
+                                         action="#{FichaCadastralEventoClienteMB.save()}"
+                                         icon="fa fa-check" 
+                                         class="btn btn-success"
+                                         style="margin-left: 10px;"
+                                         onstart="PF('statusDialog').show();"
+                                         oncomplete="PF('statusDialog').hide();"/>
+                        
+
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

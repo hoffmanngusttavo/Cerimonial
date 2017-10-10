@@ -6,9 +6,9 @@
 package br.com.cerimonial.controller.mb.cliente;
 
 import br.com.cerimonial.entity.Estado;
-import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.service.EnderecoService;
-import br.com.cerimonial.service.PessoaService;
+import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,72 +23,80 @@ import javax.faces.model.SelectItem;
  *
  * @author hoffmann
  */
-@ManagedBean(name = "ContratanteEventoMB")
+@ManagedBean(name = "FichaCadastralEventoClienteMB")
 @ViewScoped
-public class ContratanteEventoMB extends ClienteControl {
-
+public class FichaCadastralEventoClienteMB extends ClienteControl{
+    
     protected Long idEvento;
-    protected Pessoa contratante;
-
+    protected Evento evento;
+    
     @EJB
-    protected PessoaService service;
+    protected EventoService eventoService;
+    
     @EJB
     protected EnderecoService enderecoService;
 
     protected final SelectItemUtils selectItemUtils;
 
-    public ContratanteEventoMB() {
+    public FichaCadastralEventoClienteMB() {
         this.selectItemUtils = new SelectItemUtils();
     }
 
     /**
-     * Evento invocado ao abrir o xhtml do contratante
+     * Evento invocado ao abrir o xhtml de ficha cadastral
      */
-    public void init() {
-
+    public void initEvento() {
         try {
-
-            contratante = service.getContratanteEvento(idEvento);
+            
+            evento = eventoService.getEventoLocalizacao(idEvento, cliente);
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível carregar o contrante:" + ex.getCause().getMessage());
-            scrollTopMessage();
+            createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
         }
     }
 
     /**
-     * Evento invocado pela tela de form para salvar contratante
+     * Evento invocado pela tela de form para salvar um evento
      *
      * @return
      */
     public synchronized String save() {
         try {
-            
-            service.editCliente(contratante);
-            
+
+            eventoService.save(evento);
+
             createFacesInfoMessage("Dados gravados com sucesso!");
-            
+
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            
-            return "/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=" + idEvento + "&faces-redirect=true";
-            
+
+            return "/intranet/cliente/evento/partials/ficha-cadastral.xhtml?idEvento=" + idEvento + "&faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível salvar os dados: "+ex.getCause().getLocalizedMessage());
+            createFacesErrorMessage(ex.getMessage());
         } finally {
             scrollTopMessage();
         }
         return null;
     }
 
-    public void buscaCep() {
-        if (contratante != null && contratante.getEndereco() != null) {
-            try {
-                contratante.setEndereco(enderecoService.buscaCep(contratante.getEndereco()));
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            }
+    public void buscaCepCerimoniaEvento() {
+        try {
+
+            evento.getCerimoniaEvento().setEndereco(enderecoService.buscaCep(evento.getCerimoniaEvento().getEndereco()));
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void buscaCepFestaEvento() {
+        try {
+
+            evento.getFestaCerimonia().setEndereco(enderecoService.buscaCep(evento.getFestaCerimonia().getEndereco()));
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -99,7 +107,7 @@ public class ContratanteEventoMB extends ClienteControl {
     public List<SelectItem> getComboEstado() {
         return selectItemUtils.getComboEstado();
     }
-
+    
     public Long getIdEvento() {
         return idEvento;
     }
@@ -108,12 +116,16 @@ public class ContratanteEventoMB extends ClienteControl {
         this.idEvento = idEvento;
     }
 
-    public Pessoa getContratante() {
-        return contratante;
+    public Evento getEvento() {
+        return evento;
     }
 
-    public void setContratante(Pessoa contratante) {
-        this.contratante = contratante;
+    public void setEvento(Evento evento) {
+        this.evento = evento;
     }
-
+    
+    
+    
+    
+    
 }

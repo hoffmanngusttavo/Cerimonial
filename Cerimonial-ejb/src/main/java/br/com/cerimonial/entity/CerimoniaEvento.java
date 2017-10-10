@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,20 +42,20 @@ public class CerimoniaEvento implements Serializable, ModelInterface {
     @SequenceGenerator(name = "GENERATE_CerimoniaEvento", sequenceName = "CerimoniaEvento_pk_seq", allocationSize = 1)
     private Long id;
 
+    @Column
+    private String nomeLocalEvento;
+
+    @ManyToOne
+    private Endereco endereco;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
-    @ManyToOne
-    private Evento evento;
-
-    @ManyToOne
-    private Endereco endereco;
-
-    @OneToMany(mappedBy = "cerimoniaEvento", fetch = FetchType.LAZY)
-    private List<FestaCerimonia> festas;
+    @OneToMany(mappedBy = "cerimoniaEvento")
+    private List<Evento> eventos;
 
     @Override
     public Long getId() {
@@ -86,14 +87,6 @@ public class CerimoniaEvento implements Serializable, ModelInterface {
         this.dataUltimaAlteracao = data;
     }
 
-    public Evento getEvento() {
-        return evento;
-    }
-
-    public void setEvento(Evento evento) {
-        this.evento = evento;
-    }
-
     public Endereco getEndereco() {
         return endereco;
     }
@@ -102,31 +95,20 @@ public class CerimoniaEvento implements Serializable, ModelInterface {
         this.endereco = endereco;
     }
 
-    public FestaCerimonia getFestaCerimonia() {
-
-        if (CerimonialUtils.isListNotBlank(festas)) {
-            return festas.get(0);
-        }
-
-        return null;
+    public String getNomeLocalEvento() {
+        return nomeLocalEvento;
     }
 
-    public void setFestaCerimonia(FestaCerimonia festa) {
+    public void setNomeLocalEvento(String nomeLocalEvento) {
+        this.nomeLocalEvento = nomeLocalEvento;
+    }
 
-        if (festa == null) {
-            festas = null;
-        } else {
+    public List<Evento> getEventos() {
+        return eventos;
+    }
 
-            if (CerimonialUtils.isListNotBlank(festas)) {
-                festas.set(0, festa);
-            }
-
-            if (festas == null) {
-                festas = new ArrayList<>();
-            }
-
-            festas.add(festa);
-        }
+    public void setEventos(List<Evento> eventos) {
+        this.eventos = eventos;
     }
 
     @PrePersist

@@ -7,14 +7,17 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -36,17 +39,20 @@ public class FestaCerimonia implements Serializable, ModelInterface {
     @SequenceGenerator(name = "GENERATE_FestaCerimonia", sequenceName = "FestaCerimonia_pk_seq", allocationSize = 1)
     private Long id;
 
+    @Column
+    private String nomeLocalFesta;
+
+    @ManyToOne
+    private Endereco endereco;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
-    @ManyToOne
-    private CerimoniaEvento cerimoniaEvento;
-
-    @ManyToOne
-    private Endereco endereco;
+    @OneToMany(mappedBy = "festaCerimonia")
+    private List<Evento> eventos;
 
     @Override
     public Long getId() {
@@ -78,12 +84,12 @@ public class FestaCerimonia implements Serializable, ModelInterface {
         this.dataUltimaAlteracao = data;
     }
 
-    public CerimoniaEvento getCerimoniaEvento() {
-        return cerimoniaEvento;
+    public List<Evento> getEventos() {
+        return eventos;
     }
 
-    public void setCerimoniaEvento(CerimoniaEvento cerimoniaEvento) {
-        this.cerimoniaEvento = cerimoniaEvento;
+    public void setEventos(List<Evento> eventos) {
+        this.eventos = eventos;
     }
 
     public Endereco getEndereco() {
@@ -94,6 +100,16 @@ public class FestaCerimonia implements Serializable, ModelInterface {
         this.endereco = endereco;
     }
 
+    public String getNomeLocalFesta() {
+        return nomeLocalFesta;
+    }
+
+    public void setNomeLocalFesta(String nomeLocalFesta) {
+        this.nomeLocalFesta = nomeLocalFesta;
+    }
+
+    
+    
     @PrePersist
     @Override
     public void prePersistEntity() {

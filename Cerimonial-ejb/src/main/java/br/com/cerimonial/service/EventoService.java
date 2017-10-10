@@ -123,23 +123,22 @@ public class EventoService extends BasicService<Evento> {
         }
         return new ArrayList<Evento>();
     }
-    
-     /**
+
+    /**
      * Vai retornar todos os eventos ativos do cliente
      *
      * @param cliente
      * @return
      */
     public List<Evento> findEventosAtivosCliente(Pessoa cliente) {
-        
-        if(cliente == null || cliente.getId() == null){
-            throw  new GenericException("Não foi possível carregar os eventos, cliente nulo", ErrorCode.BAD_REQUEST.getCode());
+
+        if (cliente == null || cliente.getId() == null) {
+            throw new GenericException("Não foi possível carregar os eventos, cliente nulo", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         return repository.findEventosAtivosCliente(cliente);
-        
+
     }
-    
 
     public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento, Pessoa cliente) throws Exception {
 
@@ -148,14 +147,19 @@ public class EventoService extends BasicService<Evento> {
         }
 
         Evento evento = this.getEventoByOrcamento(orcamento);
-        
+
         if (evento == null) {
             evento = new Evento();
+            evento.setDataInicio(orcamento.getContatoEvento().getDataEvento());
+            evento.setDataTermino(orcamento.getContatoEvento().getDataEvento());
+            evento.setHoraInicio(orcamento.getContatoEvento().getHoraEvento());
+            evento.setQuantidadeConvidados(orcamento.getContatoEvento().getQuantidadeConvidados());
         }
 
         evento.setContratante(cliente);
         evento.setNome(orcamento.getContatoEvento().getNomeEvento());
         evento.setOrcamentoEvento(orcamento);
+        evento.setTipoEvento(orcamento.getContatoEvento().getTipoEvento());
 
         return evento;
     }
@@ -175,7 +179,7 @@ public class EventoService extends BasicService<Evento> {
         return null;
 
     }
-    
+
     public Evento getEventoByContatoInicial(ContatoEvento contatoEvento) throws Exception {
 
         if (contatoEvento == null || contatoEvento.getId() == null) {
@@ -201,35 +205,71 @@ public class EventoService extends BasicService<Evento> {
     }
 
     /**
-     * Vai retornar o evento que pertence a somente esse cliente
-     * Carregar em lazy o contrato
+     * Vai retornar o evento que pertence a somente esse cliente Carregar em
+     * lazy o contrato
+     *
      * @param idEvento
      * @param contratante
-     * @return 
+     * @return
      */
     public Evento getEventoByIdEventoContratante(Long idEvento, Pessoa contratante) {
-        
-        if(idEvento == null){
+
+        if (idEvento == null) {
             throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        if(contratante == null || contratante.getId() == null){
+
+        if (contratante == null || contratante.getId() == null) {
             throw new GenericException("Cliente contratante nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
-        
-         if(evento != null){
-            if(evento.getContrato() != null){
+
+        if (evento != null) {
+            if (evento.getContrato() != null) {
                 evento.getContrato().getId();
             }
         }
-         
-         return evento;
-        
+
+        return evento;
+
+    }
+    
+    /**
+     * Vai retornar o evento que pertence a somente esse cliente Carregar em
+     * lazy o cerimonia, festa, tipo evento
+     *
+     * @param idEvento
+     * @param contratante
+     * @return
+     */
+    public Evento getEventoLocalizacao(Long idEvento, Pessoa contratante) {
+
+        if (idEvento == null) {
+            throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (contratante == null || contratante.getId() == null) {
+            throw new GenericException("Cliente contratante nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
+
+        if (evento != null) {
+            if (evento.getCerimoniaEvento() != null) {
+                evento.getCerimoniaEvento().getId();
+            }
+            
+            if (evento.getFestaCerimonia() != null) {
+                evento.getFestaCerimonia().getId();
+            }
+            
+            if (evento.getTipoEvento() != null) {
+                evento.getTipoEvento().getId();
+            }
+        }
+
+        return evento;
+
     }
 
-   
-
-    
 }
