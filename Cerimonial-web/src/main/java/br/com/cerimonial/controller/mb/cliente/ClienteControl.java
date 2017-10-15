@@ -11,6 +11,7 @@ import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.web.UsuarioLogado;
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 
 /**
@@ -21,21 +22,25 @@ public class ClienteControl extends BasicControl implements Serializable {
 
     protected Usuario usuarioLogado = null;
     protected Pessoa cliente = null;
-    
+
     @EJB
     PessoaService pessoaService;
 
-    public ClienteControl() {
-
+    @PostConstruct
+    public void postConstruct() {
         try {
             usuarioLogado = UsuarioLogado.getInstance().getUsuario();
 
             cliente = pessoaService.getClienteByUsuario(usuarioLogado);
-            
+
         } catch (Exception e) {
-            
-            createFacesErrorMessage(e.getCause().getMessage());
+            if (e.getCause() != null) {
+                createFacesErrorMessage(e.getCause().getMessage());
+            } else {
+                createFacesErrorMessage(e.getMessage());
+            }
         }
+
     }
 
     public Usuario getUsuarioLogado() {
@@ -53,7 +58,5 @@ public class ClienteControl extends BasicControl implements Serializable {
     public void setCliente(Pessoa cliente) {
         this.cliente = cliente;
     }
-    
-    
 
 }

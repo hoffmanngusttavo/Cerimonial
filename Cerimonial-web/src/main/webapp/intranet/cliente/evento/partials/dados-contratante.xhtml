@@ -14,7 +14,8 @@
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="id" value="#{ContratanteEventoMB.idEvento}" converter="javax.faces.Long"/>
+            <f:viewParam name="idEvento" value="#{ContratanteEventoMB.idEvento}" converter="javax.faces.Long"/>
+            
             <f:viewAction action="#{ContratanteEventoMB.init()}"/>
         </f:metadata>
 

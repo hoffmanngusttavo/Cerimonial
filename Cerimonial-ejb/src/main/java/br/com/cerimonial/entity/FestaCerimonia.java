@@ -24,12 +24,14 @@ import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import org.apache.shiro.SecurityUtils;
+import org.hibernate.envers.Audited;
 
 /**
  *
  * @author hoffmann
  */
 @Entity
+@Audited
 public class FestaCerimonia implements Serializable, ModelInterface {
 
     private static final long serialVersionUID = 1L;

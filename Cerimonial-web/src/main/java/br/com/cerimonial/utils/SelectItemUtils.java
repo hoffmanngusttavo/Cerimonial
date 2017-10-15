@@ -8,7 +8,6 @@ package br.com.cerimonial.utils;
 import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Estado;
-import br.com.cerimonial.entity.ModeloContrato;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.StatusContato;
 import br.com.cerimonial.entity.TipoEvento;

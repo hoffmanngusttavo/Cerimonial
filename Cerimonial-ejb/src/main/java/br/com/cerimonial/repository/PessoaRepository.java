@@ -106,7 +106,7 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
             sb.append("SELECT cli FROM Pessoa cli ");
             sb.append("INNER JOIN cli.usuariosClientes user ");
             sb.append("WHERE user.id = ?1 ");
-            sb.append("cli.tipoEnvolvido = ?2 ");
+            sb.append("AND cli.tipoEnvolvido = ?2 ");
 
             return getPurePojo(Pessoa.class, sb.toString(), usuarioLogado.getId(), TipoEnvolvido.CLIENTE);
 

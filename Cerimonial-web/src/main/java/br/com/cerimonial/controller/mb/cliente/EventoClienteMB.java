@@ -5,19 +5,13 @@
  */
 package br.com.cerimonial.controller.mb.cliente;
 
-import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Evento;
-import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.EventoService;
-import br.com.cerimonial.utils.SelectItemUtils;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
 /**
  *

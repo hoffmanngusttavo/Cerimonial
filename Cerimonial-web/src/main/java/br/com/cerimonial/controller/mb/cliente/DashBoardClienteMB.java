@@ -7,7 +7,9 @@ package br.com.cerimonial.controller.mb.cliente;
 
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.service.EventoService;
+import br.com.cerimonial.web.UsuarioLogado;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -18,26 +20,27 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "DashBoardClienteMB")
 @ViewScoped
-public class DashBoardClienteMB extends ClienteControl{
+public class DashBoardClienteMB extends ClienteControl {
 
-    
     private List<Evento> eventosAtivos;
-    
+
     @EJB
     protected EventoService eventoService;
-    
-    
+
     public DashBoardClienteMB() {
+
+    }
+
+    @PostConstruct
+    public void postInstance() {
         try {
-            
+
             eventosAtivos = eventoService.findEventosAtivosCliente(cliente);
-            
+
         } catch (Exception e) {
-            
+
             createFacesErrorMessage(e.getCause().getMessage());
         }
-        
-    
     }
 
     public List<Evento> getEventosAtivos() {
@@ -47,8 +50,5 @@ public class DashBoardClienteMB extends ClienteControl{
     public void setEventosAtivos(List<Evento> eventosAtivos) {
         this.eventosAtivos = eventosAtivos;
     }
-    
-    
-    
-    
+
 }
