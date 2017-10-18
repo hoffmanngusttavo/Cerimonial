@@ -5,8 +5,8 @@
  */
 package br.com.cerimonial.repository;
 
-import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -51,6 +51,12 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
 
     }
 
+     /**
+     * Método vai buscar o orçamento de um evento;
+     *
+     * @param idEvento do Evento
+     * @return
+     */
     public OrcamentoEvento getOrcamentoByEvento(Long idEvento) {
 
         StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
@@ -60,24 +66,29 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
         sql.append(" WHERE 1=1");
         sql.append(" AND evento.id = ?1");
 
-        OrcamentoEvento orcamento = getPurePojo(OrcamentoEvento.class, sql.toString(), idEvento);
+        return getPurePojo(OrcamentoEvento.class, sql.toString(), idEvento);
+    }
+    
+    /**
+     * Método vai buscar o orçamento de um evento de um contratante;
+     *
+     * @param idEvento do Evento
+     * @param contratante
+     * @return
+     */
+    public OrcamentoEvento getOrcamentoContratante(Long idEvento, Pessoa contratante) {
 
-        if (orcamento != null) {
+        StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
+        sql.append(" INNER JOIN orc.eventos evento");
+        sql.append(" INNER JOIN evento.contratante cli");
+        sql.append(" LEFT JOIN orc.modeloProposta mp");
+        sql.append(" LEFT JOIN orc.anexos arq");
+        sql.append(" WHERE 1=1");
+        sql.append(" AND evento.id = ?1");
+        sql.append(" AND cli.id = ?2");
 
-            if (orcamento.getEvento() != null) {
-                orcamento.getEvento().getId();
-            }
-            
-            if (orcamento.getAnexos() != null) {
-                orcamento.getAnexos().size();
-            }
+        return getPurePojo(OrcamentoEvento.class, sql.toString(), idEvento, contratante.getId());
 
-            if (orcamento.getModeloProposta() != null) {
-                orcamento.getModeloProposta().getId();
-            }
-
-        }
-        return orcamento;
     }
 
 }

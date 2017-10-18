@@ -92,7 +92,75 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
             throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        return repository.getOrcamentoByEvento(idEvento);
+        OrcamentoEvento orcamento = repository.getOrcamentoByEvento(idEvento);
+        
+        if (orcamento != null) {
+
+            if (orcamento.getEvento() != null) {
+                orcamento.getEvento().getId();
+            }
+            
+            if (orcamento.getAnexos() != null) {
+                orcamento.getAnexos().size();
+            }
+
+            if (orcamento.getModeloProposta() != null) {
+                orcamento.getModeloProposta().getId();
+            }
+
+        }
+        
+        return orcamento;
+        
+    }
+    
+    
+    /**
+     * Método vai buscar o orçamento de um evento de um contratante;
+     *
+     * @param idEvento do Evento
+     * @param contratante
+     * @return
+     * @throws java.lang.Exception
+     */
+    public OrcamentoEvento getOrcamentoContratante(Long idEvento, Pessoa contratante) throws Exception {
+
+        if (idEvento == null) {
+            throw new GenericException("Id nulo do evento ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEvento < 0) {
+            throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (contratante == null) {
+            throw new GenericException("Contratante nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (contratante.getId() == null) {
+            throw new GenericException("Id Contratante nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        OrcamentoEvento orcamento = repository.getOrcamentoContratante(idEvento, contratante);
+        
+        if (orcamento != null) {
+
+            if (orcamento.getEvento() != null) {
+                orcamento.getEvento().getId();
+            }
+            
+            if (orcamento.getAnexos() != null) {
+                orcamento.getAnexos().size();
+            }
+
+            if (orcamento.getModeloProposta() != null) {
+                orcamento.getModeloProposta().getId();
+            }
+
+        }
+        
+        return orcamento;
+        
     }
 
     @Override
