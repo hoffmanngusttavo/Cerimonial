@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
@@ -26,6 +27,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -329,7 +331,9 @@ public class PessoaService extends BasicService<Pessoa> {
             throw new GenericException("Id evento nulo", ErrorCode.BAD_REQUEST.getCode());
         }
         
-        return repository.getContratanteEvento(idEvento);
+        Pessoa contratante = repository.getContratanteEvento(idEvento);
+        
+        return contratante;
         
     }
 

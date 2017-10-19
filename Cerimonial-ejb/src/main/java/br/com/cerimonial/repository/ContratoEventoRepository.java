@@ -20,25 +20,39 @@ public class ContratoEventoRepository extends AbstractRepository<ContratoEvento>
         super(entityManager, ContratoEvento.class);
     }
 
+    
+    /**
+     * Método monta sql para buscar ao banco o contrato a partir de um id do Evento
+     * @param idEvento do Evento
+     * @return
+     */
     public List<ContratoEvento> getContratosByEvento(Long idEvento) {
 
-        StringBuilder sql = new StringBuilder("select contrato from ContratoEvento contrato  ");
-        sql.append("INNER JOIN contrato.evento evento");
-        sql.append(" where 1=1");
-        sql.append(" and evento.id = ?1");
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT contrato FROM ContratoEvento contrato");
+        sql.append(" INNER JOIN contrato.evento evento");
+        sql.append(" WHERE 1=1");
+        sql.append(" AND evento.id = ?1");
         
         return getPureList(ContratoEvento.class, sql.toString(), idEvento);
     }
     
-    
+    /**
+     * Método monta sql para buscar ao banco o contrato de um contratante
+     * a partir de um id do Evento
+     * @param idEvento do Evento
+     * @param contratante
+     * @return
+     */
     public List<ContratoEvento> getContratoByEventoContratante(Long idEvento, Pessoa contratante) {
 
-        StringBuilder sql = new StringBuilder("select contrato from ContratoEvento contrato  ");
-        sql.append("INNER JOIN contrato.evento evento");
-        sql.append("INNER JOIN evento.contratante cliente");
-        sql.append(" where 1=1");
-        sql.append(" and evento.id = ?1");
-        sql.append(" and cliente.id = ?1");
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT contrato FROM ContratoEvento contrato");
+        sql.append(" INNER JOIN contrato.evento evento");
+        sql.append(" INNER JOIN evento.contratante cliente");
+        sql.append(" WHERE 1=1");
+        sql.append(" AND evento.id = ?1");
+        sql.append(" AND cliente.id = ?2");
         
         return getPureList(ContratoEvento.class, sql.toString(), idEvento, contratante.getId());
     }

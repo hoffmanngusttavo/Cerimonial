@@ -5,9 +5,12 @@
  */
 package br.com.cerimonial.controller.mb.cliente;
 
+import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Estado;
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.service.EnderecoService;
+import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
@@ -29,11 +32,14 @@ public class ContratanteEventoMB extends ClienteControl {
 
     protected Long idEvento;
     protected Pessoa contratante;
+    protected Evento evento;
 
     @EJB
     protected PessoaService service;
     @EJB
     protected EnderecoService enderecoService;
+    @EJB
+    protected EventoService eventoService;
 
     protected final SelectItemUtils selectItemUtils;
 
@@ -50,6 +56,12 @@ public class ContratanteEventoMB extends ClienteControl {
 
             contratante = service.getContratanteEvento(idEvento);
 
+            if (contratante != null && contratante.getEndereco() == null) {
+                contratante.setEndereco(new Endereco());
+            }
+
+            evento = eventoService.getEventoByIdEventoContratante(idEvento, contratante);
+
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível carregar o contrante:" + ex.getCause().getMessage());
@@ -64,18 +76,18 @@ public class ContratanteEventoMB extends ClienteControl {
      */
     public synchronized String save() {
         try {
-            
+
             service.editCliente(contratante);
-            
+
             createFacesInfoMessage("Dados gravados com sucesso!");
-            
+
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            
+
             return "/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=" + idEvento + "&faces-redirect=true";
-            
+
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível salvar os dados: "+ex.getCause().getLocalizedMessage());
+            createFacesErrorMessage("Não foi possível salvar os dados: " + ex.getCause().getLocalizedMessage());
         } finally {
             scrollTopMessage();
         }
@@ -114,6 +126,14 @@ public class ContratanteEventoMB extends ClienteControl {
 
     public void setContratante(Pessoa contratante) {
         this.contratante = contratante;
+    }
+
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
     }
 
 }

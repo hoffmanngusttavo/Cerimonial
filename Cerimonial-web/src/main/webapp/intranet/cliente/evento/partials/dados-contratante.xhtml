@@ -15,16 +15,37 @@
 
         <f:metadata>
             <f:viewParam name="idEvento" value="#{ContratanteEventoMB.idEvento}" converter="javax.faces.Long"/>
-            
+
             <f:viewAction action="#{ContratanteEventoMB.init()}"/>
         </f:metadata>
 
         <h:form prependId="false"
                 id="form">
 
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <p:link href="/intranet/cliente/evento/form.xhtml?id=#{ContratanteEventoMB.evento.id}">
+                                    <i class="fa fa-list"></i>
+                                    <span>#{ContratanteEventoMB.evento.nome}</span>
+                                </p:link>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div style="margin-left: 28px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <p:focus for="inptNome"/>
 
-            
+
             <div class="row">
                 <!-- Nav tabs -->
                 <ul id="tabEtapas" class="nav nav-tabs" role="tablist">
@@ -169,7 +190,7 @@
                                              class="btn btn-success"
                                              onstart="PF('statusDialog').show();"
                                              oncomplete="PF('statusDialog').hide();"/>
-                            
+
                         </div>
 
                     </div>
@@ -312,7 +333,7 @@
                                          class="btn btn-info"
                                          icon="fa fa-arrow-left"
                                          value="Voltar Etapa"/>
-                        
+
                         <p:commandButton value="Salvar"
                                          action="#{ContratanteEventoMB.save()}"
                                          onclick="validaFormularioContratante()"
@@ -321,7 +342,7 @@
                                          style="margin-left: 10px;"
                                          onstart="PF('statusDialog').show();"
                                          oncomplete="PF('statusDialog').hide();"/>
-                        
+
 
                     </div>
                 </div>
