@@ -28,6 +28,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.transaction.Transactional;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -116,6 +117,8 @@ public class PessoaService extends BasicService<Pessoa> {
     public Pessoa editCliente(Pessoa entity) throws Exception {
 
         isValid(entity);
+        
+        isValidCliente(entity);
 
         if (entity.getId() == null) {
             throw new GenericException("Não pode gravar um novo cliente", ErrorCode.BAD_REQUEST.getCode());
@@ -319,9 +322,35 @@ public class PessoaService extends BasicService<Pessoa> {
         return true;
 
     }
+    
+    public boolean isValidCliente(Pessoa entity) throws Exception {
+
+        if (entity == null) {
+            throw new GenericException("Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (StringUtils.isBlank(entity.getNome())) {
+            throw new GenericException("Preencha o nome corretamente.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        if (StringUtils.isBlank(entity.getCpf())) {
+            throw new GenericException("Preencha o cpf corretamente.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        if (StringUtils.isBlank(entity.getRg())) {
+            throw new GenericException("Preencha o rg corretamente.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        if (StringUtils.isBlank(entity.getTelefoneResidencial()) && StringUtils.isBlank(entity.getTelefoneCelular())) {
+            throw new GenericException("Preencha pelo menos um telefone.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        CerimonialUtils.validarEmail(entity.getEmail());
+        
+        return true;
+
+    }
 
     /**
      * Vai retornar o Contratante do evento
+     * carregar em lazy o endereço
      * @param idEvento
      * @return 
      */
@@ -332,7 +361,13 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         
         Pessoa contratante = repository.getContratanteEvento(idEvento);
-        
+        if(contratante != null){
+            
+            if(contratante.getEndereco() != null){
+                contratante.getEndereco().getId();
+            }
+            
+        }
         return contratante;
         
     }

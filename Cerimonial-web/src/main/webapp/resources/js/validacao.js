@@ -452,8 +452,7 @@ function validaFormularioContratante(){
   var inptCpf = $('#inptCpf').val();
   var inptRg = $('#inptRg').val();
   var inptEmail = $('#inptEmail').val();
-  var inptTelefone1 = $('#inptTelefone1').val();
-  var inptTelefone2 = $('#inptTelefone2').val();
+ 
   
  if(inptNome === ''){
     alteraEtapaContratante(1);
@@ -481,13 +480,7 @@ function validaFormularioContratante(){
     return;
   }
   
-  if(inptTelefone1 === '' || inptTelefone2 === ''){
-    alteraEtapaContratante(1);
-    $('#inptTelefone1').focus();
-    $('html, body').animate({ scrollTop: $('#form').offset().top }, 800);
-    return;
-  }
-  
+ 
   var inptCep = $('#inptCep').val();
   var inptBairro = $('#inptBairro').val();
   var inptLog = $('#inptLog').val();

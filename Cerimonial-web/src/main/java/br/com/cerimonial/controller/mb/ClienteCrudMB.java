@@ -23,7 +23,7 @@ import org.primefaces.model.SortOrder;
  */
 @ManagedBean(name = "ClienteCrudMB")
 @ViewScoped
-public class ClienteCrudMB extends PessoaMB{
+public class ClienteCrudMB extends PessoaMB {
 
     public ClienteCrudMB() {
         try {
@@ -41,12 +41,10 @@ public class ClienteCrudMB extends PessoaMB{
      */
     public synchronized String save() {
         try {
-            if (entity != null) {
-                service.editCliente(entity);
-                createFacesInfoMessage("Dados gravados com sucesso!");
-                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-                return "index.xhtml?faces-redirect=true";
-            }
+            service.editCliente(entity);
+            createFacesInfoMessage("Dados gravados com sucesso!");
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            return "index.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
@@ -104,5 +102,5 @@ public class ClienteCrudMB extends PessoaMB{
         }
         return lazyLista;
     }
-    
+
 }

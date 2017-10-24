@@ -15,7 +15,6 @@
 
         <f:metadata>
             <f:viewParam name="idEvento" value="#{ContratanteEventoMB.idEvento}" converter="javax.faces.Long"/>
-
             <f:viewAction action="#{ContratanteEventoMB.init()}"/>
         </f:metadata>
 
@@ -128,9 +127,6 @@
 
                         <div class="form-group col-md-6">
                             <label>Telefone Residencial
-                                <span class="asteriskField">
-                                    *
-                                </span>
                             </label>
 
                             <p:inputText value="#{ContratanteEventoMB.contratante.telefoneResidencial}"
