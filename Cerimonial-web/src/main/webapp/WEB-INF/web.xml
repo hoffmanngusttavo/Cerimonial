@@ -10,6 +10,11 @@
         <param-value>0</param-value>
     </context-param>
     
+    <context-param>
+        <param-name>timezone</param-name>
+        <param-value>GMT-3</param-value>
+    </context-param>
+    
     <servlet>
         <servlet-name>ServletAdaptor</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>

@@ -39,6 +39,8 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
 
 /**
  *
@@ -62,9 +64,11 @@ public class Pessoa implements Serializable, ModelInterface {
     private String rg;
 
     @Column
+    @CPF
     private String cpf;
 
     @Column
+    @CNPJ
     private String cnpj;
 
     @Column

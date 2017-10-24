@@ -26,6 +26,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang.StringUtils;
@@ -94,6 +95,7 @@ public class ContatoEvento implements Serializable, ModelInterface{
     private Usuario modificadoPor;
     
     @Column
+    @Min(1)
     private Integer quantidadeConvidados;
     
     @ManyToOne

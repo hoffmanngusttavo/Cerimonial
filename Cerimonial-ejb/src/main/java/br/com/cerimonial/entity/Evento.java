@@ -26,6 +26,7 @@ import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.shiro.SecurityUtils;
@@ -68,6 +69,7 @@ public class Evento implements Serializable, ModelInterface {
     private Date horaTermino;
     
     @Column
+    @Min(1)
     private Integer quantidadeConvidados;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -27,6 +27,7 @@ import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
+import javax.validation.constraints.DecimalMin;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -43,8 +44,9 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     @SequenceGenerator(name = "GENERATE_OrcamentoEvento", sequenceName = "OrcamentoEvento_pk_seq", allocationSize = 1)
     private Long id;
 
+    @DecimalMin("0.0")
     @Column(precision = 16, scale = 2)
-    private double valorProposta = 0;
+    private Double valorProposta;
 
     @Column(precision = 16, scale = 2)
     private double valorAlterado = -1;
@@ -118,11 +120,11 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
         this.modificadoPor = modificadoPor;
     }
 
-    public double getValorProposta() {
+    public Double getValorProposta() {
         return valorProposta;
     }
 
-    public void setValorProposta(double valorProposta) {
+    public void setValorProposta(Double valorProposta) {
         this.valorProposta = valorProposta;
     }
 

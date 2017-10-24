@@ -15,7 +15,10 @@
 
             <title><ui:insert name="titleOfPage">None</ui:insert></title>
 
-            <ui:include src="./includes.xhtml" />
+            <link rel="stylesheet" type="text/css"
+                  href="#{request.contextPath}/resources/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+            <h:outputStylesheet name="css/style.css"/>
         </h:head>
 
         <h:body>
@@ -44,6 +47,7 @@
                 </ui:insert>
 
             </h:form>
+            
         </h:body>
     </f:view>
 </html>

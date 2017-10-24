@@ -28,6 +28,7 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -55,6 +56,7 @@ public class Endereco implements Serializable, ModelInterface {
 
     @Column(nullable = false)
     @NotNull
+    @NotBlank
     @Size(min = 2, max = 255)
     private String logradouro;
 
@@ -63,6 +65,7 @@ public class Endereco implements Serializable, ModelInterface {
 
     @Column(nullable = false)
     @NotNull
+    @NotBlank
     @Size(min = 2, max = 255)
     private String bairro;
 
