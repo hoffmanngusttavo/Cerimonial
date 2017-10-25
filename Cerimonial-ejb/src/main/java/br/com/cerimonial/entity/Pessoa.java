@@ -56,7 +56,7 @@ public class Pessoa implements Serializable, ModelInterface {
     private Long id;
 
     @Column(nullable = false)
-    @NotNull
+    @NotNull(message = "Preencha um nome válido")
     @Size(min = 2, max = 255)
     private String nome;
 

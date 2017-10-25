@@ -4,6 +4,8 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 template="#{LayoutMB.layout}"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
@@ -56,11 +58,12 @@
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <h2>Dados Gerais</h2>
+
                             </div>
                         </div>
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6"
+                             id="divInptNome">
                             <label class="control-label ">Nome
                                 <span class="asteriskField">
                                     *
@@ -76,7 +79,7 @@
 
                         </div>
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" id="div-inptCpf">
                             <label class="control-label ">Cpf
                                 <span class="asteriskField">
                                     *
@@ -92,7 +95,7 @@
                                          label="Cpf"/>
                         </div>
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" id="div-inptRg">
                             <label class="control-label ">Rg
                                 <span class="asteriskField">
                                     *
@@ -107,7 +110,7 @@
                                          label="Rg"/>
                         </div>
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" id="div-inptEmail">
                             <label>E-mail
                                 <span class="asteriskField">
                                     *
@@ -125,7 +128,7 @@
                             </p:inputText>
                         </div>
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" id="div-inptTelefone1">
                             <label>Telefone Residencial
                             </label>
 
@@ -179,12 +182,11 @@
 
                             <p:commandButton value="Salvar"
                                              action="#{ContratanteEventoMB.save()}"
-                                             onclick="validaFormularioContratante()()"
                                              icon="fa fa-check" 
                                              style="margin-left: 10px;"
                                              id="btn-salvar-cliente"
                                              class="btn btn-success"
-                                             onstart="PF('statusDialog').show();"
+                                             onstart="PF('statusDialog').show();validaFormularioContratante();"
                                              oncomplete="PF('statusDialog').hide();"/>
 
                         </div>
@@ -194,14 +196,13 @@
                     <div role="tabpanel" class="tab-pane" id="etapa2">
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <h2>Endereço</h2>
                             </div>
 
                         </div>
 
                         <h:panelGroup id="enderecoGroup">
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6" id="div-inptCep">
                                 <label>Cep
                                     <span class="asteriskField">
                                         *
@@ -227,7 +228,7 @@
 
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6" id="div-inptBairro">
                                 <label>Bairro
                                     <span class="asteriskField">
                                         *
@@ -243,7 +244,7 @@
 
                             </div>
 
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-12" id="div-inptLog">
                                 <label>Logradouro
                                     <span class="asteriskField">
                                         *
@@ -277,7 +278,7 @@
                                              label="Complemento"/>
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6" id="div-inptEstado">
                                 <label>Estado 
                                     <span class="asteriskField">
                                         *
@@ -292,7 +293,7 @@
                                                  class="form-control"
                                                  label="Estado">
                                     <f:selectItem itemValue="" 
-                                                  itemLabel="Selecione" /> 
+                                                  itemLabel="" /> 
                                     <f:selectItems value="#{ContratanteEventoMB.comboEstado}" />
                                     <p:ajax process="@this"
                                             update="@this, inptCidade"
@@ -300,7 +301,7 @@
                                 </h:selectOneMenu>
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6" id="div-inptCidade">
                                 <label>Cidade 
                                     <span class="asteriskField">
                                         *
@@ -315,7 +316,7 @@
                                                  class="form-control"
                                                  label="Cidade">
                                     <f:selectItem itemValue="" 
-                                                  itemLabel="Selecione" /> 
+                                                  itemLabel="" /> 
                                     <f:selectItems value="#{ContratanteEventoMB.getComboCidade(ContratanteEventoMB.contratante.endereco.estado)}" />
                                     <p:ajax process="@this"
                                             update="@this"
@@ -332,11 +333,11 @@
 
                         <p:commandButton value="Salvar"
                                          action="#{ContratanteEventoMB.save()}"
-                                         onclick="validaFormularioContratante()"
                                          icon="fa fa-check" 
-                                         class="btn btn-success"
                                          style="margin-left: 10px;"
-                                         onstart="PF('statusDialog').show();"
+                                         id="btn-salvar-cliente-endereco"
+                                         class="btn btn-success"
+                                         onstart="PF('statusDialog').show();validaFormularioContratante();"
                                          oncomplete="PF('statusDialog').hide();"/>
 
 
