@@ -100,7 +100,10 @@ public class Evento implements Serializable, ModelInterface {
     @ManyToOne(fetch = FetchType.LAZY)
     private FestaCerimonia festaCerimonia;
     
-
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
+    private List<EnvolvidoEvento> envolvidos;
+    
+    
     @Override
     public Long getId() {
         return id;
@@ -272,6 +275,15 @@ public class Evento implements Serializable, ModelInterface {
     public void setCerimoniaEvento(CerimoniaEvento cerimoniaEvento) {
         this.cerimoniaEvento = cerimoniaEvento;
     }
+
+    public List<EnvolvidoEvento> getEnvolvidos() {
+        return envolvidos;
+    }
+
+    public void setEnvolvidos(List<EnvolvidoEvento> envolvidos) {
+        this.envolvidos = envolvidos;
+    }
+    
     
     
     

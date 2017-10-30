@@ -1,0 +1,287 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.cerimonial.entity;
+
+import br.com.cerimonial.enums.TipoEnvolvidoEvento;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import org.apache.shiro.SecurityUtils;
+import org.hibernate.envers.Audited;
+import org.hibernate.validator.constraints.br.CPF;
+
+/**
+ *
+ * @author hoffmann
+ */
+@Entity
+@Audited
+public class EnvolvidoEvento implements Serializable, ModelInterface {
+    
+
+    @Id
+    @GeneratedValue(generator = "GENERATE_EnvolvidoEvento", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "GENERATE_EnvolvidoEvento", sequenceName = "EnvolvidoEvento_pk_seq", allocationSize = 1)
+    private Long id;
+
+    @Column(nullable = false)
+    @NotNull
+    @Size(min = 2, max = 255)
+    private String nome;
+    
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TipoEnvolvidoEvento tipoEnvolvidoEvento = TipoEnvolvidoEvento.NOIVO;
+
+    @Column
+    private String rg;
+
+    @Column
+    @CPF
+    private String cpf;
+
+    @Column
+    private String email;
+
+    @Column
+    private String facebook;
+
+    @Column
+    private String instagram;
+
+    @Column
+    private String telefoneResidencial;
+
+    @Column
+    private String telefoneCelular;
+
+    @ManyToOne
+    private Endereco endereco;
+    
+    
+    
+    @ManyToOne
+    private Evento evento;
+    
+    @OneToMany(mappedBy = "envolvidoEvento", fetch = FetchType.LAZY)
+    private List<ContatoEnvolvido> contatosFamiliar;
+    
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Usuario modificadoPor;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataUltimaAlteracao;
+
+    
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public Usuario getModificadoPor() {
+        return modificadoPor;
+    }
+
+    @Override
+    public void setModificadoPor(Usuario modificadoPor) {
+        this.modificadoPor = modificadoPor;
+    }
+
+    @Override
+    public Date getDataUltimaAlteracao() {
+        return dataUltimaAlteracao;
+    }
+
+    @Override
+    public void setDataUltimaAlteracao(Date data) {
+        this.dataUltimaAlteracao = data;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public TipoEnvolvidoEvento getTipoEnvolvidoEvento() {
+        return tipoEnvolvidoEvento;
+    }
+
+    public void setTipoEnvolvidoEvento(TipoEnvolvidoEvento tipoEnvolvidoEvento) {
+        this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
+    }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
+    }
+
+    public String getTelefoneResidencial() {
+        return telefoneResidencial;
+    }
+
+    public void setTelefoneResidencial(String telefoneResidencial) {
+        this.telefoneResidencial = telefoneResidencial;
+    }
+
+    public String getTelefoneCelular() {
+        return telefoneCelular;
+    }
+
+    public void setTelefoneCelular(String telefoneCelular) {
+        this.telefoneCelular = telefoneCelular;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+
+    public List<ContatoEnvolvido> getContatosFamiliar() {
+        return contatosFamiliar;
+    }
+
+    public void setContatosFamiliar(List<ContatoEnvolvido> contatosFamiliar) {
+        this.contatosFamiliar = contatosFamiliar;
+    }
+
+    
+    
+    
+
+    @PrePersist
+    @Override
+    public void prePersistEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    @PreUpdate
+    @Override
+    public void preUpdateEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    @PreRemove
+    @Override
+    public void preRemoveEntity() {
+        try {
+            this.setDataUltimaAlteracao(new Date());
+            this.setModificadoPor((Usuario) SecurityUtils.getSubject().getPrincipal());
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof EnvolvidoEvento)) {
+            return false;
+        }
+        EnvolvidoEvento other = (EnvolvidoEvento) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "br.com.cerimonial.entity.EnvolvidoEvento[ id=" + id + " ]";
+    }
+
+}
