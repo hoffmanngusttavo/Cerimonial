@@ -5,10 +5,12 @@
  */
 package br.com.cerimonial.controller.mb.cliente;
 
+import br.com.cerimonial.entity.EnvolvidoEvento;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.EventoService;
+import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,7 +30,14 @@ import javax.faces.model.SelectItem;
 public class FichaCadastralEventoClienteMB extends ClienteControl{
     
     protected Long idEvento;
+    
     protected Evento evento;
+    
+    //pelo menos 1 deve ter no evento
+    protected EnvolvidoEvento envolvido1;
+    
+    //casamento, bodas, festeiro
+    protected EnvolvidoEvento envolvido2;
     
     @EJB
     protected EventoService eventoService;
@@ -49,6 +58,16 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
         try {
             
             evento = eventoService.getEventoLocalizacao(idEvento, cliente);
+           
+            if(CerimonialUtils.isListNotBlank(evento.getEnvolvidos())){
+            
+                envolvido1 = evento.getEnvolvidos().get(0);
+                
+                if(evento.getEnvolvidos().size() > 1){
+                     envolvido2 = evento.getEnvolvidos().get(1);
+                }
+                
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
