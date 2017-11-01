@@ -45,7 +45,7 @@ public class FestaCerimonia implements Serializable, ModelInterface {
     private String nomeLocalFesta;
 
     @ManyToOne
-    private Endereco endereco;
+    private Endereco endereco = new Endereco();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;

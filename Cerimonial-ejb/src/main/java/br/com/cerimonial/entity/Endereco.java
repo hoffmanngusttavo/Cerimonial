@@ -5,6 +5,8 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
@@ -238,6 +240,22 @@ public class Endereco implements Serializable, ModelInterface {
         
         return true;
         
+    }
+
+    public Endereco copiarEndereco(Endereco endereco) {
+        
+        if(endereco == null){
+            throw new GenericException("Endereço nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        this.bairro = endereco.getBairro();
+        this.cep = endereco.getCep();
+        this.complemento = endereco.getComplemento();
+        this.estado = endereco.getEstado();
+        this.logradouro = endereco.getLogradouro();
+        this.numero = endereco.getNumero();
+        
+        return this;
     }
 
 }

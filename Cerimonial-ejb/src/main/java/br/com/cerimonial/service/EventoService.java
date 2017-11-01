@@ -5,9 +5,12 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.CerimoniaEvento;
 import br.com.cerimonial.entity.ContatoEvento;
+import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.EnvolvidoEvento;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.repository.EventoRepository;
@@ -269,18 +272,30 @@ public class EventoService extends BasicService<Evento> {
                 evento.getTipoEvento().getId();
             }
 
-            if (evento.getEnvolvidos() != null) {
-                
-                evento.getEnvolvidos().size();
-
-                evento.getEnvolvidos().stream().forEach((envolvido) -> {
-                    envolvido.getId();
-                });
-            }
         }
 
         return evento;
 
+    }
+
+    /**
+     * Vai copiar o endereco da cerimonia e setar no endereco da festa
+     * @param cerimoniaEvento
+     * @param festaCerimonia
+     */
+    public void copiarLocalizacaoCerimonia(CerimoniaEvento cerimoniaEvento, FestaCerimonia festaCerimonia) {
+        
+        if(cerimoniaEvento == null || cerimoniaEvento.getEndereco() == null){
+            throw new GenericException("Endereço da cerimônia nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(festaCerimonia.getEndereco() == null){
+            festaCerimonia.setEndereco(new Endereco());
+        }
+        
+        festaCerimonia.setNomeLocalFesta(cerimoniaEvento.getNomeLocalEvento());
+        festaCerimonia.setEndereco(festaCerimonia.getEndereco().copiarEndereco(cerimoniaEvento.getEndereco()));
+        
     }
 
 }

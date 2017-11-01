@@ -5,9 +5,11 @@
  */
 package br.com.cerimonial.controller.mb.cliente;
 
+import br.com.cerimonial.entity.CerimoniaEvento;
 import br.com.cerimonial.entity.EnvolvidoEvento;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.utils.CerimonialUtils;
@@ -33,12 +35,6 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
     
     protected Evento evento;
     
-    //pelo menos 1 deve ter no evento
-    protected EnvolvidoEvento envolvido1;
-    
-    //casamento, bodas, festeiro
-    protected EnvolvidoEvento envolvido2;
-    
     @EJB
     protected EventoService eventoService;
     
@@ -59,14 +55,12 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
             
             evento = eventoService.getEventoLocalizacao(idEvento, cliente);
            
-            if(CerimonialUtils.isListNotBlank(evento.getEnvolvidos())){
+            if(evento.getCerimoniaEvento() == null){
+                evento.setCerimoniaEvento(new CerimoniaEvento());
+            }
             
-                envolvido1 = evento.getEnvolvidos().get(0);
-                
-                if(evento.getEnvolvidos().size() > 1){
-                     envolvido2 = evento.getEnvolvidos().get(1);
-                }
-                
+            if(evento.getFestaCerimonia() == null){
+                evento.setFestaCerimonia(new FestaCerimonia());
             }
 
         } catch (Exception ex) {
@@ -99,6 +93,19 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
         return null;
     }
 
+    public void copiarEnderecoCerimonia() {
+        try {
+
+            eventoService.copiarLocalizacaoCerimonia(evento.getCerimoniaEvento(), evento.getFestaCerimonia());
+            
+            createFacesInfoMessage("Copiado com sucesso");
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage("Não foi copiar o local: " + ex.getCause().getMessage());
+        }
+    }
+    
     public void buscaCepCerimoniaEvento() {
         try {
 
@@ -142,9 +149,7 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
     public void setEvento(Evento evento) {
         this.evento = evento;
     }
-    
-    
-    
+
     
     
 }
