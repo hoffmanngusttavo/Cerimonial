@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,7 +46,7 @@ public class CerimoniaEvento implements Serializable, ModelInterface {
     @Column
     private String nomeLocalEvento;
 
-    @ManyToOne
+    @ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Endereco endereco = new Endereco();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -100,7 +101,7 @@ public class CerimoniaEvento implements Serializable, ModelInterface {
     }
 
     public void setNomeLocalEvento(String nomeLocalEvento) {
-        this.nomeLocalEvento = nomeLocalEvento;
+        this.nomeLocalEvento = nomeLocalEvento != null ? nomeLocalEvento.toUpperCase().trim() : nomeLocalEvento;
     }
 
     public List<Evento> getEventos() {

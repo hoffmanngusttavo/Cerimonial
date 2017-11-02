@@ -86,7 +86,7 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
             return "/intranet/cliente/evento/partials/ficha-cadastral.xhtml?idEvento=" + idEvento + "&faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage(ex.getMessage());
+            createFacesErrorMessage("Não foi possível salvar o evento "+ex.getMessage());
         } finally {
             scrollTopMessage();
         }

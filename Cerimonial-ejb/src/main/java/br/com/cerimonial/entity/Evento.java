@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -94,10 +95,10 @@ public class Evento implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
     private List<ContratoEvento> contratos;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private CerimoniaEvento cerimoniaEvento;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,  cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private FestaCerimonia festaCerimonia;
     
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)

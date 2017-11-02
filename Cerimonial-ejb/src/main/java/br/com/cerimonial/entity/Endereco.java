@@ -254,6 +254,7 @@ public class Endereco implements Serializable, ModelInterface {
         this.estado = endereco.getEstado();
         this.logradouro = endereco.getLogradouro();
         this.numero = endereco.getNumero();
+        this.cidade = endereco.getCidade();
         
         return this;
     }

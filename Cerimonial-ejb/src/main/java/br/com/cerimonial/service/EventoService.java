@@ -58,7 +58,7 @@ public class EventoService extends BasicService<Evento> {
     public Evento save(Evento entity) throws Exception {
 
         isValid(entity);
-
+        
         if (entity.getId() == null) {
             return repository.create(entity);
         } else {

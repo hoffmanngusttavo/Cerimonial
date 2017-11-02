@@ -346,7 +346,7 @@
                                            style="font-size: 13px;margin-left: 10px;"
                                            rendered="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.id == null}"
                                            value="Copiar local da cerimonia"
-                                           process="@this"
+                                           process="@this, inptLocalCerimonia, enderecoGroup"
                                            onstart="PF('statusDialog').show();"
                                            oncomplete="PF('statusDialog').hide();"
                                            update="inptLocalFesta, enderecoGroupFesta"/>

@@ -41,73 +41,98 @@
 
                 <div class="row">
 
-                    <div class="col-md-4 text-center">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Orçamento</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div style="margin-left: 28px;">
-                                    <p:link href="/intranet/cliente/evento/partials/orcamento.xhtml?idEvento=#{EventoClienteMB.evento.id}">
-                                        <i class="fa fa-dollar"></i>
+                    <div class="col-lg-12 col-md-12">
+
+
+                        <div class="form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Ficha Cadastral Evento
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <p:link href="/intranet/cliente/evento/partials/ficha-cadastral.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                        <i class="fa fa-object-group"></i>
                                         <span></span>
                                     </p:link>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <h:panelGroup rendered="#{EventoClienteMB.evento.contrato.dataImpressao != null}">
-                        <div class="col-md-4 text-center">
+                        <div class=" form-group col-md-4 text-center">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Contrato</h3>
+                                    <h3 class="panel-title">
+                                        Ficha Cadastral Envolvidos
+                                    </h3>
                                 </div>
                                 <div class="panel-body">
-                                    
-                                    <p:commandButton process="@this"
-                                                     onclick="window.open('#{facesContext.externalContext.requestContextPath}/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento=#{EventoClienteMB.evento.id}')"
-                                                     icon="fa fa fa-list" 
-                                                     style="color: #337ab7;font-size: medium;"
-                                                     styleClass="bt-acoes"
-                                                     title="Imprimir Contrato"/>
+                                    <p:link href="/intranet/cliente/evento/partials/ficha-cadastral.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                        <i class="fa fa-users"></i>
+                                        <span></span>
+                                    </p:link>
                                 </div>
                             </div>
                         </div>
-                    </h:panelGroup>
-
-                    <div class="col-md-4 text-center">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    Dados Contratante
-                                </h3>
-                            </div>
-                            <div class="panel-body">
-                                <p:link href="/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=#{EventoClienteMB.evento.id}">
-                                    <i class="fa fa-user"></i>
-                                    <span></span>
-                                </p:link>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 text-center">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    Ficha Cadastral
-                                </h3>
-                            </div>
-                            <div class="panel-body">
-                                <p:link href="/intranet/cliente/evento/partials/ficha-cadastral.xhtml?idEvento=#{EventoClienteMB.evento.id}">
-                                    <i class="fa fa-dollar"></i>
-                                    <span></span>
-                                </p:link>
+                        
+                        <div class="form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Dados Contratante
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <p:link href="/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                        <i class="fa fa-user"></i>
+                                        <span></span>
+                                    </p:link>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                        
+
+                        <div class="form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Orçamento</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div style="margin-left: 28px;">
+                                        <p:link href="/intranet/cliente/evento/partials/orcamento.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                            <i class="fa fa-dollar"></i>
+                                            <span></span>
+                                        </p:link>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h:panelGroup rendered="#{EventoClienteMB.evento.contrato.dataImpressao != null}">
+                            <div class="form-group col-md-4 text-center">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Contrato</h3>
+                                    </div>
+                                    <div class="panel-body">
+
+                                        <p:commandButton process="@this"
+                                                         onclick="window.open('#{facesContext.externalContext.requestContextPath}/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento=#{EventoClienteMB.evento.id}')"
+                                                         icon="fa fa fa-list" 
+                                                         style="color: #337ab7;font-size: medium;"
+                                                         styleClass="bt-acoes"
+                                                         title="Imprimir Contrato"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+
+                        
+                        
+
+                    </div>
                 </div>
             </div>
         </h:form>
