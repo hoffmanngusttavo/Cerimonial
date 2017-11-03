@@ -9,6 +9,7 @@ import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.EnvolvidoEvento;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.EnvolvidoEventoService;
 import br.com.cerimonial.service.EventoService;
@@ -77,11 +78,11 @@ public class FichaCasamentoMB extends ClienteControl {
             }
 
             if (noivo == null) {
-                noivo = new EnvolvidoEvento();
+                noivo = new EnvolvidoEvento(TipoEnvolvidoEvento.NOIVO);
             }
 
             if (noiva == null) {
-                noiva = new EnvolvidoEvento();
+                noiva = new EnvolvidoEvento(TipoEnvolvidoEvento.NOIVO);
             }
             
             if(noivo.getEndereco() == null){
@@ -205,5 +206,23 @@ public class FichaCasamentoMB extends ClienteControl {
     public void setEvento(Evento evento) {
         this.evento = evento;
     }
+
+    public EnvolvidoEvento getNoivo() {
+        return noivo;
+    }
+
+    public void setNoivo(EnvolvidoEvento noivo) {
+        this.noivo = noivo;
+    }
+
+    public EnvolvidoEvento getNoiva() {
+        return noiva;
+    }
+
+    public void setNoiva(EnvolvidoEvento noiva) {
+        this.noiva = noiva;
+    }
+    
+    
 
 }

@@ -14,8 +14,7 @@ import java.util.List;
  */
 public enum TipoEnvolvidoEvento {
     
-    NOIVO("NOIVO"),
-    NOIVA("NOIVA"),
+    NOIVO("NOIVO(A)"),
     FORMANDO("FORMANDO(A)"),
     ANIVERSARIANTE("ANIVERSARIANTE"),
     FESTEIRO("FESTEIRO(A)");
