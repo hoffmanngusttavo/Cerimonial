@@ -6,6 +6,8 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.EnvolvidoEvento;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EnvolvidoEventoRepository;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
@@ -24,8 +26,8 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class EnvolvidoEventoService extends BasicService<EnvolvidoEvento>{
-    
+public class EnvolvidoEventoService extends BasicService<EnvolvidoEvento> {
+
     private EnvolvidoEventoRepository repository;
 
     @PostConstruct
@@ -54,8 +56,34 @@ public class EnvolvidoEventoService extends BasicService<EnvolvidoEvento>{
 
     @Override
     public boolean isValid(EnvolvidoEvento entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        if (entity == null) {
+            throw new GenericException("Envolvido nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (entity.getTipoEnvolvidoEvento() == null) {
+            throw new GenericException("Tipo do envolvido nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        return true;
+
     }
 
-    
+    /**
+     * Método responsavel por salvar o cadastro dos noivos
+     * @param noivo
+     * @param noiva
+     * @throws java.lang.Exception
+     */
+    public void salvarNoivos(EnvolvidoEvento noivo, EnvolvidoEvento noiva) throws Exception {
+
+        isValid(noiva);
+        isValid(noivo);
+        
+        save(noivo);
+        
+        save(noiva);
+
+    }
+
 }

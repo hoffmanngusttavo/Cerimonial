@@ -5,12 +5,14 @@
  */
 package br.com.cerimonial.controller.mb.cliente;
 
-import br.com.cerimonial.entity.CerimoniaEvento;
+import br.com.cerimonial.entity.Endereco;
+import br.com.cerimonial.entity.EnvolvidoEvento;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Evento;
-import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.service.EnderecoService;
+import br.com.cerimonial.service.EnvolvidoEventoService;
 import br.com.cerimonial.service.EventoService;
+import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,23 +27,30 @@ import javax.faces.model.SelectItem;
  *
  * @author hoffmann
  */
-@ManagedBean(name = "FichaCadastralEventoClienteMB")
+@ManagedBean(name = "FichaCasamentoMB")
 @ViewScoped
-public class FichaCadastralEventoClienteMB extends ClienteControl{
-    
+public class FichaCasamentoMB extends ClienteControl {
+
     protected Long idEvento;
-    
+
     protected Evento evento;
-    
+
+    protected EnvolvidoEvento noivo;
+
+    protected EnvolvidoEvento noiva;
+
     @EJB
     protected EventoService eventoService;
     
+    @EJB
+    protected EnvolvidoEventoService envolvidoEventoService;
+
     @EJB
     protected EnderecoService enderecoService;
 
     protected final SelectItemUtils selectItemUtils;
 
-    public FichaCadastralEventoClienteMB() {
+    public FichaCasamentoMB() {
         this.selectItemUtils = new SelectItemUtils();
     }
 
@@ -50,15 +59,37 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
      */
     public void initEvento() {
         try {
-            
-            evento = eventoService.getEventoLocalizacao(idEvento, cliente);
-           
-            if(evento.getCerimoniaEvento() == null){
-                evento.setCerimoniaEvento(new CerimoniaEvento());
+
+            evento = eventoService.getEventoCasamento(idEvento, cliente);
+
+            if (evento != null) {
+
+                if (CerimonialUtils.isListNotBlank(evento.getEnvolvidos())) {
+
+                    noivo = evento.getEnvolvidos().get(0);
+
+                    if (evento.getEnvolvidos().size() > 1) {
+                        noiva = evento.getEnvolvidos().get(1);
+                    }
+
+                }
+
+            }
+
+            if (noivo == null) {
+                noivo = new EnvolvidoEvento();
+            }
+
+            if (noiva == null) {
+                noiva = new EnvolvidoEvento();
             }
             
-            if(evento.getFestaCerimonia() == null){
-                evento.setFestaCerimonia(new FestaCerimonia());
+            if(noivo.getEndereco() == null){
+                noivo.setEndereco(new Endereco());
+            }
+            
+            if(noiva.getEndereco() == null){
+                noiva.setEndereco(new Endereco());
             }
 
         } catch (Exception ex) {
@@ -75,49 +106,76 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
     public synchronized String save() {
         try {
 
-            eventoService.save(evento);
+            envolvidoEventoService.salvarNoivos(noivo, noiva);
 
             createFacesInfoMessage("Dados gravados com sucesso!");
 
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-            return "/intranet/cliente/evento/partials/ficha-cadastral.xhtml?idEvento=" + idEvento + "&faces-redirect=true";
+            return "/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=" + idEvento + "&faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível salvar o evento "+ex.getMessage());
+            createFacesErrorMessage("Não foi possível salvar o cadastro dos noivos " + ex.getMessage());
         } finally {
             scrollTopMessage();
         }
         return null;
     }
 
-    public void copiarEnderecoCerimonia() {
+    public void buscaCepNoivo() {
         try {
 
-            eventoService.copiarLocalizacaoCerimonia(evento.getCerimoniaEvento(), evento.getFestaCerimonia());
-            
-            createFacesInfoMessage("Copiado com sucesso");
-
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi copiar o local: " + ex.getCause().getMessage());
-        }
-    }
-    
-    public void buscaCepCerimoniaEvento() {
-        try {
-
-            evento.getCerimoniaEvento().setEndereco(enderecoService.buscaCep(evento.getCerimoniaEvento().getEndereco()));
+            noivo.setEndereco(enderecoService.buscaCep(evento.getFestaCerimonia().getEndereco()));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void buscaCepFestaEvento() {
+
+    public void buscaCepNoiva() {
         try {
 
-            evento.getFestaCerimonia().setEndereco(enderecoService.buscaCep(evento.getFestaCerimonia().getEndereco()));
+            noiva.setEndereco(enderecoService.buscaCep(evento.getFestaCerimonia().getEndereco()));
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void adicionarContatoNoivo() {
+        try {
+
+            noivo.adicionarNovoContato();
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void removerContatoNoivo() {
+        try {
+
+            noivo.removerContato(Integer.parseInt("posicaoContatoNoivo"));
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void adicionarContatoNoiva() {
+        try {
+
+            noiva.adicionarNovoContato();
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void removerContatoNoiva() {
+        try {
+
+            noiva.removerContato(Integer.parseInt("posicaoContatoNoiva"));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -131,7 +189,7 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
     public List<SelectItem> getComboEstado() {
         return selectItemUtils.getComboEstado();
     }
-    
+
     public Long getIdEvento() {
         return idEvento;
     }
@@ -148,6 +206,4 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
         this.evento = evento;
     }
 
-    
-    
 }

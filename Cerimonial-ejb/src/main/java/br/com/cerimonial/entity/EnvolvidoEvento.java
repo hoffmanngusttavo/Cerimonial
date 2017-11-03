@@ -5,12 +5,16 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.GrauParentesco;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -39,7 +43,6 @@ import org.hibernate.validator.constraints.br.CPF;
 @Entity
 @Audited
 public class EnvolvidoEvento implements Serializable, ModelInterface {
-    
 
     @Id
     @GeneratedValue(generator = "GENERATE_EnvolvidoEvento", strategy = GenerationType.AUTO)
@@ -50,7 +53,7 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
-    
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private TipoEnvolvidoEvento tipoEnvolvidoEvento = TipoEnvolvidoEvento.NOIVO;
@@ -77,17 +80,14 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
     @Column
     private String telefoneCelular;
 
-    @ManyToOne
-    private Endereco endereco;
-    
-    
-    
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private Endereco endereco = new Endereco();
+
     @ManyToOne
     private Evento evento;
-    
+
     @OneToMany(mappedBy = "envolvidoEvento", fetch = FetchType.LAZY)
     private List<ContatoEnvolvido> contatosFamiliar;
-    
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
@@ -95,7 +95,6 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
-    
     @Override
     public Long getId() {
         return id;
@@ -222,9 +221,27 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
         this.contatosFamiliar = contatosFamiliar;
     }
 
-    
-    
-    
+    public void adicionarNovoContato() {
+
+        if (contatosFamiliar == null) {
+            contatosFamiliar = new ArrayList<>();
+        }
+
+        ContatoEnvolvido contatoEnvolvido = new ContatoEnvolvido();
+        contatoEnvolvido.setGrauParentesco(GrauParentesco.PAI_MAE);
+
+        contatosFamiliar.add(contatoEnvolvido);
+    }
+
+    public void removerContato(int posicao) {
+
+        if (CerimonialUtils.isListNotBlank(contatosFamiliar)) {
+
+            contatosFamiliar.remove(posicao);
+
+        }
+
+    }
 
     @PrePersist
     @Override

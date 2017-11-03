@@ -8,7 +8,6 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.CerimoniaEvento;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Endereco;
-import br.com.cerimonial.entity.EnvolvidoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.entity.OrcamentoEvento;
@@ -274,6 +273,35 @@ public class EventoService extends BasicService<Evento> {
 
         }
 
+        return evento;
+
+    }
+    /**
+     * Vai retornar o evento que pertence a somente esse cliente Carregar em
+     * lazy os noivos
+     *
+     * @param idEvento
+     * @param contratante
+     * @return
+     */
+    public Evento getEventoCasamento(Long idEvento, Pessoa contratante) {
+
+        if (idEvento == null) {
+            throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (contratante == null || contratante.getId() == null) {
+            throw new GenericException("Cliente contratante nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
+
+        if(evento != null){
+             if(evento.getEnvolvidos() != null){
+                 evento.getEnvolvidos().size();
+             }
+        }
+        
         return evento;
 
     }
