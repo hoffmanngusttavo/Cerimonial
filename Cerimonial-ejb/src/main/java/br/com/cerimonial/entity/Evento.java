@@ -104,6 +104,9 @@ public class Evento implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
     private List<EnvolvidoEvento> envolvidos;
     
+    @Column(columnDefinition = "TEXT")
+    private String observacaoEnvolvidos;
+    
     
     @Override
     public Long getId() {
@@ -284,6 +287,15 @@ public class Evento implements Serializable, ModelInterface {
     public void setEnvolvidos(List<EnvolvidoEvento> envolvidos) {
         this.envolvidos = envolvidos;
     }
+
+    public String getObservacaoEnvolvidos() {
+        return observacaoEnvolvidos;
+    }
+
+    public void setObservacaoEnvolvidos(String observacaoEnvolvidos) {
+        this.observacaoEnvolvidos = observacaoEnvolvidos;
+    }
+    
     
     
     

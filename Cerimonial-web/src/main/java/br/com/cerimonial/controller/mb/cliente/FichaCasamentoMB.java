@@ -78,11 +78,11 @@ public class FichaCasamentoMB extends ClienteControl {
             }
 
             if (noivo == null) {
-                noivo = new EnvolvidoEvento(TipoEnvolvidoEvento.NOIVO);
+                noivo = new EnvolvidoEvento(evento, TipoEnvolvidoEvento.NOIVO);
             }
 
             if (noiva == null) {
-                noiva = new EnvolvidoEvento(TipoEnvolvidoEvento.NOIVO);
+                noiva = new EnvolvidoEvento(evento, TipoEnvolvidoEvento.NOIVO);
             }
             
             if(noivo.getEndereco() == null){
@@ -126,7 +126,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public void buscaCepNoivo() {
         try {
 
-            noivo.setEndereco(enderecoService.buscaCep(evento.getFestaCerimonia().getEndereco()));
+            noivo.setEndereco(enderecoService.buscaCep(noivo.getEndereco()));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -136,7 +136,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public void buscaCepNoiva() {
         try {
 
-            noiva.setEndereco(enderecoService.buscaCep(evento.getFestaCerimonia().getEndereco()));
+            noiva.setEndereco(enderecoService.buscaCep(noiva.getEndereco()));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

@@ -64,6 +64,10 @@ public class EnvolvidoEventoService extends BasicService<EnvolvidoEvento> {
         if (entity.getTipoEnvolvidoEvento() == null) {
             throw new GenericException("Tipo do envolvido nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
+        
+        if (entity.getEvento() == null) {
+            throw new GenericException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
 
         return true;
 
@@ -77,9 +81,6 @@ public class EnvolvidoEventoService extends BasicService<EnvolvidoEvento> {
      */
     public void salvarNoivos(EnvolvidoEvento noivo, EnvolvidoEvento noiva) throws Exception {
 
-        isValid(noiva);
-        isValid(noivo);
-        
         save(noivo);
         
         save(noiva);

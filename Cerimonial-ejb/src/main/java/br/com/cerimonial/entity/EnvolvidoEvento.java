@@ -221,7 +221,8 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
         this.contatosFamiliar = contatosFamiliar;
     }
 
-    public EnvolvidoEvento(TipoEnvolvidoEvento tipoEnvolvidoEvento) {
+    public EnvolvidoEvento(Evento evento, TipoEnvolvidoEvento tipoEnvolvidoEvento) {
+        this.evento = evento;
         this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
     }
 
