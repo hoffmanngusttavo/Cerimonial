@@ -73,18 +73,6 @@ public class EnvolvidoEventoService extends BasicService<EnvolvidoEvento> {
 
     }
 
-    /**
-     * Método responsavel por salvar o cadastro dos noivos
-     * @param noivo
-     * @param noiva
-     * @throws java.lang.Exception
-     */
-    public void salvarNoivos(EnvolvidoEvento noivo, EnvolvidoEvento noiva) throws Exception {
-
-        save(noivo);
-        
-        save(noiva);
-
-    }
+    
 
 }

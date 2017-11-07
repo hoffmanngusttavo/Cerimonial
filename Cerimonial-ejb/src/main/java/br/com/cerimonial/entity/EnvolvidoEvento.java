@@ -79,6 +79,16 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
 
     @Column
     private String telefoneCelular;
+    
+    @Column
+    private String profissao;
+    
+    @Column(columnDefinition = "TEXT")
+    private String observacao;
+    
+    @Column
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataNascimento;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Endereco endereco = new Endereco();
@@ -220,6 +230,32 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
     public void setContatosFamiliar(List<ContatoEnvolvido> contatosFamiliar) {
         this.contatosFamiliar = contatosFamiliar;
     }
+
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getProfissao() {
+        return profissao;
+    }
+
+    public void setProfissao(String profissao) {
+        this.profissao = profissao;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+    
+    
 
     public EnvolvidoEvento(Evento evento, TipoEnvolvidoEvento tipoEnvolvidoEvento) {
         this.evento = evento;

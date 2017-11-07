@@ -5,6 +5,8 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.TipoEnvolvido;
+import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -56,19 +58,19 @@ public class Evento implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataInicio;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataTermino;
-    
+
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date horaInicio;
-    
+
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date horaTermino;
-    
+
     @Column
     @Min(1)
     private Integer quantidadeConvidados;
@@ -78,7 +80,7 @@ public class Evento implements Serializable, ModelInterface {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private OrcamentoEvento orcamentoEvento;
-    
+
     @NotNull(message = "O tipo de evento não pode ser nulo")
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoEvento tipoEvento;
@@ -94,20 +96,19 @@ public class Evento implements Serializable, ModelInterface {
 
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
     private List<ContratoEvento> contratos;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private CerimoniaEvento cerimoniaEvento;
-    
-    @ManyToOne(fetch = FetchType.LAZY,  cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private FestaCerimonia festaCerimonia;
-    
+
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
     private List<EnvolvidoEvento> envolvidos;
-    
+
     @Column(columnDefinition = "TEXT")
     private String observacaoEnvolvidos;
-    
-    
+
     @Override
     public Long getId() {
         return id;
@@ -218,7 +219,6 @@ public class Evento implements Serializable, ModelInterface {
         this.quantidadeConvidados = quantidadeConvidados;
     }
 
-
     public TipoEvento getTipoEvento() {
         return tipoEvento;
     }
@@ -243,8 +243,6 @@ public class Evento implements Serializable, ModelInterface {
         this.festaCerimonia = festaCerimonia;
     }
 
-    
-    
     public ContratoEvento getContrato() {
 
         if (CerimonialUtils.isListNotBlank(contratos)) {
@@ -295,11 +293,7 @@ public class Evento implements Serializable, ModelInterface {
     public void setObservacaoEnvolvidos(String observacaoEnvolvidos) {
         this.observacaoEnvolvidos = observacaoEnvolvidos;
     }
-    
-    
-    
-    
-    
+
     @PrePersist
     @Override
     public void prePersistEntity() {
@@ -358,6 +352,54 @@ public class Evento implements Serializable, ModelInterface {
     @Override
     public String toString() {
         return "Evento{" + "id=" + id + '}';
+    }
+
+    public EnvolvidoEvento getTipoEnvolvidoEvento(TipoEnvolvidoEvento tipo) {
+
+        if (tipo != null) {
+
+            switch (tipo) {
+                case NOIVO:
+                    return getNoivo();
+
+                case NOIVA:
+                    return getNoiva();
+
+                default:
+                    return getNoivo();
+            }
+        }
+
+        return null;
+
+    }
+
+    public EnvolvidoEvento getNoivo() {
+
+        if (CerimonialUtils.isListNotBlank(envolvidos)) {
+
+            for (EnvolvidoEvento env : envolvidos) {
+                if (env != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.NOIVO)) {
+                    return env;
+                }
+            }
+
+        }
+
+        return null;
+
+    }
+
+    public EnvolvidoEvento getNoiva() {
+
+        for (EnvolvidoEvento env : envolvidos) {
+            if (env != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.NOIVA)) {
+                return env;
+            }
+        }
+
+        return null;
+
     }
 
 }

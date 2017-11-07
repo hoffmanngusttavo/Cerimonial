@@ -5,6 +5,8 @@
  */
 package br.com.cerimonial.enums;
 
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,15 +16,17 @@ import java.util.List;
  */
 public enum TipoEnvolvidoEvento {
     
-    NOIVO("NOIVO(A)"),
-    FORMANDO("FORMANDO(A)"),
-    ANIVERSARIANTE("ANIVERSARIANTE"),
-    FESTEIRO("FESTEIRO(A)");
-    
+    NOIVO(0,"NOIVO(A)"),
+    NOIVA(1,"NOIVO(A)"),
+    FORMANDO(2,"FORMANDO(A)"),
+    ANIVERSARIANTE(3,"ANIVERSARIANTE"),
+    FESTEIRO(4,"FESTEIRO(A)");
 
     private String label;
+    private int codigo;
 
-    private TipoEnvolvidoEvento(String label) {
+    private TipoEnvolvidoEvento(int codigo, String label) {
+        this.codigo = codigo;
         this.label = label;
     }
 
@@ -34,8 +38,36 @@ public enum TipoEnvolvidoEvento {
         this.label = label;
     }
 
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+    
+    
+
     public static List<TipoEnvolvidoEvento> getList() {
         return Arrays.asList(values());
+    }
+    
+    public static TipoEnvolvidoEvento getTipoByCode(Integer tipoEnvolvido) {
+        
+        if(tipoEnvolvido == null){
+            throw new GenericException("Não foi possível carregar tipo de envolvido do evento, código nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        for(TipoEnvolvidoEvento tipo : getList()){
+            
+            if(tipo.getCodigo() == tipoEnvolvido){
+                return tipo;
+            }
+            
+        }
+        
+        return null;
+        
     }
     
 }

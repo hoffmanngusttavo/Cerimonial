@@ -64,11 +64,43 @@
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
-                                        Ficha Cadastral Envolvidos
+                                        Ficha Cadastral Noivo
                                     </h3>
                                 </div>
                                 <div class="panel-body">
-                                    <p:link href="/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                    <p:link href="/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=#{EventoClienteMB.evento.id}&amp;tipoEnvolvido=0">
+                                        <i class="fa fa-users"></i>
+                                        <span></span>
+                                    </p:link>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class=" form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Ficha Cadastral Noiva
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <p:link href="/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=#{EventoClienteMB.evento.id}&amp;tipoEnvolvido=1">
+                                        <i class="fa fa-users"></i>
+                                        <span></span>
+                                    </p:link>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class=" form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Ficha Complementar Casal
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <p:link href="/intranet/cliente/evento/partials/ficha-complementar-casal.xhtml?idEvento=#{EventoClienteMB.evento.id}">
                                         <i class="fa fa-users"></i>
                                         <span></span>
                                     </p:link>

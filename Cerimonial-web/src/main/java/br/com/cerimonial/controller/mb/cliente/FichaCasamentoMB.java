@@ -33,12 +33,12 @@ import javax.faces.model.SelectItem;
 public class FichaCasamentoMB extends ClienteControl {
 
     protected Long idEvento;
+    
+    protected Integer tipoEnvolvido;
 
     protected Evento evento;
 
-    protected EnvolvidoEvento noivo;
-
-    protected EnvolvidoEvento noiva;
+    protected EnvolvidoEvento envolvido;
 
     @EJB
     protected EventoService eventoService;
@@ -67,33 +67,24 @@ public class FichaCasamentoMB extends ClienteControl {
 
                 if (CerimonialUtils.isListNotBlank(evento.getEnvolvidos())) {
 
-                    noivo = evento.getEnvolvidos().get(0);
-
-                    if (evento.getEnvolvidos().size() > 1) {
-                        noiva = evento.getEnvolvidos().get(1);
-                    }
+                    envolvido = evento.getTipoEnvolvidoEvento(TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
 
                 }
 
             }
 
-            if (noivo == null) {
-                noivo = new EnvolvidoEvento(evento, TipoEnvolvidoEvento.NOIVO);
+            if (envolvido == null) {
+                envolvido = new EnvolvidoEvento(evento, TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
             }
 
-            if (noiva == null) {
-                noiva = new EnvolvidoEvento(evento, TipoEnvolvidoEvento.NOIVO);
+            if(envolvido.getEndereco() == null){
+                envolvido.setEndereco(new Endereco());
             }
             
-            if(noivo.getEndereco() == null){
-                noivo.setEndereco(new Endereco());
-            }
             
-            if(noiva.getEndereco() == null){
-                noiva.setEndereco(new Endereco());
-            }
 
         } catch (Exception ex) {
+            envolvido = new EnvolvidoEvento();
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
         }
@@ -107,13 +98,13 @@ public class FichaCasamentoMB extends ClienteControl {
     public synchronized String save() {
         try {
 
-            envolvidoEventoService.salvarNoivos(noivo, noiva);
+            envolvidoEventoService.save(envolvido);
 
             createFacesInfoMessage("Dados gravados com sucesso!");
 
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-            return "/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=" + idEvento + "&faces-redirect=true";
+            return "/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=" + idEvento + "&tipoEnvolvido="+tipoEnvolvido+"&faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível salvar o cadastro dos noivos " + ex.getMessage());
@@ -126,17 +117,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public void buscaCepNoivo() {
         try {
 
-            noivo.setEndereco(enderecoService.buscaCep(noivo.getEndereco()));
-
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void buscaCepNoiva() {
-        try {
-
-            noiva.setEndereco(enderecoService.buscaCep(noiva.getEndereco()));
+            envolvido.setEndereco(enderecoService.buscaCep(envolvido.getEndereco()));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -146,7 +127,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public void adicionarContatoNoivo() {
         try {
 
-            noivo.adicionarNovoContato();
+            envolvido.adicionarNovoContato();
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -156,27 +137,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public void removerContatoNoivo() {
         try {
 
-            noivo.removerContato(Integer.parseInt("posicaoContatoNoivo"));
-
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void adicionarContatoNoiva() {
-        try {
-
-            noiva.adicionarNovoContato();
-
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void removerContatoNoiva() {
-        try {
-
-            noiva.removerContato(Integer.parseInt("posicaoContatoNoiva"));
+            envolvido.removerContato(Integer.parseInt("posicaoContatoNoivo"));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -207,22 +168,22 @@ public class FichaCasamentoMB extends ClienteControl {
         this.evento = evento;
     }
 
-    public EnvolvidoEvento getNoivo() {
-        return noivo;
+    public EnvolvidoEvento getEnvolvido() {
+        return envolvido;
     }
 
-    public void setNoivo(EnvolvidoEvento noivo) {
-        this.noivo = noivo;
+    public void setEnvolvido(EnvolvidoEvento envolvido) {
+        this.envolvido = envolvido;
     }
 
-    public EnvolvidoEvento getNoiva() {
-        return noiva;
+    public Integer getTipoEnvolvido() {
+        return tipoEnvolvido;
     }
 
-    public void setNoiva(EnvolvidoEvento noiva) {
-        this.noiva = noiva;
+    public void setTipoEnvolvido(Integer tipoEnvolvido) {
+        this.tipoEnvolvido = tipoEnvolvido;
     }
-    
+
     
 
 }
