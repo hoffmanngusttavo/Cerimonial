@@ -59,17 +59,10 @@
 
                             <div class="form-group col-md-12" id="div-inptComplementar">
 
-                                <p:inputTextarea id="inptComplementar" 
-                                                 value="#{FichaComplementarMB.evento.observacaoEnvolvidos}"
-                                                 style="min-height: 150px;"
-                                                 required="true"
-                                                 requiredMessage="Preencha a ficha corretamente"
-                                                 maxlength="500"
-                                                 counterTemplate="{0} caracteres restantes"
-                                                 counter="display"
-                                                 class="form-control"
-                                                 label="Nome"/>
-                                <h:outputText id="display" />
+                                <p:editor id="inptComplementar" 
+                                          value="#{FichaComplementarMB.evento.observacaoEnvolvidos}"
+                                          required="true"
+                                          requiredMessage="Preencha a ficha corretamente"/>
 
                             </div>
 

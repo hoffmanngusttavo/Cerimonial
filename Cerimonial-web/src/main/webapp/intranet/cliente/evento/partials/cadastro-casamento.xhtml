@@ -31,7 +31,7 @@
                             <h3 class="panel-title">
                                 <p:link href="/intranet/cliente/evento/form.xhtml?id=#{FichaCasamentoMB.evento.id}">
                                     <i class="fa fa-list"></i>
-                                    <span>#{FichaCasamentoMB.evento.nome} -  Ficha Cadastral</span>
+                                    <span>#{FichaCasamentoMB.evento.nome} -  Ficha Cadastral Noivo(a)</span>
                                 </p:link>
                             </h3>
                         </div>
@@ -46,12 +46,6 @@
 
 
             <div class="row">
-
-                <div class="form-group col-md-12">
-                    <fieldset>
-                        <legend>Noivo(a)</legend>
-                    </fieldset>
-                </div>
 
                 <div class="form-group col-md-6">
 
@@ -88,7 +82,7 @@
                                 <p:inputMask mask="999.999.999-99"
                                              value="#{FichaCasamentoMB.envolvido.cpf}"
                                              required="true"
-                                             requiredMessage="Preencha um cpf da envolvido válido"
+                                             requiredMessage="Preencha um cpf válido"
                                              id="inptCpfNoiva"
                                              class="form-control"
                                              label="Cpf"/>
@@ -121,6 +115,8 @@
                                             id="dataNascimentoNoiva" 
                                             value="#{FichaCasamentoMB.envolvido.dataNascimento}" 
                                             navigator="true"
+                                            required="true"
+                                            requiredMessage="Preencha a data de nascimento"
                                             showOn="button"
                                             locale="pt"
                                             timeZone="#{initParam.timezone}">
@@ -359,6 +355,9 @@
                         </div>
                     </div>
                 </div>
+
+                
+                <ui:include src="./contatos-casamento.xhtml" />
 
                 <div class="form-group col-md-12">
                     <p:commandButton value="Salvar"

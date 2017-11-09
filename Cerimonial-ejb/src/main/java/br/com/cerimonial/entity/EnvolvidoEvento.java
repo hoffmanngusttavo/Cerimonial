@@ -7,6 +7,8 @@ package br.com.cerimonial.entity;
 
 import br.com.cerimonial.enums.GrauParentesco;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -268,14 +270,15 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
     
     
 
-    public void adicionarNovoContato() {
+    public void adicionarNovoContato(ContatoEnvolvido contatoEnvolvido) {
 
+        if(contatoEnvolvido == null){
+             throw new GenericException("Contato Envolvido nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
         if (contatosFamiliar == null) {
             contatosFamiliar = new ArrayList<>();
         }
-
-        ContatoEnvolvido contatoEnvolvido = new ContatoEnvolvido();
-        contatoEnvolvido.setGrauParentesco(GrauParentesco.PAI_MAE);
 
         contatosFamiliar.add(contatoEnvolvido);
     }

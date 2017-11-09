@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.controller.mb.cliente;
 
+import br.com.cerimonial.entity.ContatoEnvolvido;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.EnvolvidoEvento;
 import br.com.cerimonial.entity.Estado;
@@ -39,6 +40,8 @@ public class FichaCasamentoMB extends ClienteControl {
     protected Evento evento;
 
     protected EnvolvidoEvento envolvido;
+    
+    protected ContatoEnvolvido contato;
 
     @EJB
     protected EventoService eventoService;
@@ -124,10 +127,20 @@ public class FichaCasamentoMB extends ClienteControl {
         }
     }
 
-    public void adicionarContatoNoivo() {
+    public void salvarContato() {
         try {
 
-            envolvido.adicionarNovoContato();
+            envolvido.adicionarNovoContato(contato);
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void criarNovoContato() {
+        try {
+
+            contato = new ContatoEnvolvido();
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -182,6 +195,14 @@ public class FichaCasamentoMB extends ClienteControl {
 
     public void setTipoEnvolvido(Integer tipoEnvolvido) {
         this.tipoEnvolvido = tipoEnvolvido;
+    }
+
+    public ContatoEnvolvido getContato() {
+        return contato;
+    }
+
+    public void setContato(ContatoEnvolvido contato) {
+        this.contato = contato;
     }
 
     

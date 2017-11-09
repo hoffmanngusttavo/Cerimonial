@@ -45,97 +45,80 @@
                 </div>
             </div>
 
+
             <div class="row">
+
                 <div class="form-group col-md-6">
-                    <h2>Orçamento Aprovado</h2>
+                    <label>Tipo de Evento</label>
+
+                    <p:inputText value="#{OrcamentoEventoClienteMB.orcamento.contatoEvento.tipoEvento.nome}" 
+                                 class="form-control"
+                                 disabled="true"
+                                 label="Email"/>
+
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label ">Modelo de Propostas</label>
+
+                    <p:inputText value="#{OrcamentoEventoClienteMB.orcamento.modeloProposta.titulo}" 
+                                 disabled="true"
+                                 class="form-control"/>
                 </div>
             </div>
-            <h:panelGroup id="groupOrcamento">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label>Tipo de Evento
-                            <span class="asteriskField">
-                                *
-                            </span>
-                        </label>
-                        <p:inputText value="#{OrcamentoEventoClienteMB.orcamento.contatoEvento.tipoEvento.nome}" 
-                                     class="form-control"
-                                     disabled="true"
-                                     label="Email"/>
 
-                    </div>
 
-                    <div class="form-group col-md-6">
-                        <label class="control-label ">Modelo de Propostas
-                            <span class="asteriskField">
-                                *
-                            </span>
-                        </label>
-
-                        <p:inputText value="#{OrcamentoEventoClienteMB.orcamento.modeloProposta.titulo}" 
-                                     disabled="true"
-                                     class="form-control"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label>Valor
-                            <span class="asteriskField">
-                                *
-                            </span>
-                        </label>
-                        <h:panelGroup>
-                            <p:inputText value="#{OrcamentoEventoClienteMB.orcamento.valorFinal}" 
-                                         disabled="true"
-                                         class="form-control">
-                                <f:convertNumber maxFractionDigits="2"
-                                                 minFractionDigits="2"
-                                                 locale="pt_BR"/>
-                            </p:inputText>
-                        </h:panelGroup>
-                    </div>
-
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Valor</label>
+                    <p:inputText value="#{OrcamentoEventoClienteMB.orcamento.valorFinal}" 
+                                 disabled="true"
+                                 class="form-control">
+                        <f:convertNumber maxFractionDigits="2"
+                                         minFractionDigits="2"
+                                         locale="pt_BR"/>
+                    </p:inputText>
                 </div>
 
                 <h:panelGroup rendered="#{OrcamentoEventoClienteMB.orcamento.arquivo != null}">
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label style="width: 100%;">Anexo
-                                <span class="asteriskField">
-                                    *
-                                </span>
-                            </label>
-                            <p:commandButton icon="fa fa-download" 
-                                             styleClass="bt-acoes"
-                                             process="@this"
-                                             title="Baixar Arquivo"
-                                             actionListener="#{OrcamentoEventoClienteMB.baixarArquivoOrcamento()}"
-                                             ajax="false"
-                                             rendered="#{OrcamentoEventoClienteMB.orcamento.arquivo.id != null}"
-                                             immediate="true"
-                                             onstart="PF('statusDialog').show();"
-                                             oncomplete="PF('statusDialog').hide();"/>
 
-                            <label>#{OrcamentoEventoClienteMB.orcamento.arquivo.nome}</label>
+                    <div class="form-group col-md-6">
+                        <label style="width: 100%;">Anexo</label>
+                        
+                        <p:commandButton icon="fa fa-download" 
+                                         styleClass="bt-acoes"
+                                         process="@this"
+                                         title="Baixar Arquivo"
+                                         actionListener="#{OrcamentoEventoClienteMB.baixarArquivoOrcamento()}"
+                                         ajax="false"
+                                         rendered="#{OrcamentoEventoClienteMB.orcamento.arquivo.id != null}"
+                                         immediate="true"
+                                         onstart="PF('statusDialog').show();"
+                                         oncomplete="PF('statusDialog').hide();"/>
 
-                        </div>
+                        <label>#{OrcamentoEventoClienteMB.orcamento.arquivo.nome}</label>
+
                     </div>
+
                 </h:panelGroup>
 
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="control-label ">Conteúdo
-                            <span class="asteriskField">
-                                *
-                            </span>
-                        </label>
-                        <p:editor value="#{OrcamentoEventoClienteMB.orcamento.proposta}"
-                                  disabled="true"/>
-                    </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label class="control-label ">Conteúdo
+                        <span class="asteriskField">
+                            *
+                        </span>
+                    </label>
+                    <p:editor value="#{OrcamentoEventoClienteMB.orcamento.proposta}"
+                              disabled="true"/>
                 </div>
+            </div>
 
 
-            </h:panelGroup>
 
 
         </h:form>

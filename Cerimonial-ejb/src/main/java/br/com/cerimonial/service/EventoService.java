@@ -298,7 +298,13 @@ public class EventoService extends BasicService<Evento> {
 
         if(evento != null){
              if(evento.getEnvolvidos() != null){
+                 
                  evento.getEnvolvidos().size();
+                 
+                 evento.getEnvolvidos().stream().filter((envolvido) -> 
+                         (envolvido.getContatosFamiliar() != null)).forEach((envolvido) -> {
+                     envolvido.getContatosFamiliar().size();
+                 });
              }
         }
         
