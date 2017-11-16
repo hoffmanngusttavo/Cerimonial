@@ -5,7 +5,6 @@
  */
 package br.com.cerimonial.entity;
 
-import br.com.cerimonial.enums.GrauParentesco;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
@@ -34,6 +33,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.br.CPF;
@@ -98,7 +98,7 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
     @ManyToOne
     private Evento evento;
 
-    @OneToMany(mappedBy = "envolvidoEvento", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "envolvidoEvento", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<ContatoEnvolvido> contatosFamiliar;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -276,18 +276,44 @@ public class EnvolvidoEvento implements Serializable, ModelInterface {
              throw new GenericException("Contato Envolvido nulo", ErrorCode.BAD_REQUEST.getCode());
         }
         
+        if(StringUtils.isBlank(contatoEnvolvido.getNome())){
+             throw new GenericException("Contato deve possuir pelo menos um nome", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
         if (contatosFamiliar == null) {
             contatosFamiliar = new ArrayList<>();
         }
 
         contatosFamiliar.add(contatoEnvolvido);
     }
+    
+    
+    public void editarContato(ContatoEnvolvido contatoEnvolvido, int posicao) {
 
-    public void removerContato(int posicao) {
+        if(contatoEnvolvido == null){
+             throw new GenericException("Contato Envolvido nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(StringUtils.isBlank(contatoEnvolvido.getNome())){
+             throw new GenericException("Contato deve possuir pelo menos um nome", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (contatosFamiliar == null) {
+            contatosFamiliar = new ArrayList<>();
+        }
 
+        contatosFamiliar.set(posicao, contatoEnvolvido);
+    }
+
+    public void removerContato(Integer posicao) {
+
+        if(posicao == null){
+            throw new GenericException("Posição do contato não pode ser nula", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
         if (CerimonialUtils.isListNotBlank(contatosFamiliar)) {
 
-            contatosFamiliar.remove(posicao);
+            contatosFamiliar.remove(posicao.intValue());
 
         }
 

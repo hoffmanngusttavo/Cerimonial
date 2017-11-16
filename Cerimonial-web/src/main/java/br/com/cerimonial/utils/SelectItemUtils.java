@@ -12,6 +12,7 @@ import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.StatusContato;
 import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.enums.CategoriaEvento;
+import br.com.cerimonial.enums.GrauParentesco;
 import br.com.cerimonial.enums.TipoEmail;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.service.CategoriaFornecedorService;
@@ -37,6 +38,14 @@ public class SelectItemUtils {
     public static List<SelectItem> getComboTipoPessoa() {
         List<SelectItem> items = new LinkedList<>();
         TipoPessoa.getList().stream().forEach((item) -> {
+            items.add(new SelectItem(item, item.getLabel()));
+        });
+        return items;
+    }
+    
+    public static List<SelectItem> getComboGrauParentesco() {
+        List<SelectItem> items = new LinkedList<>();
+        GrauParentesco.getList().stream().forEach((item) -> {
             items.add(new SelectItem(item, item.getLabel()));
         });
         return items;

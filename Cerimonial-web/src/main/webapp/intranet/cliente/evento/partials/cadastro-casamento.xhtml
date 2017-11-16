@@ -47,317 +47,323 @@
 
             <div class="row">
 
-                <div class="form-group col-md-6">
+                <h:panelGroup id="groupForm">
 
-                    <fieldset>
-                        <legend>Dados Pessoais</legend>
-                    </fieldset>
 
-                    <div class="row">
 
-                        <div class="col-lg-12 col-md-12">
+                    <div class="form-group col-md-6">
 
-                            <div class="form-group col-md-12" id="div-inptNomeNoiva">
-                                <label>Nome Completo
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
+                        <fieldset>
+                            <legend>Dados Pessoais</legend>
+                        </fieldset>
 
-                                <p:inputText id="inptNomeNoiva" 
-                                             value="#{FichaCasamentoMB.envolvido.nome}" 
-                                             required="true"
-                                             class="form-control"
-                                             label="Nome"/>
+                        <div class="row">
 
-                            </div>
+                            <div class="col-lg-12 col-md-12">
 
-                            <div class="form-group col-md-6" id="div-inptCpfNoiva">
-                                <label class="control-label ">Cpf
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
+                                <div class="form-group col-md-12" id="div-inptNomeNoiva">
+                                    <label>Nome Completo
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
 
-                                <p:inputMask mask="999.999.999-99"
-                                             value="#{FichaCasamentoMB.envolvido.cpf}"
-                                             required="true"
-                                             requiredMessage="Preencha um cpf válido"
-                                             id="inptCpfNoiva"
-                                             class="form-control"
-                                             label="Cpf"/>
-                            </div>
+                                    <p:inputText id="inptNomeNoiva" 
+                                                 value="#{FichaCasamentoMB.envolvido.nome}" 
+                                                 required="true"
+                                                 class="form-control"
+                                                 label="Nome"/>
 
-                            <div class="form-group col-md-6" id="div-inptRgNoiva">
-                                <label class="control-label ">Rg
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
+                                </div>
 
-                                <p:inputText value="#{FichaCasamentoMB.envolvido.rg}"
-                                             required="true"
-                                             id="inptRgNoiva"
-                                             requiredMessage="Preencha um rg válido"
-                                             class="form-control"
-                                             label="Rg"/>
-                            </div>
+                                <div class="form-group col-md-6" id="div-inptCpfNoiva">
+                                    <label class="control-label ">Cpf
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
 
-                            <div class="form-group col-md-6" id="div-dataNascimentoNoiva">
-                                <label>Data de Nascimento
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
+                                    <p:inputMask mask="999.999.999-99"
+                                                 value="#{FichaCasamentoMB.envolvido.cpf}"
+                                                 required="true"
+                                                 requiredMessage="Preencha um cpf válido"
+                                                 id="inptCpfNoiva"
+                                                 class="form-control"
+                                                 label="Cpf"/>
+                                </div>
 
-                                <p:calendar pattern="dd/MM/yyyy"
-                                            mask="true" 
-                                            id="dataNascimentoNoiva" 
-                                            value="#{FichaCasamentoMB.envolvido.dataNascimento}" 
-                                            navigator="true"
-                                            required="true"
-                                            requiredMessage="Preencha a data de nascimento"
-                                            showOn="button"
-                                            locale="pt"
-                                            timeZone="#{initParam.timezone}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"
-                                                       locale="pt_BR"
-                                                       timeZone="#{initParam.timezone}"/>
-                                </p:calendar>
+                                <div class="form-group col-md-6" id="div-inptRgNoiva">
+                                    <label class="control-label ">Rg
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
 
-                            </div>
+                                    <p:inputText value="#{FichaCasamentoMB.envolvido.rg}"
+                                                 required="true"
+                                                 id="inptRgNoiva"
+                                                 requiredMessage="Preencha um rg válido"
+                                                 class="form-control"
+                                                 label="Rg"/>
+                                </div>
 
-                            <div class="form-group col-md-6" id="div-inptProfissaoNoiva">
-                                <label class="control-label ">Profissão
-                                </label>
+                                <div class="form-group col-md-6" id="div-dataNascimentoNoiva">
+                                    <label>Data de Nascimento
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
 
-                                <p:inputText value="#{FichaCasamentoMB.envolvido.profissao}"
-                                             id="inptProfissaoNoiva"
-                                             class="form-control"
-                                             label="Profissão"/>
-                            </div>
+                                    <p:calendar pattern="dd/MM/yyyy"
+                                                mask="true" 
+                                                id="dataNascimentoNoiva" 
+                                                value="#{FichaCasamentoMB.envolvido.dataNascimento}" 
+                                                navigator="true"
+                                                required="true"
+                                                requiredMessage="Preencha a data de nascimento"
+                                                showOn="button"
+                                                locale="pt"
+                                                timeZone="#{initParam.timezone}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"
+                                                           locale="pt_BR"
+                                                           timeZone="#{initParam.timezone}"/>
+                                    </p:calendar>
 
-                            <div class="form-group col-md-12" id="div-inptEmailNoiva">
-                                <label>E-mail
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
+                                </div>
 
-                                <p:inputText id="inptEmailNoiva" 
-                                             value="#{FichaCasamentoMB.envolvido.email}" 
-                                             class="form-control"
-                                             required="true"
-                                             requiredMessage="Preencha um e-mail válido"
-                                             placeholder="Ex: teste@teste.com"
-                                             label="Email">
-                                    <f:validator validatorId="EmailValidate"/>
-                                </p:inputText>
-                            </div>
+                                <div class="form-group col-md-6" id="div-inptProfissaoNoiva">
+                                    <label class="control-label ">Profissão
+                                    </label>
 
-                            <div class="form-group col-md-6" id="div-inptTelefone1Noiva">
-                                <label>Telefone Residencial
-                                </label>
+                                    <p:inputText value="#{FichaCasamentoMB.envolvido.profissao}"
+                                                 id="inptProfissaoNoiva"
+                                                 class="form-control"
+                                                 label="Profissão"/>
+                                </div>
 
-                                <p:inputMask value="#{FichaCasamentoMB.envolvido.telefoneResidencial}"
-                                             mask="(99) 99999-9999"
-                                             class="form-control"
-                                             id="inptTelefone1Noiva"
-                                             label="Telefone Residencial"/>
-                            </div>
+                                <div class="form-group col-md-12" id="div-inptEmailNoiva">
+                                    <label>E-mail
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
 
-                            <div class="form-group col-md-6" id="div-inptTelefone2Noiva">
-                                <label>Telefone Celular
-                                </label>
+                                    <p:inputText id="inptEmailNoiva" 
+                                                 value="#{FichaCasamentoMB.envolvido.email}" 
+                                                 class="form-control"
+                                                 required="true"
+                                                 requiredMessage="Preencha um e-mail válido"
+                                                 placeholder="Ex: teste@teste.com"
+                                                 label="Email">
+                                        <f:validator validatorId="EmailValidate"/>
+                                    </p:inputText>
+                                </div>
 
-                                <p:inputMask value="#{FichaCasamentoMB.envolvido.telefoneCelular}"
-                                             mask="(99) 99999-9999"
-                                             class="form-control"
-                                             id="inptTelefone2Noiva"
-                                             label="Telefone Celular"/>
-                            </div>
+                                <div class="form-group col-md-6" id="div-inptTelefone1Noiva">
+                                    <label>Telefone Residencial
+                                    </label>
 
-                            <div class="form-group col-md-6">
-                                <label class="control-label ">Facebook
-                                </label>
+                                    <p:inputMask value="#{FichaCasamentoMB.envolvido.telefoneResidencial}"
+                                                 mask="(99) 99999-9999"
+                                                 class="form-control"
+                                                 id="inptTelefone1Noiva"
+                                                 label="Telefone Residencial"/>
+                                </div>
 
-                                <p:inputText id="inptFaceNoiva" 
-                                             class="form-control"
-                                             value="#{FichaCasamentoMB.envolvido.facebook}" 
-                                             label="Facebook"/>
-                            </div>
+                                <div class="form-group col-md-6" id="div-inptTelefone2Noiva">
+                                    <label>Telefone Celular
+                                    </label>
 
-                            <div class="form-group col-md-6">
-                                <label class="control-label ">Instagram
-                                </label>
+                                    <p:inputMask value="#{FichaCasamentoMB.envolvido.telefoneCelular}"
+                                                 mask="(99) 99999-9999"
+                                                 class="form-control"
+                                                 id="inptTelefone2Noiva"
+                                                 label="Telefone Celular"/>
+                                </div>
 
-                                <p:inputText id="inptInstaNoiva" 
-                                             class="form-control"
-                                             value="#{FichaCasamentoMB.envolvido.instagram}" 
-                                             label="Instagram"/>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label ">Facebook
+                                    </label>
+
+                                    <p:inputText id="inptFaceNoiva" 
+                                                 class="form-control"
+                                                 value="#{FichaCasamentoMB.envolvido.facebook}" 
+                                                 label="Facebook"/>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class="control-label ">Instagram
+                                    </label>
+
+                                    <p:inputText id="inptInstaNoiva" 
+                                                 class="form-control"
+                                                 value="#{FichaCasamentoMB.envolvido.instagram}" 
+                                                 label="Instagram"/>
+                                </div>
+
                             </div>
 
                         </div>
 
                     </div>
 
-                </div>
+                    <div class="form-group col-md-6">
 
-                <div class="form-group col-md-6">
+                        <fieldset>
+                            <legend>Endereço</legend>
+                        </fieldset>
 
-                    <fieldset>
-                        <legend>Endereço</legend>
-                    </fieldset>
+                        <div class="row">
 
-                    <div class="row">
+                            <div class="col-lg-12 col-md-12">
 
-                        <div class="col-lg-12 col-md-12">
+                                <h:panelGroup id="enderecoGroupNoiva">
 
-                            <h:panelGroup id="enderecoGroupNoiva">
+                                    <div class="form-group col-md-6" id="div-inptCepNoiva">
+                                        <label>Cep
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
 
-                                <div class="form-group col-md-6" id="div-inptCepNoiva">
-                                    <label>Cep
-                                        <span class="asteriskField">
-                                            *
-                                        </span>
-                                    </label>
-
-                                    <p:inputMask mask="99.999-999"
-                                                 value="#{FichaCasamentoMB.envolvido.endereco.cep}"
-                                                 required="true"
-                                                 requiredMessage="Preencha um cep válido"
-                                                 class="form-control"
-                                                 id="inptCepNoiva"
-                                                 label="Cep">
-                                        <p:ajax id="eventCepFesta" 
-                                                event="change" 
-                                                listener="#{FichaCasamentoMB.buscaCepNoivo()}" 
-                                                process="@this"
-                                                update="enderecoGroupNoiva"
-                                                onstart="PF('statusDialog').show();"
-                                                oncomplete="PF('statusDialog').hide();"
-                                                partialSubmit="true"/>
-                                    </p:inputMask>
-
-                                </div>
-
-                                <div class="form-group col-md-6" id="div-inptBairroNoiva">
-                                    <label>Bairro
-                                        <span class="asteriskField">
-                                            *
-                                        </span>
-                                    </label>
-
-                                    <p:inputText id="inptBairroNoiva" 
-                                                 value="#{FichaCasamentoMB.envolvido.endereco.bairro}" 
-                                                 required="true"
-                                                 requiredMessage="Preencha um bairro válido"
-                                                 class="form-control"
-                                                 label="Bairro"/>
-
-                                </div>
-
-                                <div class="form-group col-md-12" id="div-inptLogNoiva">
-                                    <label>Logradouro
-                                        <span class="asteriskField">
-                                            *
-                                        </span>
-                                    </label>
-
-                                    <p:inputText id="inptLogNoiva" 
-                                                 value="#{FichaCasamentoMB.envolvido.endereco.logradouro}" 
-                                                 required="true"
-                                                 requiredMessage="Preencha um logradouro válido"
-                                                 class="form-control"
-                                                 label="Logradouro"/>
-
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Número</label>
-
-                                    <p:inputText id="inptNumeroNoiva" 
-                                                 value="#{FichaCasamentoMB.envolvido.endereco.numero}" 
-                                                 class="form-control"
-                                                 label="Número"/>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Complemento</label>
-
-                                    <p:inputText id="inptComplementoNoiva" 
-                                                 value="#{FichaCasamentoMB.envolvido.endereco.complemento}" 
-                                                 class="form-control"
-                                                 label="Complemento"/>
-                                </div>
-
-                                <div class="form-group col-md-6" id="div-inptEstadoNoiva">
-                                    <label>Estado 
-                                        <span class="asteriskField">
-                                            *
-                                        </span>
-                                    </label>
-
-                                    <h:selectOneMenu id="inptEstadoNoiva" 
-                                                     value="#{FichaCasamentoMB.envolvido.endereco.estado}"
-                                                     converter="EntityConverter"
-                                                     rendered="true"
-                                                     requiredMessage="Preencha um estado válido"
-                                                     class="form-control"
-                                                     label="Estado">
-                                        <f:selectItem itemValue="" 
-                                                      itemLabel="" /> 
-                                        <f:selectItems value="#{FichaCasamentoMB.comboEstado}" />
-                                        <p:ajax process="@this"
-                                                update="@this, inptCidadeNoiva"
-                                                global="false"/>
-                                    </h:selectOneMenu>
-                                </div>
-
-                                <div class="form-group col-md-6" id="div-inptCidadeNoiva">
-                                    <label>Cidade 
-                                        <span class="asteriskField">
-                                            *
-                                        </span>
-                                    </label>
-
-                                    <h:selectOneMenu id="inptCidadeNoiva" 
-                                                     value="#{FichaCasamentoMB.envolvido.endereco.cidade}"
-                                                     converter="EntityConverter"
+                                        <p:inputMask mask="99.999-999"
+                                                     value="#{FichaCasamentoMB.envolvido.endereco.cep}"
                                                      required="true"
-                                                     requiredMessage="Preencha uma cidade válida"
+                                                     requiredMessage="Preencha um cep válido"
                                                      class="form-control"
-                                                     label="Cidade">
-                                        <f:selectItem itemValue="" 
-                                                      itemLabel="" /> 
-                                        <f:selectItems value="#{FichaCasamentoMB.getComboCidade(FichaCasamentoMB.envolvido.endereco.estado)}" />
-                                        <p:ajax process="@this"
-                                                update="@this"
-                                                global="false"/>
-                                    </h:selectOneMenu>
-                                </div>
-                            </h:panelGroup>
-                        </div>
-                    </div>
-                </div>
+                                                     id="inptCepNoiva"
+                                                     label="Cep">
+                                            <p:ajax id="eventCepFesta" 
+                                                    event="change" 
+                                                    listener="#{FichaCasamentoMB.buscaCepNoivo()}" 
+                                                    process="@this"
+                                                    update="enderecoGroupNoiva"
+                                                    onstart="PF('statusDialog').show();"
+                                                    oncomplete="PF('statusDialog').hide();"
+                                                    partialSubmit="true"/>
+                                        </p:inputMask>
 
-                <div class="form-group col-md-6">
-                    <fieldset>
-                        <legend>Observação</legend>
-                    </fieldset>
+                                    </div>
 
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group col-md-12">
-                                <p:inputTextarea value="#{FichaCasamentoMB.envolvido.observacao}"
-                                                 class="form-control"/>
+                                    <div class="form-group col-md-6" id="div-inptBairroNoiva">
+                                        <label>Bairro
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <p:inputText id="inptBairroNoiva" 
+                                                     value="#{FichaCasamentoMB.envolvido.endereco.bairro}" 
+                                                     required="true"
+                                                     requiredMessage="Preencha um bairro válido"
+                                                     class="form-control"
+                                                     label="Bairro"/>
+
+                                    </div>
+
+                                    <div class="form-group col-md-12" id="div-inptLogNoiva">
+                                        <label>Logradouro
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <p:inputText id="inptLogNoiva" 
+                                                     value="#{FichaCasamentoMB.envolvido.endereco.logradouro}" 
+                                                     required="true"
+                                                     requiredMessage="Preencha um logradouro válido"
+                                                     class="form-control"
+                                                     label="Logradouro"/>
+
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Número</label>
+
+                                        <p:inputText id="inptNumeroNoiva" 
+                                                     value="#{FichaCasamentoMB.envolvido.endereco.numero}" 
+                                                     class="form-control"
+                                                     label="Número"/>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Complemento</label>
+
+                                        <p:inputText id="inptComplementoNoiva" 
+                                                     value="#{FichaCasamentoMB.envolvido.endereco.complemento}" 
+                                                     class="form-control"
+                                                     label="Complemento"/>
+                                    </div>
+
+                                    <div class="form-group col-md-6" id="div-inptEstadoNoiva">
+                                        <label>Estado 
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <h:selectOneMenu id="inptEstadoNoiva" 
+                                                         value="#{FichaCasamentoMB.envolvido.endereco.estado}"
+                                                         converter="EntityConverter"
+                                                         rendered="true"
+                                                         requiredMessage="Preencha um estado válido"
+                                                         class="form-control"
+                                                         label="Estado">
+                                            <f:selectItem itemValue="" 
+                                                          itemLabel="" /> 
+                                            <f:selectItems value="#{FichaCasamentoMB.comboEstado}" />
+                                            <p:ajax process="@this"
+                                                    update="@this, inptCidadeNoiva"
+                                                    global="false"/>
+                                        </h:selectOneMenu>
+                                    </div>
+
+                                    <div class="form-group col-md-6" id="div-inptCidadeNoiva">
+                                        <label>Cidade 
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <h:selectOneMenu id="inptCidadeNoiva" 
+                                                         value="#{FichaCasamentoMB.envolvido.endereco.cidade}"
+                                                         converter="EntityConverter"
+                                                         required="true"
+                                                         requiredMessage="Preencha uma cidade válida"
+                                                         class="form-control"
+                                                         label="Cidade">
+                                            <f:selectItem itemValue="" 
+                                                          itemLabel="" /> 
+                                            <f:selectItems value="#{FichaCasamentoMB.getComboCidade(FichaCasamentoMB.envolvido.endereco.estado)}" />
+                                            <p:ajax process="@this"
+                                                    update="@this"
+                                                    global="false"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                </h:panelGroup>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                    <div class="form-group col-md-6">
+                        <fieldset>
+                            <legend>Observação</legend>
+                        </fieldset>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group col-md-12">
+                                    <p:inputTextarea value="#{FichaCasamentoMB.envolvido.observacao}"
+                                                     class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ui:include src="./contatos-casamento.xhtml" />
                 
-                <ui:include src="./contatos-casamento.xhtml" />
+                </h:panelGroup>
+
 
                 <div class="form-group col-md-12">
                     <p:commandButton value="Salvar"
@@ -366,9 +372,12 @@
                                      style="margin-left: 10px;float: right;margin-top: 30px;"
                                      id="btn-salvar-cliente-endereco"
                                      class="btn btn-success"
+                                     process="@this, :form:groupForm"
                                      onstart="PF('statusDialog').show();"
                                      oncomplete="PF('statusDialog').hide();"/>
                 </div>
+                
+                <ui:include src="./dialog-contatos-casamento.xhtml" />
 
 
             </div>

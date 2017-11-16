@@ -62,7 +62,7 @@ public class ContatoEnvolvido implements Serializable, ModelInterface {
 
     @Column
     private String telefoneCelular;
-    
+
     @ManyToOne
     private EnvolvidoEvento envolvidoEvento;
 
@@ -71,6 +71,14 @@ public class ContatoEnvolvido implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+
+    public ContatoEnvolvido() {
+
+    }
+
+    public ContatoEnvolvido(EnvolvidoEvento envolvidoEvento) {
+        this.envolvidoEvento = envolvidoEvento;
+    }
 
     @Override
     public Long getId() {
@@ -157,8 +165,6 @@ public class ContatoEnvolvido implements Serializable, ModelInterface {
     public void setEnvolvidoEvento(EnvolvidoEvento envolvidoEvento) {
         this.envolvidoEvento = envolvidoEvento;
     }
-    
-    
 
     @PrePersist
     @Override
