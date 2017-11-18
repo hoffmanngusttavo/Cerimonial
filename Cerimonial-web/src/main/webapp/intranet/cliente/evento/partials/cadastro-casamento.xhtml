@@ -44,12 +44,9 @@
                 </div>
             </div>
 
-
             <div class="row">
 
                 <h:panelGroup id="groupForm">
-
-
 
                     <div class="form-group col-md-6">
 
@@ -71,6 +68,7 @@
                                     <p:inputText id="inptNomeNoiva" 
                                                  value="#{FichaCasamentoMB.envolvido.nome}" 
                                                  required="true"
+                                                 requiredMessage="Preencha o nome completo"
                                                  class="form-control"
                                                  label="Nome"/>
 
@@ -86,7 +84,7 @@
                                     <p:inputMask mask="999.999.999-99"
                                                  value="#{FichaCasamentoMB.envolvido.cpf}"
                                                  required="true"
-                                                 requiredMessage="Preencha um cpf válido"
+                                                 requiredMessage="Preencha o cpf"
                                                  id="inptCpfNoiva"
                                                  class="form-control"
                                                  label="Cpf"/>
@@ -102,7 +100,7 @@
                                     <p:inputText value="#{FichaCasamentoMB.envolvido.rg}"
                                                  required="true"
                                                  id="inptRgNoiva"
-                                                 requiredMessage="Preencha um rg válido"
+                                                 requiredMessage="Preencha o rg"
                                                  class="form-control"
                                                  label="Rg"/>
                                 </div>
@@ -152,7 +150,7 @@
                                                  value="#{FichaCasamentoMB.envolvido.email}" 
                                                  class="form-control"
                                                  required="true"
-                                                 requiredMessage="Preencha um e-mail válido"
+                                                 requiredMessage="Preencha um e-mai válido"
                                                  placeholder="Ex: teste@teste.com"
                                                  label="Email">
                                         <f:validator validatorId="EmailValidate"/>
@@ -229,7 +227,7 @@
                                         <p:inputMask mask="99.999-999"
                                                      value="#{FichaCasamentoMB.envolvido.endereco.cep}"
                                                      required="true"
-                                                     requiredMessage="Preencha um cep válido"
+                                                     requiredMessage="Preencha o cep do endereço"
                                                      class="form-control"
                                                      id="inptCepNoiva"
                                                      label="Cep">
@@ -255,7 +253,7 @@
                                         <p:inputText id="inptBairroNoiva" 
                                                      value="#{FichaCasamentoMB.envolvido.endereco.bairro}" 
                                                      required="true"
-                                                     requiredMessage="Preencha um bairro válido"
+                                                     requiredMessage="Preencha o bairro"
                                                      class="form-control"
                                                      label="Bairro"/>
 
@@ -271,7 +269,7 @@
                                         <p:inputText id="inptLogNoiva" 
                                                      value="#{FichaCasamentoMB.envolvido.endereco.logradouro}" 
                                                      required="true"
-                                                     requiredMessage="Preencha um logradouro válido"
+                                                     requiredMessage="Preencha o logradouro"
                                                      class="form-control"
                                                      label="Logradouro"/>
 
@@ -306,7 +304,7 @@
                                                          value="#{FichaCasamentoMB.envolvido.endereco.estado}"
                                                          converter="EntityConverter"
                                                          rendered="true"
-                                                         requiredMessage="Preencha um estado válido"
+                                                         requiredMessage="Preencha o estado"
                                                          class="form-control"
                                                          label="Estado">
                                             <f:selectItem itemValue="" 
@@ -329,7 +327,7 @@
                                                          value="#{FichaCasamentoMB.envolvido.endereco.cidade}"
                                                          converter="EntityConverter"
                                                          required="true"
-                                                         requiredMessage="Preencha uma cidade válida"
+                                                         requiredMessage="Preencha a cidade"
                                                          class="form-control"
                                                          label="Cidade">
                                             <f:selectItem itemValue="" 
@@ -373,7 +371,7 @@
                                      id="btn-salvar-cliente-endereco"
                                      class="btn btn-success"
                                      process="@this, :form:groupForm"
-                                     onstart="PF('statusDialog').show();"
+                                     onstart="PF('statusDialog').show();validaFormularioCasamento();"
                                      oncomplete="PF('statusDialog').hide();"/>
                 </div>
                 

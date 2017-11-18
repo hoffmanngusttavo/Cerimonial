@@ -503,34 +503,29 @@ function validaFormularioContratante() {
     var inptCidade = $('#inptCidade').val();
 
     if (inptCep === '') {
-        alteraEtapaContratante(2);
         $('#div-inptCep').addClass('has-error');
         $('#inptCep').focus();
 
     }
     if (inptBairro === '') {
-        alteraEtapaContratante(2);
         $('#div-inptBairro').addClass('has-error');
         $('#inptBairro').focus();
 
     }
 
     if (inptLog === '') {
-        alteraEtapaContratante(2);
         $('#div-inptLog').addClass('has-error');
         $('#inptLog').focus();
 
     }
 
     if (inptEstado === '') {
-        alteraEtapaContratante(2);
         $('#div-inptEstado').addClass('has-error');
         $('#inptEstado').focus();
 
     }
 
     if (inptCidade === '') {
-        alteraEtapaContratante(2);
         $('#div-inptCidade').addClass('has-error');
         $('#inptCidade').focus();
 
@@ -538,7 +533,201 @@ function validaFormularioContratante() {
 
 }
 
+//---------------------FICHA CADASTRAL EVENTO -------------------------------------
 
-function alteraEtapaContratante(etapa) {
-    $('#tabEtapas a[href="#etapa' + etapa + '"]').tab('show');
+function validaFormularioEvento() {
+    var inptNome = $('#inptNomeEvento').val();
+    var inptDataEvento = $('#inptDataEvento_input').val();
+    var inptHoraInicialEvento = $('#inptHoraInicialEvento').val();
+    var inptDataTerminoEvento = $('#inptDataEventoTermino_input').val();
+    var inptHoraTerminoEvento = $('#inptHoraTerminoEvento').val();
+    var inptQtdConvidados = $('#inptQtdConvidados').val();
+
+    if (inptNome === '') {
+        $('#inptNomeEvento').focus();
+        $('#divInptNome').addClass('has-error');
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+
+    }
+    
+    if (inptDataEvento === '' || inptDataEvento.length < 3) {
+        $('#inptDataEvento_input').focus();
+        $('#div-inptDataEvento').addClass('has-error');
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+
+    }
+    
+    if (inptHoraInicialEvento === '') {
+        $('#inptHoraInicialEvento').focus();
+        $('#div-inptDataEvento').addClass('has-error');
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+
+    }
+    
+    if (inptDataTerminoEvento === '' || inptDataTerminoEvento.length < 3) {
+        $('#inptDataEventoTermino_input').focus();
+        $('#div-inptDataEventoTermino').addClass('has-error');
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+
+    }
+    
+    if (inptHoraTerminoEvento === '') {
+        $('#inptHoraTerminoEvento').focus();
+        $('#div-inptDataEventoTermino').addClass('has-error');
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+
+    }
+    if (inptQtdConvidados === '') {
+        $('#inptQtdConvidados').focus();
+        $('#div-inptQtdConvidados').addClass('has-error');
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+
+    }
+
+    if ($('#inptLocalCerimonia').val() === '') {
+        $('#div-inptLocalCerimonia').addClass('has-error');
+        $('#inptLocalCerimonia').focus();
+
+    }
+
+    if ($('#inptCep').val() === '') {
+        $('#div-inptCep').addClass('has-error');
+        $('#inptCep').focus();
+
+    }
+    if ($('#inptBairro').val() === '') {
+        $('#div-inptBairro').addClass('has-error');
+        $('#inptBairro').focus();
+
+    }
+
+    if ($('#inptLog').val() === '') {
+        $('#div-inptLog').addClass('has-error');
+        $('#inptLog').focus();
+
+    }
+
+    if ($('#inptEstado').val() === '') {
+        $('#div-inptEstado').addClass('has-error');
+        $('#inptEstado').focus();
+
+    }
+
+    if ($('#inptCidade').val() === '') {
+        $('#div-inptCidade').addClass('has-error');
+        $('#inptCidade').focus();
+
+    }
+    
+    
+    if ($('#inptLocalFesta').val() === '') {
+        $('#div-inptLocalFesta').addClass('has-error');
+        $('#inptLocalFesta').focus();
+
+    }
+
+    if ($('#inptCepFesta').val() === '') {
+        $('#div-inptCepFesta').addClass('has-error');
+        $('#inptCepFesta').focus();
+
+    }
+    if ($('#inptBairroFesta').val() === '') {
+        $('#div-inptBairroFesta').addClass('has-error');
+        $('#inptBairroFesta').focus();
+
+    }
+
+    if ($('#inptLogFesta').val() === '') {
+        $('#div-inptLogFesta').addClass('has-error');
+        $('#inptLogFesta').focus();
+
+    }
+
+    if ($('#inptEstadoFesta').val() === '') {
+        $('#div-inptEstadoFesta').addClass('has-error');
+        $('#inptEstadoFesta').focus();
+
+    }
+
+    if ($('#inptCidadeFesta').val() === '') {
+        $('#div-inptCidadeFesta').addClass('has-error');
+        $('#inptCidadeFesta').focus();
+
+    }
+
+
+}
+
+
+//---------------------FICHA CADASTRAL EVENTO -------------------------------------
+
+function validaFormularioCasamento() {
+    
+    if ($('#inptNomeNoiva').val() === '') {
+        $('#div-inptNomeNoiva').addClass('has-error');
+        $('#inptNomeNoiva').focus();
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+    }
+    
+    if ($('#inptCpfNoiva').val() === '') {
+        $('#div-inptCpfNoiva').addClass('has-error');
+        $('#inptCpfNoiva').focus();
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+    }
+    
+    if ($('#inptRgNoiva').val() === '') {
+        $('#div-inptRgNoiva').addClass('has-error');
+        $('#inptRgNoiva').focus();
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+    }
+    
+    if ($('#dataNascimentoNoiva_input').val() === '') {
+        $('#div-dataNascimentoNoiva').addClass('has-error');
+        $('#dataNascimentoNoiva_input').focus();
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+    }
+    
+    if ($('#inptEmailNoiva').val() === '') {
+        $('#div-inptEmailNoiva').addClass('has-error');
+        $('#inptEmailNoiva').focus();
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+    }
+    
+    if ($('#inptCepNoiva').val() === '') {
+        $('#div-inptCepNoiva').addClass('has-error');
+        $('#inptCepNoiva').focus();
+    }
+    
+    if ($('#inptBairroNoiva').val() === '') {
+        $('#div-inptBairroNoiva').addClass('has-error');
+        $('#inptBairroNoiva').focus();
+    }
+    
+    if ($('#inptLogNoiva').val() === '') {
+        $('#div-inptLogNoiva').addClass('has-error');
+        $('#inptLogNoiva').focus();
+    }
+    
+    if ($('#inptEstadoNoiva').val() === '') {
+        $('#div-inptEstadoNoiva').addClass('has-error');
+        $('#inptEstadoNoiva').focus();
+    }
+    
+    if ($('#inptCidadeNoiva').val() === '') {
+        $('#div-inptCidadeNoiva').addClass('has-error');
+        $('#inptCidadeNoiva').focus();
+    }
+    
+}
+
+function validarFormularioContatoCasamento(){
+    
+    var valor = $('#inptNomeContato').val();
+    
+    if (valor === '' || valor.length < 3) {
+        $('#div-inptNomeContato').addClass('has-error');
+        $('#inptNomeContato').focus();
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+    }
+    
 }

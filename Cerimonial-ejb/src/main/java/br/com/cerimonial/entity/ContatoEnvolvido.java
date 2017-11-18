@@ -44,7 +44,7 @@ public class ContatoEnvolvido implements Serializable, ModelInterface {
 
     @Column(nullable = false)
     @NotNull
-    @Size(min = 2, max = 255)
+    @Size(min = 2, max = 255, message = "Nome do contato deve ter no mínimo 2 e no máximo 255 caracteres")
     private String nome;
 
     @NotNull

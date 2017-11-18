@@ -6,7 +6,11 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ContatoEnvolvido;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContatoEnvolvidoRepository;
+import br.com.cerimonial.utils.CerimonialUtils;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
@@ -24,8 +28,8 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido>{
-    
+public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
+
     private ContatoEnvolvidoRepository repository;
 
     @PostConstruct
@@ -54,7 +58,36 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido>{
 
     @Override
     public boolean isValid(ContatoEnvolvido entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        if (entity == null) {
+            throw new GenericException("Contato nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        
+        return true;
     }
-    
+
+    /**
+     * Método responsável por remover os contatos.
+     * Só pode remover contato que existe no banco de dados.
+     * @param contatosRemover
+     */
+    public void removerContatos(List<ContatoEnvolvido> contatosRemover) {
+        
+        if(CerimonialUtils.isListNotBlank(contatosRemover)){
+            
+            for (ContatoEnvolvido contato : contatosRemover) {
+                
+                if (contato.getId() == null) {
+                    throw new GenericException("Não pode remover um contato sem id", ErrorCode.BAD_REQUEST.getCode());
+                }
+                
+                repository.delete(contato.getId());
+                
+            }
+            
+        }
+        
+    }
+
 }

@@ -18,11 +18,12 @@
 
                     <div class="panel-heading">
                         <h3 class="panel-title">Contatos</h3>
-                        <div class="pull-right">
+                        <div class="pull-right" style="margin-top: -20px;">
                             <p:commandButton icon="fa fa-plus" 
                                              styleClass="bt-acoes"
                                              actionListener="#{FichaCasamentoMB.criarNovoContato()}"
                                              process="@this"
+                                             title="Adicionar Novo"
                                              update=":form:groupEdit"
                                              immediate="true"
                                              oncomplete="$('#editDialogVar').modal('show');"/>
@@ -59,6 +60,7 @@
                                                                  styleClass="bt-acoes"
                                                                  actionListener="#{FichaCasamentoMB.carregarContato(item)}"
                                                                  process="@this"
+                                                                 title="Editar"
                                                                  update=":form:groupEdit"
                                                                  immediate="true"
                                                                  oncomplete="$('#editDialogVar').modal('show');">
@@ -69,6 +71,7 @@
                                                                  styleClass="bt-acoes"
                                                                  actionListener="#{FichaCasamentoMB.carregarContato(item)}"
                                                                  process="@this"
+                                                                 title="Remover"
                                                                  update=":form:groupRemove"
                                                                  immediate="true"
                                                                  oncomplete="$('#removeDialogVar').modal('show');">

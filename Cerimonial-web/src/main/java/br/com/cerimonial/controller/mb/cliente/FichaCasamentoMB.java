@@ -11,11 +11,13 @@ import br.com.cerimonial.entity.EnvolvidoEvento;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
+import br.com.cerimonial.service.ContatoEnvolvidoService;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.EnvolvidoEventoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +26,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -44,12 +47,17 @@ public class FichaCasamentoMB extends ClienteControl {
     protected EnvolvidoEvento envolvido;
 
     protected ContatoEnvolvido contato;
+    
+    protected List<ContatoEnvolvido> contatosRemover;
 
     @EJB
     protected EventoService eventoService;
 
     @EJB
     protected EnvolvidoEventoService envolvidoEventoService;
+    
+    @EJB
+    protected ContatoEnvolvidoService contatoEnvolvidoService;
 
     @EJB
     protected EnderecoService enderecoService;
@@ -58,6 +66,7 @@ public class FichaCasamentoMB extends ClienteControl {
 
     public FichaCasamentoMB() {
         this.selectItemUtils = new SelectItemUtils();
+        contatosRemover = new ArrayList<>();
     }
 
     /**
@@ -102,6 +111,8 @@ public class FichaCasamentoMB extends ClienteControl {
         try {
 
             envolvidoEventoService.save(envolvido);
+            
+            contatoEnvolvidoService.removerContatos(contatosRemover);
 
             createFacesInfoMessage("Dados gravados com sucesso!");
 
@@ -117,6 +128,9 @@ public class FichaCasamentoMB extends ClienteControl {
         return null;
     }
 
+    /**
+     * Método pra buscar cep e carregar um endereço a partir do cep digitado.
+     */
     public void buscaCepNoivo() {
         try {
 
@@ -128,7 +142,9 @@ public class FichaCasamentoMB extends ClienteControl {
     }
 
     
-
+    /**
+     * Método por instanciar um novo contato, quando clicado no botão de +
+     */
     public void criarNovoContato() {
         try {
 
@@ -140,6 +156,9 @@ public class FichaCasamentoMB extends ClienteControl {
         }
     }
 
+    /**
+     * Método para salvar a adição ou edição em memória o contato.
+     */
     public void salvarContato() {
         try {
 
@@ -162,14 +181,31 @@ public class FichaCasamentoMB extends ClienteControl {
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            
+            RequestContext requestContext = RequestContext.getCurrentInstance();
+            requestContext.execute("$('#editDialogVar').modal('hide');");
+            
         }
     }
     
+    
+    /**
+     * Método para remover da memória o contato selecionado
+     * Se o contato já tiver no banco de dados, será armazenado em uma lista
+     * para depois remover quando salvar.
+     */
     public void removerContatoNoivo() {
         try {
 
             envolvido.removerContato(posicaoContato);
+            
+            if (contato != null && contato.getId() != null) {
+                contatosRemover.add(contato);
+            }
+            
             posicaoContato = null;
+            setContato(null);
 
             createFacesInfoMessage("Removido contato com sucesso");
 
@@ -181,6 +217,11 @@ public class FichaCasamentoMB extends ClienteControl {
         }
     }
     
+    
+    /**
+     * Método para carregar o objeto contato para editar ou remover
+     * @param item
+     */
     public void carregarContato(ContatoEnvolvido item){
         
         setContato(item);
@@ -248,6 +289,14 @@ public class FichaCasamentoMB extends ClienteControl {
 
     public void setPosicaoContato(Integer posicaoContato) {
         this.posicaoContato = posicaoContato;
+    }
+
+    public List<ContatoEnvolvido> getContatosRemover() {
+        return contatosRemover;
+    }
+
+    public void setContatosRemover(List<ContatoEnvolvido> contatosRemover) {
+        this.contatosRemover = contatosRemover;
     }
     
     
