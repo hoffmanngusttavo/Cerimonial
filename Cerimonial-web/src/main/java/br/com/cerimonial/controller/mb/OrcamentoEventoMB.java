@@ -295,7 +295,7 @@ public class OrcamentoEventoMB extends BasicControl {
     
     
     public List<SelectItem> getComboModelosProposta() {
-        return selectItemUtils.getComboModelosProposta();
+        return selectItemUtils.getComboModelosPropostaTipoEvento(entity.getContatoEvento().getTipoEvento());
     }
     
     

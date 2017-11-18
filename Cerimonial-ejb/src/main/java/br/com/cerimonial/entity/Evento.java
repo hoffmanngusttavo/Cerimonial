@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.CategoriaEvento;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.utils.CerimonialUtils;
@@ -400,6 +401,25 @@ public class Evento implements Serializable, ModelInterface {
 
         return null;
 
+    }
+    
+    
+    public boolean isEventoCasamento(){
+        
+        if(tipoEvento != null && tipoEvento.getCategoria() != null){
+            return tipoEvento.getCategoria().equals(CategoriaEvento.CASAMENTO);
+        }
+        
+        return false;
+    }
+    
+    public boolean isEventoBodas(){
+        
+        if(tipoEvento != null && tipoEvento.getCategoria() != null){
+            return tipoEvento.getCategoria().equals(CategoriaEvento.BODAS);
+        }
+        
+        return false;
     }
 
 }

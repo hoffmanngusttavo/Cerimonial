@@ -161,6 +161,23 @@ public class SelectItemUtils {
         }
         return items;
     }
+    
+    public List<SelectItem> getComboModelosPropostaTipoEvento(TipoEvento tipoEvento) {
+        List<SelectItem> items = new LinkedList<>();
+
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        ModeloPropostaService service = lookupUtil.lookupService(ModeloPropostaService.class);
+
+        try {
+            for (ModeloProposta item : service.findModelosPropostaByTipoEvento(tipoEvento)) {
+                items.add(new SelectItem(item, item.getTitulo()));
+            }
+            
+        } catch (Exception ex) {
+            Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return items;
+    }
 
     public List<SelectItem> getComboStatusContato() {
         List<SelectItem> items = new LinkedList<>();

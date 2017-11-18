@@ -5,19 +5,26 @@
  */
 package br.com.cerimonial.utils;
 
+import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ConfiguracaoEmail;
 import br.com.cerimonial.service.ConfiguracaoEmailService;
-import br.com.cerimonial.service.ModeloPropostaService;
 import br.com.cerimonial.service.utils.ServiceLookupUtil;
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Authenticator;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.Multipart;
+import javax.mail.Part;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -25,6 +32,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -42,7 +50,7 @@ public class EmailHelper {
         ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
         ConfiguracaoEmailService service = lookupUtil.lookupService(ConfiguracaoEmailService.class);
         configuracaoEmail = service.getConfiguracaoEmail();
-        
+
     }
 
     public static void validarConfiguracaoEmail() throws Exception {
@@ -60,6 +68,71 @@ public class EmailHelper {
      */
     public void enviarEmail(String destinatario, String assunto, String mensagem) throws Exception {
         this.enviarEmail(destinatario, assunto, mensagem, null);
+    }
+
+    public void send(String destinatario, String assunto, String mensagem, HashMap<String, Object> anexos) throws Exception{
+
+        String remetente = configuracaoEmail.getLogin();
+        
+        //1) get the session object   
+        Properties properties = getProperties();
+
+        SimpleAuth auth = new SimpleAuth(remetente, configuracaoEmail.getSenha());
+
+        Address[] toUser = InternetAddress.parse(destinatario.trim().toLowerCase());
+        
+        Session session = Session.getDefaultInstance(properties, auth);
+        session.setDebug(true);
+        
+        MimeMessage message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(remetente));
+        message.setRecipients(Message.RecipientType.TO, toUser);
+        message.setSubject(assunto);
+        
+        //3) create MimeBodyPart object and set your message content    
+        BodyPart messageBodyPart1 = new MimeBodyPart();
+        messageBodyPart1.setText(mensagem);
+        
+         //5) create Multipart object and add MimeBodyPart objects to this object    
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart1);
+       
+        //4) create new MimeBodyPart object and set DataHandler object to this object    
+        if (anexos != null && anexos.size() > 0) {
+            for (Map.Entry e : anexos.entrySet()) {
+                if (e.getValue() != null) {
+                    MimeBodyPart mbp = new MimeBodyPart();
+
+                    String arquivo = System.getProperty("java.io.tmpdir") + "/arquivo_" + e.getKey();
+                    try {
+                        
+                        Arquivo arq = (Arquivo) e.getValue();
+
+                        FileUtils.writeByteArrayToFile(new File(arquivo), arq.getConteudo());
+
+                        DataSource fds = new FileDataSource(arquivo);
+                        mbp.setDisposition(Part.ATTACHMENT);
+                        mbp.setDataHandler(new DataHandler(fds));
+                        mbp.setFileName(arq.getNome());
+
+                        multipart.addBodyPart(mbp);
+                        
+                    } catch (Exception ex) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+            }
+        }
+        
+        //6) set the multiplart object to the message object
+        message.setContent(multipart);
+
+        //7) send message
+        Transport.send(message);
+
+        System.out.println("message sent....");
+
     }
 
     /**
