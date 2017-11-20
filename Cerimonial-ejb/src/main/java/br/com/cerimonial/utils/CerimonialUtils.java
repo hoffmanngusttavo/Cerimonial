@@ -17,6 +17,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
+import javax.faces.context.FacesContext;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -108,6 +109,11 @@ public class CerimonialUtils {
         if(StringUtils.isBlank(email)){
             throw new GenericException("Preencha um email válido", ErrorCode.BAD_REQUEST.getCode());
         }
+    }
+
+    public static String urlSistema() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return context.getExternalContext().getRequestContextPath();
     }
     
 }

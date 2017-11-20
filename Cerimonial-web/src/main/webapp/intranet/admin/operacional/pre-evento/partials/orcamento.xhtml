@@ -345,7 +345,9 @@
                                                              rendered="#{!proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
                                                              title="Aceitar Proposta"
                                                              update=":form:groupPropostas"
-                                                             immediate="true"/>
+                                                             immediate="true"
+                                                             onstart="PF('statusDialog').show();"
+                                                             oncomplete="PF('statusDialog').hide();"/>
 
                                             <p:commandButton icon="fa fa-times" 
                                                              styleClass="bt-acoes"
@@ -354,7 +356,9 @@
                                                              rendered="#{proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
                                                              title="Cancelar Proposta"
                                                              update=":form:groupPropostas"
-                                                             immediate="true"/>
+                                                             immediate="true"
+                                                             onstart="PF('statusDialog').show();"
+                                                             oncomplete="PF('statusDialog').hide();"/>
 
                                             <p:commandButton process="@this"
                                                              actionListener="#{OrcamentoEventoMB.criarEvento(proposta)}"
@@ -362,8 +366,10 @@
                                                              id="btn-criar-criar-ficha"
                                                              icon="fa fa-universal-access" 
                                                              styleClass="bt-acoes"
-                                                             update="groupOrcamento"
-                                                             title="Criar Evento"/>
+                                                             update="@form"
+                                                             title="Criar Evento"
+                                                             onstart="PF('statusDialog').show();"
+                                                             oncomplete="PF('statusDialog').hide();"/>
 
                                             <p:commandButton icon="fa fa-trash" 
                                                              styleClass="bt-acoes"

@@ -9,6 +9,7 @@ import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.enums.SituacaoEvento;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,7 @@ public class EventoRepository extends AbstractRepository<Evento> {
      */
     public List<Evento> findEventosDia(Date dataSelecionada) {
         try {
-            return getPureList(Evento.class, "select event from Evento event where event.dataEvento = ?1", dataSelecionada);
+            return getPureList(Evento.class, "select event from Evento event where event.dataInicio = ?1", dataSelecionada);
         } catch (Exception ex) {
             Logger.getLogger(EventoRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -49,7 +50,12 @@ public class EventoRepository extends AbstractRepository<Evento> {
      */
     public List<Evento> findEventosAtivos(int limit) {
         try {
-            return getPureListRange(Evento.class, "select event from Evento event where event.ativo = true", limit, 0);
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT event FROM Evento event ");
+            sb.append("WHERE event.situacaoEvento = ");
+            sb.append(SituacaoEvento.ATIVO);
+
+            return getPureListRange(Evento.class, sb.toString(), limit, 0);
         } catch (Exception ex) {
             Logger.getLogger(EventoRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -67,10 +73,10 @@ public class EventoRepository extends AbstractRepository<Evento> {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT eve FROM Evento eve ");
         sb.append("INNER JOIN eve.contratante cli ");
-        sb.append("WHERE eve.ativo = ?1 ");
+        sb.append("WHERE eve.situacaoEvento = ?1 ");
         sb.append("AND cli.id = ?2 ");
 
-        return getPureList(Evento.class, sb.toString(), Boolean.TRUE, cliente.getId());
+        return getPureList(Evento.class, sb.toString(), SituacaoEvento.ATIVO, cliente.getId());
     }
 
     /**
@@ -119,7 +125,7 @@ public class EventoRepository extends AbstractRepository<Evento> {
 
     /**
      * Vai retornar o evento que pertence a somente esse cliente
-     * 
+     *
      * @param idEvento
      * @param contratante
      * @return
@@ -134,7 +140,7 @@ public class EventoRepository extends AbstractRepository<Evento> {
         sb.append("AND eve.id =?1 ");
         sb.append("AND con.id =?2");
 
-        return  getPurePojo(Evento.class, sb.toString(), idEvento, contratante.getId());
+        return getPurePojo(Evento.class, sb.toString(), idEvento, contratante.getId());
     }
 
 }

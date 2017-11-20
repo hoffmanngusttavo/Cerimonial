@@ -6,7 +6,7 @@
 package br.com.cerimonial.entity;
 
 import br.com.cerimonial.enums.CategoriaEvento;
-import br.com.cerimonial.enums.TipoEnvolvido;
+import br.com.cerimonial.enums.SituacaoEvento;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -85,15 +87,11 @@ public class Evento implements Serializable, ModelInterface {
     @NotNull(message = "O tipo de evento não pode ser nulo")
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoEvento tipoEvento;
-
-    @Column(columnDefinition = "boolean default true")
-    private boolean ativo = true;
-
-    @Column(columnDefinition = "boolean default false")
-    private boolean cancelado = false;
-
-    @Column(columnDefinition = "boolean default false")
-    private boolean finalizado = false;
+    
+    @NotNull(message = "A situação não pode ser nula")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SituacaoEvento situacaoEvento = SituacaoEvento.ATIVO;
 
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
     private List<ContratoEvento> contratos;
@@ -165,28 +163,29 @@ public class Evento implements Serializable, ModelInterface {
     }
 
     public boolean isAtivo() {
-        return ativo;
+        if(situacaoEvento != null){
+            return situacaoEvento.equals(SituacaoEvento.ATIVO);
+        }
+        return false;
     }
 
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
+    
 
     public boolean isCancelado() {
-        return cancelado;
-    }
-
-    public void setCancelado(boolean cancelado) {
-        this.cancelado = cancelado;
+        if(situacaoEvento != null){
+            return situacaoEvento.equals(SituacaoEvento.CANCELADO);
+        }
+        return false;
     }
 
     public boolean isFinalizado() {
-        return finalizado;
+        if(situacaoEvento != null){
+            return situacaoEvento.equals(SituacaoEvento.FINALIZADO);
+        }
+        return false;
     }
 
-    public void setFinalizado(boolean finalizado) {
-        this.finalizado = finalizado;
-    }
+    
 
     public Date getDataInicio() {
         return dataInicio;
