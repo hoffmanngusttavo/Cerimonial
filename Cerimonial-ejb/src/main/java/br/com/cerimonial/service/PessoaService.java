@@ -372,6 +372,20 @@ public class PessoaService extends BasicService<Pessoa> {
         
     }
 
+    /**
+     * Método responsavel por inativar Pessoa
+     * @param contratante
+     */
+    public void inativarPessoa(Pessoa contratante) {
+        
+        isValid(contratante);
+        
+        contratante.setAtivo(false);
+        
+        repository.edit(contratante);
+        
+    }
+
     
 
 }

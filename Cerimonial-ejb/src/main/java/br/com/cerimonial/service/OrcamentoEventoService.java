@@ -6,7 +6,6 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
-import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.OrcamentoEvento;

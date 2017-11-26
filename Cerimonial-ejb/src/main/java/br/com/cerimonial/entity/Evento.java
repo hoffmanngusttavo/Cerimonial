@@ -107,6 +107,9 @@ public class Evento implements Serializable, ModelInterface {
 
     @Column(columnDefinition = "TEXT")
     private String observacaoEnvolvidos;
+    
+    @Column(columnDefinition = "TEXT")
+    private String motivoCancelamento;
 
     @Override
     public Long getId() {
@@ -293,6 +296,24 @@ public class Evento implements Serializable, ModelInterface {
     public void setObservacaoEnvolvidos(String observacaoEnvolvidos) {
         this.observacaoEnvolvidos = observacaoEnvolvidos;
     }
+
+    public SituacaoEvento getSituacaoEvento() {
+        return situacaoEvento;
+    }
+
+    public void setSituacaoEvento(SituacaoEvento situacaoEvento) {
+        this.situacaoEvento = situacaoEvento;
+    }
+
+    public String getMotivoCancelamento() {
+        return motivoCancelamento;
+    }
+
+    public void setMotivoCancelamento(String motivoCancelamento) {
+        this.motivoCancelamento = motivoCancelamento;
+    }
+    
+    
 
     @PrePersist
     @Override

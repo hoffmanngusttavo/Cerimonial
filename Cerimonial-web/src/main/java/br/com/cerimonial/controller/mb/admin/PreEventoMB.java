@@ -71,6 +71,24 @@ public class PreEventoMB extends BasicControl {
         }
     }
 
+    /**
+     * Evento invocado pela tela para cancelar um evento
+     */
+    public void cancelarEvento() {
+        try {
+
+            eventoService.cancelarEvento(evento.getId(), evento.getMotivoCancelamento());
+            
+            evento = eventoService.getEntity(evento.getId());
+            
+            createFacesInfoMessage("Evento cancelado com sucesso");
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage("Não foi possível cancelar o evento: " + ex.getCause().getMessage());
+        }
+    }
+
     public ContatoEvento getEntity() {
         return entity;
     }

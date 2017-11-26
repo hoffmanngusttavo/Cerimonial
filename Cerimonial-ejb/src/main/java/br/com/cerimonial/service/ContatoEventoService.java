@@ -10,7 +10,6 @@ import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.repository.ContatoEventoRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

@@ -16,7 +16,7 @@
         <f:metadata>
             <f:viewParam name="id" value="#{PreEventoMB.id}" converter="javax.faces.Long"/>
             <f:viewAction action="#{PreEventoMB.init()}"/>
-        
+
             <f:viewParam name="idEvento" value="#{PreEventoMB.idEvento}" converter="javax.faces.Long"/>
             <f:viewAction action="#{PreEventoMB.initEvento()}"/>
         </f:metadata>
@@ -58,6 +58,37 @@
                             </div>
                         </div>
                     </div>
+
+                    <h:panelGroup rendered="#{PreEventoMB.evento != null}">
+                        <div class="col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Situação</h3>
+                                </div>
+                                <div class="panel-body" align="center" style="max-height: 45px;">
+
+                                    <h:panelGrid columns="2"
+                                                 id="gridSituacao">
+                                        <p:row>
+                                            <p:column>
+                                                <h:outputText value="#{PreEventoMB.evento.situacaoEvento.label}"
+                                                              style="font-size: 12px;"/>
+                                            </p:column>
+                                            <p:column rendered="#{PreEventoMB.evento.ativo}">
+                                                <p:commandButton icon="fa fa-times" 
+                                                                 styleClass="bt-acoes"
+                                                                 process="@this"
+                                                                 title="Cancelar Evento"
+                                                                 immediate="true"
+                                                                 oncomplete="$('#removeDialogVar').modal('show');"/>
+                                            </p:column>
+                                        </p:row>
+                                    </h:panelGrid>
+
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
 
                     <div class="col-md-4 text-center">
                         <div class="panel panel-primary">
@@ -107,6 +138,54 @@
                         </div>
                     </h:panelGroup>
 
+                </div>
+            </div>
+
+        </h:form>
+
+
+        <h:form id="formDialog"
+                prependId="false">
+            <div class="modal fade" 
+                 id="removeDialogVar" tabindex="-1" 
+                 role="dialog" aria-labelledby="myModal" 
+                 aria-hidden="true" data-keyboard="false" 
+                 data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Deseja cancelar esse evento ?</h4>
+                        </div>
+                        <div class="modal-body col-lg-12 col-md-12">
+
+                            <div class="form-group col-md-12">
+                                <p:inputTextarea id="inptMotivoCancelamento" 
+                                                 value="#{PreEventoMB.evento.motivoCancelamento}" 
+                                                 placeholder="Motivo de cancelamento"
+                                                 required="true"
+                                                 class="form-control"
+                                                 label="Insta"/>
+                            </div>
+                        </div>
+                        <h:panelGroup layout="block" styleClass="modal-footer">
+                            <p:commandLink value="Fechar"
+                                           immediate="true" 
+                                           styleClass="btn btn-default" 
+                                           oncomplete="$('#removeDialogVar').modal('hide');" />
+
+                            <p:commandLink value="Confirmar" 
+                                           actionListener="#{PreEventoMB.cancelarEvento()}"
+                                           styleClass="btn btn-primary"
+                                           update=":form:gridSituacao"
+                                           process="@this,formDialog:inptMotivoCancelamento" 
+                                           onstart="PF('statusDialog').show();"
+                                           oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
+                        </h:panelGroup>
+                    </div>
                 </div>
             </div>
         </h:form>

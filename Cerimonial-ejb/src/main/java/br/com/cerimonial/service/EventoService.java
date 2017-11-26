@@ -12,6 +12,7 @@ import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.enums.SituacaoEvento;
 import br.com.cerimonial.repository.EventoRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -29,6 +31,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -41,6 +44,11 @@ import javax.ejb.TransactionManagementType;
 public class EventoService extends BasicService<Evento> {
 
     private EventoRepository repository;
+
+    @EJB
+    protected PessoaService pessoaService;
+    @EJB
+    protected UsuarioService usuarioService;
 
     @PostConstruct
     @PostActivate
@@ -57,7 +65,7 @@ public class EventoService extends BasicService<Evento> {
     public Evento save(Evento entity) throws Exception {
 
         isValid(entity);
-        
+
         if (entity.getId() == null) {
             return repository.create(entity);
         } else {
@@ -258,7 +266,7 @@ public class EventoService extends BasicService<Evento> {
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
         if (evento != null) {
-            
+
             if (evento.getCerimoniaEvento() != null) {
                 evento.getCerimoniaEvento().getId();
             }
@@ -276,6 +284,7 @@ public class EventoService extends BasicService<Evento> {
         return evento;
 
     }
+
     /**
      * Vai retornar o evento que pertence a somente esse cliente Carregar em
      * lazy os noivos
@@ -296,40 +305,80 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
-        if(evento != null){
-             if(evento.getEnvolvidos() != null){
-                 
-                 evento.getEnvolvidos().size();
-                 
-                 evento.getEnvolvidos().stream().filter((envolvido) -> 
-                         (envolvido.getContatosFamiliar() != null)).forEach((envolvido) -> {
-                     envolvido.getContatosFamiliar().size();
-                 });
-             }
+        if (evento != null) {
+            if (evento.getEnvolvidos() != null) {
+
+                evento.getEnvolvidos().size();
+
+                evento.getEnvolvidos().stream().filter((envolvido)
+                        -> (envolvido.getContatosFamiliar() != null)).forEach((envolvido) -> {
+                            envolvido.getContatosFamiliar().size();
+                        });
+            }
         }
-        
+
         return evento;
 
     }
 
     /**
      * Vai copiar o endereco da cerimonia e setar no endereco da festa
+     *
      * @param cerimoniaEvento
      * @param festaCerimonia
      */
     public void copiarLocalizacaoCerimonia(CerimoniaEvento cerimoniaEvento, FestaCerimonia festaCerimonia) {
-        
-        if(cerimoniaEvento == null || cerimoniaEvento.getEndereco() == null){
+
+        if (cerimoniaEvento == null || cerimoniaEvento.getEndereco() == null) {
             throw new GenericException("Endereço da cerimônia nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        if(festaCerimonia.getEndereco() == null){
+
+        if (festaCerimonia.getEndereco() == null) {
             festaCerimonia.setEndereco(new Endereco());
         }
-        
+
         festaCerimonia.setNomeLocalFesta(cerimoniaEvento.getNomeLocalEvento());
         festaCerimonia.setEndereco(festaCerimonia.getEndereco().copiarEndereco(cerimoniaEvento.getEndereco()));
+
+    }
+
+    /**
+     * Vai cancelar o evento, vai inativar o usuario do contratante para não ter
+     * mais acesso ao sistema
+     *
+     * @param idEvento
+     * @param motivoCancelamento
+     * @throws java.lang.Exception
+     */
+    public void cancelarEvento(Long idEvento, String motivoCancelamento) throws Exception {
+
+        if (StringUtils.isBlank(motivoCancelamento)) {
+            throw new GenericException("Motivo de cancelamento não deve ser vazio", ErrorCode.BAD_REQUEST.getCode());
+        }
         
+        if (idEvento == null) {
+            throw new GenericException("Motivo de cancelamento não deve ser vazio", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        Evento evento = getEntity(idEvento);
+        
+        List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratante());
+        
+        if (CerimonialUtils.isListNotBlank(eventosAtivos)) {
+
+            if (eventosAtivos.size() == 1) {
+
+                pessoaService.inativarPessoa(evento.getContratante());
+
+                usuarioService.inativarUsuario(evento.getContratante().getUsuarioCliente());
+            }
+        }
+        
+        evento.setSituacaoEvento(SituacaoEvento.CANCELADO);
+        evento.setMotivoCancelamento(motivoCancelamento);
+        
+        repository.edit(evento);
+
     }
 
 }

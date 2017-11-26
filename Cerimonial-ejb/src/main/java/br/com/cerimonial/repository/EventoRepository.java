@@ -52,8 +52,9 @@ public class EventoRepository extends AbstractRepository<Evento> {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("SELECT event FROM Evento event ");
-            sb.append("WHERE event.situacaoEvento = ");
+            sb.append("WHERE event.situacaoEvento = '");
             sb.append(SituacaoEvento.ATIVO);
+            sb.append("'");
 
             return getPureListRange(Evento.class, sb.toString(), limit, 0);
         } catch (Exception ex) {

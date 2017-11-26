@@ -293,4 +293,21 @@ public class UsuarioService extends BasicService<Usuario> {
         return true;
     }
 
+    
+    /**
+     * Metodo para inativar usuário
+     * @param usuario
+     */
+    public void inativarUsuario(Usuario usuario) {
+
+        isValid(usuario);
+
+        usuario.setAtivo(false);
+
+        repository.edit(usuario);
+
+    }
+    
+   
+
 }
