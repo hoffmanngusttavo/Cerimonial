@@ -53,7 +53,7 @@ public class OrcamentoEventoMB extends BasicControl {
 
     @EJB
     protected ContatoEventoService contatoEventoService;
-    
+
     @EJB
     protected EventoService eventoService;
 
@@ -66,17 +66,17 @@ public class OrcamentoEventoMB extends BasicControl {
             try {
 
                 contatoEvento = contatoEventoService.getEntity(idContato);
-                
+
                 evento = eventoService.getEventoByContatoInicial(contatoEvento);
 
-                if(contatoEvento == null){
+                if (contatoEvento == null) {
                     throw new GenericException("Não foi possível encontrar o Contato Inicial com esse Id", ErrorCode.NOT_FOUND.getCode());
                 }
-                
+
                 orcamentos = service.findAllByContatoId(contatoEvento.getId());
 
                 if (CerimonialUtils.isListBlank(orcamentos)) {
-                   instanciarOrcamento();
+                    instanciarOrcamento();
                 }
 
             } catch (Exception ex) {
@@ -85,7 +85,7 @@ public class OrcamentoEventoMB extends BasicControl {
                 scrollTopMessage();
             }
         }
-        
+
         this.selectItemUtils = new SelectItemUtils();
 
     }
@@ -193,15 +193,18 @@ public class OrcamentoEventoMB extends BasicControl {
      * Método invocado pelo botÃ£o de criar evento na tela de form
      *
      * @param orcamentoEvento
+     * @return 
      */
-    public void criarEvento(OrcamentoEvento orcamentoEvento) {
+    public String criarEvento(OrcamentoEvento orcamentoEvento) {
         try {
             service.criarEvento(orcamentoEvento);
             createFacesInfoMessage("Evento criado com sucesso!");
         } catch (Exception ex) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível criar o evento, entre em contato com o suporte do sistema: "+ex.getCause().getMessage());
+            createFacesErrorMessage("Não foi possível criar o evento, entre em contato com o suporte do sistema: " + ex.getCause().getMessage());
+            return null;
         }
+        return "/intranet/admin/operacional/pre-evento/form.xhtml?id=" + idContato + "&faces-redirect=true";
     }
 
     /**
@@ -251,7 +254,7 @@ public class OrcamentoEventoMB extends BasicControl {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível enviar o email com a proposta: "+ex.getCause().getMessage());
+            createFacesErrorMessage("Não foi possível enviar o email com a proposta: " + ex.getCause().getMessage());
         } finally {
             scrollTopMessage();
         }
@@ -273,7 +276,7 @@ public class OrcamentoEventoMB extends BasicControl {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível remover o orçamento: "+ex.getCause().getMessage());
+            createFacesErrorMessage("Não foi possível remover o orçamento: " + ex.getCause().getMessage());
         } finally {
             scrollTopMessage();
         }
@@ -292,13 +295,10 @@ public class OrcamentoEventoMB extends BasicControl {
     public void cancelarAlterarValorProposta() {
         entity.setValorAlterado(-1);
     }
-    
-    
+
     public List<SelectItem> getComboModelosProposta() {
         return selectItemUtils.getComboModelosPropostaTipoEvento(entity.getContatoEvento().getTipoEvento());
     }
-    
-    
 
     public Long getIdContato() {
         return idContato;
@@ -356,5 +356,4 @@ public class OrcamentoEventoMB extends BasicControl {
         this.evento = evento;
     }
 
-    
 }

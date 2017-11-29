@@ -239,6 +239,11 @@ public class EventoService extends BasicService<Evento> {
             if (evento.getContrato() != null) {
                 evento.getContrato().getId();
             }
+            
+            if (evento.getTipoEvento()!= null) {
+                evento.getTipoEvento().getId();
+            }
+            
         }
 
         return evento;

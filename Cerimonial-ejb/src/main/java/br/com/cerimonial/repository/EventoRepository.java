@@ -139,7 +139,7 @@ public class EventoRepository extends AbstractRepository<Evento> {
         sb.append("INNER JOIN eve.contratante con ");
         sb.append("WHERE 1=1 ");
         sb.append("AND eve.id =?1 ");
-        sb.append("AND con.id =?2");
+        sb.append("AND con.id =?2 ");
         sb.append("AND eve.situacaoEvento =?3");
 
         return getPurePojo(Evento.class, sb.toString(), idEvento, contratante.getId(), SituacaoEvento.ATIVO);

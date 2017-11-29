@@ -161,9 +161,10 @@
                                     <label>Telefone Residencial
                                     </label>
 
-                                    <p:inputMask value="#{FichaCasamentoMB.envolvido.telefoneResidencial}"
-                                                 mask="(99) 99999-9999"
-                                                 class="form-control"
+                                    <p:inputText value="#{FichaCasamentoMB.envolvido.telefoneResidencial}"
+                                                 onfocus="functionMaskPhone();"
+                                                 styleClass="phone"
+                                                 class="form-control phone"
                                                  id="inptTelefone1Noiva"
                                                  label="Telefone Residencial"/>
                                 </div>
@@ -172,9 +173,10 @@
                                     <label>Telefone Celular
                                     </label>
 
-                                    <p:inputMask value="#{FichaCasamentoMB.envolvido.telefoneCelular}"
-                                                 mask="(99) 99999-9999"
-                                                 class="form-control"
+                                    <p:inputText value="#{FichaCasamentoMB.envolvido.telefoneCelular}"
+                                                 onfocus="functionMaskPhone();"
+                                                 styleClass="phone"
+                                                 class="form-control phone"
                                                  id="inptTelefone2Noiva"
                                                  label="Telefone Celular"/>
                                 </div>
@@ -359,7 +361,7 @@
                     </div>
 
                     <ui:include src="./contatos-casamento.xhtml" />
-                
+
                 </h:panelGroup>
 
 
@@ -374,7 +376,7 @@
                                      onstart="PF('statusDialog').show();validaFormularioCasamento();"
                                      oncomplete="PF('statusDialog').hide();"/>
                 </div>
-                
+
                 <ui:include src="./dialog-contatos-casamento.xhtml" />
 
 

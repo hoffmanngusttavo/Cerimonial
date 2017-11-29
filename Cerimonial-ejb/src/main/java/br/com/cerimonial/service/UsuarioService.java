@@ -231,7 +231,7 @@ public class UsuarioService extends BasicService<Usuario> {
         body = body.replaceAll("@@@NOME_USUARIO@@@", user.getNome());
         body = body.replaceAll("@@@LOGIN_USUARIO@@@", user.getLogin());
         body = body.replaceAll("@@@SENHA_USUARIO@@@", senha);
-        body = body.replaceAll("@@@URL_ACESSO@@@", CerimonialUtils.urlSistema());
+        body = body.replaceAll("@@@URL_ACESSO@@@", CerimonialUtils.getApplicationUri());
         body = body.replaceAll("@@@NOME_EMPRESA@@@", EmpresaCache.getEmpresa().getNome());
 
         //enviar email

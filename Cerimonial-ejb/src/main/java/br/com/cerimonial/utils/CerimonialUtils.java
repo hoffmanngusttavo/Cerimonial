@@ -10,6 +10,8 @@ import br.com.cerimonial.exceptions.GenericException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -17,6 +19,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
+import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.commons.lang.StringUtils;
 
@@ -97,16 +101,14 @@ public class CerimonialUtils {
         return "";
     }
 
-    
     public static String gerarAlfaNumericoAleatoria() {
         UUID uuid = UUID.randomUUID();
         String random = uuid.toString();
         return random.substring(0, 6);
     }
-    
-    
-    public static void validarEmail(String email) throws Exception{
-        if(StringUtils.isBlank(email)){
+
+    public static void validarEmail(String email) throws Exception {
+        if (StringUtils.isBlank(email)) {
             throw new GenericException("Preencha um email válido", ErrorCode.BAD_REQUEST.getCode());
         }
     }
@@ -115,5 +117,18 @@ public class CerimonialUtils {
         FacesContext context = FacesContext.getCurrentInstance();
         return context.getExternalContext().getRequestContextPath();
     }
-    
+
+    public static String getApplicationUri() {
+        try {
+            FacesContext ctxt = FacesContext.getCurrentInstance();
+            ExternalContext ext = ctxt.getExternalContext();
+            URI uri = new URI(ext.getRequestScheme(),
+                    null, ext.getRequestServerName(), ext.getRequestServerPort(),
+                    ext.getRequestContextPath(), null, null);
+            return uri.toASCIIString();
+        } catch (URISyntaxException e) {
+            throw new FacesException(e);
+        }
+    }
+
 }

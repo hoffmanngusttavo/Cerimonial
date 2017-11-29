@@ -361,7 +361,7 @@
                                                              oncomplete="PF('statusDialog').hide();"/>
 
                                             <p:commandButton process="@this"
-                                                             actionListener="#{OrcamentoEventoMB.criarEvento(proposta)}"
+                                                             action="#{OrcamentoEventoMB.criarEvento(proposta)}"
                                                              rendered="#{proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
                                                              id="btn-criar-criar-ficha"
                                                              icon="fa fa-universal-access" 

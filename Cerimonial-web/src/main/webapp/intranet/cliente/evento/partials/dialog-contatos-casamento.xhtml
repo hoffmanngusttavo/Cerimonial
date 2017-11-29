@@ -102,24 +102,26 @@
                         </div>
 
                         <div class="form-group col-md-6">
-                            <p:inputMask id="inptTelefoneCelContato" 
-                                         mask="(99) 99999-9999"
+                            <p:inputText id="inptTelefoneCelContato" 
+                                         onfocus="functionMaskPhone();"
+                                         styleClass="phone"
+                                         class="form-control phone"
                                          value="#{FichaCasamentoMB.contato.telefoneCelular}" 
                                          placeholder="Telefone Celular"
-                                         class="form-control"
                                          label="Telefone"/>
                         </div>
-                        
+
                         <div class="form-group col-md-6">
-                            <p:inputMask id="inptTelefoneResidencialContato" 
-                                         mask="(99) 99999-9999"
+                            <p:inputText id="inptTelefoneResidencialContato" 
+                                         onfocus="functionMaskPhone();"
+                                         styleClass="phone"
+                                         class="form-control phone"
                                          value="#{FichaCasamentoMB.contato.telefoneResidencial}" 
                                          placeholder="Telefone Residencial"
-                                         class="form-control"
                                          label="Telefone Residencial"/>
                         </div>
 
-                       
+
                         <div class="form-group col-md-6">
 
                             <p:inputText id="inptFacebookContato" 
