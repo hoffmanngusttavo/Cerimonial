@@ -5,7 +5,6 @@
  */
 package br.com.cerimonial.repository;
 
-import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.TipoEvento;
 import java.util.List;

@@ -32,7 +32,7 @@
                             <h3 class="panel-title">
                                 <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{OrcamentoEventoMB.contatoEvento.id}">
                                     <i class="fa fa-list"></i>
-                                    <span>#{OrcamentoEventoMB.contatoEvento.nomeEvento}</span>
+                                    <span>#{OrcamentoEventoMB.contatoEvento.nomeEvento} - Proposta/Orçamento</span>
                                 </p:link>
                             </h3>
                         </div>
@@ -45,11 +45,7 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="form-group col-md-3">
-                    <h2>Proposta/Orçamento</h2>
-                </div>
-            </div>
+            
             <h:panelGroup id="groupOrcamento">
                 <h:panelGroup rendered="#{OrcamentoEventoMB.abrirFormOrcamento}">
                     <div class="row">
@@ -217,11 +213,8 @@
 
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <label class="control-label ">Conteúdo
-                                <span class="asteriskField">
-                                    *
-                                </span>
-                            </label>
+                            <label class="control-label ">Conteúdo</label>
+                            
                             <p:editor value="#{OrcamentoEventoMB.entity.proposta}"
                                       disabled="#{OrcamentoEventoMB.entity.id != null}"/>
                         </div>
@@ -254,6 +247,7 @@
                     <div class="row">
                         <p:commandButton process="@this"
                                          actionListener="#{OrcamentoEventoMB.instanciarOrcamento()}"
+                                         style="float: right;"
                                          rendered="#{OrcamentoEventoMB.evento == null}"
                                          id="btn-criar-orcamento"
                                          update="groupOrcamento"
@@ -343,7 +337,7 @@
                                                              actionListener="#{OrcamentoEventoMB.aceitarProposta(proposta)}"
                                                              process="@this"
                                                              rendered="#{!proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
-                                                             title="Aceitar Proposta"
+                                                             title="Aprovar Proposta"
                                                              update=":form:groupPropostas"
                                                              immediate="true"
                                                              onstart="PF('statusDialog').show();"

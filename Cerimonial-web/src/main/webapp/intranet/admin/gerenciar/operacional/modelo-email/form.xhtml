@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="#{LayoutMB.layout}"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Cadastro de Modelo de Emails
+    </ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam name="id" value="#{ModeloEmailCrudMB.id}" converter="javax.faces.Long"/>
+            <!--use view action if you are in a Java EE 7 server: -->
+            <f:viewAction action="#{ModeloEmailCrudMB.init()}"/>
+            <!--<f:event type="preRenderView" listener="{ModeloEmailCrudMB.init}"/>-->
+        </f:metadata>
+
+        <h:form prependId="false"
+                enctype="multipart/form-data"
+                id="form">
+
+            <p:focus for="inptNome"/>
+
+            <div class="row">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="etapa1">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <h2>Modelo de Email</h2>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="control-label ">Título
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputText id="inptNome" 
+                                             value="#{ModeloEmailCrudMB.entity.titulo}" 
+                                             required="true"
+                                             requiredMessage="Preencha um título válido"
+                                             class="form-control"
+                                             label="Nome"/>
+
+                            </div>
+
+                            <div class="form-group col-md-3" style="margin-top: 28px;">
+                                <label>Ativo ?
+                                </label>
+
+                                <p:selectBooleanCheckbox value="#{ModeloEmailCrudMB.entity.ativo}"
+                                                         class="checkbox-inline"
+                                                         id="inptAtivo"/>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label style="width: 100%;">Anexo
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:fileUpload value="#{ModeloEmailCrudMB.file}"
+                                              mode="simple" 
+                                              skinSimple="true"
+                                              label="Selecione Arquivo"/>
+                                <h:panelGroup id="groupFile">
+                                    <h:panelGroup rendered="#{ModeloEmailCrudMB.entity.arquivo != null}">
+                                        <p:commandButton icon="fa fa-download" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         title="Baixar Arquivo"
+                                                         actionListener="#{ModeloEmailCrudMB.baixarArquivo()}"
+                                                         ajax="false"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
+
+                                        <label>#{ModeloEmailCrudMB.entity.arquivo.nome}</label>
+
+                                        <p:commandButton icon="fa fa-trash" 
+                                                         styleClass="bt-acoes"
+                                                         title="Remover anexo"
+                                                         actionListener="#{ModeloEmailCrudMB.removerArquivo()}"
+                                                         process="@this"
+                                                         update=":form:groupFile"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label>Conteúdo
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:editor id="inptConteudo" 
+                                          value="#{ModeloEmailCrudMB.entity.conteudo}" 
+                                          required="true"
+                                          requiredMessage="Preencha um texto válido"/>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <p:commandButton value="Voltar"
+                                 immediate="true"
+                                 action="index?faces-redirect=true"
+                                 process="@this"
+                                 class="btn btn-default"
+                                 icon="fa fa-close"/>
+
+
+                <p:commandButton value="Salvar"
+                                 action="#{ModeloEmailCrudMB.save()}"
+                                 icon="fa fa-check" 
+                                 ajax="false"
+                                 class="btn btn-success"
+                                 style="margin-left: 10px;"
+                                 onstart="PF('statusDialog').show();"
+                                 oncomplete="PF('statusDialog').hide();"/>
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

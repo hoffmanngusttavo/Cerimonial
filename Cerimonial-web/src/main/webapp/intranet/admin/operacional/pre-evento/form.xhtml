@@ -51,10 +51,26 @@
                                 <h3 class="panel-title">Contato Inicial</h3>
                             </div>
                             <div class="panel-body">
-                                <p:link href="/intranet/admin/operacional/pre-evento/partials/contato-inicial.xhtml?id=#{PreEventoMB.entity.id}">
-                                    <i class="fa fa-list"></i>
-                                    <span></span>
-                                </p:link>
+                                <div class="row">
+
+                                    <div class="col-md-8">
+                                        <p:link href="/intranet/admin/operacional/pre-evento/partials/contato-inicial.xhtml?id=#{PreEventoMB.entity.id}">
+                                            <i class="fa fa-list"></i>
+                                            <span></span>
+                                        </p:link>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <p:commandButton icon="fa fa-send" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         title="Enviar E-mail"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

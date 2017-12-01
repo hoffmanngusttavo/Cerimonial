@@ -31,7 +31,7 @@
                                 <h3 class="panel-title">
                                     <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{ContatoInicialCrudMB.entity.id}">
                                         <i class="fa fa-list"></i>
-                                        <span>#{ContatoInicialCrudMB.entity.nomeEvento}</span>
+                                        <span>#{ContatoInicialCrudMB.entity.nomeEvento} - Contato Inicial</span>
                                     </p:link>
                                 </h3>
                             </div>
@@ -54,8 +54,6 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
-                        <h2>Contato Inicial</h2>
-
 
                         <div class="row">
                             <div class="form-group col-md-12">
@@ -316,10 +314,12 @@
 
                             <div class="form-group col-md-12">
                                 <label for="inptObs">
-                                    Observação
+                                    Observações gerais
                                 </label>
-                                <p:inputTextarea value="#{ContatoInicialCrudMB.entity.observacao}" 
-                                                 class="form-control"/>
+                                
+                                 <p:editor id="inptConteudo" 
+                                          value="#{ContatoInicialCrudMB.entity.observacao}" />
+                                
                             </div>
                         </div>
 
