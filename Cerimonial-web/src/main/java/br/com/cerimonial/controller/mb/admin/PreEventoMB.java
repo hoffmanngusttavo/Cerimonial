@@ -137,6 +137,9 @@ public class PreEventoMB extends BasicControl {
         try {
             
             emailContatoEventoService.save(emailContato);
+            
+            init();
+            
             createFacesInfoMessage("Email enviado com sucesso");
             
         } catch (Exception ex) {

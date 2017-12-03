@@ -13,6 +13,7 @@ import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EmailContatoEventoRepository;
 import br.com.cerimonial.utils.EmailHelper;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -68,9 +69,11 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
         isValid(entity);
 
         if (entity.getId() == null) {
-
+            
             enviarEmail(entity);
 
+            entity.setDataCadastro(new Date());
+            
             return repository.create(entity);
         } else {
             return repository.edit(entity);

@@ -53,6 +53,19 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     @Override
     public ContatoEvento getEntity(Long id) throws Exception {
         ContatoEvento entity = repository.getEntity(id);
+        
+        if (entity != null) {
+            if (entity.getTipoIndicacao() != null) {
+                entity.getTipoIndicacao().getId();
+            }
+            if (entity.getStatus() != null) {
+                entity.getStatus().getId();
+            }
+            
+            if(entity.getEmailsContato() != null){
+                entity.getEmailsContato().size();
+            }
+        }
         return entity;
     }
 
@@ -147,7 +160,14 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
             throw new GenericException("Evento nulo", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        return  repository.getContatoInicialByEvento(evento);
+        ContatoEvento entity = repository.getContatoInicialByEvento(evento);
+        if (entity != null) {
+
+            if (entity.getEmailsContato() != null) {
+                entity.getEmailsContato().size();
+            }
+        }
+            return entity;
 
     }
 

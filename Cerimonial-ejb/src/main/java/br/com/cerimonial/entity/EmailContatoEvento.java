@@ -60,6 +60,9 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
     private List<Arquivo> anexos;
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataCadastro;
+    
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -154,6 +157,14 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
 
     public List<Arquivo> getAnexos() {
         return anexos;
+    }
+
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
     
     
