@@ -105,6 +105,9 @@ public class ContatoEvento implements Serializable, ModelInterface{
     
     @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY)
     private List<OrcamentoEvento> propostas;
+    
+    @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY)
+    private List<EmailContatoEvento> emailsContato;
  
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoIndicacao tipoIndicacao;
@@ -279,6 +282,14 @@ public class ContatoEvento implements Serializable, ModelInterface{
 
     public void setNomeEvento(String nomeEvento) {
         this.nomeEvento = nomeEvento;
+    }
+
+    public List<EmailContatoEvento> getEmailsContato() {
+        return emailsContato;
+    }
+
+    public void setEmailsContato(List<EmailContatoEvento> emailsContato) {
+        this.emailsContato = emailsContato;
     }
     
     

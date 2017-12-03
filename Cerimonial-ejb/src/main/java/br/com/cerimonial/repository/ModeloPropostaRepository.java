@@ -20,14 +20,7 @@ public class ModeloPropostaRepository extends AbstractRepository<ModeloProposta>
         super(entityManager, ModeloProposta.class);
     }
 
-    @Override
-    public ModeloProposta getEntity(Long id) {
-        ModeloProposta modeloProposta = super.getEntity(id);
-        if (modeloProposta != null && modeloProposta.getAnexos() != null) {
-            modeloProposta.getAnexos().size();
-        }
-        return modeloProposta;
-    }
+   
 
     public List<ModeloProposta> findModelosPropostaByTipoEvento(TipoEvento tipoEvento) {
 

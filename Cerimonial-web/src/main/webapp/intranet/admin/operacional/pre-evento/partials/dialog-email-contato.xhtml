@@ -8,111 +8,95 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 
-    <div class="modal fade" 
-         id="editDialogVar"
-         tabindex="-1" 
-         role="dialog" 
-         aria-labelledby="edit"
-         aria-hidden="true"
-         data-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <h:panelGroup id="groupEdit">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                        <h4 class="modal-title custom_align" id="Heading">Editar Contato</h4>
-                    </div>
+    <h:form prependId="false"
+            id="formDialogEmail">
 
-                    <div class="modal-body col-lg-12 col-md-12">
-
-                        <div class="form-group col-md-12"
-                             id="div-inptNomeContato">
-                            <p:inputText id="inptNomeContato" 
-                                         value="#{FichaCasamentoMB.contato.nome}" 
-                                         required="true"
-                                         requiredMessage="Preencha nome do contato"
-                                         placeholder="Nome Completo"
-                                         class="form-control"
-                                         label="Nome"/>
+        <div class="modal fade" 
+             id="emailContatoDialogVar"
+             tabindex="-1" 
+             role="dialog" 
+             aria-labelledby="edit"
+             aria-hidden="true"
+             data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <h:panelGroup id="groupDialogEmailContato">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            <h4 class="modal-title custom_align" id="Heading">Enviar Email</h4>
                         </div>
 
-                        <div class="form-group col-md-12">
+                        <div class="modal-body col-lg-12 col-md-12">
 
-                            <h:selectOneMenu id="inptGrauContato"
-                                             value="#{FichaCasamentoMB.contato.grauParentesco}"
+                            <div class="form-group col-md-12">
+
+                                <h:selectOneMenu id="inptModeloEmail"
+                                                 value="#{PreEventoMB.emailContato.modeloEmail}"
+                                                 converter="EntityConverter"
+                                                 class="form-control">
+                                    <f:selectItem itemLabel="Modelo de Email"/>
+                                    <f:selectItems value="#{PreEventoMB.comboModeloEmail}"/>
+                                    <p:ajax event="change"
+                                            listener="#{PreEventoMB.selecionarModeloEmailContato()}"
+                                            update=":formDialogEmail:groupDialogEmailContato"/>
+                                </h:selectOneMenu>
+
+                            </div>
+
+                            <div class="form-group col-md-12"
+                                 id="div-inptNomeContato">
+                                <p:inputText id="inptDestinatarioEmail" 
+                                             value="#{PreEventoMB.emailContato.destinatarios}" 
                                              required="true"
+                                             requiredMessage="Preencha destinatários email"
+                                             placeholder="Destinatários, podem separar por (;) ponto e vírgula"
                                              class="form-control"
-                                             requiredMessage="Selecione um grau de parentesco">
-                                <f:selectItem itemLabel="Selecione Grau Parentesco"/>
-                                <f:selectItems value="#{FichaCasamentoMB.comboGrauParentesco}"/>
-                            </h:selectOneMenu>
+                                             label="Destinatários"/>
+                            </div>
+                            
+                             <div class="form-group col-md-12"
+                                 id="div-inptNomeContato">
+                                <p:inputText id="inptTituloEmail" 
+                                             value="#{PreEventoMB.emailContato.tituloEmail}" 
+                                             required="true"
+                                             requiredMessage="Preencha título email"
+                                             placeholder="Título do email"
+                                             class="form-control"
+                                             label="Título"/>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <p:editor id="inptCorpoEmail" 
+                                          value="#{PreEventoMB.emailContato.corpoEmail}" />
+                            </div>
 
                         </div>
 
-                        <div class="form-group col-md-6">
-                            <p:inputText id="inptTelefoneCelContato" 
-                                         onfocus="functionMaskPhone();"
-                                         styleClass="phone"
-                                         class="form-control phone"
-                                         value="#{FichaCasamentoMB.contato.telefoneCelular}" 
-                                         placeholder="Telefone Celular"
-                                         label="Telefone"/>
+                        <div class="modal-footer ">
+
+                            <p:commandLink value="Cancelar"
+                                           immediate="true"
+                                           styleClass="btn btn-warning" 
+                                           process="@this"
+                                           actionListener="#{PreEventoMB.setEmailContato(null)}"
+                                           oncomplete="$('#emailContatoDialogVar').modal('hide');" />
+
+                            <p:commandLink value="Confirmar" 
+                                           action="#{PreEventoMB.salvarEmailContato()}" 
+                                           update=":form:listagemEmailsContato"
+                                           styleClass="btn btn-success"
+                                           process=":formDialogEmail:groupDialogEmailContato" 
+                                           onstart="PF('statusDialog').show();"
+                                           oncomplete="PF('statusDialog').hide();$('#emailContatoDialogVar').modal('hide');"/>
                         </div>
-
-                        <div class="form-group col-md-6">
-                            <p:inputText id="inptTelefoneResidencialContato" 
-                                         onfocus="functionMaskPhone();"
-                                         styleClass="phone"
-                                         class="form-control phone"
-                                         value="#{FichaCasamentoMB.contato.telefoneResidencial}" 
-                                         placeholder="Telefone Residencial"
-                                         label="Telefone Residencial"/>
-                        </div>
-
-
-                        <div class="form-group col-md-6">
-
-                            <p:inputText id="inptFacebookContato" 
-                                         value="#{FichaCasamentoMB.contato.facebook}" 
-                                         placeholder="Facebook"
-                                         class="form-control"
-                                         label="Facebook"/>
-
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <p:inputText id="inptInstagranContato" 
-                                         value="#{FichaCasamentoMB.contato.instagram}" 
-                                         placeholder="Instagram"
-                                         class="form-control"
-                                         label="Insta"/>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer ">
-
-                        <p:commandLink value="Cancelar"
-                                       immediate="true"
-                                       styleClass="btn btn-warning" 
-                                       process="@this"
-                                       actionListener="#{FichaCasamentoMB.setPosicaoContato(null)}"
-                                       oncomplete="$('#editDialogVar').modal('hide');" />
-
-                        <p:commandLink value="Confirmar" 
-                                       action="#{FichaCasamentoMB.salvarContato()}" 
-                                       update="dataTable"
-                                       styleClass="btn btn-success"
-                                       process="groupEdit" 
-                                       onstart="PF('statusDialog').show();validarFormularioContatoCasamento();"
-                                       oncomplete="PF('statusDialog').hide();"/>
-                    </div>
-                </h:panelGroup>
+                    </h:panelGroup>
+                </div>
+                <!-- /.modal-content --> 
             </div>
-            <!-- /.modal-content --> 
+            <!-- /.modal-dialog --> 
         </div>
-        <!-- /.modal-dialog --> 
-    </div>
+
+    </h:form>
 
 </ui:composition>
 

@@ -8,6 +8,7 @@ package br.com.cerimonial.utils;
 import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Estado;
+import br.com.cerimonial.entity.ModeloEmail;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.StatusContato;
 import br.com.cerimonial.entity.TipoEvento;
@@ -19,6 +20,7 @@ import br.com.cerimonial.service.CategoriaFornecedorService;
 import br.com.cerimonial.service.CidadeService;
 import br.com.cerimonial.service.EstadoService;
 import br.com.cerimonial.service.ModeloContratoService;
+import br.com.cerimonial.service.ModeloEmailService;
 import br.com.cerimonial.service.ModeloPropostaService;
 import br.com.cerimonial.service.StatusContatoService;
 import br.com.cerimonial.service.TipoEventoService;
@@ -92,6 +94,22 @@ public class SelectItemUtils {
         try {
             for (Estado item : service.findAll()) {
                 items.add(new SelectItem(item, item.getSigla()));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return items;
+    }
+    
+    public List<SelectItem> getComboModeloEmail() {
+        List<SelectItem> items = new LinkedList<>();
+
+        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
+        ModeloEmailService service = lookupUtil.lookupService(ModeloEmailService.class);
+
+        try {
+            for (ModeloEmail item : service.findAll()) {
+                items.add(new SelectItem(item, item.getTitulo()));
             }
         } catch (Exception ex) {
             Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);

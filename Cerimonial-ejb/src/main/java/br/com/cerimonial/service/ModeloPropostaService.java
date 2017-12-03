@@ -49,7 +49,11 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
 
     @Override
     public ModeloProposta getEntity(Long id) throws Exception {
-        return repository.getEntity(id);
+        ModeloProposta modeloProposta = repository.getEntity(id);
+        if (modeloProposta != null && modeloProposta.getAnexos() != null) {
+            modeloProposta.getAnexos().size();
+        }
+        return modeloProposta;
     }
 
     @Override

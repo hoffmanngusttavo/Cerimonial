@@ -62,11 +62,24 @@ public class EmailHelper {
      * @throws java.lang.Exception
      */
     public void enviarEmail(String destinatario, String assunto, String mensagem) throws Exception {
-        this.enviarEmail(destinatario, assunto, mensagem, null);
+        
+        String[] destinatarios = new String[1];
+        destinatarios[0] = destinatario;
+        
+        this.enviarEmail(destinatarios, assunto, mensagem, null);
     }
-
     
-
+    /**
+     *
+     * @param destinatarios
+     * @param assunto
+     * @param mensagem
+     * @throws java.lang.Exception
+     */
+    public void enviarEmail(String[] destinatarios, String assunto, String mensagem) throws Exception {
+        this.enviarEmail(destinatarios, assunto, mensagem, null);
+    }
+    
     /**
      * @param destinatario
      * @param assunto
@@ -75,13 +88,34 @@ public class EmailHelper {
      * @throws java.lang.Exception
      */
     public void enviarEmail(String destinatario, String assunto, String mensagem, HashMap<String, Object> anexos) throws Exception {
-        String remetente = configuracaoEmail.getLogin();
+        String[] destinatarios = new String[1];
+        destinatarios[0] = destinatario;
+        this.enviarEmail(destinatarios, assunto, mensagem, anexos);
+    }
+
+    
+    
+    /**
+     *
+     * @param destinatarios
+     * @param assunto
+     * @param mensagem
+     * @throws java.lang.Exception
+     */
+    public void enviarEmail(String[] destinatarios, String assunto, String mensagem, HashMap<String, Object> anexos) throws Exception {
+      String remetente = configuracaoEmail.getLogin();
 
         Properties properties = getProperties();
 
         SimpleAuth auth = new SimpleAuth(remetente, configuracaoEmail.getSenha());
+        
+        Address[] toUser = new Address[destinatarios.length];
+        
+        for (int i = 0; i < destinatarios.length; i++) {
+            toUser[i] = new InternetAddress(destinatarios[i]);
+        }
 
-        Address[] toUser = InternetAddress.parse(destinatario.trim().toLowerCase());
+        
         Transport tr = null;
         try {
             Session session = Session.getDefaultInstance(properties, auth);
@@ -138,6 +172,8 @@ public class EmailHelper {
             }
         }
     }
+
+    
 
     
 

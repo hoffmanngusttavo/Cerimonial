@@ -93,9 +93,23 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
         return 0;
     }
 
+    /**
+     * Método para retornar os contatos da listagem em lazy o status
+     * @param max
+     * @param offset
+     * @param sortField
+     * @param sortAscDesc
+     * @return 
+     */
     public List<ContatoEvento> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
-            return repository.findRangeListagem(max, offset, sortField, sortAscDesc);
+            List<ContatoEvento> findRangeListagem = repository.findRangeListagem(max, offset, sortField, sortAscDesc);
+            if(findRangeListagem != null){
+                findRangeListagem.stream().filter((contato) -> (contato.getStatus() != null)).forEach((contato) -> {
+                    contato.getStatus().getId();
+                });
+            }
+            return findRangeListagem;
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }

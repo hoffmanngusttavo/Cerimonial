@@ -113,6 +113,13 @@
                                           headerText="Tipo Evento">
                                     <h:outputText value="#{item.tipoEvento.nome}" />
                                 </p:column>
+                                
+                                <p:column id="statusContato" 
+                                          exportable="true"
+                                          sortBy="#{item.status.nome}"
+                                          headerText="Status Evento">
+                                    <h:outputText value="#{item.status.nome}" />
+                                </p:column>
 
                                 <p:column headerText="Ações"
                                           style="text-align: center;width: 70px;">
