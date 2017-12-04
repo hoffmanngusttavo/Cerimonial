@@ -9,6 +9,7 @@
 
 
     <h:form prependId="false"
+            enctype="multipart/form-data"
             id="formDialogEmail">
 
         <div class="modal fade" 
@@ -53,8 +54,8 @@
                                              class="form-control"
                                              label="Destinatários"/>
                             </div>
-                            
-                             <div class="form-group col-md-12"
+
+                            <div class="form-group col-md-12"
                                  id="div-inptNomeContato">
                                 <p:inputText id="inptTituloEmail" 
                                              value="#{PreEventoMB.emailContato.tituloEmail}" 
@@ -68,6 +69,37 @@
                             <div class="form-group col-md-12">
                                 <p:editor id="inptCorpoEmail" 
                                           value="#{PreEventoMB.emailContato.corpoEmail}" />
+                            </div>
+                            <div class="form-group col-md-12">
+                                <p:fileUpload value="#{PreEventoMB.file}"
+                                              mode="simple" 
+                                              skinSimple="true"
+                                              label="Selecione Arquivo"/>
+                                <h:panelGroup id="groupFile">
+                                    <h:panelGroup rendered="#{PreEventoMB.emailContato.arquivo != null}">
+                                        <p:commandButton icon="fa fa-download" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         title="Baixar Arquivo"
+                                                         actionListener="#{PreEventoMB.baixarArquivo()}"
+                                                         ajax="false"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
+
+                                        <label>#{PreEventoMB.emailContato.arquivo.nome}</label>
+
+                                        <p:commandButton icon="fa fa-trash" 
+                                                         styleClass="bt-acoes"
+                                                         title="Remover anexo"
+                                                         actionListener="#{PreEventoMB.removerArquivo()}"
+                                                         process="@this"
+                                                         update=":formDialogEmail:groupFile"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
                             </div>
 
                         </div>
@@ -84,19 +116,19 @@
                             <p:commandLink value="Confirmar" 
                                            action="#{PreEventoMB.salvarEmailContato()}" 
                                            update=":form:listagemEmailsContato"
+                                           ajax="false"
                                            styleClass="btn btn-success"
-                                           process=":formDialogEmail:groupDialogEmailContato" 
                                            onstart="PF('statusDialog').show();"
                                            oncomplete="PF('statusDialog').hide();$('#emailContatoDialogVar').modal('hide');"/>
-                        </div>
-                    </h:panelGroup>
-                </div>
-                <!-- /.modal-content --> 
+                    </div>
+                </h:panelGroup>
             </div>
-            <!-- /.modal-dialog --> 
+            <!-- /.modal-content --> 
         </div>
+        <!-- /.modal-dialog --> 
+    </div>
 
-    </h:form>
+</h:form>
 
 </ui:composition>
 

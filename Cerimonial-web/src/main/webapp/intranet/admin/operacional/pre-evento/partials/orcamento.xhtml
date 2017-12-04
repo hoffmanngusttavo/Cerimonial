@@ -263,7 +263,6 @@
                                     <th>#</th>
                                     <th>Modelo Proposta</th>
                                     <th>Valor</th>
-                                    <th>Enviado por email</th>
                                     <th>Proposta Aceita</th>
                                     <th>Ações</th>
                                 </tr>
@@ -295,10 +294,6 @@
                                         </td>
 
                                         <td>
-                                            <h:outputText value="#{proposta.propostaEnviada ? 'Sim': 'Não'}"/>
-                                        </td>
-
-                                        <td>
                                             <h:outputText value="#{proposta.propostaAceita ? 'Sim': 'Não'}"/>
                                         </td>
 
@@ -309,17 +304,6 @@
                                                              title="Visualizar Orçamento"
                                                              actionListener="#{OrcamentoEventoMB.visualizarOrcamento(proposta)}"
                                                              update=":form:groupOrcamento"/>
-
-                                            <p:commandButton icon="fa fa-send" 
-                                                             styleClass="bt-acoes"
-                                                             process="@this"
-                                                             title="Enviar E-mail"
-                                                             actionListener="#{OrcamentoEventoMB.enviarPropostaEmail(proposta)}"
-                                                             rendered="#{OrcamentoEventoMB.evento == null}"
-                                                             update=":form:groupPropostas"
-                                                             immediate="true"
-                                                             onstart="PF('statusDialog').show();"
-                                                             oncomplete="PF('statusDialog').hide();"/>
 
                                             <p:commandButton icon="fa fa-download" 
                                                              styleClass="bt-acoes"
@@ -368,7 +352,7 @@
                                             <p:commandButton icon="fa fa-trash" 
                                                              styleClass="bt-acoes"
                                                              actionListener="#{OrcamentoEventoMB.setEntity(proposta)}"
-                                                             rendered="#{OrcamentoEventoMB.evento == null}"
+                                                             rendered="#{OrcamentoEventoMB.evento == null and !proposta.propostaAceita}"
                                                              process="@this"
                                                              title="Remover"
                                                              update=":form:groupRemove"

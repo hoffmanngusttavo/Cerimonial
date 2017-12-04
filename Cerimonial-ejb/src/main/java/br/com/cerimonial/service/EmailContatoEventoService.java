@@ -137,6 +137,13 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     public EmailContatoEvento carregarDadosModeloEmail(EmailContatoEvento entity, ModeloEmail modeloEmail) throws Exception {
 
+        if(entity != null){
+            entity.setArquivo(null);
+            entity.setCorpoEmail(null);
+            entity.setTituloEmail(null);
+        }
+        
+        
         if (modeloEmail == null) {
             throw new GenericException("Modelo de Email nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -170,7 +177,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
         HashMap<String, Object> anexos = new HashMap<>();
         if (entity.getAnexos() != null) {
             entity.getAnexos().stream().forEach((file) -> {
-                anexos.put(file.getId().toString(), file);
+                anexos.put(file.getNome(), file);
             });
         }
 

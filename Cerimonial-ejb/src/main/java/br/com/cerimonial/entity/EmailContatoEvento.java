@@ -5,12 +5,14 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -56,7 +58,7 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
     @Column(columnDefinition = "TEXT")
     private String corpoEmail;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Arquivo> anexos;
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -167,7 +169,17 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
         this.dataCadastro = dataCadastro;
     }
     
-    
+    public void setArquivo(Arquivo file) {
+       anexos =  anexos = new ArrayList<>();
+       adicionarAnexo(file);
+    }
+
+    public Arquivo getArquivo() {
+        if (CerimonialUtils.isListNotBlank(anexos)) {
+            return anexos.get(0);
+        }
+        return null;
+    }
     
      public void adicionarAnexo(Arquivo arquivo) {
         if (arquivo != null) {
