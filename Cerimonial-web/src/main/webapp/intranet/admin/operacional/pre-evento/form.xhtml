@@ -45,6 +45,43 @@
 
                 <div class="row">
 
+                    <div class="col-md-4 text-center">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Emails Enviados</h3>
+                            </div>
+                            <div class="panel-body" style="max-height: 45px;">
+                                <div style="margin-left: 28px;" class="btn-link">
+
+                                    <p:commandLink actionListener="#{PreEventoMB.adicionarNovoEmailContato()}"
+                                                   onstart="PF('statusDialog').show();"
+                                                   oncomplete="PF('statusDialog').hide();"
+                                                   onsuccess="$('#emailContatoDialogVar').modal('show');"
+                                                   process="@this"
+                                                   title="Enviar Email"
+                                                   immediate="true"
+                                                   update=":formDialogEmail:groupDialogEmailContato">
+                                        <i class="fa fa-send"></i>
+                                        <span></span>
+                                    </p:commandLink>
+
+                                    <p:commandLink onstart="PF('statusDialog').show();"
+                                                   oncomplete="PF('statusDialog').hide();"
+                                                   value="Visualizar emails"
+                                                   style="float: right;"
+                                                   onsuccess="$('#emailsDialogVar').modal('show');"
+                                                   process="@this"
+                                                   immediate="true"
+                                                   update=":formDialogEmail:listagemEmailsContato">
+                                        <i class="fa fa-send"></i>
+                                        <span></span>
+                                    </p:commandLink>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-4">
 
                         <div class="panel panel-primary">
@@ -60,10 +97,6 @@
                                             <span></span>
                                         </p:link>
                                     </div>
-
-
-
-
                                 </div>
 
                             </div>
@@ -117,73 +150,6 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4 text-center">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Emails</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div style="margin-left: 28px;">
-                                    <div class="col-md-3">
-                                        <p:commandButton icon="fa fa-send" 
-                                                         styleClass="bt-acoes"
-                                                         process="@this"
-                                                         update=":formDialogEmail:groupDialogEmailContato"
-                                                         title="Enviar E-mail"
-                                                         immediate="true"
-                                                         actionListener="#{PreEventoMB.adicionarNovoEmailContato()}"
-                                                         onstart="PF('statusDialog').show();"
-                                                         oncomplete="PF('statusDialog').hide();"
-                                                         onsuccess="$('#emailContatoDialogVar').modal('show');"/>
-                                    </div>
-
-                                    <div class="col-md-12 table-responsive">
-
-                                        <h:panelGroup id="listagemEmailsContato">
-
-                                            <table class="table table-hover">
-
-                                                <thead>
-                                                    <th>#</th>
-                                                    <th>Titulo</th>
-                                                    <th>Data Envio</th>
-                                                </thead>
-
-                                                <tbody>
-
-                                                    <ui:repeat value="#{PreEventoMB.entity.emailsContato}"
-                                                               var="email"
-                                                               varStatus="indice">
-
-                                                        <tr>
-                                                            <td>#{indice.index + 1}</td>
-                                                            <td>
-                                                                <h:outputText value="#{email.dataCadastro}">
-                                                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm"
-                                                                                       locale="pt_BR"
-                                                                                       timeZone="#{initParam.timezone}"/>
-                                                                </h:outputText>
-                                                            </td>
-
-                                                            <td>
-                                                                <h:outputText value="#{email.tituloEmail}"/>
-                                                            </td>
-                                                        </tr>
-
-                                                    </ui:repeat>
-                                                </tbody>
-                                            </table>
-                                        </h:panelGroup>
-
-                                        <div class="clearfix"></div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
                     <h:panelGroup rendered="#{PreEventoMB.evento != null}">
                         <div class="col-md-4 text-center">
                             <div class="panel panel-primary">
@@ -221,53 +187,7 @@
         </h:form>
 
 
-        <h:form id="formDialog"
-                prependId="false">
-            <div class="modal fade" 
-                 id="removeDialogVar" tabindex="-1" 
-                 role="dialog" aria-labelledby="myModal" 
-                 aria-hidden="true" data-keyboard="false" 
-                 data-backdrop="static">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title">Deseja cancelar esse evento ?</h4>
-                        </div>
-                        <div class="modal-body col-lg-12 col-md-12">
-
-                            <div class="form-group col-md-12">
-                                <p:inputTextarea id="inptMotivoCancelamento" 
-                                                 value="#{PreEventoMB.evento.motivoCancelamento}" 
-                                                 placeholder="Motivo de cancelamento"
-                                                 required="true"
-                                                 class="form-control"
-                                                 label="Insta"/>
-                            </div>
-                        </div>
-                        <h:panelGroup layout="block" styleClass="modal-footer">
-                            <p:commandLink value="Fechar"
-                                           immediate="true" 
-                                           styleClass="btn btn-default" 
-                                           oncomplete="$('#removeDialogVar').modal('hide');" />
-
-                            <p:commandLink value="Confirmar" 
-                                           actionListener="#{PreEventoMB.cancelarEvento()}"
-                                           styleClass="btn btn-primary"
-                                           update=":form:gridSituacao"
-                                           process="@this,formDialog:inptMotivoCancelamento" 
-                                           onstart="PF('statusDialog').show();"
-                                           oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
-                        </h:panelGroup>
-                    </div>
-                </div>
-            </div>
-        </h:form>
-
-        <ui:include src="./partials/dialog-email-contato.xhtml" />
+        <ui:include src="./partials/dialogs-form.xhtml" />
 
     </ui:define>
 
