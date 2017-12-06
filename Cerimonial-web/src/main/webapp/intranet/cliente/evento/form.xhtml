@@ -45,16 +45,16 @@
 
 
                         <div class="form-group col-md-4 text-center">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-success">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
                                         Ficha Cadastral Evento
                                     </h3>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body" style="max-height: 45px;">
                                     <p:link href="/intranet/cliente/evento/partials/ficha-cadastral.xhtml?idEvento=#{EventoClienteMB.evento.id}">
                                         <i class="fa fa-object-group"></i>
-                                        <span></span>
+                                        <span style="margin-left: 20px;">100% Concluído</span>
                                     </p:link>
                                 </div>
                             </div>
@@ -64,16 +64,16 @@
                                                   or EventoClienteMB.evento.eventoBodas}">
 
                             <div class=" form-group col-md-4 text-center">
-                                <div class="panel panel-primary">
+                                <div class="panel panel-warning">
                                     <div class="panel-heading">
                                         <h3 class="panel-title">
                                             Ficha Cadastral Noivo
                                         </h3>
                                     </div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="max-height: 45px;">
                                         <p:link href="/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=#{EventoClienteMB.evento.id}&amp;tipoEnvolvido=0">
                                             <i class="fa fa-users"></i>
-                                            <span></span>
+                                            <span style="margin-left: 20px;">50% Concluído</span>
                                         </p:link>
                                     </div>
                                 </div>
@@ -86,7 +86,7 @@
                                             Ficha Cadastral Noiva
                                         </h3>
                                     </div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="max-height: 45px;">
                                         <p:link href="/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=#{EventoClienteMB.evento.id}&amp;tipoEnvolvido=1">
                                             <i class="fa fa-users"></i>
                                             <span></span>
@@ -102,7 +102,7 @@
                                             Ficha Complementar Casal
                                         </h3>
                                     </div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="max-height: 45px;">
                                         <p:link href="/intranet/cliente/evento/partials/ficha-complementar-casal.xhtml?idEvento=#{EventoClienteMB.evento.id}">
                                             <i class="fa fa-users"></i>
                                             <span></span>
@@ -120,7 +120,7 @@
                                         Dados Contratante
                                     </h3>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body" style="max-height: 45px;">
                                     <p:link href="/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=#{EventoClienteMB.evento.id}">
                                         <i class="fa fa-user"></i>
                                         <span></span>
@@ -136,7 +136,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Orçamento</h3>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body" style="max-height: 45px;">
                                     <div style="margin-left: 28px;">
                                         <p:link href="/intranet/cliente/evento/partials/orcamento.xhtml?idEvento=#{EventoClienteMB.evento.id}">
                                             <i class="fa fa-dollar"></i>
@@ -153,7 +153,7 @@
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Contrato</h3>
                                     </div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="max-height: 45px;">
 
                                         <p:commandButton process="@this"
                                                          onclick="window.open('#{facesContext.externalContext.requestContextPath}/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento=#{EventoClienteMB.evento.id}')"

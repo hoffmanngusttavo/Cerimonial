@@ -102,6 +102,7 @@
 
                                             <ui:repeat value="#{PreEventoMB.entity.emailsContato}"
                                                        var="email"
+                                                       id="listaEmails"
                                                        varStatus="indice">
 
                                                 <tr>
@@ -119,17 +120,16 @@
                                                     </td>
 
                                                     <td>
-                                                       
-                                                        <p:commandLink id="btn-info-emails">
-                                                            <i class="fa fa-info"></i>
-                                                            <span></span>
-                                                        </p:commandLink>
 
-                                                        <p:tooltip escape="false"
-                                                                   position="top"
-                                                                   widgetVar="toolTipEmailVar"
-                                                                   for="btn-info-emails"
-                                                                   value="#{email.corpoEmail}"/>
+                                                        <p:commandButton icon="fa fa-commenting-o" 
+                                                                         styleClass="bt-acoes"
+                                                                         process="@this"
+                                                                         immediate="true"
+                                                                         update=":formDialogEmail:groupDialogEmailContatoInfo"
+                                                                         actionListener="#{PreEventoMB.setEmailContato(email)}"
+                                                                         onsuccess="$('#emailContatoInfoDialogVar').modal('show');$('#emailsDialogVar').css('display','none');"
+                                                                         />
+
                                                     </td>
                                                 </tr>
 
@@ -147,7 +147,7 @@
                     <h:panelGroup layout="block" styleClass="modal-footer">
                         <p:commandLink value="Fechar"
                                        immediate="true" 
-                                       styleClass="btn btn-default" 
+                                       styleClass="btn btn-warning" 
                                        oncomplete="$('#emailsDialogVar').modal('hide');" />
 
                     </h:panelGroup>
@@ -157,6 +157,48 @@
 
 
 
+        <div class="modal fade" 
+             id="emailContatoInfoDialogVar"
+             tabindex="-1" 
+             role="dialog" 
+             aria-labelledby="edit"
+             aria-hidden="true"
+             data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <h:panelGroup id="groupDialogEmailContatoInfo">
+                        <div class="modal-header">
+                            <h4 class="modal-title custom_align" id="Heading">Conteúdo</h4>
+                        </div>
+
+                        <div class="modal-body col-lg-12 col-md-12">
+
+                            <div class="form-group col-md-12">
+                                <h:outputText id="inptCorpoEmailInfo" escape="false"
+                                          value="#{PreEventoMB.emailContato.corpoEmail}" />
+                            </div>
+                        </div>
+
+                        <div class="modal-footer ">
+
+                            <p:commandLink value="Voltar"
+                                           immediate="true"
+                                           styleClass="btn btn-warning" 
+                                           process="@this"
+                                           actionListener="#{PreEventoMB.setEmailContato(null)}"
+                                           onclick="$('#emailsDialogVar').css('display','block');"
+                                           oncomplete="$('#emailContatoInfoDialogVar').modal('hide');" />
+
+                            
+                        </div>
+                    </h:panelGroup>
+                </div>
+                <!-- /.modal-content --> 
+            </div>
+            <!-- /.modal-dialog --> 
+        </div>
+        
+        
         <div class="modal fade" 
              id="emailContatoDialogVar"
              tabindex="-1" 
