@@ -423,11 +423,49 @@ public class Evento implements Serializable, ModelInterface {
 
     }
     
+    public boolean isCategoriaCasamento() {
+        return isEventoCasamento() 
+                || isEventoBodas();
+    }
+    
+    public boolean isCategoriaAniversario() {
+        return isEventoAniversario()
+                || isEventoAniversario15Anos()
+                || isEventoAniversarioInfantil();
+    }
+    
     
     public boolean isEventoCasamento(){
         
         if(tipoEvento != null && tipoEvento.getCategoria() != null){
             return tipoEvento.getCategoria().equals(CategoriaEvento.CASAMENTO);
+        }
+        
+        return false;
+    }
+    
+    public boolean isEventoAniversario(){
+        
+        if(tipoEvento != null && tipoEvento.getCategoria() != null){
+            return tipoEvento.getCategoria().equals(CategoriaEvento.ANIVERSARIO);
+        }
+        
+        return false;
+    }
+    
+    public boolean isEventoAniversario15Anos(){
+        
+        if(tipoEvento != null && tipoEvento.getCategoria() != null){
+            return tipoEvento.getCategoria().equals(CategoriaEvento.ANIVERSARIO_15_ANOS);
+        }
+        
+        return false;
+    }
+    
+    public boolean isEventoAniversarioInfantil(){
+        
+        if(tipoEvento != null && tipoEvento.getCategoria() != null){
+            return tipoEvento.getCategoria().equals(CategoriaEvento.ANIVERSARIO_INFANTIL);
         }
         
         return false;

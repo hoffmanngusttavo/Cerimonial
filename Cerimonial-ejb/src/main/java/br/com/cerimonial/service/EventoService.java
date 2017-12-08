@@ -190,7 +190,7 @@ public class EventoService extends BasicService<Evento> {
         return null;
 
     }
-
+    
     public Evento getEventoByContatoInicial(ContatoEvento contatoEvento) throws Exception {
 
         if (contatoEvento == null || contatoEvento.getId() == null) {
@@ -325,6 +325,44 @@ public class EventoService extends BasicService<Evento> {
         return evento;
 
     }
+    
+    
+     /**
+     * Vai retornar o evento que pertence a somente esse cliente Carregar em
+     * lazy os noivos
+     *
+     * @param idEvento
+     * @param contratante
+     * @return
+     */
+    public Evento getEventoAniversario(Long idEvento, Pessoa contratante) {
+
+        if (idEvento == null) {
+            throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (contratante == null || contratante.getId() == null) {
+            throw new GenericException("Cliente contratante nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
+
+        if (evento != null) {
+            if (evento.getEnvolvidos() != null) {
+
+                evento.getEnvolvidos().size();
+
+                evento.getEnvolvidos().stream().filter((envolvido)
+                        -> (envolvido.getContatosFamiliar() != null)).forEach((envolvido) -> {
+                            envolvido.getContatosFamiliar().size();
+                        });
+            }
+        }
+
+        return evento;
+
+    }
+    
 
     /**
      * Vai copiar o endereco da cerimonia e setar no endereco da festa

@@ -57,6 +57,16 @@ public class ContratoEvento implements Serializable, ModelInterface {
     @ManyToOne
     private ModeloContrato modeloContrato;
 
+    public ContratoEvento() {
+    }
+
+    public ContratoEvento(Evento evento) {
+        this.evento = evento;
+    }
+
+    
+    
+    
     @Override
     public Long getId() {
         return id;

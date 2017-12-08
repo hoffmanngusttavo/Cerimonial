@@ -62,9 +62,8 @@ public class ContratoEventoMB extends BasicControl {
                 entity = service.getContratoByEvento(id);
 
                 if (entity == null) {
-                    entity = new ContratoEvento();
                     Evento evento = eventoService.getEntity(id);
-                    entity.setEvento(evento);
+                    entity = new ContratoEvento(evento);
                 }
 
                 postConstruct();

@@ -53,7 +53,7 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
             
             evento = eventoService.getEventoLocalizacao(idEvento, cliente);
            
-            if(evento.getCerimoniaEvento() == null){
+            if(evento.isCategoriaCasamento() && evento.getCerimoniaEvento() == null){
                 evento.setCerimoniaEvento(new CerimoniaEvento());
             }
             

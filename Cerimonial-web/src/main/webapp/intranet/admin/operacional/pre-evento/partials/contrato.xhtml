@@ -30,7 +30,7 @@
                             <h3 class="panel-title">
                                 <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=#{ContratoEventoMB.entity.evento.id}">
                                     <i class="fa fa-list"></i>
-                                    <span>#{ContratoEventoMB.entity.evento.nome}</span>
+                                    <span>#{ContratoEventoMB.entity.evento.nome} - Contrato</span>
                                 </p:link>
                             </h3>
                         </div>
@@ -46,11 +46,6 @@
             <div class="row">
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <h2>Contrato</h2>
-                            </div>
-                        </div>
 
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -90,6 +85,7 @@
                                 <p:editor id="inptConteudo" 
                                           value="#{ContratoEventoMB.entity.conteudo}" 
                                           required="true"
+                                          height="600"
                                           requiredMessage="Preencha um texto válido"/>
 
                             </div>

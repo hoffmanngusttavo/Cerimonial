@@ -113,6 +113,25 @@
 
                         </h:panelGroup>
 
+
+                        <h:panelGroup rendered="#{EventoClienteMB.evento.categoriaAniversario}">
+                            <div class=" form-group col-md-4 text-center">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            Ficha Cadastral Aniversariante
+                                        </h3>
+                                    </div>
+                                    <div class="panel-body" style="max-height: 45px;">
+                                        <p:link href="/intranet/cliente/evento/partials/cadastro-aniversariante.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                            <i class="fa fa-users"></i>
+                                            <span style="margin-left: 20px;">50% Concluído</span>
+                                        </p:link>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+
                         <div class="form-group col-md-4 text-center">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
