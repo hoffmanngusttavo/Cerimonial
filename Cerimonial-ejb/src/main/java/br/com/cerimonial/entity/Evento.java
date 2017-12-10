@@ -385,9 +385,12 @@ public class Evento implements Serializable, ModelInterface {
 
                 case NOIVA:
                     return getNoiva();
+                    
+                case ANIVERSARIANTE:
+                    return getAniversariante();
 
                 default:
-                    return getNoivo();
+                    return this.getEnvolvidos().get(0);
             }
         }
 
@@ -401,6 +404,22 @@ public class Evento implements Serializable, ModelInterface {
 
             for (EnvolvidoEvento env : envolvidos) {
                 if (env != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.NOIVO)) {
+                    return env;
+                }
+            }
+
+        }
+
+        return null;
+
+    }
+    
+    public EnvolvidoEvento getAniversariante() {
+
+        if (CerimonialUtils.isListNotBlank(envolvidos)) {
+
+            for (EnvolvidoEvento env : envolvidos) {
+                if (env != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.ANIVERSARIANTE)) {
                     return env;
                 }
             }

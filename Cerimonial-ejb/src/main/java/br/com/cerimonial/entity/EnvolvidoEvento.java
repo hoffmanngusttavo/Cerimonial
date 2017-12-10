@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.entity.validators.CPF;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
@@ -36,7 +37,6 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.br.CPF;
 
 /**
  *

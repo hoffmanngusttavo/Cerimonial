@@ -731,3 +731,48 @@ function validarFormularioContatoCasamento(){
     }
     
 }
+
+
+
+//--------------------ANIVERSARIO--------------------------
+
+function validaFormularioAniversario() {
+    
+    if ($('#inptNome').val() === '') {
+        $('#div-inptNome').addClass('has-error');
+        $('#inptNome').focus();
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+    }
+   
+    if ($('#dataNascimento_input').val() === '') {
+        $('#div-dataNascimento').addClass('has-error');
+        $('#dataNascimento_input').focus();
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+    }
+    
+    if ($('#inptCep').val() === '') {
+        $('#div-inptCep').addClass('has-error');
+        $('#inptCep').focus();
+    }
+    
+    if ($('#inptBairro').val() === '') {
+        $('#div-inptBairro').addClass('has-error');
+        $('#inptBairro').focus();
+    }
+    
+    if ($('#inptLog').val() === '') {
+        $('#div-inptLog').addClass('has-error');
+        $('#inptLog').focus();
+    }
+    
+    if ($('#inptEstado').val() === '') {
+        $('#div-inptEstado').addClass('has-error');
+        $('#inptEstado').focus();
+    }
+    
+    if ($('#inptCidade').val() === '') {
+        $('#div-inptCidade').addClass('has-error');
+        $('#inptCidade').focus();
+    }
+    
+}

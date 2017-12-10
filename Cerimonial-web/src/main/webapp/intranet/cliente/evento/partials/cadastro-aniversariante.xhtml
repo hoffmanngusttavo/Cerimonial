@@ -57,14 +57,14 @@
 
                             <div class="col-lg-12 col-md-12">
 
-                                <div class="form-group col-md-12" id="div-inptNomeNoiva">
+                                <div class="form-group col-md-12" id="div-inptNome">
                                     <label>Nome Completo
                                         <span class="asteriskField">
                                             *
                                         </span>
                                     </label>
 
-                                    <p:inputText id="inptNomeNoiva" 
+                                    <p:inputText id="inptNome" 
                                                  value="#{FichaAniversarianteMB.envolvido.nome}" 
                                                  required="true"
                                                  requiredMessage="Preencha o nome completo"
@@ -73,26 +73,26 @@
 
                                 </div>
 
-                                <div class="form-group col-md-6" id="div-inptCpfNoiva">
+                                <div class="form-group col-md-6" id="div-inptCpf">
                                     <label class="control-label ">Cpf</label>
 
                                     <p:inputMask mask="999.999.999-99"
                                                  value="#{FichaAniversarianteMB.envolvido.cpf}"
-                                                 id="inptCpfNoiva"
+                                                 id="inptCpf"
                                                  class="form-control"
                                                  label="Cpf"/>
                                 </div>
 
-                                <div class="form-group col-md-6" id="div-inptRgNoiva">
+                                <div class="form-group col-md-6" id="div-inptRg">
                                     <label class="control-label ">Rg </label>
 
                                     <p:inputText value="#{FichaAniversarianteMB.envolvido.rg}"
-                                                 id="inptRgNoiva"
+                                                 id="inptRg"
                                                  class="form-control"
                                                  label="Rg"/>
                                 </div>
 
-                                <div class="form-group col-md-6" id="div-dataNascimentoNoiva">
+                                <div class="form-group col-md-6" id="div-dataNascimento">
                                     <label>Data de Nascimento
                                         <span class="asteriskField">
                                             *
@@ -101,7 +101,7 @@
 
                                     <p:calendar pattern="dd/MM/yyyy"
                                                 mask="true" 
-                                                id="dataNascimentoNoiva" 
+                                                id="dataNascimento" 
                                                 value="#{FichaAniversarianteMB.envolvido.dataNascimento}" 
                                                 navigator="true"
                                                 required="true"
@@ -116,20 +116,20 @@
 
                                 </div>
 
-                                <div class="form-group col-md-6" id="div-inptProfissaoNoiva">
+                                <div class="form-group col-md-6" id="div-inptProfissaO">
                                     <label class="control-label ">Profissão
                                     </label>
 
                                     <p:inputText value="#{FichaAniversarianteMB.envolvido.profissao}"
-                                                 id="inptProfissaoNoiva"
+                                                 id="inptProfissao"
                                                  class="form-control"
                                                  label="Profissão"/>
                                 </div>
 
-                                <div class="form-group col-md-12" id="div-inptEmailNoiva">
+                                <div class="form-group col-md-12" id="div-inptEmail">
                                     <label>E-mail</label>
 
-                                    <p:inputText id="inptEmailNoiva" 
+                                    <p:inputText id="inptEmail" 
                                                  value="#{FichaAniversarianteMB.envolvido.email}" 
                                                  class="form-control"
                                                  placeholder="Ex: teste@teste.com"
@@ -138,7 +138,7 @@
                                     </p:inputText>
                                 </div>
 
-                                <div class="form-group col-md-6" id="div-inptTelefone1Noiva">
+                                <div class="form-group col-md-6" id="div-inptTelefone1">
                                     <label>Telefone Residencial
                                     </label>
 
@@ -146,11 +146,11 @@
                                                  onfocus="functionMaskPhone();"
                                                  styleClass="phone"
                                                  class="form-control phone"
-                                                 id="inptTelefone1Noiva"
+                                                 id="inptTelefone1"
                                                  label="Telefone Residencial"/>
                                 </div>
 
-                                <div class="form-group col-md-6" id="div-inptTelefone2Noiva">
+                                <div class="form-group col-md-6" id="div-inptTelefone2">
                                     <label>Telefone Celular
                                     </label>
 
@@ -158,7 +158,7 @@
                                                  onfocus="functionMaskPhone();"
                                                  styleClass="phone"
                                                  class="form-control phone"
-                                                 id="inptTelefone2Noiva"
+                                                 id="inptTelefone2"
                                                  label="Telefone Celular"/>
                                 </div>
 
@@ -166,7 +166,7 @@
                                     <label class="control-label ">Facebook
                                     </label>
 
-                                    <p:inputText id="inptFaceNoiva" 
+                                    <p:inputText id="inptFace" 
                                                  class="form-control"
                                                  value="#{FichaAniversarianteMB.envolvido.facebook}" 
                                                  label="Facebook"/>
@@ -176,7 +176,7 @@
                                     <label class="control-label ">Instagram
                                     </label>
 
-                                    <p:inputText id="inptInstaNoiva" 
+                                    <p:inputText id="inptInsta" 
                                                  class="form-control"
                                                  value="#{FichaAniversarianteMB.envolvido.instagram}" 
                                                  label="Instagram"/>
@@ -198,9 +198,9 @@
 
                             <div class="col-lg-12 col-md-12">
 
-                                <h:panelGroup id="enderecoGroupNoiva">
+                                <h:panelGroup id="enderecoGroup">
 
-                                    <div class="form-group col-md-6" id="div-inptCepNoiva">
+                                    <div class="form-group col-md-6" id="div-inptCep">
                                         <label>Cep
                                             <span class="asteriskField">
                                                 *
@@ -212,13 +212,13 @@
                                                      required="true"
                                                      requiredMessage="Preencha o cep do endereço"
                                                      class="form-control"
-                                                     id="inptCepNoiva"
+                                                     id="inptCep"
                                                      label="Cep">
                                             <p:ajax id="eventCepFesta" 
                                                     event="change" 
                                                     listener="#{FichaAniversarianteMB.buscaCep()}" 
                                                     process="@this"
-                                                    update="enderecoGroupNoiva"
+                                                    update="enderecoGroup"
                                                     onstart="PF('statusDialog').show();"
                                                     oncomplete="PF('statusDialog').hide();"
                                                     partialSubmit="true"/>
@@ -226,14 +226,14 @@
 
                                     </div>
 
-                                    <div class="form-group col-md-6" id="div-inptBairroNoiva">
+                                    <div class="form-group col-md-6" id="div-inptBairro">
                                         <label>Bairro
                                             <span class="asteriskField">
                                                 *
                                             </span>
                                         </label>
 
-                                        <p:inputText id="inptBairroNoiva" 
+                                        <p:inputText id="inptBairro" 
                                                      value="#{FichaAniversarianteMB.envolvido.endereco.bairro}" 
                                                      required="true"
                                                      requiredMessage="Preencha o bairro"
@@ -242,14 +242,14 @@
 
                                     </div>
 
-                                    <div class="form-group col-md-12" id="div-inptLogNoiva">
+                                    <div class="form-group col-md-12" id="div-inptLog">
                                         <label>Logradouro
                                             <span class="asteriskField">
                                                 *
                                             </span>
                                         </label>
 
-                                        <p:inputText id="inptLogNoiva" 
+                                        <p:inputText id="inptLog" 
                                                      value="#{FichaAniversarianteMB.envolvido.endereco.logradouro}" 
                                                      required="true"
                                                      requiredMessage="Preencha o logradouro"
@@ -261,7 +261,7 @@
                                     <div class="form-group col-md-6">
                                         <label>Número</label>
 
-                                        <p:inputText id="inptNumeroNoiva" 
+                                        <p:inputText id="inptNumerO" 
                                                      value="#{FichaAniversarianteMB.envolvido.endereco.numero}" 
                                                      class="form-control"
                                                      label="Número"/>
@@ -270,20 +270,20 @@
                                     <div class="form-group col-md-6">
                                         <label>Complemento</label>
 
-                                        <p:inputText id="inptComplementoNoiva" 
+                                        <p:inputText id="inptComplemento" 
                                                      value="#{FichaAniversarianteMB.envolvido.endereco.complemento}" 
                                                      class="form-control"
                                                      label="Complemento"/>
                                     </div>
 
-                                    <div class="form-group col-md-6" id="div-inptEstadoNoiva">
+                                    <div class="form-group col-md-6" id="div-inptEstado">
                                         <label>Estado 
                                             <span class="asteriskField">
                                                 *
                                             </span>
                                         </label>
 
-                                        <h:selectOneMenu id="inptEstadoNoiva" 
+                                        <h:selectOneMenu id="inptEstado" 
                                                          value="#{FichaAniversarianteMB.envolvido.endereco.estado}"
                                                          converter="EntityConverter"
                                                          rendered="true"
@@ -294,19 +294,19 @@
                                                           itemLabel="" /> 
                                             <f:selectItems value="#{FichaAniversarianteMB.comboEstado}" />
                                             <p:ajax process="@this"
-                                                    update="@this, inptCidadeNoiva"
+                                                    update="@this, inptCidade"
                                                     global="false"/>
                                         </h:selectOneMenu>
                                     </div>
 
-                                    <div class="form-group col-md-6" id="div-inptCidadeNoiva">
+                                    <div class="form-group col-md-6" id="div-inptCidade">
                                         <label>Cidade 
                                             <span class="asteriskField">
                                                 *
                                             </span>
                                         </label>
 
-                                        <h:selectOneMenu id="inptCidadeNoiva" 
+                                        <h:selectOneMenu id="inptCidade" 
                                                          value="#{FichaAniversarianteMB.envolvido.endereco.cidade}"
                                                          converter="EntityConverter"
                                                          required="true"
@@ -354,7 +354,7 @@
                                      id="btn-salvar-cliente-endereco"
                                      class="btn btn-success"
                                      process="@this, :form:groupForm"
-                                     onstart="PF('statusDialog').show();validaFormularioCasamento();"
+                                     onstart="PF('statusDialog').show();validaFormularioAniversario();"
                                      oncomplete="PF('statusDialog').hide();"/>
                 </div>
 
