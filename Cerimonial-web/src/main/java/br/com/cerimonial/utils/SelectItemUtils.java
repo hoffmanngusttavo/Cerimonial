@@ -10,9 +10,8 @@ import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.ModeloEmail;
 import br.com.cerimonial.entity.ModeloProposta;
-import br.com.cerimonial.entity.StatusContato;
-import br.com.cerimonial.entity.TipoEvento;
-import br.com.cerimonial.enums.CategoriaEvento;
+import br.com.cerimonial.enums.ClassificacaoContato;
+import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.enums.GrauParentesco;
 import br.com.cerimonial.enums.TipoEmail;
 import br.com.cerimonial.enums.TipoPessoa;
@@ -22,8 +21,6 @@ import br.com.cerimonial.service.EstadoService;
 import br.com.cerimonial.service.ModeloContratoService;
 import br.com.cerimonial.service.ModeloEmailService;
 import br.com.cerimonial.service.ModeloPropostaService;
-import br.com.cerimonial.service.StatusContatoService;
-import br.com.cerimonial.service.TipoEventoService;
 import br.com.cerimonial.service.utils.ServiceLookupUtil;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,9 +50,9 @@ public class SelectItemUtils {
         return items;
     }
 
-    public static List<SelectItem> getComboCategoriaEvento() {
+    public static List<SelectItem> getComboTipoEvento() {
         List<SelectItem> items = new LinkedList<>();
-        CategoriaEvento.getList().stream().forEach((item) -> {
+        TipoEvento.getList().stream().forEach((item) -> {
             items.add(new SelectItem(item, item.getLabel()));
         });
         return items;
@@ -133,21 +130,6 @@ public class SelectItemUtils {
         return items;
     }
 
-    public List<SelectItem> getComboTipoEvento() {
-        List<SelectItem> items = new LinkedList<>();
-        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
-        TipoEventoService service = lookupUtil.lookupService(TipoEventoService.class);
-
-        try {
-            for (TipoEvento item : service.findAll()) {
-                items.add(new SelectItem(item, item.getNome()));
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return items;
-    }
-
     public List<SelectItem> getComboModeloContratoByTipoEvento(TipoEvento tipoEvento) {
         List<SelectItem> items = new LinkedList<>();
         ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
@@ -197,19 +179,11 @@ public class SelectItemUtils {
         return items;
     }
 
-    public List<SelectItem> getComboStatusContato() {
+    public static List<SelectItem> getComboStatusContato() {
         List<SelectItem> items = new LinkedList<>();
-
-        ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
-        StatusContatoService service = lookupUtil.lookupService(StatusContatoService.class);
-
-        try {
-            for (StatusContato item : service.findAll()) {
-                items.add(new SelectItem(item, item.getNome()));
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ClassificacaoContato.getList().stream().forEach((item) -> {
+            items.add(new SelectItem(item, item.getLabel()));
+        });
         return items;
     }
 

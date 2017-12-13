@@ -8,10 +8,8 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.Evento;
-import br.com.cerimonial.entity.TipoEvento;
 import br.com.cerimonial.service.ContratoEventoService;
 import br.com.cerimonial.service.EventoService;
-import br.com.cerimonial.service.TipoEventoService;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,9 +40,6 @@ public class ContratoEventoMB extends BasicControl {
 
     @EJB
     protected EventoService eventoService;
-
-    @EJB
-    protected TipoEventoService tipoEventoService;
 
     protected SelectItemUtils selectItemUtils;
 
@@ -98,9 +93,8 @@ public class ContratoEventoMB extends BasicControl {
 
     private void postConstruct() {
         try {
-            TipoEvento tipoEvento = tipoEventoService.findTipoEventoByEvento(entity.getEvento());
 
-            comboModeloContrato = selectItemUtils.getComboModeloContratoByTipoEvento(tipoEvento);
+            comboModeloContrato = selectItemUtils.getComboModeloContratoByTipoEvento(entity.getEvento().getTipoEvento());
 
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);

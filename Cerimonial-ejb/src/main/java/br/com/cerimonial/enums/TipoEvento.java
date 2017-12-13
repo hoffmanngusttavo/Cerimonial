@@ -12,18 +12,19 @@ import java.util.List;
  *
  * @author Gustavo Hoffmann
  */
-public enum CategoriaEvento {
+public enum TipoEvento {
     
     CASAMENTO("Casamento"),
     ANIVERSARIO("Aniversário"),
     ANIVERSARIO_15_ANOS("Aniversário 15 anos"),
     ANIVERSARIO_INFANTIL("Aniversário infantil"),
     BODAS("Bodas"),
-    RELIGIOSO("Religioso");
+    RELIGIOSO("Religioso"),
+    OUTROS("Outros");
     
      private String label;
 
-    private CategoriaEvento(String label) {
+    private TipoEvento(String label) {
         this.label = label;
     }
 
@@ -35,7 +36,7 @@ public enum CategoriaEvento {
         this.label = label;
     }
     
-     public static List<CategoriaEvento> getList() {
+     public static List<TipoEvento> getList() {
         return Arrays.asList(values());
     }
     

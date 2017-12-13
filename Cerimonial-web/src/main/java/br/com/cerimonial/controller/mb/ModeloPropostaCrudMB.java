@@ -42,7 +42,6 @@ public class ModeloPropostaCrudMB extends BasicControl {
     private ModeloPropostaService service;
 
     private AbstractFilter filtros;
-    private SelectItemUtils selectItemUtils;
 
     /**
      * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
@@ -60,7 +59,7 @@ public class ModeloPropostaCrudMB extends BasicControl {
             entity = new ModeloProposta();
         }
 
-        this.selectItemUtils = new SelectItemUtils();
+       
     }
 
     /**
@@ -182,7 +181,7 @@ public class ModeloPropostaCrudMB extends BasicControl {
     }
 
     public List<SelectItem> getComboTipoEvento() {
-        return selectItemUtils.getComboTipoEvento();
+       return SelectItemUtils.getComboTipoEvento();
     }
 
     public LazyDataModel<ModeloProposta> getLazyLista() {

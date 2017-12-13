@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,6 +17,8 @@ import java.util.logging.Logger;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -59,8 +62,9 @@ public class ModeloProposta implements Serializable, ModelInterface {
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
 
-    @NotNull(message = "O tipo de evento não pode ser nulo")
-    @ManyToOne
+    @NotNull(message = "A categoria não pode ser nula")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TipoEvento tipoEvento;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -141,6 +145,8 @@ public class ModeloProposta implements Serializable, ModelInterface {
         this.tipoEvento = tipoEvento;
     }
 
+    
+    
     public BigDecimal getValorProposta() {
         return valorProposta;
     }

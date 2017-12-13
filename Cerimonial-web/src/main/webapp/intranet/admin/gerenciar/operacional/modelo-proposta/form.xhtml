@@ -60,7 +60,6 @@
                                 </label>
                                 <h:selectOneMenu id="inptTipoEvento" 
                                                  value="#{ModeloPropostaCrudMB.entity.tipoEvento}"
-                                                 converter="EntityConverter"
                                                  rendered="true"
                                                  requiredMessage="Preencha um tipo de evento válido"
                                                  class="form-control"
@@ -78,11 +77,7 @@
 
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label style="width: 100%;">Anexo
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
+                                <label style="width: 100%;">Anexo</label>
 
                                 <p:fileUpload value="#{ModeloPropostaCrudMB.file}"
                                               mode="simple" 
@@ -156,16 +151,10 @@
 
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <label>Conteúdo
-                                    <span class="asteriskField">
-                                        *
-                                    </span>
-                                </label>
+                                <label>Observações</label>
 
                                 <p:editor id="inptConteudo" 
-                                          value="#{ModeloPropostaCrudMB.entity.conteudo}" 
-                                          required="true"
-                                          requiredMessage="Preencha um texto válido"/>
+                                          value="#{ModeloPropostaCrudMB.entity.conteudo}" />
 
                             </div>
                         </div>

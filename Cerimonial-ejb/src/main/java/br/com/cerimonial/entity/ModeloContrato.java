@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.TipoEvento;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -54,8 +57,9 @@ public class ModeloContrato implements Serializable, ModelInterface {
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
 
-    @NotNull(message = "O tipo de evento não pode ser nulo")
-    @ManyToOne
+    @NotNull(message = "A categoria não pode ser nula")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TipoEvento tipoEvento;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -128,6 +132,7 @@ public class ModeloContrato implements Serializable, ModelInterface {
     public void setTipoEvento(TipoEvento tipoEvento) {
         this.tipoEvento = tipoEvento;
     }
+
 
     public List<ContratoEvento> getContratosEvento() {
         return contratosEvento;

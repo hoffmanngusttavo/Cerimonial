@@ -6,7 +6,7 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.ModeloProposta;
-import br.com.cerimonial.entity.TipoEvento;
+import br.com.cerimonial.enums.TipoEvento;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -29,7 +29,7 @@ public class ModeloPropostaRepository extends AbstractRepository<ModeloProposta>
         sb.append("INNER JOIN mod.tipoEvento tipo ");
         sb.append("WHERE tipo.id = ?1 ");
 
-        return getPureList(ModeloProposta.class, sb.toString(), tipoEvento.getId());
+        return getPureList(ModeloProposta.class, sb.toString(), tipoEvento);
 
     }
 

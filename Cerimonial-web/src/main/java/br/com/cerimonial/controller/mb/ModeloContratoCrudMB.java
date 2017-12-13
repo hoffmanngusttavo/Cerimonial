@@ -35,7 +35,6 @@ public class ModeloContratoCrudMB extends BasicControl {
 
     @EJB
     private ModeloContratoService service;
-    private SelectItemUtils selectItemUtils;
 
     /**
      * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
@@ -53,8 +52,6 @@ public class ModeloContratoCrudMB extends BasicControl {
             entity = new ModeloContrato();
         }
         
-        this.selectItemUtils = new SelectItemUtils();
-
     }
 
     /**
@@ -140,7 +137,7 @@ public class ModeloContratoCrudMB extends BasicControl {
     }
     
      public List<SelectItem> getComboTipoEvento() {
-        return selectItemUtils.getComboTipoEvento();
+        return SelectItemUtils.getComboTipoEvento();
     }
 
     public Long getId() {

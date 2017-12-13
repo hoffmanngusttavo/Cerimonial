@@ -154,7 +154,7 @@ public class ContatoInicialCrudMB extends BasicControl {
     }
 
     public List<SelectItem> getComboTipoEvento() {
-        return selectItemUtils.getComboTipoEvento();
+        return SelectItemUtils.getComboTipoEvento();
     }
 
     public List<SelectItem> getComboModelosProposta() {
@@ -162,7 +162,7 @@ public class ContatoInicialCrudMB extends BasicControl {
     }
 
     public List<SelectItem> getComboStatusContato() {
-        return selectItemUtils.getComboStatusContato();
+        return SelectItemUtils.getComboStatusContato();
     }
 
     public List<String> completeLocalEvento(String value) {

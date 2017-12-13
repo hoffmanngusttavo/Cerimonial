@@ -5,6 +5,8 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.ClassificacaoContato;
+import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +29,6 @@ import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -98,9 +101,9 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @Min(1)
     private Integer quantidadeConvidados;
     
-    @ManyToOne
-    @NotNull(message = "Tipo de Evento não pode ser nulo")
-    @Valid
+    @NotNull(message = "A categoria não pode ser nula")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TipoEvento tipoEvento;
     
     @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY)
@@ -112,8 +115,10 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoIndicacao tipoIndicacao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private StatusContato status;
+    @NotNull(message = "O status não pode ser nulo")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ClassificacaoContato status = ClassificacaoContato.NEGOCIANDO;
     
      @Override
     public Long getId() {
@@ -243,6 +248,8 @@ public class ContatoEvento implements Serializable, ModelInterface{
         this.tipoEvento = tipoEvento;
     }
 
+   
+
     public List<OrcamentoEvento> getPropostas() {
         return propostas;
     }
@@ -259,13 +266,15 @@ public class ContatoEvento implements Serializable, ModelInterface{
         this.tipoIndicacao = tipoIndicacao;
     }
 
-    public StatusContato getStatus() {
+    public ClassificacaoContato getStatus() {
         return status;
     }
 
-    public void setStatus(StatusContato status) {
+    public void setStatus(ClassificacaoContato status) {
         this.status = status;
     }
+
+    
     
     public boolean isPropostaAceita(){
         if(CerimonialUtils.isListNotBlank(propostas)){

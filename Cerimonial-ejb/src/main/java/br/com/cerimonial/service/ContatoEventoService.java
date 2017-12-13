@@ -58,9 +58,6 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
             if (entity.getTipoIndicacao() != null) {
                 entity.getTipoIndicacao().getId();
             }
-            if (entity.getStatus() != null) {
-                entity.getStatus().getId();
-            }
             
             if(entity.getEmailsContato() != null){
                 entity.getEmailsContato().size();
@@ -117,11 +114,6 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     public List<ContatoEvento> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
             List<ContatoEvento> findRangeListagem = repository.findRangeListagem(max, offset, sortField, sortAscDesc);
-            if(findRangeListagem != null){
-                findRangeListagem.stream().filter((contato) -> (contato.getStatus() != null)).forEach((contato) -> {
-                    contato.getStatus().getId();
-                });
-            }
             return findRangeListagem;
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

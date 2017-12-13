@@ -80,9 +80,9 @@
 
                                 <p:column id="login" 
                                           exportable="true"
-                                          sortBy="#{item.tipoEvento.nome}"
+                                          sortBy="#{item.tipoEvento}"
                                           headerText="Tipo Evento">
-                                    <h:outputText value="#{item.tipoEvento.nome}" />
+                                    <h:outputText value="#{item.tipoEvento.label}" />
                                 </p:column>
 
                                 <p:column id="ativo" 

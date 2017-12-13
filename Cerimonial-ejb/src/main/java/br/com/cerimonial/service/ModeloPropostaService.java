@@ -7,7 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
-import br.com.cerimonial.entity.TipoEvento;
+import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.repository.ModeloPropostaRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
@@ -106,10 +106,6 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
             
             if(tipoEvento == null){
                 throw new GenericException("TipoEvento nulo.", ErrorCode.BAD_REQUEST.getCode());
-            }
-            
-            if(tipoEvento.getId() == null){
-                throw new GenericException("Id TipoEvento nulo.", ErrorCode.BAD_REQUEST.getCode());
             }
             
             return repository.findModelosPropostaByTipoEvento(tipoEvento);

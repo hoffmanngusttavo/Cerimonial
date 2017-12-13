@@ -5,7 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
-import br.com.cerimonial.enums.CategoriaEvento;
+import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.enums.SituacaoEvento;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.utils.CerimonialUtils;
@@ -84,16 +84,17 @@ public class Evento implements Serializable, ModelInterface {
     @ManyToOne(fetch = FetchType.LAZY)
     private OrcamentoEvento orcamentoEvento;
 
-    @NotNull(message = "O tipo de evento não pode ser nulo")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private TipoEvento tipoEvento;
-    
+    @NotNull(message = "A categoria não pode ser nula")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoEvento tipoEvento = TipoEvento.CASAMENTO;
+
     @NotNull(message = "A situação não pode ser nula")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SituacaoEvento situacaoEvento = SituacaoEvento.ATIVO;
 
-    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ContratoEvento> contratos;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -102,12 +103,12 @@ public class Evento implements Serializable, ModelInterface {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private FestaCerimonia festaCerimonia;
 
-    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<EnvolvidoEvento> envolvidos;
 
     @Column(columnDefinition = "TEXT")
     private String observacaoEnvolvidos;
-    
+
     @Column(columnDefinition = "TEXT")
     private String motivoCancelamento;
 
@@ -166,29 +167,25 @@ public class Evento implements Serializable, ModelInterface {
     }
 
     public boolean isAtivo() {
-        if(situacaoEvento != null){
+        if (situacaoEvento != null) {
             return situacaoEvento.equals(SituacaoEvento.ATIVO);
         }
         return false;
     }
 
-    
-
     public boolean isCancelado() {
-        if(situacaoEvento != null){
+        if (situacaoEvento != null) {
             return situacaoEvento.equals(SituacaoEvento.CANCELADO);
         }
         return false;
     }
 
     public boolean isFinalizado() {
-        if(situacaoEvento != null){
+        if (situacaoEvento != null) {
             return situacaoEvento.equals(SituacaoEvento.FINALIZADO);
         }
         return false;
     }
-
-    
 
     public Date getDataInicio() {
         return dataInicio;
@@ -229,6 +226,8 @@ public class Evento implements Serializable, ModelInterface {
     public void setTipoEvento(TipoEvento tipoEvento) {
         this.tipoEvento = tipoEvento;
     }
+
+   
 
     public Date getHoraTermino() {
         return horaTermino;
@@ -312,8 +311,6 @@ public class Evento implements Serializable, ModelInterface {
     public void setMotivoCancelamento(String motivoCancelamento) {
         this.motivoCancelamento = motivoCancelamento;
     }
-    
-    
 
     @PrePersist
     @Override
@@ -385,7 +382,7 @@ public class Evento implements Serializable, ModelInterface {
 
                 case NOIVA:
                     return getNoiva();
-                    
+
                 case ANIVERSARIANTE:
                     return getAniversariante();
 
@@ -413,7 +410,7 @@ public class Evento implements Serializable, ModelInterface {
         return null;
 
     }
-    
+
     public EnvolvidoEvento getAniversariante() {
 
         if (CerimonialUtils.isListNotBlank(envolvidos)) {
@@ -441,61 +438,60 @@ public class Evento implements Serializable, ModelInterface {
         return null;
 
     }
-    
+
     public boolean isCategoriaCasamento() {
-        return isEventoCasamento() 
+        return isEventoCasamento()
                 || isEventoBodas();
     }
-    
+
     public boolean isCategoriaAniversario() {
         return isEventoAniversario()
                 || isEventoAniversario15Anos()
                 || isEventoAniversarioInfantil();
     }
-    
-    
-    public boolean isEventoCasamento(){
-        
-        if(tipoEvento != null && tipoEvento.getCategoria() != null){
-            return tipoEvento.getCategoria().equals(CategoriaEvento.CASAMENTO);
+
+    public boolean isEventoCasamento() {
+
+        if (tipoEvento != null) {
+            return tipoEvento.equals(TipoEvento.CASAMENTO);
         }
-        
+
         return false;
     }
-    
-    public boolean isEventoAniversario(){
-        
-        if(tipoEvento != null && tipoEvento.getCategoria() != null){
-            return tipoEvento.getCategoria().equals(CategoriaEvento.ANIVERSARIO);
+
+    public boolean isEventoAniversario() {
+
+        if (tipoEvento != null ) {
+            return tipoEvento.equals(TipoEvento.ANIVERSARIO);
         }
-        
+
         return false;
     }
-    
-    public boolean isEventoAniversario15Anos(){
-        
-        if(tipoEvento != null && tipoEvento.getCategoria() != null){
-            return tipoEvento.getCategoria().equals(CategoriaEvento.ANIVERSARIO_15_ANOS);
+
+    public boolean isEventoAniversario15Anos() {
+
+        if (tipoEvento != null) {
+            return tipoEvento.equals(TipoEvento.ANIVERSARIO_15_ANOS);
         }
-        
+
         return false;
     }
-    
-    public boolean isEventoAniversarioInfantil(){
-        
-        if(tipoEvento != null && tipoEvento.getCategoria() != null){
-            return tipoEvento.getCategoria().equals(CategoriaEvento.ANIVERSARIO_INFANTIL);
+
+    public boolean isEventoAniversarioInfantil() {
+
+        if (tipoEvento != null) {
+            return tipoEvento.equals(TipoEvento.ANIVERSARIO_INFANTIL);
         }
-        
+
         return false;
     }
-    
-    public boolean isEventoBodas(){
-        
-        if(tipoEvento != null && tipoEvento.getCategoria() != null){
-            return tipoEvento.getCategoria().equals(CategoriaEvento.BODAS);
+
+    public boolean isEventoBodas() {
+
+        if (tipoEvento != null ) {
+            return tipoEvento.equals(TipoEvento.BODAS);
         }
-        
+
         return false;
     }
 

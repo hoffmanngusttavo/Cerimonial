@@ -5,7 +5,6 @@
  */
 package br.com.cerimonial.entity.validators;
 
-import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;

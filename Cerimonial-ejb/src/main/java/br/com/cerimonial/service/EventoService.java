@@ -240,10 +240,6 @@ public class EventoService extends BasicService<Evento> {
                 evento.getContrato().getId();
             }
             
-            if (evento.getTipoEvento()!= null) {
-                evento.getTipoEvento().getId();
-            }
-            
         }
 
         return evento;
@@ -278,10 +274,6 @@ public class EventoService extends BasicService<Evento> {
 
             if (evento.getFestaCerimonia() != null) {
                 evento.getFestaCerimonia().getId();
-            }
-
-            if (evento.getTipoEvento() != null) {
-                evento.getTipoEvento().getId();
             }
 
         }

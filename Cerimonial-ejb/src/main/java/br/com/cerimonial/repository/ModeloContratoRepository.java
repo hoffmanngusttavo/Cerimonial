@@ -5,9 +5,8 @@
  */
 package br.com.cerimonial.repository;
 
-import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.ModeloContrato;
-import br.com.cerimonial.entity.TipoEvento;
+import br.com.cerimonial.enums.TipoEvento;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,7 +32,7 @@ public class ModeloContratoRepository extends AbstractRepository<ModeloContrato>
             sql.append(" WHERE 1=1");
             sql.append(" AND tipo.id = ?1");
 
-            return getPureList(ModeloContrato.class, sql.toString(), tipoEvento.getId());
+            return getPureList(ModeloContrato.class, sql.toString(), tipoEvento);
             
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

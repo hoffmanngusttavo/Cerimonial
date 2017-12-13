@@ -73,12 +73,12 @@
                                     <h:outputText value="#{item.nome}" />
                                 </p:column>
                                 
-                                <p:column id="ativo" 
+                                <p:column id="situacao" 
                                           exportable="true"
                                           width="80"
-                                          sortBy="#{item.ativo}"
-                                          headerText="Ativo">
-                                    <h:outputText value="#{item.ativo ? 'Sim': 'Não'}" />
+                                          sortBy="#{item.situacaoEvento}"
+                                          headerText="Situação">
+                                    <h:outputText value="#{item.situacaoEvento.label}" />
                                 </p:column>
                                 
                                 <p:column headerText="Ações"
