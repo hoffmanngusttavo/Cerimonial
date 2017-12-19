@@ -135,7 +135,14 @@
                                 </p:column>
 
                                 <p:column headerText="Ações"
-                                          style="text-align: center;width: 60px;">
+                                          style="text-align: center;width: 85px;">
+                                    
+                                    <p:commandButton icon="fa fa-pencil" 
+                                                     styleClass="bt-acoes"
+                                                     process="@this"
+                                                     immediate="true"
+                                                     onclick="window.location='./form.xhtml?id=#{item.id}'"/>
+                                    
                                     <p:commandButton icon="fa fa-trash" 
                                                      styleClass="bt-acoes"
                                                      actionListener="#{UsuarioCrudMB.setEntity(item)}"

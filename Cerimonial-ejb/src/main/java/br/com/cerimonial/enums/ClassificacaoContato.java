@@ -5,7 +5,6 @@
  */
 package br.com.cerimonial.enums;
 
-import static br.com.cerimonial.enums.TipoEvento.values;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public enum ClassificacaoContato {
     REUNIAO_REALIZADA("Reunião Realizada"),
     AGUARDANDO_RETORNO("Aguardando Retorno"),
     CONTRATO_FECHADO("Contrato Fechado"),
-    DATA_CONTRATADA("Aguardando Retorno"),
+    DATA_CONTRATADA("Data Contratada"),
     OUTROS("Outros");
 
     private String label;

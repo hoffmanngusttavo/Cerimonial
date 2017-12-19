@@ -163,4 +163,20 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     }
 
+     /**
+     * Vai retornar todos os contatos ativos {NEGOCIANDO, REUNIAO_REALIZADA, AGUARDANDO_RETORNO, CONTRATO_FECHADO}
+     * e que não tem evento criado
+     *
+     * @param limit
+     * @return
+     */
+    public List<ContatoEvento> findContatosAtivos(int limit) {
+        try {
+            return repository.findContatosAtivos(limit);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<ContatoEvento>();
+    }
+
 }

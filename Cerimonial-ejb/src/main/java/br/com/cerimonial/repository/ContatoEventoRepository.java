@@ -7,6 +7,9 @@ package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.enums.ClassificacaoContato;
+import br.com.cerimonial.enums.SituacaoEvento;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +26,7 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
     }
 
     @Override
-    public ContatoEvento getEntity(Long id)  {
+    public ContatoEvento getEntity(Long id) {
         ContatoEvento entity = super.getEntity(id);
         return entity;
     }
@@ -60,6 +63,34 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
 
         return null;
 
+    }
+
+    /**
+     * Vai retornar todos os contatos ativos {NEGOCIANDO, REUNIAO_REALIZADA,
+     * AGUARDANDO_RETORNO, CONTRATO_FECHADO} e que não tem evento criado
+     *
+     * @param limit
+     * @return
+     */
+    public List<ContatoEvento> findContatosAtivos(int limit) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT contato FROM ContatoEvento contato ");
+            sb.append("LEFT JOIN contato.propostas orcamento ");
+            sb.append("LEFT JOIN orcamento.eventos evento ");
+            sb.append("WHERE contato.status IN(");
+            sb.append("'").append(ClassificacaoContato.NEGOCIANDO).append("',");
+            sb.append("'").append(ClassificacaoContato.AGUARDANDO_RETORNO).append("',");
+            sb.append("'").append(ClassificacaoContato.REUNIAO_REALIZADA).append("',");
+            sb.append("'").append(ClassificacaoContato.CONTRATO_FECHADO).append("'");
+            sb.append(")");
+            sb.append(" AND evento.id IS NULL ");
+
+            return getPureListRange(ContatoEvento.class, sb.toString(), limit, 0);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<ContatoEvento>();
     }
 
 }

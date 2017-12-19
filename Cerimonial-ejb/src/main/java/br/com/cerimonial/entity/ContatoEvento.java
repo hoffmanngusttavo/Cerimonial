@@ -118,7 +118,7 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @NotNull(message = "O status não pode ser nulo")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ClassificacaoContato status = ClassificacaoContato.NEGOCIANDO;
+    private ClassificacaoContato status = ClassificacaoContato.AGUARDANDO_RETORNO;
     
      @Override
     public Long getId() {
