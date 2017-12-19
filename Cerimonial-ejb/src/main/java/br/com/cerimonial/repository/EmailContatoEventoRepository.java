@@ -20,15 +20,5 @@ public class EmailContatoEventoRepository extends AbstractRepository<EmailContat
         super(entityManager, EmailContatoEvento.class);
     }
 
-    public List<EmailContatoEvento> findAllByContato(ContatoEvento contatoEvento) {
-        
-        StringBuilder sql = new StringBuilder("select email from EmailContatoEvento email  ");
-        sql.append("INNER JOIN email.contatoEvento contato");
-        sql.append(" where 1=1");
-        sql.append(" and contato.id = ?1");
-        
-        return getPureList(EmailContatoEvento.class, sql.toString(), contatoEvento.getId());
-        
-    }
     
 }

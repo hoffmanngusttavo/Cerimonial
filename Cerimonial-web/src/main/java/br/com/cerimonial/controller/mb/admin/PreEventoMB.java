@@ -23,7 +23,6 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
-import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -64,7 +63,7 @@ public class PreEventoMB extends BasicControl {
             if (id != null) {
 
                 entity = service.getEntity(id);
-
+                
                 evento = eventoService.getEventoByContatoInicial(entity);
 
             }
@@ -82,15 +81,17 @@ public class PreEventoMB extends BasicControl {
             if (idEvento != null) {
 
                 evento = eventoService.getEntity(idEvento);
-
+                
                 entity = service.getContatoInicialByEvento(evento);
-
+                
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
         }
     }
+    
+     
 
     /**
      * Evento invocado pela tela para cancelar um evento
@@ -235,5 +236,9 @@ public class PreEventoMB extends BasicControl {
     public void setFile(UploadedFile file) {
         this.file = file;
     }
+
+   
+    
+    
 
 }

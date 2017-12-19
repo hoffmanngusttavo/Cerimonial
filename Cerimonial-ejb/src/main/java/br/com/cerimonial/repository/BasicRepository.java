@@ -184,6 +184,18 @@ abstract class BasicRepository implements Serializable {
 
         return intValue;
     }
+    
+    protected int getCount(String query, Object... values) {
+        int intValue = 0;
+        try {
+            Query qr = createQuery(query, values);
+            intValue = ((Number) qr.getSingleResult()).intValue();
+        } catch (RuntimeException e) {
+            throw new GenericException("Erro ao contabilizar objeto no banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+        }
+
+        return intValue;
+    }
 
     private Query createQuery(String query, Object... values) {
         Query qr = getEntityManager().createQuery(query);

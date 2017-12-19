@@ -80,20 +80,8 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
         }
     }
 
-    public List<EmailContatoEvento> findAllByContato(ContatoEvento contatoEvento) {
-        try {
-
-            if (contatoEvento == null) {
-                throw new GenericException("Objeto nulo.", ErrorCode.BAD_REQUEST.getCode());
-            }
-
-            return repository.findAllByContato(contatoEvento);
-        } catch (Exception ex) {
-            Logger.getLogger(EmailContatoEventoService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return new ArrayList<>();
-    }
-
+    
+   
     public void delete(EmailContatoEvento contato) throws Exception {
 
         isValid(contato);
