@@ -72,6 +72,7 @@ public class ContatoInicialCrudMB extends BasicControl {
     public void delete() {
         try {
             service.delete(entity);
+            createFacesInfoMessage("Dados removidos com sucesso!");
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());

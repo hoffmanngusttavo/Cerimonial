@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -98,7 +99,7 @@ public class ContatoEvento implements Serializable, ModelInterface{
     private Usuario modificadoPor;
     
     @Column
-    @Min(1)
+    @Min(value = 1, message = "Quantidade mínima deve ser 1")
     private Integer quantidadeConvidados;
     
     @NotNull(message = "A categoria não pode ser nula")
@@ -106,10 +107,10 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @Column(nullable = false)
     private TipoEvento tipoEvento;
     
-    @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<OrcamentoEvento> propostas;
     
-    @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<EmailContatoEvento> emailsContato;
  
     @ManyToOne(fetch = FetchType.LAZY)

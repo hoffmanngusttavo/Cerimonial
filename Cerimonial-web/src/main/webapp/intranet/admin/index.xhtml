@@ -39,7 +39,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Verificar Disponibilidade de Evento</h3>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="min-height: 104px;">
                                 <div style="margin-left: 28px;">
 
                                     <p:calendar pattern="dd/MM/yyyy"
@@ -107,7 +107,7 @@
                                     Contatos Ativos
                                 </h3>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="min-height: 104px;">
                                 <table class="table table-hover table-sm table-responsive table-condensed">
                                     <tbody>
                                         <p:repeat value="#{DashBoardMB.contatosAtivos}" var="cont">
@@ -138,7 +138,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Eventos Ativos</h3>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="min-height: 104px;">
                                 <table class="table table-hover table-sm table-responsive table-condensed">
                                     <tbody>
                                         <p:repeat value="#{DashBoardMB.eventosAtivos}" var="eve">
@@ -159,16 +159,59 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Alertas / Avisos</h3>
+                            </div>
+                            <div class="panel-body" style="min-height: 104px;">
+                                <table class="table table-hover table-sm table-responsive table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Mensagem</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="ashdjgasgdkasdhkajshdjkashdkjashdashdjakshdasjkhdakjhdajkhdajkshdkjasnbckzjxcbnkjzhc" class="reticencias"/>
+                                            </td>
+                                            <td>
+
+                                            </td>
+
+                                        </tr>
+
+
+                                        <p:repeat value="#{DashBoardMB.alertasDestinatario}" var="alerta">
+                                            <tr>
+                                                <td>
+                                                    <div class="reticencias"> #{alerta.alerta.mensagem} </div>
+                                                </td>
+                                                <td>
+
+                                                </td>
+
+                                            </tr>
+                                        </p:repeat>
+                                    </tbody>
+                                </table>
+                                <p:link href="/intranet/admin/operacional/alerta/index.xhtml" >
+                                    <span>Visualizar Todos</span>
+                                </p:link>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="col-md-4 text-center">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Últimos acessos</h3>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="min-height: 104px;">
                                 <table class="table table-hover table-sm table-responsive table-condensed">
                                     <thead>
                                         <tr>

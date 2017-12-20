@@ -75,3 +75,12 @@ input.currency {
     text-align: right;
     padding-right: 15px;
 }
+
+.reticencias {
+    width: 100px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    direction: ltr;
+}

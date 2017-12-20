@@ -6,14 +6,19 @@
 package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.BasicControl;
+import br.com.cerimonial.entity.AlertaDestinatario;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Login;
+import br.com.cerimonial.service.AlertaDestinatarioService;
 import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.LoginService;
+import br.com.cerimonial.web.UsuarioLogado;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -33,11 +38,14 @@ public class DashBoardMB extends BasicControl{
     protected EventoService eventoService;
     @EJB
     protected ContatoEventoService contatoEventoService;
+    @EJB
+    protected AlertaDestinatarioService alertaDestinatarioService;
     
     private List<Login> ultimosLogins;
     private List<Evento> eventosDia;
     private List<Evento> eventosAtivos;
     private List<ContatoEvento> contatosAtivos;
+    private List<AlertaDestinatario> alertasDestinatario;
     
     private Date dataSelecionada;
     
@@ -52,6 +60,7 @@ public class DashBoardMB extends BasicControl{
         carregarEventosDoDia();
         carregarEventosAtivos();
         carregarContatosAtivos();
+        carregarAlertasUsuario();
         carregarLogins();
     }
     
@@ -70,6 +79,18 @@ public class DashBoardMB extends BasicControl{
     
     public void carregarContatosAtivos(){
         contatosAtivos = contatoEventoService.findContatosAtivos(10);
+    }
+    
+    /**
+     * Carregar os 10 ultimos alertas que não foram visualizados do usuário logado
+     */
+    public void carregarAlertasUsuario(){
+        try {
+            alertasDestinatario = alertaDestinatarioService.findAlertasUsuarioNaoVisualizados(10, UsuarioLogado.getInstance().getUsuario());
+        } catch (Exception ex) {
+            Logger.getLogger(DashBoardMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     
@@ -116,6 +137,14 @@ public class DashBoardMB extends BasicControl{
 
     public void setContatosAtivos(List<ContatoEvento> contatosAtivos) {
         this.contatosAtivos = contatosAtivos;
+    }
+
+    public List<AlertaDestinatario> getAlertasDestinatario() {
+        return alertasDestinatario;
+    }
+
+    public void setAlertasDestinatario(List<AlertaDestinatario> alertasDestinatario) {
+        this.alertasDestinatario = alertasDestinatario;
     }
     
     

@@ -7,7 +7,6 @@ package br.com.cerimonial.controller.mb.cliente;
 
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.service.EventoService;
-import br.com.cerimonial.web.UsuarioLogado;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
