@@ -174,22 +174,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        <tr>
-                                            <td>
-                                                <h:outputText value="ashdjgasgdkasdhkajshdjkashdkjashdashdjakshdasjkhdakjhdajkhdajkshdkjasnbckzjxcbnkjzhc" class="reticencias"/>
-                                            </td>
-                                            <td>
-
-                                            </td>
-
-                                        </tr>
-
-
                                         <p:repeat value="#{DashBoardMB.alertasDestinatario}" var="alerta">
                                             <tr>
                                                 <td>
-                                                    <div class="reticencias"> #{alerta.alerta.mensagem} </div>
+                                                    <h:outputText value="#{alerta.alerta.mensagem}" class="reticencias"/>
                                                 </td>
                                                 <td>
 

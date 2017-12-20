@@ -118,4 +118,26 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
 
     }
 
+    /**
+     * Alterar para visualizado o alerta
+     * @param entity
+     * @return 
+     * @throws java.lang.Exception
+     */
+    public AlertaDestinatario alterarAlertaVisualizado(AlertaDestinatario entity) throws Exception {
+        
+        isValid(entity);
+        
+        if(!entity.isVisualizado()){
+             
+            entity.setVisualizado(true);
+            
+            return this.save(entity);
+        }
+        
+        return entity;
+    }
+
+   
+
 }

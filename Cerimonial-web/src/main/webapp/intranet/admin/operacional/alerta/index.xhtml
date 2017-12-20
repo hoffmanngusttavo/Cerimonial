@@ -8,7 +8,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Eventos
+        Alertas
     </ui:define>
 
     <ui:define name="content">
@@ -19,7 +19,7 @@
                 <div class="row no-margim">
                     <div class="col-md-12">
                         <h1 class="module-title">
-                            Eventos
+                            Alertas Não Visualizados
                         </h1>
                     </div>
                 </div>
@@ -28,9 +28,9 @@
                     <div class="container">
                         <div class="row">
                             <div class="form-group col-md-5">
-                                
+
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -48,11 +48,10 @@
                                          currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          paginatorPosition="bottom"
-                                         value="#{EventoCrudMB.lazyDataModel}" 
+                                         value="#{AlertaDestinatarioCrudMB.lazyLista}" 
                                          widgetVar="dataTableVar"
                                          reflow="true"
-                                         emptyMessage="Nenhum registro encontrado"
-                                         lazy="true">
+                                         emptyMessage="Nenhum registro encontrado">
 
                                 <p:column id="id" 
                                           width="5%"
@@ -60,101 +59,32 @@
                                           exportable="true"
                                           sortBy="#{item.id}"
                                           headerText="#">
-                                    <p:link value="#{item.id}" 
-                                            outcome="/intranet/admin/operacional/pre-evento/form.xhtml">
-                                        <f:param name="idEvento" value="#{item.id}"/>
-                                    </p:link>
+                                    
+                                    <h:outputText value="#{item.id}"/>
+                                    
                                 </p:column>
-                                
+
                                 <p:column id="nomeContato" 
                                           exportable="true"
-                                          sortBy="#{item.nome}"
-                                          headerText="Nome">
-                                    <h:outputText value="#{item.nome}" />
+                                          sortBy="#{item.alerta.mensagem}"
+                                          headerText="Msg">
+                                    <h:outputText value="#{item.alerta.mensagem}" class="reticencias"/>
                                 </p:column>
-                                
-                                <p:column id="situacao" 
-                                          exportable="true"
-                                          width="80"
-                                          sortBy="#{item.situacaoEvento}"
-                                          headerText="Situação">
-                                    <h:outputText value="#{item.situacaoEvento.label}" />
-                                </p:column>
-                                
+
                                 <p:column headerText="Ações"
                                           style="text-align: center;width: 70px;">
-                                    <p:commandButton icon="fa fa-trash" 
+                                    <p:commandButton icon="fa fa-pencil" 
                                                      styleClass="bt-acoes"
-                                                     actionListener="#{EventoCrudMB.setEntity(item)}"
                                                      process="@this"
-                                                     update=":form:groupRemove"
                                                      immediate="true"
-                                                     oncomplete="$('#removeDialogVar').modal('show');"/>
+                                                     onclick="window.location = './form.xhtml?id=#{item.id}'"/>
+
                                 </p:column>
                             </p:dataTable>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-            <div class="modal fade" 
-                 id="removeDialogVar" tabindex="-1" 
-                 role="dialog" aria-labelledby="myModal" 
-                 aria-hidden="true" data-keyboard="false" 
-                 data-backdrop="static">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <h:panelGroup id="groupRemove">
-                            <div class="modal-header modal-header-danger">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <h4 class="modal-title">Remover ?</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label ">Id
-                                            </label>
-                                        </div>
-                                        <div class="col-md-3 col-md-offset-3">
-                                            <h:outputText value="#{EventoCrudMB.entity.id}" />
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label ">Nome
-                                            </label>
-                                        </div>
-                                        <div class="col-md-3 col-md-offset-3">
-                                            <h:outputText value="#{EventoCrudMB.entity.nome}" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <h:panelGroup layout="block" styleClass="modal-footer">
-                                <p:commandLink value="Fechar"
-                                               immediate="true" 
-                                               styleClass="btn btn-default" 
-                                               oncomplete="$('#removeDialogVar').modal('hide');" />
-
-                                <p:commandLink value="Confirmar" 
-                                               action="#{EventoCrudMB.delete()}" 
-                                               update="dataTable"
-                                               styleClass="btn btn-primary"
-                                               process="groupRemove" 
-                                               onstart="PF('statusDialog').show();"
-                                               oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
-                            </h:panelGroup>
-                        </h:panelGroup>
-                    </div>
-                </div>
-            </div>
-
 
         </h:form>
     </ui:define>
