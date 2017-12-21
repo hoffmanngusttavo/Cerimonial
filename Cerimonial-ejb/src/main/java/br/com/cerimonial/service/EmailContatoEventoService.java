@@ -146,7 +146,10 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
             entity.setModeloEmail(modeloEmail);
             entity.setCorpoEmail(modeloEmail.getConteudo());
             entity.setTituloEmail(modeloEmail.getTitulo());
-            entity.setArquivo(new Arquivo(modeloEmail.getArquivo().getNome(), modeloEmail.getArquivo().getExtensao(), modeloEmail.getArquivo().getConteudo()));
+            
+            if(modeloEmail.getArquivo() != null){
+                entity.setArquivo(new Arquivo(modeloEmail.getArquivo().getNome(), modeloEmail.getArquivo().getExtensao(), modeloEmail.getArquivo().getConteudo()));
+            }
         }
 
         return entity;

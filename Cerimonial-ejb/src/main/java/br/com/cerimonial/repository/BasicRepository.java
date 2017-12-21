@@ -160,6 +160,17 @@ abstract class BasicRepository implements Serializable {
 
         return (T) singleResult;
     }
+    
+     protected <T> T getPurePojoNative(Class<T> classToCast, String query) {
+       Object singleResult = null;
+        try {
+            Query qr = getEntityManager().createNativeQuery(query);
+            singleResult = qr.getSingleResult();
+        } catch (RuntimeException e) {
+            throw new GenericException("Erro ao recuperar todos os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+        }
+        return (T) singleResult;
+    }
 
     protected int executeCommand(String query, Object... values) {
         int executeUpdate = 0;

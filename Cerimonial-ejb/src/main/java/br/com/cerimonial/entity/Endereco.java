@@ -17,20 +17,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -51,24 +46,16 @@ public class Endereco implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 8, max = 15)
+    @Column
     private String cep;
 
-    @Column(nullable = false)
-    @NotNull
-    @NotBlank
-    @Size(min = 2, max = 255)
+    @Column
     private String logradouro;
 
     @Column
     private String complemento;
 
-    @Column(nullable = false)
-    @NotNull
-    @NotBlank
-    @Size(min = 2, max = 255)
+    @Column
     private String bairro;
 
     @Column

@@ -86,10 +86,11 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
             StringBuilder sb = new StringBuilder();
             sb.append("SELECT cli FROM Pessoa cli ");
             sb.append("INNER JOIN cli.usuariosClientes user ");
-            sb.append("WHERE user.id = ?1 ");
-            sb.append("AND cli.tiposEnvolvidos = ?2 ");
+            sb.append("INNER JOIN cli.tiposEnvolvidos tipo ");
+            sb.append("WHERE user.id =  ").append(usuarioLogado.getId());
+            sb.append(" AND tipo IN ('").append(TipoEnvolvido.CLIENTE).append("')");
 
-            return getPurePojo(Pessoa.class, sb.toString(), usuarioLogado.getId(), TipoEnvolvido.CLIENTE);
+            return getPurePojo(Pessoa.class, sb.toString());
 
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);

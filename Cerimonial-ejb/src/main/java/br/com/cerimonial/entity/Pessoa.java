@@ -114,7 +114,7 @@ public class Pessoa implements Serializable, ModelInterface {
     private TipoPessoa tipoPessoa = TipoPessoa.JURIDICA;
 
     @ElementCollection(fetch = FetchType.EAGER, targetClass = TipoEnvolvido.class)   
-    @JoinTable(name = "tipoEnvolvido", joinColumns = @JoinColumn(name = "tipoEnvolvido_id"))
+    @JoinTable(name = "tipoEnvolvido", joinColumns = @JoinColumn(name = "pessoa_id", nullable=false))
     @Column(name = "tiposEnvolvidos")
     @Enumerated(EnumType.STRING)
     private List<TipoEnvolvido> tiposEnvolvidos;
