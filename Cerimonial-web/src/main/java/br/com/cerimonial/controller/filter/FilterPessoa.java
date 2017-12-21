@@ -11,14 +11,16 @@ import br.com.cerimonial.controller.AbstractFilter;
  *
  * @author Gustavo Hoffmann
  */
-public class FilterColaborador extends AbstractFilter{
-    
+public class FilterPessoa extends AbstractFilter{
+
     private String nome;
 
-    public FilterColaborador() {
+    public FilterPessoa() {
          paths.put("nome", "nome");
     }
-
+    
+    
+    
     @Override
     public void limparFiltros() {
         nome = null;
@@ -36,5 +38,7 @@ public class FilterColaborador extends AbstractFilter{
     public void setNome(String nome) {
         this.nome = nome;
     }
+    
+    
     
 }

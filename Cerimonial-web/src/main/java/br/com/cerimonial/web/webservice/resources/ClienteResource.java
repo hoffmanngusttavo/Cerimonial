@@ -38,14 +38,14 @@ public class ClienteResource {
     public List<Pessoa> getClientes(@BeanParam ClienteFilterBean filter) {
 
         if ((filter.getOffset() >= 0) && (filter.getLimit() > 0)) {
-            return service.findRangeListagemClientes(null, filter.getLimit(), filter.getOffset(), null, null);
+            return service.findRangeListagem(null, filter.getLimit(), filter.getOffset(), null, null);
         }
         
         if (filter.getName() != null) {
-            return service.findRangeListagemClientes(null, 0, 0, null, null);
+            return service.findRangeListagem(null, 0, 0, null, null);
         }
 
-        return service.findRangeListagemClientes(null, 0, 0, null, null);
+        return service.findRangeListagem(null, 0, 0, null, null);
     }
 
     @GET

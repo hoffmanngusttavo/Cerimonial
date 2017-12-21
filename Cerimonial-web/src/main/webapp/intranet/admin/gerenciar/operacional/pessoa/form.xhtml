@@ -8,16 +8,16 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Cadastro de Cliente
+        Cadastro de Pessoa
     </ui:define>
 
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="id" value="#{ClienteCrudMB.id}" converter="javax.faces.Long"/>
+            <f:viewParam name="id" value="#{PessoaMB.id}" converter="javax.faces.Long"/>
             <!--use view action if you are in a Java EE 7 server: -->
-            <f:viewAction action="#{ClienteCrudMB.init()}"/>
-            <!--<f:event type="preRenderView" listener="{ClienteCrudMB.init}"/>-->
+            <f:viewAction action="#{PessoaMB.init()}"/>
+            <!--<f:event type="preRenderView" listener="{PessoaMB.init}"/>-->
         </f:metadata>
 
         <h:form prependId="false"
@@ -50,7 +50,7 @@
                             </label>
 
                             <p:inputText id="inptNome" 
-                                         value="#{ClienteCrudMB.entity.nome}" 
+                                         value="#{PessoaMB.entity.nome}" 
                                          required="true"
                                          requiredMessage="Preencha um nome válido"
                                          class="form-control"
@@ -66,7 +66,7 @@
                             </label>
 
                             <p:inputMask mask="999.999.999-99"
-                                         value="#{ClienteCrudMB.entity.cpf}"
+                                         value="#{PessoaMB.entity.cpf}"
                                          required="true"
                                          requiredMessage="Preencha um cpf válido"
                                          id="inptCpf"
@@ -81,7 +81,7 @@
                                 </span>
                             </label>
 
-                            <p:inputText value="#{ClienteCrudMB.entity.rg}"
+                            <p:inputText value="#{PessoaMB.entity.rg}"
                                          required="true"
                                          id="inptRg"
                                          requiredMessage="Preencha um rg válido"
@@ -97,7 +97,7 @@
                             </label>
 
                             <p:inputText id="inptEmail" 
-                                         value="#{ClienteCrudMB.entity.email}" 
+                                         value="#{PessoaMB.entity.email}" 
                                          class="form-control"
                                          required="true"
                                          requiredMessage="Preencha um e-mail válido"
@@ -114,7 +114,7 @@
                                 </span>
                             </label>
 
-                            <p:inputText value="#{ClienteCrudMB.entity.telefoneResidencial}"
+                            <p:inputText value="#{PessoaMB.entity.telefoneResidencial}"
                                          onfocus="functionMaskPhone();"
                                          styleClass="phone"
                                          class="form-control phone"
@@ -126,7 +126,7 @@
                             <label>Telefone Celular
                             </label>
 
-                            <p:inputText value="#{ClienteCrudMB.entity.telefoneCelular}"
+                            <p:inputText value="#{PessoaMB.entity.telefoneCelular}"
                                          onfocus="functionMaskPhone();"
                                          styleClass="phone"
                                          class="form-control phone"
@@ -143,7 +143,7 @@
                                         mask="true" 
                                         id="inptNascimento"
                                         style="display: block;"
-                                        value="#{ClienteCrudMB.entity.dataNascimento}"
+                                        value="#{PessoaMB.entity.dataNascimento}"
                                         label="Data Nascimento" 
                                         showOn="button"
                                         navigator="true"
@@ -161,7 +161,7 @@
 
                             <p:inputText id="inptFace" 
                                          class="form-control"
-                                         value="#{ClienteCrudMB.entity.facebook}" 
+                                         value="#{PessoaMB.entity.facebook}" 
                                          label="Facebook"/>
                         </div>
 
@@ -171,7 +171,7 @@
 
                             <p:inputText id="inptInsta" 
                                          class="form-control"
-                                         value="#{ClienteCrudMB.entity.instagram}" 
+                                         value="#{PessoaMB.entity.instagram}" 
                                          label="Instagram"/>
                         </div>
 
@@ -181,7 +181,7 @@
 
                             <p:inputTextarea id="inptObs" 
                                              class="form-control"
-                                             value="#{ClienteCrudMB.entity.observacao}" 
+                                             value="#{PessoaMB.entity.observacao}" 
                                              label="Observação"/>
                         </div>
 
@@ -193,7 +193,7 @@
                                              value="Próxima Etapa"/>
 
                             <p:commandButton value="Salvar"
-                                             action="#{ClienteCrudMB.save()}"
+                                             action="#{PessoaMB.save()}"
                                              onclick="validaFormularioCliente()"
                                              icon="fa fa-check" 
                                              style="margin-left: 10px;"
@@ -231,7 +231,7 @@
                                 </label>
 
                                 <p:inputMask mask="99.999-999"
-                                             value="#{ClienteCrudMB.entity.endereco.cep}"
+                                             value="#{PessoaMB.entity.endereco.cep}"
                                              required="true"
                                              requiredMessage="Preencha um cep válido"
                                              class="form-control"
@@ -239,7 +239,7 @@
                                              label="Cep">
                                     <p:ajax id="eventCep" 
                                             event="change" 
-                                            listener="#{ClienteCrudMB.buscaCep()}" 
+                                            listener="#{PessoaMB.buscaCep()}" 
                                             process="@this"
                                             update="enderecoGroup"
                                             onstart="PF('statusDialog').show();"
@@ -257,7 +257,7 @@
                                 </label>
 
                                 <p:inputText id="inptBairro" 
-                                             value="#{ClienteCrudMB.entity.endereco.bairro}" 
+                                             value="#{PessoaMB.entity.endereco.bairro}" 
                                              required="true"
                                              requiredMessage="Preencha um bairro válido"
                                              class="form-control"
@@ -273,7 +273,7 @@
                                 </label>
 
                                 <p:inputText id="inptLog" 
-                                             value="#{ClienteCrudMB.entity.endereco.logradouro}" 
+                                             value="#{PessoaMB.entity.endereco.logradouro}" 
                                              required="true"
                                              requiredMessage="Preencha um logradouro válido"
                                              class="form-control"
@@ -285,7 +285,7 @@
                                 <label>Número</label>
 
                                 <p:inputText id="inptNumero" 
-                                             value="#{ClienteCrudMB.entity.endereco.numero}" 
+                                             value="#{PessoaMB.entity.endereco.numero}" 
                                              class="form-control"
                                              label="Número"/>
                             </div>
@@ -294,7 +294,7 @@
                                 <label>Complemento</label>
 
                                 <p:inputText id="inptComplemento" 
-                                             value="#{ClienteCrudMB.entity.endereco.complemento}" 
+                                             value="#{PessoaMB.entity.endereco.complemento}" 
                                              class="form-control"
                                              label="Complemento"/>
                             </div>
@@ -307,7 +307,7 @@
                                 </label>
 
                                 <h:selectOneMenu id="inptEstado" 
-                                                 value="#{ClienteCrudMB.entity.endereco.estado}"
+                                                 value="#{PessoaMB.entity.endereco.estado}"
                                                  converter="EntityConverter"
                                                  rendered="true"
                                                  requiredMessage="Preencha um estado válido"
@@ -315,7 +315,7 @@
                                                  label="Estado">
                                     <f:selectItem itemValue="" 
                                                   itemLabel="Selecione" /> 
-                                    <f:selectItems value="#{ClienteCrudMB.comboEstado}" />
+                                    <f:selectItems value="#{PessoaMB.comboEstado}" />
                                     <p:ajax process="@this"
                                             update="@this, inptCidade"
                                             global="false"/>
@@ -330,7 +330,7 @@
                                 </label>
 
                                 <h:selectOneMenu id="inptCidade" 
-                                                 value="#{ClienteCrudMB.entity.endereco.cidade}"
+                                                 value="#{PessoaMB.entity.endereco.cidade}"
                                                  converter="EntityConverter"
                                                  required="true"
                                                  requiredMessage="Preencha uma cidade válida"
@@ -338,7 +338,7 @@
                                                  label="Cidade">
                                     <f:selectItem itemValue="" 
                                                   itemLabel="Selecione" /> 
-                                    <f:selectItems value="#{ClienteCrudMB.getComboCidade(ClienteCrudMB.entity.endereco.estado)}" />
+                                    <f:selectItems value="#{PessoaMB.getComboCidade(PessoaMB.entity.endereco.estado)}" />
                                     <p:ajax process="@this"
                                             update="@this"
                                             global="false"/>
@@ -353,7 +353,7 @@
                                          value="Voltar Etapa"/>
                         
                         <p:commandButton value="Salvar"
-                                         action="#{ClienteCrudMB.save()}"
+                                         action="#{PessoaMB.save()}"
                                          onclick="validaFormularioCliente()"
                                          icon="fa fa-check" 
                                          class="btn btn-success"

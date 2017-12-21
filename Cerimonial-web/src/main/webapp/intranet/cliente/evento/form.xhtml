@@ -45,6 +45,39 @@
 
 
                         <div class="form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Serviço Contratado</h3>
+                                </div>
+                                <div class="panel-body" style="max-height: 45px;">
+                                    <div style="margin-left: 28px;">
+                                        <p:link href="/intranet/cliente/evento/partials/orcamento.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                            <i class="fa fa-dollar"></i>
+                                            <span></span>
+                                        </p:link>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Dados Contratante
+                                    </h3>
+                                </div>
+                                <div class="panel-body" style="max-height: 45px;">
+                                    <p:link href="/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                        <i class="fa fa-user"></i>
+                                        <span></span>
+                                    </p:link>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group col-md-4 text-center">
                             <div class="panel panel-success">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
@@ -132,40 +165,11 @@
                             </div>
                         </h:panelGroup>
 
-                        <div class="form-group col-md-4 text-center">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">
-                                        Dados Contratante
-                                    </h3>
-                                </div>
-                                <div class="panel-body" style="max-height: 45px;">
-                                    <p:link href="/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=#{EventoClienteMB.evento.id}">
-                                        <i class="fa fa-user"></i>
-                                        <span></span>
-                                    </p:link>
-                                </div>
-                            </div>
-                        </div>
+                        
 
 
 
-                        <div class="form-group col-md-4 text-center">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Serviço Contratado</h3>
-                                </div>
-                                <div class="panel-body" style="max-height: 45px;">
-                                    <div style="margin-left: 28px;">
-                                        <p:link href="/intranet/cliente/evento/partials/orcamento.xhtml?idEvento=#{EventoClienteMB.evento.id}">
-                                            <i class="fa fa-dollar"></i>
-                                            <span></span>
-                                        </p:link>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        
                         <h:panelGroup rendered="#{EventoClienteMB.evento.contrato.dataImpressao != null}">
                             <div class="form-group col-md-4 text-center">
                                 <div class="panel panel-primary">

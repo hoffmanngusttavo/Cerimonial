@@ -26,14 +26,6 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
         super(entityManager, Pessoa.class);
     }
 
-    public Pessoa getPessoa(Long id) throws Exception {
-        Pessoa entity = super.getEntity(Pessoa.class, id);
-        if (entity != null && entity.getEndereco() != null) {
-            entity.getEndereco().getId();
-        }
-        return entity;
-    }
-
     @Override
     public int countListagem(HashMap<String, Object> filter) {
         ModelFilter modelFilter = ModelFilter.getInstance();
@@ -61,36 +53,19 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
         return super.findRangeListagem(modelFilter); //To change body of generated methods, choose Tools | Templates.
     }
 
-    //-----------Fornecedores----------------------
-    public List<Pessoa> findRangeListagemFornecedor(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) throws Exception {
-        List<Pessoa> fornecedores = this.findRangeListagem(params, max, offset, sortField, sortAscDesc);
-        if (CerimonialUtils.isListNotBlank(fornecedores)) {
-            for (Pessoa fornecedor : fornecedores) {
-                if (fornecedor.getCategoriasFornecedor() != null) {
-                    fornecedor.getCategoriasFornecedor().size();
-                }
-            }
-        }
-        return fornecedores;
-    }
+   
 
-    public Pessoa getEntityFornecedorCategoria(Long id) throws Exception {
-        Pessoa entity = getEntity(Pessoa.class, id);
-        if (entity != null) {
-            if (entity.getCategoriasFornecedor() != null) {
-                entity.getCategoriasFornecedor().size();
-            }
-            if (entity.getEndereco() != null) {
-                entity.getEndereco().getId();
-            }
-        }
-        return entity;
-    }
 
-    public Pessoa getClienteByEmail(String email) {
+    
+    /**
+     * Vai buscar uma pessoa pelo email
+     * @param email
+     * @return 
+     */
+    public Pessoa getPessoaByEmail(String email) {
 
         try {
-            return getPurePojo(Pessoa.class, "select usr from Pessoa usr where usr.email = ?1 and usr.tipoEnvolvido = ?2", email, TipoEnvolvido.CLIENTE);
+            return getPurePojo(Pessoa.class, "select usr from Pessoa usr where usr.email = ?1 limit 1", email);
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
@@ -112,7 +87,7 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
             sb.append("SELECT cli FROM Pessoa cli ");
             sb.append("INNER JOIN cli.usuariosClientes user ");
             sb.append("WHERE user.id = ?1 ");
-            sb.append("AND cli.tipoEnvolvido = ?2 ");
+            sb.append("AND cli.tiposEnvolvidos = ?2 ");
 
             return getPurePojo(Pessoa.class, sb.toString(), usuarioLogado.getId(), TipoEnvolvido.CLIENTE);
 

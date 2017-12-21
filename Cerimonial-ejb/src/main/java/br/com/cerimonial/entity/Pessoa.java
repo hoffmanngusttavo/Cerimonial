@@ -8,6 +8,8 @@ package br.com.cerimonial.entity;
 import br.com.cerimonial.entity.validators.CPF;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,6 +29,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -82,7 +87,7 @@ public class Pessoa implements Serializable, ModelInterface {
 
     @Column
     private String telefoneResidencial;
-    
+
     @Column
     private String telefoneComercial;
 
@@ -108,9 +113,11 @@ public class Pessoa implements Serializable, ModelInterface {
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa = TipoPessoa.JURIDICA;
 
-    @Column
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = TipoEnvolvido.class)   
+    @JoinTable(name = "tipoEnvolvido", joinColumns = @JoinColumn(name = "tipoEnvolvido_id"))
+    @Column(name = "tiposEnvolvidos")
     @Enumerated(EnumType.STRING)
-    private TipoEnvolvido tipoEnvolvido = TipoEnvolvido.CLIENTE;
+    private List<TipoEnvolvido> tiposEnvolvidos;
 
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
@@ -132,7 +139,7 @@ public class Pessoa implements Serializable, ModelInterface {
     private List<Evento> eventos;
 
     public Pessoa(TipoEnvolvido tipoEnvolvido, TipoPessoa tipoPessoa) {
-        this.tipoEnvolvido = tipoEnvolvido;
+        setTipoEnvolvido(tipoEnvolvido);
         this.tipoPessoa = tipoPessoa;
         endereco = new Endereco();
     }
@@ -255,8 +262,6 @@ public class Pessoa implements Serializable, ModelInterface {
         this.usuariosClientes = usuariosClientes;
     }
 
-    
-
     public String getObservacao() {
         return observacao;
     }
@@ -297,13 +302,6 @@ public class Pessoa implements Serializable, ModelInterface {
         this.rg = rg;
     }
 
-    public TipoEnvolvido getTipoEnvolvido() {
-        return tipoEnvolvido;
-    }
-
-    public void setTipoEnvolvido(TipoEnvolvido tipoEnvolvido) {
-        this.tipoEnvolvido = tipoEnvolvido;
-    }
 
     public boolean isCarroProprio() {
         return carroProprio;
@@ -365,6 +363,16 @@ public class Pessoa implements Serializable, ModelInterface {
     public void setEventos(List<Evento> eventos) {
         this.eventos = eventos;
     }
+
+    public List<TipoEnvolvido> getTiposEnvolvidos() {
+        return tiposEnvolvidos;
+    }
+
+    public void setTiposEnvolvidos(List<TipoEnvolvido> tiposEnvolvidos) {
+        this.tiposEnvolvidos = tiposEnvolvidos;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -447,6 +455,24 @@ public class Pessoa implements Serializable, ModelInterface {
             throw new Exception("Lista de Categorias está vazia");
         }
         this.getCategoriasFornecedor().remove(categoriaFornecedor);
+    }
+
+    
+    
+    public void setTipoEnvolvido(TipoEnvolvido tipoEnvolvido) {
+        
+        if(tipoEnvolvido == null){
+            throw new GenericException("Tipo Envolvido nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        
+        if(tiposEnvolvidos == null){
+            tiposEnvolvidos = new ArrayList<>();
+        }
+        
+        if(!tiposEnvolvidos.contains(tipoEnvolvido)){
+            tiposEnvolvidos.add(tipoEnvolvido);
+        }
     }
 
 }

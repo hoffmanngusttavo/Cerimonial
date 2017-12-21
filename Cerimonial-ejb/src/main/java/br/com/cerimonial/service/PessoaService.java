@@ -5,7 +5,6 @@
  */
 package br.com.cerimonial.service;
 
-import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
@@ -27,7 +26,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.transaction.Transactional;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -50,12 +48,22 @@ public class PessoaService extends BasicService<Pessoa> {
 
     @Override
     public Pessoa getEntity(Long id) throws Exception {
-        return repository.getPessoa(id);
+        Pessoa entity = repository.getEntity(id);
+
+        if (entity != null) {
+            
+            if (entity.getCategoriasFornecedor() != null) {
+                entity.getCategoriasFornecedor().size();
+            }
+            
+            if (entity.getEndereco() != null) {
+                entity.getEndereco().getId();
+            }
+        }
+
+        return entity;
     }
 
-    public Pessoa getEntityFornecedorCategoria(Long id) throws Exception {
-        return repository.getEntityFornecedorCategoria(id);
-    }
 
     @Override
     public synchronized Pessoa save(Pessoa entity) throws Exception {
@@ -88,6 +96,34 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         return 0;
     }
+    
+    
+     public int countListagem(HashMap<String, Object> filter) {
+        try {
+            if (filter == null) {
+                filter = new HashMap<>();
+            }
+
+            return repository.countListagem(filter);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public List<Pessoa> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
+        try {
+            if (params == null) {
+                params = new HashMap<>();
+            }
+            return repository.findRangeListagem(params, max, offset, sortField, sortAscDesc);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
 
     //-----------Clientes----------------------
     public Pessoa saveCliente(Pessoa entity) throws Exception {
@@ -99,7 +135,7 @@ public class PessoaService extends BasicService<Pessoa> {
         }
 
         entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
-
+        
         if (entity.getId() == null) {
             return repository.create(entity);
         } else {
@@ -142,32 +178,7 @@ public class PessoaService extends BasicService<Pessoa> {
         return saveCliente(entity);
     }
 
-    public int countListagemClientes(HashMap<String, Object> filter) {
-        try {
-            if (filter == null) {
-                filter = new HashMap<>();
-            }
-
-            filter.put("tipoEnvolvido", TipoEnvolvido.CLIENTE);
-            return repository.countListagem(filter);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
-    }
-
-    public List<Pessoa> findRangeListagemClientes(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
-        try {
-            if (params == null) {
-                params = new HashMap<>();
-            }
-            params.put("tipoEnvolvido", TipoEnvolvido.CLIENTE);
-            return repository.findRangeListagem(params, max, offset, sortField, sortAscDesc);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+   
     
      /**
       * Retorna o cliente de acordo com o usuario logado
@@ -202,33 +213,6 @@ public class PessoaService extends BasicService<Pessoa> {
         }
     }
 
-    public int countListagemFornecedor(HashMap<String, Object> filter) {
-        try {
-            if (filter == null) {
-                filter = new HashMap<>();
-            }
-
-            filter.put("tipoEnvolvido", TipoEnvolvido.FORNECEDOR);
-            return repository.countListagem(filter);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
-    }
-
-    public List<Pessoa> findRangeListagemFornecedor(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
-        try {
-            if (params == null) {
-                params = new HashMap<>();
-            }
-            params.put("tipoEnvolvido", TipoEnvolvido.FORNECEDOR);
-            return repository.findRangeListagemFornecedor(params, max, offset, sortField, sortAscDesc);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
     //--------------------COLABORADOR----------------------------
     public Pessoa saveColaborador(Pessoa entity) throws Exception {
 
@@ -247,33 +231,6 @@ public class PessoaService extends BasicService<Pessoa> {
         }
     }
 
-    public int countListagemColaborador(HashMap<String, Object> filter) {
-        try {
-            if (filter == null) {
-                filter = new HashMap<>();
-            }
-
-            filter.put("tipoEnvolvido", TipoEnvolvido.COLABORADOR);
-            return repository.countListagem(filter);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
-    }
-
-    public List<Pessoa> findRangeListagemColaborador(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
-        try {
-            if (params == null) {
-                params = new HashMap<>();
-            }
-            params.put("tipoEnvolvido", TipoEnvolvido.COLABORADOR);
-            return repository.findRangeListagem(params, max, offset, sortField, sortAscDesc);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
     /**
      * Verifica se já existe um cliente cadastrado com esse email Se não houver
      * cadastrado, instancia um novo
@@ -284,13 +241,15 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public Pessoa criarClienteFromContato(OrcamentoEvento entity) throws Exception {
 
-        Pessoa cliente = this.getClienteByEmail(entity.getContatoEvento().getEmailContato());
+        Pessoa cliente = this.getPessoaByEmail(entity.getContatoEvento().getEmailContato());
 
         try {
+            
             if (cliente == null) {
                 cliente = new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA);
             }
-
+            
+            cliente.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
             cliente.setEmail(entity.getContatoEvento().getEmailContato());
             cliente.setNome(entity.getContatoEvento().getNomeContato());
             cliente.setTelefoneResidencial(entity.getContatoEvento().getTelefonePrincipal());
@@ -304,11 +263,18 @@ public class PessoaService extends BasicService<Pessoa> {
         return cliente;
     }
 
-    private Pessoa getClienteByEmail(String emailContato) throws Exception {
+    
+    /** 
+     * Vai validar se o email é válido
+     * Vai buscar uma pessoa pelo email
+     * @param email
+     * @return 
+     */
+    private Pessoa getPessoaByEmail(String emailContato) throws Exception {
         
         CerimonialUtils.validarEmail(emailContato);
         
-        return repository.getClienteByEmail(emailContato);
+        return repository.getPessoaByEmail(emailContato);
     }
     
    
@@ -361,6 +327,7 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         
         Pessoa contratante = repository.getContratanteEvento(idEvento);
+        
         if(contratante != null){
             
             if(contratante.getEndereco() != null){

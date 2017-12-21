@@ -236,7 +236,7 @@ public class UsuarioService extends BasicService<Usuario> {
 
         //enviar email
         EmailHelper emailHelper = new EmailHelper();
-        emailHelper.enviarEmail(user.getEmail(), "Boas vindas", body);
+        emailHelper.enviarEmail(user.getEmail(), "Dados de acesso sistema", body);
 
     }
 

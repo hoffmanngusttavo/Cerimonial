@@ -8,7 +8,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-        Clientes
+        Pessoas
     </ui:define>
 
     <ui:define name="content">
@@ -20,7 +20,7 @@
                 <div class="row no-margim">
                     <div class="col-md-12">
                         <h1 class="module-title">
-                            Clientes
+                            Pessoas
                         </h1>
                     </div>
                 </div>
@@ -30,13 +30,13 @@
                         <div class="row">
                             <div class="form-group col-md-5">
                                 <p:inputText id="inptNome" 
-                                             value="#{ClienteCrudMB.filtros.nome}" 
+                                             value="#{PessoaMB.filtros.nome}" 
                                              placeholder="Pesquise por nome"
                                              class="form-control"
                                              label="Nome"/>
                             </div>
                             <div class="form-group col-md-1">
-                                <p:commandButton actionListener="#{ClienteCrudMB.filtros.filtrar()}"
+                                <p:commandButton actionListener="#{PessoaMB.filtros.filtrar()}"
                                                  icon="fa fa-search"
                                                  value="Buscar" 
                                                  update="dataTable"
@@ -61,8 +61,8 @@
                                          currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          paginatorPosition="bottom"
-                                         value="#{ClienteCrudMB.lazyDataModel}" 
-                                         selection="#{ClienteCrudMB.itensSelecionados}"
+                                         value="#{PessoaMB.lazyDataModel}" 
+                                         selection="#{PessoaMB.itensSelecionados}"
                                          widgetVar="dataTableVar"
                                          reflow="true"
                                          emptyMessage="Nenhum registro encontrado"
@@ -119,7 +119,7 @@
                                     
                                     <p:commandButton icon="fa fa-trash" 
                                                      styleClass="bt-acoes"
-                                                     actionListener="#{ClienteCrudMB.setEntity(item)}"
+                                                     actionListener="#{PessoaMB.setEntity(item)}"
                                                      process="@this"
                                                      update=":form:groupRemove"
                                                      immediate="true"
@@ -155,7 +155,7 @@
                                             </label>
                                         </div>
                                         <div class="col-md-3 col-md-offset-3">
-                                            <h:outputText value="#{ClienteCrudMB.entity.id}" />
+                                            <h:outputText value="#{PessoaMB.entity.id}" />
                                         </div>
                                     </div>
 
@@ -165,7 +165,7 @@
                                             </label>
                                         </div>
                                         <div class="col-md-3 col-md-offset-3">
-                                            <h:outputText value="#{ClienteCrudMB.entity.nome}" />
+                                            <h:outputText value="#{PessoaMB.entity.nome}" />
                                         </div>
                                     </div>
                                 </div>
@@ -177,7 +177,7 @@
                                                oncomplete="$('#removeDialogVar').modal('hide');" />
 
                                 <p:commandLink value="Confirmar" 
-                                               action="#{ClienteCrudMB.delete()}" 
+                                               action="#{PessoaMB.delete()}" 
                                                update="dataTable"
                                                styleClass="btn btn-primary"
                                                process="groupRemove" 
