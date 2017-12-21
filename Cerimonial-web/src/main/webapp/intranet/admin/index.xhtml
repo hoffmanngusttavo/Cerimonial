@@ -62,13 +62,20 @@
                                                 oncomplete="PF('statusDialog').hide();"
                                                 listener="#{DashBoardMB.carregarEventosDoDia()}"
                                                 update="groupEvento"/>
+                                        
+                                        <p:ajax event="change"
+                                                process="@this"
+                                                onstart="PF('statusDialog').show();"
+                                                oncomplete="PF('statusDialog').hide();"
+                                                listener="#{DashBoardMB.carregarEventosDoDia()}"
+                                                update="groupEvento"/>
 
                                     </p:calendar>
                                 </div>
 
                                 <h:panelGroup id="groupEvento">
                                     <h:panelGroup rendered="#{not empty DashBoardMB.eventosDia}">
-                                        <table class="table table-hover">
+                                        <table class="table table-hover table-sm table-responsive table-condensed">
                                             <thead>
                                                 <tr>
                                                     <th>Evento</th>
@@ -82,7 +89,7 @@
                                                             <h:outputText value="#{evento.nome}"/>
                                                         </td>
                                                         <td>
-                                                            <h:outputText value="#{evento.hora}">
+                                                            <h:outputText value="#{evento.horaInicio}">
                                                                 <f:convertDateTime pattern="HH:mm"
                                                                                    locale="pt_BR"
                                                                                    timeZone="GMT-3"/>

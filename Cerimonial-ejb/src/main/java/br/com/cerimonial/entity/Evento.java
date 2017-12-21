@@ -147,7 +147,7 @@ public class Evento implements Serializable, ModelInterface {
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.nome = nome != null ? nome.toUpperCase().trim() : nome;
     }
 
     public Pessoa getContratante() {

@@ -28,9 +28,7 @@ public class ModeloContratoRepository extends AbstractRepository<ModeloContrato>
         try {
             
             StringBuilder sql = new StringBuilder("SELECT mc FROM ModeloContrato mc  ");
-            sql.append("INNER JOIN mc.tipoEvento tipo");
-            sql.append(" WHERE 1=1");
-            sql.append(" AND tipo.id = ?1");
+            sql.append("WHERE mc.tipoEvento = ?1");
 
             return getPureList(ModeloContrato.class, sql.toString(), tipoEvento);
             

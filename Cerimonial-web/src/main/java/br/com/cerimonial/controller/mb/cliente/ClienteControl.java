@@ -9,10 +9,11 @@ import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.PessoaService;
-import br.com.cerimonial.web.UsuarioLogado;
+import br.com.cerimonial.service.UsuarioService;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import org.apache.shiro.SecurityUtils;
 
 /**
  *
@@ -25,11 +26,17 @@ public class ClienteControl extends BasicControl implements Serializable {
 
     @EJB
     PessoaService pessoaService;
+    
+    @EJB
+    UsuarioService usuarioService;
 
     @PostConstruct
     public void postConstruct() {
         try {
-            usuarioLogado = UsuarioLogado.getInstance().getUsuario();
+            
+            Usuario user = (Usuario) SecurityUtils.getSubject().getPrincipal();
+            
+            usuarioLogado = usuarioService.getEntity(user.getId());
 
             cliente = pessoaService.getClienteByUsuario(usuarioLogado);
 

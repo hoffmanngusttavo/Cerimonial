@@ -66,6 +66,7 @@
                                 <p:inputText id="inptNomeEvento" 
                                              value="#{FichaCadastralEventoClienteMB.evento.nome}" 
                                              required="true"
+                                             disabled="true"
                                              requiredMessage="Preencha corretamente o nome do evento"
                                              class="form-control"
                                              label="Nome"/>
@@ -102,8 +103,6 @@
                                                 style="display: block;"
                                                 value="#{FichaCadastralEventoClienteMB.evento.dataInicio}"
                                                 label="Data Evento" 
-                                                required="true"
-                                                requiredMessage="Preencha a data do evento"
                                                 showOn="button"
                                                 navigator="true"
                                                 locale="pt"
@@ -116,8 +115,6 @@
                                     <p:inputMask mask="99:99"
                                                  style="display: block;"
                                                  value="#{FichaCadastralEventoClienteMB.evento.horaInicio}"
-                                                 required="true"
-                                                 requiredMessage="Preencha a hora inicial do evento"
                                                  label="Hora Inicial Evento" 
                                                  placeholder="hora inicial"
                                                  id="inptHoraInicialEvento">
@@ -141,9 +138,7 @@
                                             id="inptDataEventoTermino"
                                             style="display: block;"
                                             value="#{FichaCadastralEventoClienteMB.evento.dataTermino}"
-                                            required="true"
                                             showOn="button"
-                                            requiredMessage="Preencha a data de término do evento"
                                             label="Data Evento" 
                                             navigator="true"
                                             locale="pt"
@@ -157,8 +152,6 @@
                                              style="display: block;"
                                              value="#{FichaCadastralEventoClienteMB.evento.horaTermino}"
                                              placeholder="hora final"
-                                             required="true"
-                                             requiredMessage="Preencha a hora de término do evento"
                                              label="Data Evento" 
                                              id="inptHoraTerminoEvento">
                                     <f:convertDateTime pattern="HH:mm"
@@ -219,8 +212,6 @@
 
                                     <p:inputText id="inptLocalCerimonia" 
                                                  value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.nomeLocalEvento}" 
-                                                 required="true"
-                                                 requiredMessage="Preencha um local de cerimônia"
                                                  class="form-control"
                                                  label="Nome Local Cerimônia"/>
 
@@ -238,8 +229,6 @@
 
                                         <p:inputMask mask="99.999-999"
                                                      value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.cep}"
-                                                     required="true"
-                                                     requiredMessage="Preencha um cep de cerimônia"
                                                      class="form-control"
                                                      id="inptCep"
                                                      label="Cep">
@@ -264,8 +253,6 @@
 
                                         <p:inputText id="inptBairro" 
                                                      value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.bairro}" 
-                                                     required="true"
-                                                     requiredMessage="Preencha um bairro de cerimônia"
                                                      class="form-control"
                                                      label="Bairro"/>
 
@@ -280,8 +267,6 @@
 
                                         <p:inputText id="inptLog" 
                                                      value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.logradouro}" 
-                                                     required="true"
-                                                     requiredMessage="Preencha um logradouro de cerimônia"
                                                      class="form-control"
                                                      label="Logradouro"/>
 
@@ -315,8 +300,6 @@
                                         <h:selectOneMenu id="inptEstado" 
                                                          value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.estado}"
                                                          converter="EntityConverter"
-                                                         rendered="true"
-                                                         requiredMessage="Preencha um estado de cerimônia"
                                                          class="form-control"
                                                          label="Estado">
                                             <f:selectItem itemValue="" 
@@ -338,8 +321,6 @@
                                         <h:selectOneMenu id="inptCidade" 
                                                          value="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.endereco.cidade}"
                                                          converter="EntityConverter"
-                                                         required="true"
-                                                         requiredMessage="Preencha uma cidade de cerimônia"
                                                          class="form-control"
                                                          label="Cidade">
                                             <f:selectItem itemValue="" 
@@ -350,17 +331,10 @@
                                                     global="false"/>
                                         </h:selectOneMenu>
                                     </div>
-
                                 </h:panelGroup>
-
-
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </h:panelGroup>
 
                 <div class="form-group col-md-#{FichaCadastralEventoClienteMB.evento.categoriaCasamento ? '6':'12'}">
@@ -392,8 +366,6 @@
 
                                 <p:inputText id="inptLocalFesta" 
                                              value="#{FichaCadastralEventoClienteMB.evento.festaCerimonia.nomeLocalFesta}" 
-                                             required="true"
-                                             requiredMessage="Preencha um local da festa"
                                              class="form-control"
                                              label="Nome Local Festa"/>
 
@@ -410,8 +382,6 @@
 
                                     <p:inputMask mask="99.999-999"
                                                  value="#{FichaCadastralEventoClienteMB.evento.festaCerimonia.endereco.cep}"
-                                                 required="true"
-                                                 requiredMessage="Preencha um cep da festa"
                                                  class="form-control"
                                                  id="inptCepFesta"
                                                  label="Cep">
@@ -436,8 +406,6 @@
 
                                     <p:inputText id="inptBairroFesta" 
                                                  value="#{FichaCadastralEventoClienteMB.evento.festaCerimonia.endereco.bairro}" 
-                                                 required="true"
-                                                 requiredMessage="Preencha um bairro da festa"
                                                  class="form-control"
                                                  label="Bairro"/>
 
@@ -452,8 +420,6 @@
 
                                     <p:inputText id="inptLogFesta" 
                                                  value="#{FichaCadastralEventoClienteMB.evento.festaCerimonia.endereco.logradouro}" 
-                                                 required="true"
-                                                 requiredMessage="Preencha um logradouro da festa"
                                                  class="form-control"
                                                  label="Logradouro"/>
 
@@ -487,8 +453,6 @@
                                     <h:selectOneMenu id="inptEstadoFesta" 
                                                      value="#{FichaCadastralEventoClienteMB.evento.festaCerimonia.endereco.estado}"
                                                      converter="EntityConverter"
-                                                     rendered="true"
-                                                     requiredMessage="Preencha um estado da festa"
                                                      class="form-control"
                                                      label="Estado">
                                         <f:selectItem itemValue="" 
@@ -510,8 +474,6 @@
                                     <h:selectOneMenu id="inptCidadeFesta" 
                                                      value="#{FichaCadastralEventoClienteMB.evento.festaCerimonia.endereco.cidade}"
                                                      converter="EntityConverter"
-                                                     required="true"
-                                                     requiredMessage="Preencha uma cidade da festa"
                                                      class="form-control"
                                                      label="Cidade">
                                         <f:selectItem itemValue="" 

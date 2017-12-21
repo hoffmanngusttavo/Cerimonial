@@ -32,7 +32,7 @@
                             <h3 class="panel-title">
                                 <p:link href="/intranet/cliente/evento/form.xhtml?id=#{OrcamentoEventoClienteMB.orcamento.evento.id}">
                                     <i class="fa fa-list"></i>
-                                    <span>#{OrcamentoEventoClienteMB.orcamento.evento.nome} - Orçamento do Evento</span>
+                                    <span>#{OrcamentoEventoClienteMB.orcamento.evento.nome} - Serviço Contratado do Evento</span>
                                 </p:link>
                             </h3>
                         </div>
@@ -101,25 +101,15 @@
                     </div>
 
                 </h:panelGroup>
-
             </div>
-
-
 
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label class="control-label ">Conteúdo
-                        <span class="asteriskField">
-                            *
-                        </span>
-                    </label>
+                    <label class="control-label ">Conteúdo</label>
                     <p:editor value="#{OrcamentoEventoClienteMB.orcamento.proposta}"
                               disabled="true"/>
                 </div>
             </div>
-
-
-
 
         </h:form>
 

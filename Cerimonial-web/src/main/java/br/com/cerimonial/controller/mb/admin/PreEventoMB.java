@@ -155,7 +155,7 @@ public class PreEventoMB extends BasicControl {
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível carregar os dados do modelo: " + ex.getCause().getMessage());
+            createFacesErrorMessage("Não foi possível salvar o registro do email: " + ex.getCause().getMessage());
         }
     }
 

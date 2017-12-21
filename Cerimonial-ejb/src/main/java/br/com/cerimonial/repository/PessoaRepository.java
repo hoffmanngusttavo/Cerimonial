@@ -98,6 +98,12 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
         return null;
     }
 
+    
+    /**
+      * Retorna o cliente de acordo com o usuario logado
+     * @param usuarioLogado
+     * @return 
+      */
     public Pessoa getClienteByUsuario(Usuario usuarioLogado) {
 
         try {

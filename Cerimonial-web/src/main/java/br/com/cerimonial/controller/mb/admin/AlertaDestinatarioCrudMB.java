@@ -7,14 +7,15 @@ package br.com.cerimonial.controller.mb.admin;
 
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.AlertaDestinatario;
+import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.AlertaDestinatarioService;
-import br.com.cerimonial.web.UsuarioLogado;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.apache.shiro.SecurityUtils;
 
 /**
  *
@@ -53,7 +54,8 @@ public class AlertaDestinatarioCrudMB extends BasicControl {
         
         if(lazyLista == null){
             try {
-                lazyLista = service.findAlertasUsuarioNaoVisualizados(Integer.MAX_VALUE, UsuarioLogado.getInstance().getUsuario());
+                Usuario user = (Usuario) SecurityUtils.getSubject().getPrincipal();
+                lazyLista = service.findAlertasUsuarioNaoVisualizados(Integer.MAX_VALUE, user);
             } catch (Exception ex) {
                 Logger.getLogger(AlertaDestinatarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
             }

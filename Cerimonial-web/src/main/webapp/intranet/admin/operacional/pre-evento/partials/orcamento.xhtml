@@ -32,7 +32,7 @@
                             <h3 class="panel-title">
                                 <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{OrcamentoEventoMB.contatoEvento.id}">
                                     <i class="fa fa-list"></i>
-                                    <span>#{OrcamentoEventoMB.contatoEvento.nomeEvento} - Proposta/Orçamento</span>
+                                    <span>#{OrcamentoEventoMB.contatoEvento.nomeEvento} - Serviço Contratado</span>
                                 </p:link>
                             </h3>
                         </div>
@@ -157,11 +157,7 @@
 
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label style="width: 100%;">Anexo
-                                <span class="asteriskField">
-                                    *
-                                </span>
-                            </label>
+                            <label style="width: 100%;">Anexo</label>
 
                             <p:fileUpload fileUploadListener="#{OrcamentoEventoMB.handleFileUpload}"
                                           id="uploadFile"

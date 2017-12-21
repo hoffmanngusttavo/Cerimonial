@@ -291,7 +291,7 @@ public class ContatoEvento implements Serializable, ModelInterface{
     }
 
     public void setNomeEvento(String nomeEvento) {
-        this.nomeEvento = nomeEvento;
+        this.nomeEvento = nomeEvento != null ? nomeEvento.toUpperCase().trim() : nomeEvento;
     }
 
     public List<EmailContatoEvento> getEmailsContato() {

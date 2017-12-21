@@ -26,8 +26,7 @@ public class ModeloPropostaRepository extends AbstractRepository<ModeloProposta>
 
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT mod FROM ModeloProposta mod ");
-        sb.append("INNER JOIN mod.tipoEvento tipo ");
-        sb.append("WHERE tipo.id = ?1 ");
+        sb.append("WHERE mod.tipoEvento =?1 ");
 
         return getPureList(ModeloProposta.class, sb.toString(), tipoEvento);
 

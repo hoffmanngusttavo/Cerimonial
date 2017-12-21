@@ -10,11 +10,11 @@ import br.com.cerimonial.entity.AlertaDestinatario;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Login;
+import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.AlertaDestinatarioService;
 import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.LoginService;
-import br.com.cerimonial.web.UsuarioLogado;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.apache.shiro.SecurityUtils;
 
 /**
  *
@@ -86,7 +87,8 @@ public class DashBoardMB extends BasicControl{
      */
     public void carregarAlertasUsuario(){
         try {
-            alertasDestinatario = alertaDestinatarioService.findAlertasUsuarioNaoVisualizados(10, UsuarioLogado.getInstance().getUsuario());
+            Usuario user = (Usuario) SecurityUtils.getSubject().getPrincipal();
+            alertasDestinatario = alertaDestinatarioService.findAlertasUsuarioNaoVisualizados(10, user);
         } catch (Exception ex) {
             Logger.getLogger(DashBoardMB.class.getName()).log(Level.SEVERE, null, ex);
         }

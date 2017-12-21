@@ -536,125 +536,12 @@ function validaFormularioContratante() {
 //---------------------FICHA CADASTRAL EVENTO -------------------------------------
 
 function validaFormularioEvento() {
-    var inptNome = $('#inptNomeEvento').val();
-    var inptDataEvento = $('#inptDataEvento_input').val();
-    var inptHoraInicialEvento = $('#inptHoraInicialEvento').val();
-    var inptDataTerminoEvento = $('#inptDataEventoTermino_input').val();
-    var inptHoraTerminoEvento = $('#inptHoraTerminoEvento').val();
-    var inptQtdConvidados = $('#inptQtdConvidados').val();
-
-    if (inptNome === '') {
-        $('#inptNomeEvento').focus();
-        $('#divInptNome').addClass('has-error');
-        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
-
-    }
-    
-    if (inptDataEvento === '' || inptDataEvento.length < 3) {
-        $('#inptDataEvento_input').focus();
-        $('#div-inptDataEvento').addClass('has-error');
-        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
-
-    }
-    
-    if (inptHoraInicialEvento === '') {
-        $('#inptHoraInicialEvento').focus();
-        $('#div-inptDataEvento').addClass('has-error');
-        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
-
-    }
-    
-    if (inptDataTerminoEvento === '' || inptDataTerminoEvento.length < 3) {
-        $('#inptDataEventoTermino_input').focus();
-        $('#div-inptDataEventoTermino').addClass('has-error');
-        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
-
-    }
-    
-    if (inptHoraTerminoEvento === '') {
-        $('#inptHoraTerminoEvento').focus();
-        $('#div-inptDataEventoTermino').addClass('has-error');
-        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
-
-    }
-    if (inptQtdConvidados === '') {
+   
+    if ($('#inptQtdConvidados').val() === '') {
         $('#inptQtdConvidados').focus();
         $('#div-inptQtdConvidados').addClass('has-error');
         $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
-
     }
-
-    if ($('#inptLocalCerimonia').val() === '') {
-        $('#div-inptLocalCerimonia').addClass('has-error');
-        $('#inptLocalCerimonia').focus();
-
-    }
-
-    if ($('#inptCep').val() === '') {
-        $('#div-inptCep').addClass('has-error');
-        $('#inptCep').focus();
-
-    }
-    if ($('#inptBairro').val() === '') {
-        $('#div-inptBairro').addClass('has-error');
-        $('#inptBairro').focus();
-
-    }
-
-    if ($('#inptLog').val() === '') {
-        $('#div-inptLog').addClass('has-error');
-        $('#inptLog').focus();
-
-    }
-
-    if ($('#inptEstado').val() === '') {
-        $('#div-inptEstado').addClass('has-error');
-        $('#inptEstado').focus();
-
-    }
-
-    if ($('#inptCidade').val() === '') {
-        $('#div-inptCidade').addClass('has-error');
-        $('#inptCidade').focus();
-
-    }
-    
-    
-    if ($('#inptLocalFesta').val() === '') {
-        $('#div-inptLocalFesta').addClass('has-error');
-        $('#inptLocalFesta').focus();
-
-    }
-
-    if ($('#inptCepFesta').val() === '') {
-        $('#div-inptCepFesta').addClass('has-error');
-        $('#inptCepFesta').focus();
-
-    }
-    if ($('#inptBairroFesta').val() === '') {
-        $('#div-inptBairroFesta').addClass('has-error');
-        $('#inptBairroFesta').focus();
-
-    }
-
-    if ($('#inptLogFesta').val() === '') {
-        $('#div-inptLogFesta').addClass('has-error');
-        $('#inptLogFesta').focus();
-
-    }
-
-    if ($('#inptEstadoFesta').val() === '') {
-        $('#div-inptEstadoFesta').addClass('has-error');
-        $('#inptEstadoFesta').focus();
-
-    }
-
-    if ($('#inptCidadeFesta').val() === '') {
-        $('#div-inptCidadeFesta').addClass('has-error');
-        $('#inptCidadeFesta').focus();
-
-    }
-
 
 }
 

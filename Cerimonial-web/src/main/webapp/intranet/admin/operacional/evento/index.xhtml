@@ -28,9 +28,9 @@
                     <div class="container">
                         <div class="row">
                             <div class="form-group col-md-5">
-                                
+
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -48,6 +48,8 @@
                                          currentPageReportTemplate="Exibindo: {startRecord}-{endRecord} de {totalRecords} Registros"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          paginatorPosition="bottom"
+                                         sortBy="#{item.dataInicio}"
+                                         sortOrder="descending"
                                          value="#{EventoCrudMB.lazyDataModel}" 
                                          widgetVar="dataTableVar"
                                          reflow="true"
@@ -66,23 +68,55 @@
                                     </p:link>
                                 </p:column>
                                 
+                                <p:column id="data" 
+                                          exportable="true"
+                                          width="110"
+                                          sortBy="#{item.dataInicio}"
+                                          headerText="Data">
+                                    <h:outputText value="#{item.dataInicio}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"
+                                                           locale="pt_BR"
+                                                           timeZone="GMT-3"/>
+                                    </h:outputText>
+                                </p:column>
+                                
+                                <p:column id="hora" 
+                                          exportable="true"
+                                          width="90"
+                                          sortBy="#{item.horaInicio}"
+                                          headerText="Hora">
+                                    <h:outputText value="#{item.horaInicio}">
+                                        <f:convertDateTime pattern="HH:mm"
+                                                           locale="pt_BR"
+                                                           timeZone="GMT-3"/>
+                                    </h:outputText>
+                                </p:column>
+
                                 <p:column id="nomeContato" 
                                           exportable="true"
                                           sortBy="#{item.nome}"
                                           headerText="Nome">
                                     <h:outputText value="#{item.nome}" />
                                 </p:column>
-                                
+
                                 <p:column id="situacao" 
                                           exportable="true"
-                                          width="80"
+                                          width="110"
                                           sortBy="#{item.situacaoEvento}"
                                           headerText="Situação">
                                     <h:outputText value="#{item.situacaoEvento.label}" />
                                 </p:column>
-                                
+
                                 <p:column headerText="Ações"
-                                          style="text-align: center;width: 70px;">
+                                          style="text-align: center;width: 100px;">
+                                    
+                                     <p:commandButton icon="fa fa-pencil" 
+                                                     styleClass="bt-acoes"
+                                                     process="@this"
+                                                     immediate="true"
+                                                     onclick="window.location='#{facesContext.externalContext.requestContextPath}/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=#{item.id}'"/>
+                                    
+                                    
                                     <p:commandButton icon="fa fa-trash" 
                                                      styleClass="bt-acoes"
                                                      actionListener="#{EventoCrudMB.setEntity(item)}"

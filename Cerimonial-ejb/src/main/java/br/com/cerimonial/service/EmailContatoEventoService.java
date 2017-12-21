@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.EmailContatoEvento;
 import br.com.cerimonial.entity.ModeloEmail;
@@ -69,19 +70,17 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
         isValid(entity);
 
         if (entity.getId() == null) {
-            
+
             enviarEmail(entity);
 
             entity.setDataCadastro(new Date());
-            
+
             return repository.create(entity);
         } else {
             return repository.edit(entity);
         }
     }
 
-    
-   
     public void delete(EmailContatoEvento contato) throws Exception {
 
         isValid(contato);
@@ -125,29 +124,30 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     public EmailContatoEvento carregarDadosModeloEmail(EmailContatoEvento entity, ModeloEmail modeloEmail) throws Exception {
 
-        if(entity != null){
+        if (entity != null) {
             entity.setArquivo(null);
             entity.setCorpoEmail(null);
             entity.setTituloEmail(null);
         }
-        
-        
+
         if (modeloEmail == null) {
             throw new GenericException("Modelo de Email nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         // carregar em lazy os anexoss
         modeloEmail = modeloEmailService.getEntity(modeloEmail.getId());
-        
 
-        if (StringUtils.isBlank(entity.getDestinatarios())) {
-            entity.setDestinatarios(entity.getContatoEvento().getEmailContato());
+        if (entity != null) {
+
+            if (StringUtils.isBlank(entity.getDestinatarios())) {
+                entity.setDestinatarios(entity.getContatoEvento().getEmailContato());
+            }
+
+            entity.setModeloEmail(modeloEmail);
+            entity.setCorpoEmail(modeloEmail.getConteudo());
+            entity.setTituloEmail(modeloEmail.getTitulo());
+            entity.setArquivo(new Arquivo(modeloEmail.getArquivo().getNome(), modeloEmail.getArquivo().getExtensao(), modeloEmail.getArquivo().getConteudo()));
         }
-
-        entity.setModeloEmail(modeloEmail);
-        entity.setCorpoEmail(modeloEmail.getConteudo());
-        entity.setTituloEmail(modeloEmail.getTitulo());
-        entity.adicionarAnexo(modeloEmail.getArquivo());
 
         return entity;
 
