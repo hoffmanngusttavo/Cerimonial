@@ -73,9 +73,10 @@ public class EventoRepository extends AbstractRepository<Evento> {
 
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT eve FROM Evento eve ");
-        sb.append("INNER JOIN eve.contratante cli ");
+        sb.append("INNER JOIN eve.contratantes cli ");
+        sb.append("INNER JOIN cli.contratante con ");
         sb.append("WHERE eve.situacaoEvento = ?1 ");
-        sb.append("AND cli.id = ?2 ");
+        sb.append("AND con.id = ?2 ");
 
         return getPureList(Evento.class, sb.toString(), SituacaoEvento.ATIVO, cliente.getId());
     }
@@ -136,7 +137,8 @@ public class EventoRepository extends AbstractRepository<Evento> {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT eve FROM Evento eve ");
-        sb.append("INNER JOIN eve.contratante con ");
+        sb.append("INNER JOIN eve.contratantes ep ");
+        sb.append("INNER JOIN ep.contratante con ");
         sb.append("WHERE 1=1 ");
         sb.append("AND eve.id =?1 ");
         sb.append("AND con.id =?2 ");

@@ -105,7 +105,7 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      * @param evento
      * @return 
      */
-    public EventoPessoa getEntityByEvento(Evento evento) {
+    public EventoPessoa getEntityByEvento(Evento evento)  {
 
         if (evento == null) {
             throw new GenericException("Evento Nulo", ErrorCode.BAD_REQUEST.getCode());

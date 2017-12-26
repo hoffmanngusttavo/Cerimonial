@@ -80,12 +80,13 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
 
         StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
         sql.append(" INNER JOIN orc.eventos evento");
-        sql.append(" INNER JOIN evento.contratante cli");
+        sql.append(" INNER JOIN evento.contratantes cli");
+        sql.append(" INNER JOIN cli.contratante con");
         sql.append(" LEFT JOIN orc.modeloProposta mp");
         sql.append(" LEFT JOIN orc.anexos arq");
         sql.append(" WHERE 1=1");
         sql.append(" AND evento.id = ?1");
-        sql.append(" AND cli.id = ?2");
+        sql.append(" AND con.id = ?2");
 
         return getPurePojo(OrcamentoEvento.class, sql.toString(), idEvento, contratante.getId());
 

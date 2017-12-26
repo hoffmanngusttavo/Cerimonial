@@ -82,9 +82,9 @@ abstract class BasicRepository implements Serializable {
             getEntityManager().remove(entity);
 
         } catch (IllegalArgumentException ex) {
-            throw new GenericException("Objeto informado para remoção não existe: " + ex.getMessage(), ErrorCode.NOT_FOUND.getCode());
-        } catch (RuntimeException ex) {
             throw new GenericException("Erro ao remover objeto do banco de dados: " + ex.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+        } catch (RuntimeException ex) {
+            throw new GenericException("Objeto informado para remoção não existe: " + ex.getMessage(), ErrorCode.NOT_FOUND.getCode());
         }
 
     }
@@ -153,9 +153,9 @@ abstract class BasicRepository implements Serializable {
             Query qr = createQuery(query, values);
             singleResult = qr.getSingleResult();
         } catch (IllegalArgumentException ex) {
-            throw new GenericException("Objeto não existe: " + ex.getMessage(), ErrorCode.NOT_FOUND.getCode());
+            throw new GenericException("Erro ao recuperar objeto do banco: " + ex.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         } catch (RuntimeException e) {
-            throw new GenericException("Erro ao recuperar objeto do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Objeto não existe: " + e.getMessage(), ErrorCode.NOT_FOUND.getCode());
         }
 
         return (T) singleResult;

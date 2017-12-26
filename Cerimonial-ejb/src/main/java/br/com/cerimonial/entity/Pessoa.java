@@ -76,7 +76,8 @@ public class Pessoa implements Serializable, ModelInterface {
     @CNPJ
     private String cnpj;
 
-    @Column
+    @Column(unique = true)
+    @NotNull
     private String email;
 
     @Column
