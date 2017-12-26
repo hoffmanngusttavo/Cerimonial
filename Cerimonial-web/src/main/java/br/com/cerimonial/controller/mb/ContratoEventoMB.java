@@ -146,23 +146,26 @@ public class ContratoEventoMB extends BasicControl {
     }
 
     /**
-     * Evento invocado pela tela de contrato para imprimir
+     * Evento invocado pela tela de contrato para liberar para o cliente
      *
+     * @return 
      */
-    public synchronized void imprimirContrato() {
+    public synchronized String liberarContrato() {
         try {
 
-            service.imprimirContrato(entity);
+            service.liberarContrato(entity);
 
-            RequestContext rc = RequestContext.getCurrentInstance();
-            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/intranet/admin/operacional/pre-evento/partials/impressao-contrato.xhtml?id=" + entity.getId();
+            createFacesInfoMessage("Dados gravados com sucesso!");
 
-            rc.execute("printWindow = window.open('" + url + "');");
-            rc.execute("printWindow.print()");
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
+            return "/intranet/admin/operacional/pre-evento/partials/contrato.xhtml?idEvento=" +id + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
+            
+            return null;
         } finally {
             scrollTopMessage();
         }

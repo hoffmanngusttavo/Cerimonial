@@ -127,13 +127,17 @@ public class ContratoEventoService extends BasicService<ContratoEvento>{
         }
     }
     
-    public void imprimirContrato(ContratoEvento entity) throws Exception {
+    public void liberarContrato(ContratoEvento entity) throws Exception {
 
         isValid(entity);
         
-        entity.setDataImpressao(new Date());
+        entity.setLiberadoCliente(true);
         
         save(entity);
+        
+        //criar notificacao de alerta para os contratantes do evento
+        
+        
     }
 
     public List<ContratoEvento> findAll() {

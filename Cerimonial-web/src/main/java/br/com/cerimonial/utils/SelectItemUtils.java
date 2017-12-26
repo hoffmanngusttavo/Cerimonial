@@ -14,6 +14,7 @@ import br.com.cerimonial.enums.ClassificacaoContato;
 import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.enums.GrauParentesco;
 import br.com.cerimonial.enums.TipoEmail;
+import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.service.CategoriaFornecedorService;
 import br.com.cerimonial.service.CidadeService;
@@ -41,7 +42,7 @@ public class SelectItemUtils {
         });
         return items;
     }
-    
+
     public static List<SelectItem> getComboGrauParentesco() {
         List<SelectItem> items = new LinkedList<>();
         GrauParentesco.getList().stream().forEach((item) -> {
@@ -63,6 +64,17 @@ public class SelectItemUtils {
         TipoEmail.getList().stream().forEach((item) -> {
             items.add(new SelectItem(item, item.getLabel()));
         });
+        return items;
+    }
+
+    public static List<SelectItem> getComboTipoContratante(TipoEvento tipoEvento) {
+
+        List<SelectItem> items = new LinkedList<>();
+        if (tipoEvento != null) {
+            TipoEnvolvidoEvento.getTiposEnvolvidosByTipoEvento(tipoEvento).stream().forEach((item) -> {
+                items.add(new SelectItem(item, item.getLabel()));
+            });
+        }
         return items;
     }
 
@@ -97,7 +109,7 @@ public class SelectItemUtils {
         }
         return items;
     }
-    
+
     public List<SelectItem> getComboModeloEmail() {
         List<SelectItem> items = new LinkedList<>();
 
@@ -139,7 +151,7 @@ public class SelectItemUtils {
             service.findModelosContratoByTipoEvento(tipoEvento).stream().forEach((item) -> {
                 items.add(new SelectItem(item, item.getTitulo()));
             });
-            
+
         } catch (Exception ex) {
             Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -161,7 +173,7 @@ public class SelectItemUtils {
         }
         return items;
     }
-    
+
     public List<SelectItem> getComboModelosPropostaTipoEvento(TipoEvento tipoEvento) {
         List<SelectItem> items = new LinkedList<>();
 
@@ -172,7 +184,7 @@ public class SelectItemUtils {
             for (ModeloProposta item : service.findModelosPropostaByTipoEvento(tipoEvento)) {
                 items.add(new SelectItem(item, item.getTitulo()));
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(SelectItemUtils.class.getName()).log(Level.SEVERE, null, ex);
         }

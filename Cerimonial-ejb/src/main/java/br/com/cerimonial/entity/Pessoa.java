@@ -94,6 +94,13 @@ public class Pessoa implements Serializable, ModelInterface {
     @Column
     private String telefoneCelular;
 
+    @Column
+    private String profissao;
+
+    @Column
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataNascimento;
+
     @Column(columnDefinition = "TEXT")
     private String observacao;
 
@@ -113,15 +120,23 @@ public class Pessoa implements Serializable, ModelInterface {
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa = TipoPessoa.JURIDICA;
 
-    @ElementCollection(fetch = FetchType.EAGER, targetClass = TipoEnvolvido.class)   
-    @JoinTable(name = "tipoEnvolvido", joinColumns = @JoinColumn(name = "pessoa_id", nullable=false))
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = TipoEnvolvido.class)
+    @JoinTable(name = "tipoEnvolvido", joinColumns = @JoinColumn(name = "pessoa_id", nullable = false))
     @Column(name = "tiposEnvolvidos")
     @Enumerated(EnumType.STRING)
     private List<TipoEnvolvido> tiposEnvolvidos;
 
     @Column(columnDefinition = "boolean default true")
     private boolean ativo = true;
-
+    
+    
+    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<ContatoEnvolvido> contatosFamiliares;
+    
+    @OneToMany(mappedBy = "contratante", fetch = FetchType.LAZY)
+    private List<EventoPessoa> eventos;
+    
+    
     //Particularidades Colaborador
     @Column(columnDefinition = "boolean default true")
     private boolean carroProprio = true;
@@ -129,15 +144,9 @@ public class Pessoa implements Serializable, ModelInterface {
     //Particularidades Fornecedor
     @ManyToMany(fetch = FetchType.LAZY)
     private List<CategoriaFornecedor> categoriasFornecedor;
+    
 
-    //Particularidades Cliente
-    @Column
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataNascimento;
-
-    @OneToMany(mappedBy = "contratante", fetch = FetchType.LAZY)
-    private List<Evento> eventos;
-
+    
     public Pessoa(TipoEnvolvido tipoEnvolvido, TipoPessoa tipoPessoa) {
         setTipoEnvolvido(tipoEnvolvido);
         this.tipoPessoa = tipoPessoa;
@@ -302,7 +311,6 @@ public class Pessoa implements Serializable, ModelInterface {
         this.rg = rg;
     }
 
-
     public boolean isCarroProprio() {
         return carroProprio;
     }
@@ -356,20 +364,32 @@ public class Pessoa implements Serializable, ModelInterface {
 
     }
 
-    public List<Evento> getEventos() {
-        return eventos;
-    }
-
-    public void setEventos(List<Evento> eventos) {
-        this.eventos = eventos;
-    }
-
     public List<TipoEnvolvido> getTiposEnvolvidos() {
         return tiposEnvolvidos;
     }
 
     public void setTiposEnvolvidos(List<TipoEnvolvido> tiposEnvolvidos) {
         this.tiposEnvolvidos = tiposEnvolvidos;
+    }
+
+    public String getProfissao() {
+        return profissao;
+    }
+
+    public void setProfissao(String profissao) {
+        this.profissao = profissao;
+    }
+
+    public List<ContatoEnvolvido> getContatosFamiliares() {
+        return contatosFamiliares;
+    }
+
+    public void setContatosFamiliares(List<ContatoEnvolvido> contatosFamiliares) {
+        this.contatosFamiliares = contatosFamiliares;
+    }
+
+    public List<EventoPessoa> getEventos() {
+        return eventos;
     }
     
     
@@ -457,22 +477,68 @@ public class Pessoa implements Serializable, ModelInterface {
         this.getCategoriasFornecedor().remove(categoriaFornecedor);
     }
 
-    
-    
     public void setTipoEnvolvido(TipoEnvolvido tipoEnvolvido) {
-        
-        if(tipoEnvolvido == null){
+
+        if (tipoEnvolvido == null) {
             throw new GenericException("Tipo Envolvido nulo", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        
-        if(tiposEnvolvidos == null){
+
+        if (tiposEnvolvidos == null) {
             tiposEnvolvidos = new ArrayList<>();
         }
-        
-        if(!tiposEnvolvidos.contains(tipoEnvolvido)){
+
+        if (!tiposEnvolvidos.contains(tipoEnvolvido)) {
             tiposEnvolvidos.add(tipoEnvolvido);
         }
+    }
+    
+    public void adicionarNovoContato(ContatoEnvolvido contatoEnvolvido) {
+
+        if(contatoEnvolvido == null){
+             throw new GenericException("Contato Envolvido nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(StringUtils.isBlank(contatoEnvolvido.getNome())){
+             throw new GenericException("Contato deve possuir pelo menos um nome", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (contatosFamiliares == null) {
+            contatosFamiliares = new ArrayList<>();
+        }
+
+        contatosFamiliares.add(contatoEnvolvido);
+    }
+    
+    
+    public void editarContato(ContatoEnvolvido contatoEnvolvido, int posicao) {
+
+        if(contatoEnvolvido == null){
+             throw new GenericException("Contato Envolvido nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(StringUtils.isBlank(contatoEnvolvido.getNome())){
+             throw new GenericException("Contato deve possuir pelo menos um nome", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (contatosFamiliares == null) {
+            contatosFamiliares = new ArrayList<>();
+        }
+
+        contatosFamiliares.set(posicao, contatoEnvolvido);
+    }
+
+    public void removerContato(Integer posicao) {
+
+        if(posicao == null){
+            throw new GenericException("Posição do contato não pode ser nula", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (CerimonialUtils.isListNotBlank(contatosFamiliares)) {
+
+            contatosFamiliares.remove(posicao.intValue());
+
+        }
+
     }
 
 }

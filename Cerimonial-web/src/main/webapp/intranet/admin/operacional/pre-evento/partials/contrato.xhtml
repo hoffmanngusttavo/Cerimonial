@@ -59,6 +59,7 @@
                                                  value="#{ContratoEventoMB.entity.modeloContrato}"
                                                  converter="EntityConverter"
                                                  required="true"
+                                                 disabled="#{ContratoEventoMB.entity.liberadoCliente}"
                                                  requiredMessage="Preencha um modelo de contrato válido"
                                                  class="form-control"
                                                  label="Modelo de Contrato">
@@ -71,6 +72,16 @@
                                             global="false"/>
                                 </h:selectOneMenu>
 
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                
+                                <label>
+                                    
+                                </label>
+                                
+                                <h:outputText rendered="#{ContratoEventoMB.entity.liberadoCliente}"
+                                              value="Contrato Liberado para o Cliente"/>
                             </div>
                         </div>
 
@@ -95,12 +106,13 @@
             </div>
             <div class="row">
 
-                <p:commandButton value="Imprimir"
-                                 actionListener="#{ContratoEventoMB.imprimirContrato()}"
-                                 rendered="#{ContratoEventoMB.entity.id != null}"
+                <p:commandButton value="Liberar Contrato Cliente"
+                                 action="#{ContratoEventoMB.liberarContrato()}"
+                                 rendered="#{ContratoEventoMB.entity.id != null 
+                                             and !ContratoEventoMB.entity.liberadoCliente}"
                                  icon="fa fa-check" 
                                  ajax="false"
-                                 id="btn-imprimir-contrato"
+                                 id="btn-liberar-contrato"
                                  class="btn btn-success"
                                  style="margin-left: 10px;"
                                  onstart="PF('statusDialog').show();"

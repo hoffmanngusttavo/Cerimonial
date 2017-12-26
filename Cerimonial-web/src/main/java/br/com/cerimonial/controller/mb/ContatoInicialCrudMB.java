@@ -157,6 +157,10 @@ public class ContatoInicialCrudMB extends BasicControl {
     public List<SelectItem> getComboTipoEvento() {
         return SelectItemUtils.getComboTipoEvento();
     }
+    
+    public List<SelectItem> getComboTipoContratante() {
+        return SelectItemUtils.getComboTipoContratante(entity.getTipoEvento());
+    }
 
     public List<SelectItem> getComboModelosProposta() {
         return selectItemUtils.getComboModelosProposta();

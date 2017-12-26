@@ -167,11 +167,11 @@ public class EventoService extends BasicService<Evento> {
             evento.setQuantidadeConvidados(orcamento.getContatoEvento().getQuantidadeConvidados());
         }
 
-        evento.setContratante(cliente);
         evento.setNome(orcamento.getContatoEvento().getNomeEvento());
         evento.setOrcamentoEvento(orcamento);
         evento.setTipoEvento(orcamento.getContatoEvento().getTipoEvento());
-
+        evento.setEventoProprioContratante(orcamento.getContatoEvento().isEventoProprioContratante());
+        
         return evento;
     }
 
@@ -302,18 +302,6 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
-        if (evento != null) {
-            if (evento.getEnvolvidos() != null) {
-
-                evento.getEnvolvidos().size();
-
-                evento.getEnvolvidos().stream().filter((envolvido)
-                        -> (envolvido.getContatosFamiliar() != null)).forEach((envolvido) -> {
-                            envolvido.getContatosFamiliar().size();
-                        });
-            }
-        }
-
         return evento;
 
     }
@@ -338,18 +326,6 @@ public class EventoService extends BasicService<Evento> {
         }
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
-
-        if (evento != null) {
-            if (evento.getEnvolvidos() != null) {
-
-                evento.getEnvolvidos().size();
-
-                evento.getEnvolvidos().stream().filter((envolvido)
-                        -> (envolvido.getContatosFamiliar() != null)).forEach((envolvido) -> {
-                            envolvido.getContatosFamiliar().size();
-                        });
-            }
-        }
 
         return evento;
 
@@ -397,17 +373,17 @@ public class EventoService extends BasicService<Evento> {
         
         Evento evento = getEntity(idEvento);
         
-        List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratante());
-        
-        if (CerimonialUtils.isListNotBlank(eventosAtivos)) {
-
-            if (eventosAtivos.size() == 1) {
-
-                pessoaService.inativarPessoa(evento.getContratante());
-
-                usuarioService.inativarUsuario(evento.getContratante().getUsuarioCliente());
-            }
-        }
+//        List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratante());
+//        
+//        if (CerimonialUtils.isListNotBlank(eventosAtivos)) {
+//
+//            if (eventosAtivos.size() == 1) {
+//
+//                pessoaService.inativarPessoa(evento.getContratante());
+//
+//                usuarioService.inativarUsuario(evento.getContratante().getUsuarioCliente());
+//            }
+//        }
         
         evento.setSituacaoEvento(SituacaoEvento.CANCELADO);
         evento.setMotivoCancelamento(motivoCancelamento);

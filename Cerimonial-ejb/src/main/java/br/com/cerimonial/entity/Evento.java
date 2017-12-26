@@ -79,9 +79,6 @@ public class Evento implements Serializable, ModelInterface {
     private Integer quantidadeConvidados;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Pessoa contratante;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     private OrcamentoEvento orcamentoEvento;
 
     @NotNull(message = "A categoria não pode ser nula")
@@ -103,14 +100,20 @@ public class Evento implements Serializable, ModelInterface {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private FestaCerimonia festaCerimonia;
 
-    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<EnvolvidoEvento> envolvidos;
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<EventoPessoa> contratantes;
 
     @Column(columnDefinition = "TEXT")
     private String observacaoEnvolvidos;
 
     @Column(columnDefinition = "TEXT")
     private String motivoCancelamento;
+    
+    /**
+     * Se o evento é para a pessoa que entrou em contato
+     */
+    @Column(columnDefinition = "boolean default false")
+    private boolean eventoProprioContratante = false;
 
     @Override
     public Long getId() {
@@ -148,14 +151,6 @@ public class Evento implements Serializable, ModelInterface {
 
     public void setNome(String nome) {
         this.nome = nome != null ? nome.toUpperCase().trim() : nome;
-    }
-
-    public Pessoa getContratante() {
-        return contratante;
-    }
-
-    public void setContratante(Pessoa contratante) {
-        this.contratante = contratante;
     }
 
     public OrcamentoEvento getOrcamentoEvento() {
@@ -245,6 +240,16 @@ public class Evento implements Serializable, ModelInterface {
         this.festaCerimonia = festaCerimonia;
     }
 
+    public boolean isEventoProprioContratante() {
+        return eventoProprioContratante;
+    }
+
+    public void setEventoProprioContratante(boolean eventoProprioContratante) {
+        this.eventoProprioContratante = eventoProprioContratante;
+    }
+
+    
+    
     public ContratoEvento getContrato() {
 
         if (CerimonialUtils.isListNotBlank(contratos)) {
@@ -280,13 +285,7 @@ public class Evento implements Serializable, ModelInterface {
         this.cerimoniaEvento = cerimoniaEvento;
     }
 
-    public List<EnvolvidoEvento> getEnvolvidos() {
-        return envolvidos;
-    }
-
-    public void setEnvolvidos(List<EnvolvidoEvento> envolvidos) {
-        this.envolvidos = envolvidos;
-    }
+   
 
     public String getObservacaoEnvolvidos() {
         return observacaoEnvolvidos;
@@ -311,6 +310,17 @@ public class Evento implements Serializable, ModelInterface {
     public void setMotivoCancelamento(String motivoCancelamento) {
         this.motivoCancelamento = motivoCancelamento;
     }
+
+    public List<EventoPessoa> getContratantes() {
+        return contratantes;
+    }
+
+    public void setContratantes(List<EventoPessoa> contratantes) {
+        this.contratantes = contratantes;
+    }
+
+   
+    
 
     @PrePersist
     @Override
@@ -372,7 +382,8 @@ public class Evento implements Serializable, ModelInterface {
         return "Evento{" + "id=" + id + '}';
     }
 
-    public EnvolvidoEvento getTipoEnvolvidoEvento(TipoEnvolvidoEvento tipo) {
+    
+     public EventoPessoa getTipoEnvolvidoEvento(TipoEnvolvidoEvento tipo) {
 
         if (tipo != null) {
 
@@ -387,20 +398,21 @@ public class Evento implements Serializable, ModelInterface {
                     return getAniversariante();
 
                 default:
-                    return this.getEnvolvidos().get(0);
+                    return this.contratantes.get(0);
             }
         }
 
         return null;
 
     }
+    
+    
+     public EventoPessoa getNoivo() {
 
-    public EnvolvidoEvento getNoivo() {
+        if (CerimonialUtils.isListNotBlank(contratantes)) {
 
-        if (CerimonialUtils.isListNotBlank(envolvidos)) {
-
-            for (EnvolvidoEvento env : envolvidos) {
-                if (env != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.NOIVO)) {
+            for (EventoPessoa env : contratantes) {
+                if (env.getTipoEnvolvidoEvento() != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.NOIVO)) {
                     return env;
                 }
             }
@@ -411,12 +423,12 @@ public class Evento implements Serializable, ModelInterface {
 
     }
 
-    public EnvolvidoEvento getAniversariante() {
+    public EventoPessoa getAniversariante() {
 
-        if (CerimonialUtils.isListNotBlank(envolvidos)) {
+        if (CerimonialUtils.isListNotBlank(contratantes)) {
 
-            for (EnvolvidoEvento env : envolvidos) {
-                if (env != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.ANIVERSARIANTE)) {
+            for (EventoPessoa env : contratantes) {
+                if (env.getTipoEnvolvidoEvento() != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.ANIVERSARIANTE)) {
                     return env;
                 }
             }
@@ -427,10 +439,10 @@ public class Evento implements Serializable, ModelInterface {
 
     }
 
-    public EnvolvidoEvento getNoiva() {
+    public EventoPessoa getNoiva() {
 
-        for (EnvolvidoEvento env : envolvidos) {
-            if (env != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.NOIVA)) {
+        for (EventoPessoa env : contratantes) {
+            if (env.getTipoEnvolvidoEvento() != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.NOIVA)) {
                 return env;
             }
         }
@@ -438,6 +450,8 @@ public class Evento implements Serializable, ModelInterface {
         return null;
 
     }
+
+   
 
     public boolean isCategoriaCasamento() {
         return isEventoCasamento()

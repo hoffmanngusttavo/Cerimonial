@@ -47,12 +47,11 @@ public class ContratoEvento implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
     
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dataImpressao;
+    @Column(columnDefinition = "boolean default false")
+    private boolean liberadoCliente = false;
     
     @ManyToOne(optional = false)
     private Evento evento;
-    
     
     @ManyToOne
     private ModeloContrato modeloContrato;
@@ -105,14 +104,6 @@ public class ContratoEvento implements Serializable, ModelInterface {
         this.conteudo = conteudo;
     }
 
-    public Date getDataImpressao() {
-        return dataImpressao;
-    }
-
-    public void setDataImpressao(Date dataImpressao) {
-        this.dataImpressao = dataImpressao;
-    }
-
     public Evento getEvento() {
         return evento;
     }
@@ -127,6 +118,14 @@ public class ContratoEvento implements Serializable, ModelInterface {
 
     public void setModeloContrato(ModeloContrato modeloContrato) {
         this.modeloContrato = modeloContrato;
+    }
+
+    public boolean isLiberadoCliente() {
+        return liberadoCliente;
+    }
+
+    public void setLiberadoCliente(boolean liberadoCliente) {
+        this.liberadoCliente = liberadoCliente;
     }
     
     

@@ -154,8 +154,9 @@
                                                   itemLabel="Selecione" /> 
                                     <f:selectItems value="#{ContatoInicialCrudMB.comboTipoEvento}" />
                                     <p:ajax process="@this"
-                                            update="@this"
+                                            update="tiposEnvolvidos"
                                             global="false"/>
+                                     
                                 </h:selectOneMenu>
 
                             </div>
@@ -306,6 +307,35 @@
                                             global="false"/>
                                 </h:selectOneMenu>
                             </div>
+
+                            <div class="form-group col-md-3" style="margin-top: 28px;">
+                                <label>Evento é para a própria pessoa que está entrando em contato ?
+                                </label>
+
+                                <p:selectBooleanCheckbox value="#{ContatoInicialCrudMB.entity.eventoProprioContratante}"
+                                                         class="checkbox-inline"
+                                                         id="inptProprioContratante">
+                                   
+                                </p:selectBooleanCheckbox>
+                            </div>
+
+                            
+                            <div class="form-group col-md-6">
+                                <label>Tipo de Contratante</label>
+                                
+                                <h:selectOneMenu id="tiposEnvolvidos" 
+                                                 value="#{ContatoInicialCrudMB.entity.tipoEnvolvidoEvento}"
+                                                 class="form-control"
+                                                 label="Tipo de Contratante">
+                                    <f:selectItem itemValue="" 
+                                                  itemLabel="Selecione" /> 
+                                    <f:selectItems value="#{ContatoInicialCrudMB.comboTipoContratante}" />
+                                    <p:ajax process="@this"
+                                            global="false"/>
+                                </h:selectOneMenu>
+
+                            </div>
+
                         </div>
 
                         <div class="row">
@@ -314,10 +344,10 @@
                                 <label for="inptObs">
                                     Observações gerais
                                 </label>
-                                
-                                 <p:editor id="inptConteudo" 
+
+                                <p:editor id="inptConteudo" 
                                           value="#{ContatoInicialCrudMB.entity.observacao}" />
-                                
+
                             </div>
                         </div>
 

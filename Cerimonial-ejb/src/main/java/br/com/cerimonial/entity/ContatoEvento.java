@@ -6,6 +6,7 @@
 package br.com.cerimonial.entity;
 
 import br.com.cerimonial.enums.ClassificacaoContato;
+import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.io.Serializable;
@@ -120,6 +121,17 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ClassificacaoContato status = ClassificacaoContato.AGUARDANDO_RETORNO;
+    
+    /**
+     * Se o evento é para a pessoa que entrou em contato
+     */
+    @Column(columnDefinition = "boolean default false")
+    private boolean eventoProprioContratante = false;
+    
+    
+    @Enumerated(EnumType.STRING)
+    private TipoEnvolvidoEvento tipoEnvolvidoEvento;
+    
     
      @Override
     public Long getId() {
@@ -300,6 +312,22 @@ public class ContatoEvento implements Serializable, ModelInterface{
 
     public void setEmailsContato(List<EmailContatoEvento> emailsContato) {
         this.emailsContato = emailsContato;
+    }
+
+    public boolean isEventoProprioContratante() {
+        return eventoProprioContratante;
+    }
+
+    public void setEventoProprioContratante(boolean eventoProprioContratante) {
+        this.eventoProprioContratante = eventoProprioContratante;
+    }
+
+    public TipoEnvolvidoEvento getTipoEnvolvidoEvento() {
+        return tipoEnvolvidoEvento;
+    }
+
+    public void setTipoEnvolvidoEvento(TipoEnvolvidoEvento tipoEnvolvidoEvento) {
+        this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
     }
     
     

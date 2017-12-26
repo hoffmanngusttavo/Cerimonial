@@ -5,12 +5,11 @@
  */
 package br.com.cerimonial.entity;
 
-import br.com.cerimonial.enums.GrauParentesco;
+import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,8 +23,6 @@ import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -35,51 +32,41 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class ContatoEnvolvido implements Serializable, ModelInterface {
+public class EventoPessoa implements Serializable, ModelInterface {
 
     @Id
-    @GeneratedValue(generator = "GENERATE_ContatoEnvolvido", strategy = GenerationType.AUTO)
-    @SequenceGenerator(name = "GENERATE_ContatoEnvolvido", sequenceName = "ContatoEnvolvido_pk_seq", allocationSize = 1)
+    @GeneratedValue(generator = "GENERATE_EventoPessoa", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "GENERATE_EventoPessoa", sequenceName = "EventoPessoa_pk_seq", allocationSize = 1)
     private Long id;
-
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 2, max = 255, message = "Nome do contato deve ter no mínimo 2 e no máximo 255 caracteres")
-    private String nome;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private GrauParentesco grauParentesco = GrauParentesco.IRMAO;
-
-    @Column
-    private String facebook;
-
-    @Column
-    private String instagram;
-
-    @Column
-    private String telefoneResidencial;
-
-    @Column
-    private String telefoneCelular;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+
+    @ManyToOne
+    private Evento evento;
     
     @ManyToOne
-    private Pessoa pessoa;
+    private Pessoa contratante;
 
-    public ContatoEnvolvido() {
+    @Enumerated(EnumType.STRING)
+    private TipoEnvolvidoEvento tipoEnvolvidoEvento;
 
+    public EventoPessoa() {
     }
 
-    public ContatoEnvolvido(Pessoa pessoa) {
-        this.pessoa = pessoa;
+    public EventoPessoa(Evento evento, Pessoa contratante, TipoEnvolvidoEvento tipoEnvolvidoEvento) {
+        this.evento = evento;
+        this.contratante = contratante;
+        this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
     }
-   
+    
+    
+    
+    
+
     @Override
     public Long getId() {
         return id;
@@ -110,64 +97,32 @@ public class ContatoEnvolvido implements Serializable, ModelInterface {
         this.dataUltimaAlteracao = data;
     }
 
-    public String getNome() {
-        return nome;
+    public Evento getEvento() {
+        return evento;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setEvento(Evento evento) {
+        this.evento = evento;
     }
 
-    public GrauParentesco getGrauParentesco() {
-        return grauParentesco;
+    public TipoEnvolvidoEvento getTipoEnvolvidoEvento() {
+        return tipoEnvolvidoEvento;
     }
 
-    public void setGrauParentesco(GrauParentesco grauParentesco) {
-        this.grauParentesco = grauParentesco;
+    public void setTipoEnvolvidoEvento(TipoEnvolvidoEvento tipoEnvolvidoEvento) {
+        this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
     }
 
-    public String getFacebook() {
-        return facebook;
+    public Pessoa getContratante() {
+        return contratante;
     }
 
-    public void setFacebook(String facebook) {
-        this.facebook = facebook;
-    }
-
-    public String getInstagram() {
-        return instagram;
-    }
-
-    public void setInstagram(String instagram) {
-        this.instagram = instagram;
-    }
-
-    public String getTelefoneResidencial() {
-        return telefoneResidencial;
-    }
-
-    public void setTelefoneResidencial(String telefoneResidencial) {
-        this.telefoneResidencial = telefoneResidencial;
-    }
-
-    public String getTelefoneCelular() {
-        return telefoneCelular;
-    }
-
-    public void setTelefoneCelular(String telefoneCelular) {
-        this.telefoneCelular = telefoneCelular;
-    }
-
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
+    public void setContratante(Pessoa contratante) {
+        this.contratante = contratante;
     }
 
     
-
+    
     @PrePersist
     @Override
     public void prePersistEntity() {
@@ -211,10 +166,10 @@ public class ContatoEnvolvido implements Serializable, ModelInterface {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContatoEnvolvido)) {
+        if (!(object instanceof EventoPessoa)) {
             return false;
         }
-        ContatoEnvolvido other = (ContatoEnvolvido) object;
+        EventoPessoa other = (EventoPessoa) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -223,7 +178,7 @@ public class ContatoEnvolvido implements Serializable, ModelInterface {
 
     @Override
     public String toString() {
-        return "br.com.cerimonial.entity.ContatoEnvolvido[ id=" + id + " ]";
+        return "br.com.cerimonial.entity.EventoPessoa[ id=" + id + " ]";
     }
 
 }

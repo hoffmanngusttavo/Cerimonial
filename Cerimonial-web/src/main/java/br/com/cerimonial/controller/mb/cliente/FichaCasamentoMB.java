@@ -7,13 +7,16 @@ package br.com.cerimonial.controller.mb.cliente;
 
 import br.com.cerimonial.entity.ContatoEnvolvido;
 import br.com.cerimonial.entity.Endereco;
-import br.com.cerimonial.entity.EnvolvidoEvento;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.EventoPessoa;
+import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
+import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.service.ContatoEnvolvidoService;
 import br.com.cerimonial.service.EnderecoService;
-import br.com.cerimonial.service.EnvolvidoEventoService;
+import br.com.cerimonial.service.EventoPessoaService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
@@ -39,23 +42,23 @@ public class FichaCasamentoMB extends ClienteControl {
     protected Long idEvento;
 
     protected Integer tipoEnvolvido;
-    
+
     protected Integer posicaoContato;
 
     protected Evento evento;
 
-    protected EnvolvidoEvento envolvido;
+    protected EventoPessoa envolvido;
 
     protected ContatoEnvolvido contato;
-    
+
     protected List<ContatoEnvolvido> contatosRemover;
 
     @EJB
     protected EventoService eventoService;
 
     @EJB
-    protected EnvolvidoEventoService envolvidoEventoService;
-    
+    protected EventoPessoaService eventoPessoaService;
+
     @EJB
     protected ContatoEnvolvidoService contatoEnvolvidoService;
 
@@ -79,7 +82,7 @@ public class FichaCasamentoMB extends ClienteControl {
 
             if (evento != null) {
 
-                if (CerimonialUtils.isListNotBlank(evento.getEnvolvidos())) {
+                if (CerimonialUtils.isListNotBlank(evento.getContratantes())) {
 
                     envolvido = evento.getTipoEnvolvidoEvento(TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
 
@@ -88,15 +91,10 @@ public class FichaCasamentoMB extends ClienteControl {
             }
 
             if (envolvido == null) {
-                envolvido = new EnvolvidoEvento(evento, TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
-            }
-
-            if (envolvido.getEndereco() == null) {
-                envolvido.setEndereco(new Endereco());
+                envolvido = new EventoPessoa(evento, new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA), TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
             }
 
         } catch (Exception ex) {
-            envolvido = new EnvolvidoEvento();
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
         }
@@ -110,7 +108,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public synchronized String save() {
         try {
 
-            envolvidoEventoService.save(envolvido);
+            eventoPessoaService.save(envolvido);
             
             contatoEnvolvidoService.removerContatos(contatosRemover);
 
@@ -134,21 +132,20 @@ public class FichaCasamentoMB extends ClienteControl {
     public void buscaCepNoivo() {
         try {
 
-            envolvido.setEndereco(enderecoService.buscaCep(envolvido.getEndereco()));
+            envolvido.getContratante().setEndereco(enderecoService.buscaCep(envolvido.getContratante().getEndereco()));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    
     /**
      * Método por instanciar um novo contato, quando clicado no botão de +
      */
     public void criarNovoContato() {
         try {
 
-            contato = new ContatoEnvolvido(envolvido);
+            contato = new ContatoEnvolvido(envolvido.getContratante());
 
             posicaoContato = null;
         } catch (Exception ex) {
@@ -162,18 +159,18 @@ public class FichaCasamentoMB extends ClienteControl {
     public void salvarContato() {
         try {
 
-            if(posicaoContato != null){
-                
-                envolvido.editarContato(contato, posicaoContato);
-                
+            if (posicaoContato != null) {
+
+                envolvido.getContratante().editarContato(contato, posicaoContato);
+
             }else{
             
-                envolvido.adicionarNovoContato(contato);
+                envolvido.getContratante().adicionarNovoContato(contato);
                 
             }
-            
+
             posicaoContato = null;
-            
+
 
             createFacesInfoMessage("Adicionado contato com sucesso");
 
@@ -182,28 +179,27 @@ public class FichaCasamentoMB extends ClienteControl {
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }finally{
-            
+
             RequestContext requestContext = RequestContext.getCurrentInstance();
             requestContext.execute("$('#editDialogVar').modal('hide');");
-            
+
         }
     }
-    
-    
+
     /**
-     * Método para remover da memória o contato selecionado
-     * Se o contato já tiver no banco de dados, será armazenado em uma lista
-     * para depois remover quando salvar.
+     * Método para remover da memória o contato selecionado Se o contato já
+     * tiver no banco de dados, será armazenado em uma lista para depois remover
+     * quando salvar.
      */
     public void removerContatoNoivo() {
         try {
 
-            envolvido.removerContato(posicaoContato);
+            envolvido.getContratante().removerContato(posicaoContato);
             
             if (contato != null && contato.getId() != null) {
                 contatosRemover.add(contato);
             }
-            
+
             posicaoContato = null;
             setContato(null);
 
@@ -216,20 +212,19 @@ public class FichaCasamentoMB extends ClienteControl {
             createFacesErrorMessage("Não foi possível remover contato");
         }
     }
-    
-    
+
     /**
      * Método para carregar o objeto contato para editar ou remover
+     *
      * @param item
      */
-    public void carregarContato(ContatoEnvolvido item){
-        
+    public void carregarContato(ContatoEnvolvido item) {
+
         setContato(item);
-        
+
         posicaoContato = Integer.parseInt(getRequestParam("posicaoContatoNoivo"));
-        
+
     }
-    
 
     public List<SelectItem> getComboCidade(Estado estado) {
         return selectItemUtils.getComboCidade(estado);
@@ -257,14 +252,6 @@ public class FichaCasamentoMB extends ClienteControl {
 
     public void setEvento(Evento evento) {
         this.evento = evento;
-    }
-
-    public EnvolvidoEvento getEnvolvido() {
-        return envolvido;
-    }
-
-    public void setEnvolvido(EnvolvidoEvento envolvido) {
-        this.envolvido = envolvido;
     }
 
     public Integer getTipoEnvolvido() {
@@ -297,6 +284,14 @@ public class FichaCasamentoMB extends ClienteControl {
 
     public void setContatosRemover(List<ContatoEnvolvido> contatosRemover) {
         this.contatosRemover = contatosRemover;
+    }
+
+    public EventoPessoa getEnvolvido() {
+        return envolvido;
+    }
+
+    public void setEnvolvido(EventoPessoa envolvido) {
+        this.envolvido = envolvido;
     }
     
     
