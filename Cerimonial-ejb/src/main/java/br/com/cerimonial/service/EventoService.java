@@ -167,11 +167,11 @@ public class EventoService extends BasicService<Evento> {
             evento.setQuantidadeConvidados(orcamento.getContatoEvento().getQuantidadeConvidados());
         }
 
+//        evento.setContratante(cliente);
         evento.setNome(orcamento.getContatoEvento().getNomeEvento());
         evento.setOrcamentoEvento(orcamento);
         evento.setTipoEvento(orcamento.getContatoEvento().getTipoEvento());
-        evento.setEventoProprioContratante(orcamento.getContatoEvento().isEventoProprioContratante());
-        
+
         return evento;
     }
 
@@ -190,7 +190,7 @@ public class EventoService extends BasicService<Evento> {
         return null;
 
     }
-    
+
     public Evento getEventoByContatoInicial(ContatoEvento contatoEvento) throws Exception {
 
         if (contatoEvento == null || contatoEvento.getId() == null) {
@@ -239,7 +239,7 @@ public class EventoService extends BasicService<Evento> {
             if (evento.getContrato() != null) {
                 evento.getContrato().getId();
             }
-            
+
         }
 
         return evento;
@@ -302,12 +302,17 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
+        if (evento != null) {
+            if (evento.getContratantes() != null) {
+                evento.getContratantes().size();
+            }
+        }
+
         return evento;
 
     }
-    
-    
-     /**
+
+    /**
      * Vai retornar o evento que pertence a somente esse cliente Carregar em
      * lazy os noivos
      *
@@ -327,10 +332,15 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
+         if (evento != null) {
+            if (evento.getContratantes() != null) {
+                evento.getContratantes().size();
+            }
+        }
+
         return evento;
 
     }
-    
 
     /**
      * Vai copiar o endereco da cerimonia e setar no endereco da festa
@@ -366,13 +376,13 @@ public class EventoService extends BasicService<Evento> {
         if (StringUtils.isBlank(motivoCancelamento)) {
             throw new GenericException("Motivo de cancelamento não deve ser vazio", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         if (idEvento == null) {
             throw new GenericException("Motivo de cancelamento não deve ser vazio", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         Evento evento = getEntity(idEvento);
-        
+
 //        List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratante());
 //        
 //        if (CerimonialUtils.isListNotBlank(eventosAtivos)) {
@@ -384,10 +394,9 @@ public class EventoService extends BasicService<Evento> {
 //                usuarioService.inativarUsuario(evento.getContratante().getUsuarioCliente());
 //            }
 //        }
-        
         evento.setSituacaoEvento(SituacaoEvento.CANCELADO);
         evento.setMotivoCancelamento(motivoCancelamento);
-        
+
         repository.edit(evento);
 
     }

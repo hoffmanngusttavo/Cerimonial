@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -35,6 +36,9 @@ import javax.ejb.TransactionManagementType;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class EventoPessoaService extends BasicService<EventoPessoa> {
 
+    @EJB
+    protected PessoaService pessoaService;
+    
     private EventoPessoaRepository repository;
 
     @PostConstruct
@@ -46,15 +50,32 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
 
     @Override
     public EventoPessoa getEntity(Long id) throws Exception {
-        return repository.getEntity(id);
+        EventoPessoa entity = repository.getEntity(id);
+        
+        if(entity != null && entity.getContratante() != null){
+            if(entity.getContratante().getContatosFamiliares() != null){
+                entity.getContratante().getContatosFamiliares().size();
+            }
+            if(entity.getContratante().getEndereco() != null){
+                entity.getContratante().getEndereco().getId();
+            }
+        }
+        
+        return entity;
     }
 
     @Override
     public EventoPessoa save(EventoPessoa entity) throws Exception {
 
         isValid(entity);
-
-        return repository.create(entity);
+        
+        pessoaService.saveCliente(entity.getContratante());
+        
+        if(entity.getId() == null){
+            return repository.create(entity);
+        }else{
+            return repository.edit(entity);
+        }
     }
 
     @Override

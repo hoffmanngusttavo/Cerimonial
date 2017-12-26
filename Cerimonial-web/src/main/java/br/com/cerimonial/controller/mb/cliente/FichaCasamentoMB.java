@@ -85,6 +85,10 @@ public class FichaCasamentoMB extends ClienteControl {
                 if (CerimonialUtils.isListNotBlank(evento.getContratantes())) {
 
                     envolvido = evento.getTipoEnvolvidoEvento(TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
+                    
+                    if(envolvido != null && envolvido.getId() != null){
+                        envolvido = eventoPessoaService.getEntity(envolvido.getId());
+                    }
 
                 }
 
@@ -92,6 +96,10 @@ public class FichaCasamentoMB extends ClienteControl {
 
             if (envolvido == null) {
                 envolvido = new EventoPessoa(evento, new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA), TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
+            }
+            
+            if(envolvido.getContratante().getEndereco() == null){
+                envolvido.getContratante().setEndereco(new Endereco());
             }
 
         } catch (Exception ex) {
