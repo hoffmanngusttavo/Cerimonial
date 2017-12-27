@@ -7,15 +7,10 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
-import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EventoPessoaRepository;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -53,9 +48,11 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
         EventoPessoa entity = repository.getEntity(id);
         
         if(entity != null && entity.getContratante() != null){
+            
             if(entity.getContratante().getContatosFamiliares() != null){
                 entity.getContratante().getContatosFamiliares().size();
             }
+            
             if(entity.getContratante().getEndereco() != null){
                 entity.getContratante().getEndereco().getId();
             }

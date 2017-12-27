@@ -35,6 +35,7 @@ public abstract class BasicControl implements Serializable {
     protected void createFacesInfoMessage(String message) {
         FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, message, message);
         FacesContext.getCurrentInstance().addMessage(null, fm);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
     }
 
     protected void createFacesWarnMessage(String message) {

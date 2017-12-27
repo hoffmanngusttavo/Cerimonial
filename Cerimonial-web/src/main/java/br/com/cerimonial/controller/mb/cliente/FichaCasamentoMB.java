@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.controller.mb.cliente;
 
+import br.com.cerimonial.controller.validation.NoivoValidate;
 import br.com.cerimonial.entity.ContatoEnvolvido;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Estado;
@@ -115,16 +116,21 @@ public class FichaCasamentoMB extends ClienteControl {
      */
     public synchronized String save() {
         try {
-
-            eventoPessoaService.save(envolvido);
             
-            contatoEnvolvidoService.removerContatos(contatosRemover);
+            NoivoValidate validate = new NoivoValidate(envolvido.getContratante());
 
-            createFacesInfoMessage("Dados gravados com sucesso!");
+            if (validate.isValid()) {
 
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+                eventoPessoaService.save(envolvido);
 
-            return "/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=" + idEvento + "&tipoEnvolvido=" + tipoEnvolvido + "&faces-redirect=true";
+                contatoEnvolvidoService.removerContatos(contatosRemover);
+
+                createFacesInfoMessage("Dados gravados com sucesso!");
+
+                return "/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=" + idEvento + "&tipoEnvolvido=" + tipoEnvolvido + "&faces-redirect=true";
+            }else{
+                validate.showMessages();
+            }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível salvar o cadastro dos noivos " + ex.getMessage());
