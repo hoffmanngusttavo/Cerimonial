@@ -127,7 +127,7 @@ public class FichaAniversarianteMB extends ClienteControl {
     public void buscaCep() {
         try {
 
-            envolvido.getContratante().setEndereco(enderecoService.buscaCep(envolvido.getContratante().getEndereco()));
+            envolvido.getPessoa().setEndereco(enderecoService.buscaCep(envolvido.getPessoa().getEndereco()));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -140,7 +140,7 @@ public class FichaAniversarianteMB extends ClienteControl {
     public void criarNovoContato() {
         try {
 
-            contato = new ContatoEnvolvido(envolvido.getContratante());
+            contato = new ContatoEnvolvido(envolvido.getPessoa());
 
             posicaoContato = null;
         } catch (Exception ex) {
@@ -156,11 +156,11 @@ public class FichaAniversarianteMB extends ClienteControl {
 
             if (posicaoContato != null) {
 
-                envolvido.getContratante().editarContato(contato, posicaoContato);
+                envolvido.getPessoa().editarContato(contato, posicaoContato);
 
             } else {
 
-                envolvido.getContratante().adicionarNovoContato(contato);
+                envolvido.getPessoa().adicionarNovoContato(contato);
 
             }
             posicaoContato = null;
@@ -187,7 +187,7 @@ public class FichaAniversarianteMB extends ClienteControl {
     public void removerContatoNoivo() {
         try {
 
-            envolvido.getContratante().removerContato(posicaoContato);
+            envolvido.getPessoa().removerContato(posicaoContato);
             
             if (contato != null && contato.getId() != null) {
                 contatosRemover.add(contato);

@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
 
@@ -56,7 +55,7 @@ public class FichaCasamentoMB extends ClienteControl {
 
     @EJB
     protected EventoService eventoService;
-
+    
     @EJB
     protected EventoPessoaService eventoPessoaService;
 
@@ -99,8 +98,8 @@ public class FichaCasamentoMB extends ClienteControl {
                 envolvido = new EventoPessoa(evento, new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA), TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
             }
             
-            if(envolvido.getContratante().getEndereco() == null){
-                envolvido.getContratante().setEndereco(new Endereco());
+            if(envolvido.getPessoa().getEndereco() == null){
+                envolvido.getPessoa().setEndereco(new Endereco());
             }
 
         } catch (Exception ex) {
@@ -117,7 +116,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public synchronized String save() {
         try {
             
-            NoivoValidate validate = new NoivoValidate(envolvido.getContratante());
+            NoivoValidate validate = new NoivoValidate(envolvido.getPessoa());
 
             if (validate.isValid()) {
 
@@ -146,7 +145,24 @@ public class FichaCasamentoMB extends ClienteControl {
     public void buscaCepNoivo() {
         try {
 
-            envolvido.getContratante().setEndereco(enderecoService.buscaCep(envolvido.getContratante().getEndereco()));
+            envolvido.getPessoa().setEndereco(enderecoService.buscaCep(envolvido.getPessoa().getEndereco()));
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Método pra buscar uma pessoa pelo cpf
+     */
+    public void carregarPessoaCpf() {
+        try {
+
+            Pessoa pessoa = pessoaService.findPessoaByCpf(envolvido.getPessoa().getCpf());
+            
+            if(pessoa != null){
+                envolvido.setPessoa(pessoa);
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -159,7 +175,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public void criarNovoContato() {
         try {
 
-            contato = new ContatoEnvolvido(envolvido.getContratante());
+            contato = new ContatoEnvolvido(envolvido.getPessoa());
 
             posicaoContato = null;
         } catch (Exception ex) {
@@ -175,11 +191,11 @@ public class FichaCasamentoMB extends ClienteControl {
 
             if (posicaoContato != null) {
 
-                envolvido.getContratante().editarContato(contato, posicaoContato);
+                envolvido.getPessoa().editarContato(contato, posicaoContato);
 
             }else{
             
-                envolvido.getContratante().adicionarNovoContato(contato);
+                envolvido.getPessoa().adicionarNovoContato(contato);
                 
             }
 
@@ -208,7 +224,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public void removerContatoNoivo() {
         try {
 
-            envolvido.getContratante().removerContato(posicaoContato);
+            envolvido.getPessoa().removerContato(posicaoContato);
             
             if (contato != null && contato.getId() != null) {
                 contatosRemover.add(contato);

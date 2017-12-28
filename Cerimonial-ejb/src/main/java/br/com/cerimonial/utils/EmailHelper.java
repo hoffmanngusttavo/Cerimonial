@@ -62,13 +62,13 @@ public class EmailHelper {
      * @throws java.lang.Exception
      */
     public void enviarEmail(String destinatario, String assunto, String mensagem) throws Exception {
-        
+
         String[] destinatarios = new String[1];
         destinatarios[0] = destinatario;
-        
+
         this.enviarEmail(destinatarios, assunto, mensagem, null);
     }
-    
+
     /**
      *
      * @param destinatarios
@@ -79,7 +79,7 @@ public class EmailHelper {
     public void enviarEmail(String[] destinatarios, String assunto, String mensagem) throws Exception {
         this.enviarEmail(destinatarios, assunto, mensagem, null);
     }
-    
+
     /**
      * @param destinatario
      * @param assunto
@@ -93,8 +93,6 @@ public class EmailHelper {
         this.enviarEmail(destinatarios, assunto, mensagem, anexos);
     }
 
-    
-    
     /**
      *
      * @param destinatarios
@@ -103,79 +101,72 @@ public class EmailHelper {
      * @throws java.lang.Exception
      */
     public void enviarEmail(String[] destinatarios, String assunto, String mensagem, HashMap<String, Object> anexos) throws Exception {
-      String remetente = configuracaoEmail.getLogin();
+        String remetente = configuracaoEmail.getLogin();
 
         Properties properties = getProperties();
 
         SimpleAuth auth = new SimpleAuth(remetente, configuracaoEmail.getSenha());
-        
+
         Address[] toUser = new Address[destinatarios.length];
-        
+
         for (int i = 0; i < destinatarios.length; i++) {
             toUser[i] = new InternetAddress(destinatarios[i]);
         }
 
-        
         Transport tr = null;
-        try {
-            Session session = Session.getDefaultInstance(properties, auth);
-            session.setDebug(true);
-            tr = session.getTransport("smtps");
 
-            Message msg = new MimeMessage(session);
-            msg.setRecipients(Message.RecipientType.TO, toUser);
-            msg.setFrom(new InternetAddress(remetente));
-            msg.setSubject(assunto);
-            msg.setContent(mensagem, "text/html; charset=UTF-8"); //charset=ISO-8859-1
+        Session session = Session.getDefaultInstance(properties, auth);
+        session.setDebug(true);
+        tr = session.getTransport("smtps");
 
-            mpRoot.addBodyPart(contentPartRoot);
+        Message msg = new MimeMessage(session);
+        msg.setRecipients(Message.RecipientType.TO, toUser);
+        msg.setFrom(new InternetAddress(remetente));
+        msg.setSubject(assunto);
+        msg.setContent(mensagem, "text/html; charset=UTF-8"); //charset=ISO-8859-1
 
-            MimeBodyPart mbpHtml = new MimeBodyPart();
-            mbpHtml.setContent(mensagem, "text/html");
+        mpRoot.addBodyPart(contentPartRoot);
 
-            mpContent.addBodyPart(mbpHtml);
+        MimeBodyPart mbpHtml = new MimeBodyPart();
+        mbpHtml.setContent(mensagem, "text/html");
 
-            contentPartRoot.setContent(mpContent);
+        mpContent.addBodyPart(mbpHtml);
 
-            tr.connect(configuracaoEmail.getSmtp(), configuracaoEmail.getLogin(), configuracaoEmail.getSenha());
+        contentPartRoot.setContent(mpContent);
 
-            if (anexos != null && anexos.size() > 0) {
-                for (Map.Entry e : anexos.entrySet()) {
-                    if (e.getValue() != null) {
-                        MimeBodyPart mbp = new MimeBodyPart();
+        tr.connect(configuracaoEmail.getSmtp(), configuracaoEmail.getLogin(), configuracaoEmail.getSenha());
 
-                        String arquivo = System.getProperty("java.io.tmpdir") + "/arquivo_" + e.getKey();
+        if (anexos != null && anexos.size() > 0) {
+            for (Map.Entry e : anexos.entrySet()) {
+                if (e.getValue() != null) {
+                    MimeBodyPart mbp = new MimeBodyPart();
 
-                        Arquivo arq = (Arquivo) e.getValue();
+                    String arquivo = System.getProperty("java.io.tmpdir") + "/arquivo_" + e.getKey();
 
-                        FileUtils.writeByteArrayToFile(new File(arquivo), arq.getConteudo());
+                    Arquivo arq = (Arquivo) e.getValue();
 
-                        DataSource fds = new FileDataSource(arquivo);
-                        mbp.setDisposition(Part.ATTACHMENT);
-                        mbp.setDataHandler(new DataHandler(fds));
-                        mbp.setFileName(arq.getNome());
+                    FileUtils.writeByteArrayToFile(new File(arquivo), arq.getConteudo());
 
-                        mpRoot.addBodyPart(mbp);
-                    }
+                    DataSource fds = new FileDataSource(arquivo);
+                    mbp.setDisposition(Part.ATTACHMENT);
+                    mbp.setDataHandler(new DataHandler(fds));
+                    mbp.setFileName(arq.getNome());
+
+                    mpRoot.addBodyPart(mbp);
                 }
             }
-            msg.setContent(mpRoot);
-
-            msg.saveChanges();
-            tr.sendMessage(msg, msg.getAllRecipients());
-            tr.close();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        } finally {
-            if (tr != null && tr.isConnected()) {
-                tr.close();
-            }
         }
+        msg.setContent(mpRoot);
+
+        msg.saveChanges();
+        tr.sendMessage(msg, msg.getAllRecipients());
+        tr.close();
+
+        if (tr != null && tr.isConnected()) {
+            tr.close();
+        }
+
     }
-
-    
-
-    
 
     private Properties getProperties() {
         Properties props = new Properties();

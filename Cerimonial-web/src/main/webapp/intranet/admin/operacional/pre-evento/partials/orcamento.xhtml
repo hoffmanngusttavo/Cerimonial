@@ -89,11 +89,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-3">
                             <label>Valor
                                 <span class="asteriskField">
                                     *
                                 </span>
+                                <p:commandButton icon="fa fa-pencil" 
+                                                 styleClass="bt-acoes"
+                                                 process="@this"
+                                                 rendered="#{OrcamentoEventoMB.entity.id == null}"
+                                                 title="Alterar Valor"
+                                                 actionListener="#{OrcamentoEventoMB.alterarValorProposta()}"
+                                                 update=":form:groupValorAlterado"
+                                                 immediate="true"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
                             </label>
                             <h:panelGroup>
                                 <p:inputText value="#{OrcamentoEventoMB.entity.valorProposta}" 
@@ -107,27 +117,28 @@
                                             global="false"/>
                                 </p:inputText>
 
-                                <p:commandButton icon="fa fa-pencil" 
-                                                 styleClass="bt-acoes"
-                                                 process="@this"
-                                                 rendered="#{OrcamentoEventoMB.entity.id == null}"
-                                                 title="Alterar Valor"
-                                                 actionListener="#{OrcamentoEventoMB.alterarValorProposta()}"
-                                                 update=":form:groupValorAlterado"
-                                                 immediate="true"
-                                                 onstart="PF('statusDialog').show();"
-                                                 oncomplete="PF('statusDialog').hide();"/>
+                                
                             </h:panelGroup>
                         </div>
 
                         <h:panelGroup id="groupValorAlterado">
                             <h:panelGroup rendered="#{OrcamentoEventoMB.entity.valorAlterado gt -1}">
                                 <div class="row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-3">
                                         <label>Valor Alterado
                                             <span class="asteriskField">
                                                 *
                                             </span>
+                                            <p:commandButton icon="fa fa-times" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         rendered="#{OrcamentoEventoMB.entity.id == null}"
+                                                         title="Alterar Valor"
+                                                         actionListener="#{OrcamentoEventoMB.cancelarAlterarValorProposta()}"
+                                                         update=":form:groupValorAlterado"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
                                         </label>
                                         <p:inputText value="#{OrcamentoEventoMB.entity.valorAlterado}" 
                                                      disabled="#{OrcamentoEventoMB.entity.id != null}"
@@ -139,72 +150,11 @@
                                                     update="@this"
                                                     global="false"/>
                                         </p:inputText>
-                                        <p:commandButton icon="fa fa-times" 
-                                                         styleClass="bt-acoes"
-                                                         process="@this"
-                                                         rendered="#{OrcamentoEventoMB.entity.id == null}"
-                                                         title="Alterar Valor"
-                                                         actionListener="#{OrcamentoEventoMB.cancelarAlterarValorProposta()}"
-                                                         update=":form:groupValorAlterado"
-                                                         immediate="true"
-                                                         onstart="PF('statusDialog').show();"
-                                                         oncomplete="PF('statusDialog').hide();"/>
+                                        
                                     </div>
                                 </div>
                             </h:panelGroup>
                         </h:panelGroup>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label style="width: 100%;">Anexo</label>
-
-                            <p:fileUpload fileUploadListener="#{OrcamentoEventoMB.handleFileUpload}"
-                                          id="uploadFile"
-                                          mode="advanced"                                                                                                    
-                                          label="Procurar..."                           
-                                          uploadLabel="Carregar"
-                                          cancelLabel="Cancelar"                              
-                                          dragDropSupport="true"
-                                          fileLimit="1"
-                                          fileLimitMessage="Limite máximo de upload 1."
-                                          invalidSizeMessage="Tamanho máximo 20mb"
-                                          sizeLimit="20971520"
-                                          allowTypes="/(\.|\/)(pdf)$/"
-                                          required="true" 
-                                          invalidFileMessage="Arquivo inválido somente é aceito pdf."
-                                          requiredMessage="Por favor fazer upload de documento."
-                                          auto="true" />
-
-
-                            <h:panelGroup id="groupFile">
-                                <h:panelGroup rendered="#{OrcamentoEventoMB.entity.arquivo != null}">
-                                    <p:commandButton icon="fa fa-download" 
-                                                     styleClass="bt-acoes"
-                                                     process="@this"
-                                                     title="Baixar Arquivo"
-                                                     actionListener="#{OrcamentoEventoMB.baixarArquivoOrcamento()}"
-                                                     ajax="false"
-                                                     rendered="#{OrcamentoEventoMB.entity.arquivo.id != null}"
-                                                     immediate="true"
-                                                     onstart="PF('statusDialog').show();"
-                                                     oncomplete="PF('statusDialog').hide();"/>
-
-                                    <label>#{OrcamentoEventoMB.entity.arquivo.nome}</label>
-
-                                    <p:commandButton icon="fa fa-trash" 
-                                                     styleClass="bt-acoes"
-                                                     title="Remover anexo"
-                                                     rendered="#{!OrcamentoEventoMB.entity.propostaAceita}"
-                                                     actionListener="#{OrcamentoEventoMB.removerArquivoOrcamento()}"
-                                                     process="@this"
-                                                     update=":form:groupFile"
-                                                     immediate="true"
-                                                     onstart="PF('statusDialog').show();"
-                                                     oncomplete="PF('statusDialog').hide();"/>
-                                </h:panelGroup>
-                            </h:panelGroup>
-                        </div>
                     </div>
 
                     <div class="row">

@@ -341,9 +341,9 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     }
 
     /**
-     * Vai criar um evento a partir de uma proposta aceita. Vai Criar um cliente
-     * e um usuário para acesso ao sistema. Vai criar o evento do cliente Vai
-     * enviar por email ao cliente os acessos.
+     * Vai criar um evento a partir de uma proposta aceita.
+     * Vai Criar um cliente.
+     * Vai criar o evento do cliente 
      *
      * @param entity
      * @throws java.lang.Exception
@@ -359,22 +359,13 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         Pessoa cliente = pessoaService.criarClienteFromContato(entity);
         pessoaService.saveCliente(cliente);
 
-        Usuario usuarioCliente = usuarioService.criarUsuarioCliente(cliente);
-        String senha = usuarioCliente.getSenha();
-        usuarioCliente.setCliente(cliente);
-        if(usuarioCliente.getId() != null){
-            usuarioService.alterarSaltSenha(usuarioCliente);
-        }
-        usuarioCliente = usuarioService.save(usuarioCliente);
-
-        Evento evento = eventoService.criarEventoFromOrcamento(entity, cliente);
+        Evento evento = eventoService.criarEventoFromOrcamento(entity);
         eventoService.save(evento);
         
         // atrelar os dados do contratante de acordo com o tipo do evento
         EventoPessoa eventoPessoa = eventoPessoaService.criarEventoPessoa(evento, cliente);
         eventoPessoaService.save(eventoPessoa);
 
-        usuarioService.enviarEmailBoasVindas(usuarioCliente, senha);
     }
 
     @Override

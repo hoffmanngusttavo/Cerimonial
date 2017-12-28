@@ -54,7 +54,9 @@ public class ContratanteEventoMB extends ClienteControl {
 
         try {
 
-            contratante = service.getContratanteEvento(idEvento);
+            List<Pessoa> contratantes = service.getContratantesEvento(idEvento);
+            
+            contratante = contratantes.get(0);
 
             if (contratante != null && contratante.getEndereco() == null) {
                 contratante.setEndereco(new Endereco());

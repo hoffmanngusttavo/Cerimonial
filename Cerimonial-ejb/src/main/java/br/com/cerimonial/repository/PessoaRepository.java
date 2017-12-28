@@ -72,6 +72,22 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
 
         return null;
     }
+    
+    /**
+     * Vai buscar uma pessoa pelo cpf
+     * @param cpf
+     * @return 
+     */
+    public Pessoa findPessoaByCpf(String cpf) {
+
+        try {
+            return getPurePojo(Pessoa.class, "select usr from Pessoa usr where usr.cpf = ?1 ", cpf);
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+
+        return null;
+    }
 
     
     /**
@@ -106,16 +122,18 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
      * @param idEvento
      * @return
      */
-    public Pessoa getContratanteEvento(Long idEvento) {
+    public List<Pessoa> getContratantesEvento(Long idEvento) {
 
         try {
             StringBuilder sb = new StringBuilder();
 
             sb.append("SELECT cli FROM Pessoa cli ");
             sb.append("INNER JOIN cli.eventos eve ");
-            sb.append("WHERE eve.id = ?1 ");
+            sb.append("INNER JOIN eve.evento evento ");
+            sb.append("WHERE evento.id = ?1 ");
+            sb.append("AND eve.contratante = true ");
 
-            return getPurePojo(Pessoa.class, sb.toString(), idEvento);
+            return getPureList(Pessoa.class, sb.toString(), idEvento);
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }

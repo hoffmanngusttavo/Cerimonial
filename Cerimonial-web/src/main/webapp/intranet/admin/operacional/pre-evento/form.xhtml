@@ -36,7 +36,6 @@
                             </div>
                             <div class="panel-body">
                                 <div style="margin-left: 28px;">
-
                                 </div>
                             </div>
                         </div>
@@ -50,7 +49,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">( #{PreEventoMB.entity.emailsContato.size()} ) Emails Enviados</h3>
                             </div>
-                            <div class="panel-body" style="max-height: 45px;">
+                            <div class="panel-body" style="min-height: 66px;">
                                 <div style="margin-left: 28px;" class="btn-link">
 
                                     <p:commandLink actionListener="#{PreEventoMB.adicionarNovoEmailContato()}"
@@ -82,13 +81,48 @@
                         </div>
                     </div>
 
-                    <h:panelGroup rendered="#{PreEventoMB.evento != null}">
+                    <h:panelGroup rendered="#{PreEventoMB.evento.id != null}">
+                        <div class="col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Acesso ao sistema</h3>
+                                </div>
+                                <div class="panel-body" align="center" style="min-height: 66px; max-height: 45px;">
+
+                                    <p:commandButton process="@this"
+                                                     rendered="#{!PreEventoMB.evento.acessoSistemaLiberado}"
+                                                     styleClass="btn btn-success"
+                                                     title="Liberar Acesso ao Contratante"
+                                                     value="Liberar Acesso ao Contratante"
+                                                     update="@form"
+                                                     action="#{PreEventoMB.liberarAcessoContratante()}"
+                                                     immediate="true"
+                                                     onstart="PF('statusDialog').show();"
+                                                     oncomplete="PF('statusDialog').hide();"/>
+
+                                    <p:commandButton process="@this"
+                                                     rendered="#{PreEventoMB.evento.acessoSistemaLiberado}"
+                                                     styleClass="btn btn-danger"
+                                                     title="Cancelar Acesso ao Contratante"
+                                                     value="Cancelar Acesso ao Contratante"
+                                                     update="@form"
+                                                     action="#{PreEventoMB.cancelarAcessoContratante()}"
+                                                     immediate="true"
+                                                     onstart="PF('statusDialog').show();"
+                                                     oncomplete="PF('statusDialog').hide();"/>
+
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="false">
                         <div class="col-md-4 text-center">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Situação</h3>
                                 </div>
-                                <div class="panel-body" align="center" style="max-height: 45px;">
+                                <div class="panel-body" align="center" style="min-height: 66px;">
 
                                     <h:panelGrid columns="2"
                                                  id="gridSituacao">
@@ -119,7 +153,7 @@
                             <div class="panel-heading text-center">
                                 <h3 class="panel-title">Contato Inicial</h3>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="min-height: 66px;">
                                 <div class="row">
 
                                     <div class="col-md-12 text-center">
@@ -144,7 +178,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Serviço Contratado</h3>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="min-height: 66px;">
                                 <div style="margin-left: 28px;">
                                     <p:link href="/intranet/admin/operacional/pre-evento/partials/orcamento.xhtml?idContato=#{PreEventoMB.entity.id}">
                                         <i class="fa fa-dollar"></i>
@@ -161,7 +195,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Contrato</h3>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body" style="min-height: 66px;">
                                     <p:link href="/intranet/admin/operacional/pre-evento/partials/contrato.xhtml?idEvento=#{PreEventoMB.evento.id}">
                                         <i class="fa fa-list"></i>
                                         <span></span>
@@ -179,7 +213,7 @@
                                         Ficha Cadastral
                                     </h3>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body" style="min-height: 66px;">
 
                                 </div>
                             </div>

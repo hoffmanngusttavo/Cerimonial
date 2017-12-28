@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.enums.AcessoSistema;
 import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.enums.SituacaoEvento;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
@@ -56,6 +57,9 @@ public class Evento implements Serializable, ModelInterface {
     @Size(min = 2, max = 255)
     private String nome;
 
+    @Column
+    private String emailEvento;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
@@ -90,6 +94,11 @@ public class Evento implements Serializable, ModelInterface {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SituacaoEvento situacaoEvento = SituacaoEvento.ATIVO;
+    
+    @NotNull(message = "A situação não pode ser nula")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AcessoSistema acessoSistema = AcessoSistema.NEGADO;
 
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ContratoEvento> contratos;
@@ -108,7 +117,7 @@ public class Evento implements Serializable, ModelInterface {
 
     @Column(columnDefinition = "TEXT")
     private String motivoCancelamento;
-    
+
     /**
      * Se o evento é para a pessoa que entrou em contato
      */
@@ -181,6 +190,13 @@ public class Evento implements Serializable, ModelInterface {
         }
         return false;
     }
+    
+    public boolean isAcessoSistemaLiberado() {
+        if (acessoSistema != null) {
+            return acessoSistema.equals(AcessoSistema.LIBERADO);
+        }
+        return false;
+    }
 
     public Date getDataInicio() {
         return dataInicio;
@@ -222,8 +238,6 @@ public class Evento implements Serializable, ModelInterface {
         this.tipoEvento = tipoEvento;
     }
 
-   
-
     public Date getHoraTermino() {
         return horaTermino;
     }
@@ -248,8 +262,6 @@ public class Evento implements Serializable, ModelInterface {
         this.eventoProprioContratante = eventoProprioContratante;
     }
 
-    
-    
     public ContratoEvento getContrato() {
 
         if (CerimonialUtils.isListNotBlank(contratos)) {
@@ -285,8 +297,6 @@ public class Evento implements Serializable, ModelInterface {
         this.cerimoniaEvento = cerimoniaEvento;
     }
 
-   
-
     public String getObservacaoEnvolvidos() {
         return observacaoEnvolvidos;
     }
@@ -319,7 +329,22 @@ public class Evento implements Serializable, ModelInterface {
         this.contratantes = contratantes;
     }
 
-   
+    public String getEmailEvento() {
+        return emailEvento;
+    }
+
+    public void setEmailEvento(String emailEvento) {
+        this.emailEvento = emailEvento;
+    }
+
+    public AcessoSistema getAcessoSistema() {
+        return acessoSistema;
+    }
+
+    public void setAcessoSistema(AcessoSistema acessoSistema) {
+        this.acessoSistema = acessoSistema;
+    }
+    
     
 
     @PrePersist
@@ -382,8 +407,7 @@ public class Evento implements Serializable, ModelInterface {
         return "Evento{" + "id=" + id + '}';
     }
 
-    
-     public EventoPessoa getTipoEnvolvidoEvento(TipoEnvolvidoEvento tipo) {
+    public EventoPessoa getTipoEnvolvidoEvento(TipoEnvolvidoEvento tipo) {
 
         if (tipo != null) {
 
@@ -405,9 +429,8 @@ public class Evento implements Serializable, ModelInterface {
         return null;
 
     }
-    
-    
-     public EventoPessoa getNoivo() {
+
+    public EventoPessoa getNoivo() {
 
         if (CerimonialUtils.isListNotBlank(contratantes)) {
 
@@ -450,8 +473,20 @@ public class Evento implements Serializable, ModelInterface {
         return null;
 
     }
+    
+    public Pessoa getContratanteUsuario() {
 
-   
+        for (EventoPessoa env : contratantes) {
+            if (env.isContratante() && env.getPessoa() != null && env.getPessoa().getUsuarioCliente() != null) {
+                return env.getPessoa();
+            }
+        }
+
+        return null;
+
+    }
+    
+    
 
     public boolean isCategoriaCasamento() {
         return isEventoCasamento()
@@ -475,7 +510,7 @@ public class Evento implements Serializable, ModelInterface {
 
     public boolean isEventoAniversario() {
 
-        if (tipoEvento != null ) {
+        if (tipoEvento != null) {
             return tipoEvento.equals(TipoEvento.ANIVERSARIO);
         }
 
@@ -502,7 +537,7 @@ public class Evento implements Serializable, ModelInterface {
 
     public boolean isEventoBodas() {
 
-        if (tipoEvento != null ) {
+        if (tipoEvento != null) {
             return tipoEvento.equals(TipoEvento.BODAS);
         }
 

@@ -12,6 +12,8 @@ import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Usuario;
+import br.com.cerimonial.enums.AcessoSistema;
 import br.com.cerimonial.enums.SituacaoEvento;
 import br.com.cerimonial.repository.EventoRepository;
 import br.com.cerimonial.exceptions.GenericException;
@@ -19,7 +21,9 @@ import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -147,11 +151,20 @@ public class EventoService extends BasicService<Evento> {
             throw new GenericException("Não foi possível carregar os eventos, cliente nulo", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        return repository.findEventosAtivosCliente(cliente);
+        List<Evento> retorno = repository.findEventosAtivosCliente(cliente);
+
+        if (CerimonialUtils.isListNotBlank(retorno)) {
+            // fazer isso para nao ter dados duplicados
+            Set<Evento> eventos = new HashSet<Evento>(retorno);
+
+            retorno = new ArrayList<Evento>(eventos);
+        }
+
+        return retorno;
 
     }
 
-    public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento, Pessoa cliente) throws Exception {
+    public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento) throws Exception {
 
         if (orcamento == null) {
             throw new GenericException("Orçamento Nulo", ErrorCode.BAD_REQUEST.getCode());
@@ -332,7 +345,7 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
-         if (evento != null) {
+        if (evento != null) {
             if (evento.getContratantes() != null) {
                 evento.getContratantes().size();
             }
@@ -383,21 +396,85 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = getEntity(idEvento);
 
-//        List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratante());
+        List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratanteUsuario());
 //        
-//        if (CerimonialUtils.isListNotBlank(eventosAtivos)) {
-//
-//            if (eventosAtivos.size() == 1) {
-//
-//                pessoaService.inativarPessoa(evento.getContratante());
-//
-//                usuarioService.inativarUsuario(evento.getContratante().getUsuarioCliente());
-//            }
-//        }
+        if (CerimonialUtils.isListNotBlank(eventosAtivos)) {
+
+            if (eventosAtivos.size() == 1) {
+
+                usuarioService.inativarUsuario(evento.getContratanteUsuario().getUsuarioCliente());
+            }
+        }
+
         evento.setSituacaoEvento(SituacaoEvento.CANCELADO);
         evento.setMotivoCancelamento(motivoCancelamento);
 
         repository.edit(evento);
+
+    }
+
+    /**
+     * Vai criar usuario para cliente ter acesso ao sistema e enviar por email
+     * os acessos
+     *
+     * @param evento
+     * @throws java.lang.Exception
+     */
+    public void liberarAcessoSistemaContratanteEvento(Evento evento) throws Exception {
+
+        isValid(evento);
+        
+        evento = getEntity(evento.getId());
+        
+        Pessoa cliente = pessoaService.criarClienteFromContato(evento.getOrcamentoEvento());
+        pessoaService.saveCliente(cliente);
+
+        Usuario usuarioCliente = usuarioService.criarUsuarioCliente(cliente);
+
+        String senha = usuarioCliente.getSenha();
+
+        usuarioCliente.setCliente(cliente);
+
+        if (usuarioCliente.getId() != null) {
+            usuarioService.alterarSaltSenha(usuarioCliente);
+        }
+
+        evento.setAcessoSistema(AcessoSistema.LIBERADO);
+
+        this.repository.edit(evento);
+
+        usuarioCliente = usuarioService.save(usuarioCliente);
+
+        usuarioService.enviarEmailBoasVindas(usuarioCliente, senha);
+
+    }
+
+    /**
+     * Vai criar usuario para cliente ter acesso ao sistema e enviar por email
+     * os acessos
+     *
+     * @param evento
+     * @throws java.lang.Exception
+     */
+    public void cancelarAcessoSistemaContratanteEvento(Evento evento) throws Exception {
+
+        isValid(evento);
+
+        evento = getEntity(evento.getId());
+
+        List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratanteUsuario());
+//        
+        if (CerimonialUtils.isListNotBlank(eventosAtivos)) {
+
+            if (eventosAtivos.size() == 1) {
+
+                usuarioService.inativarUsuario(evento.getContratanteUsuario().getUsuarioCliente());
+            }
+        }
+
+        evento.setAcessoSistema(AcessoSistema.NEGADO);
+
+        this.repository.edit(evento);
 
     }
 

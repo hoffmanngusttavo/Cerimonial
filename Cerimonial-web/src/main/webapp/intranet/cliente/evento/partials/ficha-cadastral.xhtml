@@ -73,7 +73,7 @@
 
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label>Tipo de Evento
                                     <span class="asteriskField">
                                         *
@@ -86,6 +86,28 @@
                                              disabled="true"
                                              class="form-control"
                                              label="Nome"/>
+
+                            </div>
+                            
+                            <div class="form-group col-md-2"
+                                 id="div-inptQtdConvidados">
+                                <label for="inptNome">
+                                    Qtd. Convidados
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+                                <p:inputText id="inptQtdConvidados" 
+                                             value="#{FichaCadastralEventoClienteMB.evento.quantidadeConvidados}" 
+                                             required="true"
+                                             requiredMessage="Preencha a quantidade de convidados"
+                                             class="form-control"
+                                             label="Quantidade">
+                                    <f:convertNumber integerOnly="true"/>
+                                    <p:ajax event="change"
+                                            process="@this"
+                                            update="@this"/>
+                                </p:inputText>
 
                             </div>
 
@@ -160,26 +182,24 @@
                                 </p:inputMask>
                             </div>
 
-                            <div class="form-group col-md-6"
-                                 id="div-inptQtdConvidados">
-                                <label for="inptNome">
-                                    Quantidade Convidados
+                            
+
+                            <div class="form-group col-md-6" id="div-inptEmail">
+                                <label>E-mail
                                     <span class="asteriskField">
                                         *
                                     </span>
                                 </label>
-                                <p:inputText id="inptQtdConvidados" 
-                                             value="#{FichaCadastralEventoClienteMB.evento.quantidadeConvidados}" 
-                                             required="true"
-                                             requiredMessage="Preencha a quantidade de convidados"
-                                             class="form-control"
-                                             label="Quantidade">
-                                    <f:convertNumber integerOnly="true"/>
-                                    <p:ajax event="change"
-                                            process="@this"
-                                            update="@this"/>
-                                </p:inputText>
 
+                                <p:inputText id="inptEmail" 
+                                             value="#{FichaCadastralEventoClienteMB.evento.emailEvento}" 
+                                             class="form-control"
+                                             required="true"
+                                             requiredMessage="Preencha um e-mail válido"
+                                             placeholder="Ex: teste@teste.com"
+                                             label="Email">
+                                    <f:validator validatorId="EmailValidate"/>
+                                </p:inputText>
                             </div>
 
                         </div>
@@ -344,7 +364,7 @@
                             <p:commandLink actionListener="#{FichaCadastralEventoClienteMB.copiarEnderecoCerimonia()}"
                                            style="font-size: 13px;margin-left: 10px;"
                                            rendered="#{FichaCadastralEventoClienteMB.evento.cerimoniaEvento.id == null
-                                                        and FichaCadastralEventoClienteMB.evento.categoriaCasamento}"
+                                                       and FichaCadastralEventoClienteMB.evento.categoriaCasamento}"
                                            value="Copiar local da cerimonia"
                                            process="@this, inptLocalCerimonia, enderecoGroup"
                                            onstart="PF('statusDialog').show();"

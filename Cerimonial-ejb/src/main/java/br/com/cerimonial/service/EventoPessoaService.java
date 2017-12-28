@@ -47,14 +47,14 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
     public EventoPessoa getEntity(Long id) throws Exception {
         EventoPessoa entity = repository.getEntity(id);
         
-        if(entity != null && entity.getContratante() != null){
+        if(entity != null && entity.getPessoa() != null){
             
-            if(entity.getContratante().getContatosFamiliares() != null){
-                entity.getContratante().getContatosFamiliares().size();
+            if(entity.getPessoa().getContatosFamiliares() != null){
+                entity.getPessoa().getContatosFamiliares().size();
             }
             
-            if(entity.getContratante().getEndereco() != null){
-                entity.getContratante().getEndereco().getId();
+            if(entity.getPessoa().getEndereco() != null){
+                entity.getPessoa().getEndereco().getId();
             }
         }
         
@@ -66,7 +66,7 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
 
         isValid(entity);
         
-        pessoaService.saveCliente(entity.getContratante());
+        pessoaService.saveCliente(entity.getPessoa());
         
         if(entity.getId() == null){
             return repository.create(entity);
@@ -81,7 +81,7 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
             throw new GenericException("Evento Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        if (entity.getContratante() == null) {
+        if (entity.getPessoa() == null) {
             throw new GenericException("Contratate nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 

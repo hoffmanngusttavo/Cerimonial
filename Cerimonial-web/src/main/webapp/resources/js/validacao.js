@@ -542,6 +542,12 @@ function validaFormularioEvento() {
         $('#div-inptQtdConvidados').addClass('has-error');
         $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
     }
+    
+    if ($('#inptEmail').val() === '') {
+        $('#inptEmail').focus();
+        $('#div-inptEmail').addClass('has-error');
+        $('html, body').animate({scrollTop: $('#form').offset().top}, 800);
+    }
 
 }
 

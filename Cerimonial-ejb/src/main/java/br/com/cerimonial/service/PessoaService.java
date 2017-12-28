@@ -277,6 +277,33 @@ public class PessoaService extends BasicService<Pessoa> {
         return repository.getPessoaByEmail(emailContato);
     }
     
+    
+      /**
+     * Vai buscar uma pessoa pelo cpf
+     * carregando em lazy os dados de contatos e endereço
+     * @param cpf
+     * @return 
+     */
+    public Pessoa findPessoaByCpf(String cpf) {
+        
+        if (StringUtils.isBlank(cpf)) {
+            throw new GenericException("Preencha um cpf válido", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        Pessoa pessoa = repository.findPessoaByCpf(cpf);
+        
+        if(pessoa != null){
+            if(pessoa.getContatosFamiliares() != null){
+                pessoa.getContatosFamiliares().size();
+            }
+            if(pessoa.getEndereco()!= null){
+                pessoa.getEndereco().getId();
+            }
+        }
+        
+        return pessoa;
+    }
+    
    
 
     @Override
@@ -320,23 +347,29 @@ public class PessoaService extends BasicService<Pessoa> {
      * @param idEvento
      * @return 
      */
-    public Pessoa getContratanteEvento(Long idEvento) {
-        
+    public List<Pessoa> getContratantesEvento(Long idEvento) {
+
         if (idEvento == null) {
             throw new GenericException("Id evento nulo", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        Pessoa contratante = repository.getContratanteEvento(idEvento);
-        
-        if(contratante != null){
-            
-            if(contratante.getEndereco() != null){
-                contratante.getEndereco().getId();
+
+        List<Pessoa> contratantes = repository.getContratantesEvento(idEvento);
+
+        if (CerimonialUtils.isListNotBlank(contratantes)) {
+
+            for (Pessoa contratante : contratantes) {
+                if (contratante.getEndereco() != null) {
+                    contratante.getEndereco().getId();
+                }
+                
+                if (contratante.getContatosFamiliares() != null) {
+                    contratante.getContatosFamiliares().size();
+                }
             }
-            
+
         }
-        return contratante;
-        
+        return contratantes;
+
     }
 
     /**
@@ -352,6 +385,8 @@ public class PessoaService extends BasicService<Pessoa> {
         repository.edit(contratante);
         
     }
+
+    
 
     
 

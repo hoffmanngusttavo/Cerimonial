@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -49,18 +50,25 @@ public class EventoPessoa implements Serializable, ModelInterface {
     private Evento evento;
     
     @ManyToOne
-    private Pessoa contratante;
+    private Pessoa pessoa;
 
     @Enumerated(EnumType.STRING)
     private TipoEnvolvidoEvento tipoEnvolvidoEvento;
+    
+    @Column(columnDefinition = "boolean default false")
+    private boolean contratante = false;
 
     public EventoPessoa() {
     }
 
-    public EventoPessoa(Evento evento, Pessoa contratante, TipoEnvolvidoEvento tipoEnvolvidoEvento) {
+    public EventoPessoa(Evento evento, Pessoa pessoa, TipoEnvolvidoEvento tipoEnvolvidoEvento) {
         this.evento = evento;
-        this.contratante = contratante;
+        this.pessoa = pessoa;
         this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
+        
+        if(tipoEnvolvidoEvento != null){
+            this.contratante = true;
+        }
     }
     
     
@@ -113,13 +121,23 @@ public class EventoPessoa implements Serializable, ModelInterface {
         this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
     }
 
-    public Pessoa getContratante() {
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public boolean isContratante() {
         return contratante;
     }
 
-    public void setContratante(Pessoa contratante) {
+    public void setContratante(boolean contratante) {
         this.contratante = contratante;
     }
+
+   
 
     
     
