@@ -86,7 +86,7 @@ public class FichaAniversarianteMB extends ClienteControl {
             }
 
             if (envolvido == null) {
-                envolvido = new EventoPessoa(evento, new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA), TipoEnvolvidoEvento.ANIVERSARIANTE);
+                envolvido = new EventoPessoa(evento, new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA), TipoEnvolvidoEvento.ANIVERSARIANTE, true);
             }
 
         } catch (Exception ex) {

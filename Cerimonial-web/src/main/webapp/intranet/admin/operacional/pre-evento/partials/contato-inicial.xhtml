@@ -156,7 +156,7 @@
                                     <p:ajax process="@this"
                                             update="tiposEnvolvidos"
                                             global="false"/>
-                                     
+
                                 </h:selectOneMenu>
 
                             </div>
@@ -315,26 +315,33 @@
                                 <p:selectBooleanCheckbox value="#{ContatoInicialCrudMB.entity.eventoProprioContratante}"
                                                          class="checkbox-inline"
                                                          id="inptProprioContratante">
-                                   
+                                    <p:ajax event="change"
+                                            process="@this"
+                                            update="tipoContratanteGroup"
+                                            onstart="PF('statusDialog').show();"
+                                            oncomplete="PF('statusDialog').hide();"/>
                                 </p:selectBooleanCheckbox>
                             </div>
 
-                            
-                            <div class="form-group col-md-6">
-                                <label>Tipo de Contratante</label>
-                                
-                                <h:selectOneMenu id="tiposEnvolvidos" 
-                                                 value="#{ContatoInicialCrudMB.entity.tipoEnvolvidoEvento}"
-                                                 class="form-control"
-                                                 label="Tipo de Contratante">
-                                    <f:selectItem itemValue="" 
-                                                  itemLabel="Selecione" /> 
-                                    <f:selectItems value="#{ContatoInicialCrudMB.comboTipoContratante}" />
-                                    <p:ajax process="@this"
-                                            global="false"/>
-                                </h:selectOneMenu>
+                            <h:panelGroup id="tipoContratanteGroup">
+                                <h:panelGroup rendered="#{ContatoInicialCrudMB.entity.eventoProprioContratante}">
+                                    <div class="form-group col-md-6">
+                                        <label>Qual Tipo de Contratante ?</label>
 
-                            </div>
+                                        <h:selectOneMenu id="tiposEnvolvidos" 
+                                                         value="#{ContatoInicialCrudMB.entity.tipoEnvolvidoEvento}"
+                                                         class="form-control"
+                                                         label="Tipo de Contratante">
+                                            <f:selectItem itemValue="" 
+                                                          itemLabel="Selecione" /> 
+                                            <f:selectItems value="#{ContatoInicialCrudMB.comboTipoContratante}" />
+                                            <p:ajax process="@this"
+                                                    global="false"/>
+                                        </h:selectOneMenu>
+
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGroup>
 
                         </div>
 

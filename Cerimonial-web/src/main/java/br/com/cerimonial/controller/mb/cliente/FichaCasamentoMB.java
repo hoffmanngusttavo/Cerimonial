@@ -95,7 +95,7 @@ public class FichaCasamentoMB extends ClienteControl {
             }
 
             if (envolvido == null) {
-                envolvido = new EventoPessoa(evento, new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA), TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
+                envolvido = new EventoPessoa(evento, new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA), TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido), true);
             }
             
             if(envolvido.getPessoa().getEndereco() == null){

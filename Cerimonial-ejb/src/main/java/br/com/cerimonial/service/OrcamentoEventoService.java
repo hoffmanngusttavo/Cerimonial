@@ -11,7 +11,6 @@ import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
-import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.report.Relatorio;
 import br.com.cerimonial.repository.OrcamentoEventoRepository;
 import br.com.cerimonial.exceptions.GenericException;
@@ -363,7 +362,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         eventoService.save(evento);
         
         // atrelar os dados do contratante de acordo com o tipo do evento
-        EventoPessoa eventoPessoa = eventoPessoaService.criarEventoPessoa(evento, cliente);
+        EventoPessoa eventoPessoa = eventoPessoaService.criarContratanteEvento(evento, cliente);
         eventoPessoaService.save(eventoPessoa);
 
     }

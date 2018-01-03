@@ -61,14 +61,17 @@ public class EventoPessoa implements Serializable, ModelInterface {
     public EventoPessoa() {
     }
 
+    public EventoPessoa(Evento evento, Pessoa pessoa, TipoEnvolvidoEvento tipoEnvolvidoEvento, boolean contratante) {
+        this.evento = evento;
+        this.pessoa = pessoa;
+        this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
+        this.contratante = contratante;
+    }
+    
     public EventoPessoa(Evento evento, Pessoa pessoa, TipoEnvolvidoEvento tipoEnvolvidoEvento) {
         this.evento = evento;
         this.pessoa = pessoa;
         this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
-        
-        if(tipoEnvolvidoEvento != null){
-            this.contratante = true;
-        }
     }
     
     

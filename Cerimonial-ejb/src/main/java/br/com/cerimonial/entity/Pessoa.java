@@ -134,7 +134,7 @@ public class Pessoa implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<ContatoEnvolvido> contatosFamiliares;
     
-    @OneToMany(mappedBy = "contratante", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
     private List<EventoPessoa> eventos;
     
     

@@ -99,7 +99,7 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      * @return
      * @throws java.lang.Exception
      */
-    public EventoPessoa criarEventoPessoa(Evento evento, Pessoa cliente) throws Exception {
+    public EventoPessoa criarContratanteEvento(Evento evento, Pessoa cliente) throws Exception {
 
         if (evento == null) {
             throw new GenericException("Evento Nulo", ErrorCode.BAD_REQUEST.getCode());
@@ -112,7 +112,7 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
         EventoPessoa eventoPessoa = this.getEntityByEvento(evento);
 
         if (eventoPessoa == null) {
-            eventoPessoa = new EventoPessoa(evento, cliente, evento.getOrcamentoEvento().getContatoEvento().getTipoEnvolvidoEvento());
+            eventoPessoa = new EventoPessoa(evento, cliente, evento.getOrcamentoEvento().getContatoEvento().getTipoEnvolvidoEvento(), true);
         }
 
         return eventoPessoa;
