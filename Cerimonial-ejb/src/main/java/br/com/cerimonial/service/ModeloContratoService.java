@@ -5,18 +5,13 @@
  */
 package br.com.cerimonial.service;
 
-import br.com.cerimonial.entity.ContratoEvento;
-import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.ModeloContrato;
 import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.repository.ModeloContratoRepository;
-import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;

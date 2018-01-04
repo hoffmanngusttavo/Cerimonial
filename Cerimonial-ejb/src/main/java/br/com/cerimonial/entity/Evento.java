@@ -9,8 +9,8 @@ import br.com.cerimonial.enums.AcessoSistema;
 import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.enums.SituacaoEvento;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
-import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.CollectionUtils;
+import br.com.cerimonial.utils.DateUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -545,9 +545,9 @@ public class Evento implements Serializable, ModelInterface {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Data: ").append(this.dataInicio);
+        sb.append("Data: ").append(DateUtils.formatDate(this.dataInicio, DateUtils.ddMMyyyy));
         sb.append("\n ");
-        sb.append("Horário: ").append(this.horaInicio);
+        sb.append("Horário: ").append(DateUtils.formatDate(this.horaInicio, DateUtils.HHmm));
         sb.append("\n ");
 
         if (this.cerimoniaEvento != null) {

@@ -553,7 +553,7 @@ public class Pessoa implements Serializable, ModelInterface {
         sb.append(" e RG: ").append(this.rg);
         
         if(this.endereco != null){
-            sb.append(" estabelecido na ").append(this.endereco.toStringDadosCompleto());
+            sb.append(" estabelecido na rua ").append(this.endereco.toStringDadosCompleto());
         }
         
         sb.append("\n ");

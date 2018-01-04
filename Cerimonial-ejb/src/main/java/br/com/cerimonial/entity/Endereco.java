@@ -255,15 +255,15 @@ public class Endereco implements Serializable, ModelInterface {
         
         sb.append(" Nº ").append(this.numero);
         
-        sb.append(this.bairro);
+        sb.append(" ").append(this.bairro);
         
         sb.append(" Cep: ").append(this.cep);
         
         if(this.cidade != null){
-            sb.append(this.cidade.getNome());
+           sb.append(" ").append(this.cidade.getNome());
             
             if(estado != null){
-                sb.append(this.estado.getSigla());
+                sb.append(" ").append(this.estado.getSigla());
             }
         }
         

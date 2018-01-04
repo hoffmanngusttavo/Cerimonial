@@ -16,22 +16,27 @@ import java.util.GregorianCalendar;
  * @author hoffmann
  */
 public class DateUtils {
-    
+
     public static final String ddMMyyyy = "dd/MM/yyyy";
     public static final String ddMMyyyy_HHmm = "dd/MM/yyyy HH:mm";
-    
-    
-    public static String formatDate(Date data, String pattern){
+    public static final String HHmm = "HH:mm";
+
+    public static String formatDate(Date data, String pattern) {
+
+        if (data != null) {
+
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+            return sdf.format(data);
+        }
         
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        
-        return sdf.format(data);
+        return "";
     }
-    
-    public static Date parseDate(String data, String pattern) throws ParseException{
-        
+
+    public static Date parseDate(String data, String pattern) throws ParseException {
+
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        
+
         return sdf.parse(data);
     }
 
@@ -73,7 +78,7 @@ public class DateUtils {
     public static int getCurrentYear() {
         return getYear(new Date());
     }
-    
+
     public static Integer getYear(Date date) {
         if (date == null) {
             date = new Date();
@@ -82,9 +87,5 @@ public class DateUtils {
         c.setTime(date);
         return c.get(Calendar.YEAR);
     }
-    
-    
-    
-    
 
 }

@@ -6,6 +6,7 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ContratoEvento;
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
@@ -13,12 +14,11 @@ import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContratoEventoRepository;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -39,6 +39,9 @@ import org.apache.commons.lang.StringUtils;
 public class ContratoEventoService extends BasicService<ContratoEvento> {
 
     private ContratoEventoRepository repository;
+    
+    @EJB
+    protected EventoService eventoService;
 
     @PostConstruct
     @PostActivate
@@ -198,31 +201,32 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      *
      * @param entity
      */
-    public void carregarContratoDeModelo(ContratoEvento entity) {
+    public void carregarContratoDeModelo(ContratoEvento entity) throws Exception {
 
         isValid(entity);
 
         String conteudo = entity.getModeloContrato().getConteudo();
         
         if (StringUtils.isNotBlank(conteudo)) {
+            
+            Evento evento = eventoService.getEntity(entity.getEvento().getId());
 
-            conteudo = conteudo.replaceAll("#dadosContratante#", substituirDadosContratante(entity));
-            conteudo = conteudo.replaceAll("#dadosEvento#", substituirDadosEvento(entity));
-            conteudo = conteudo.replaceAll("#formaPagamento#", substituirDadosPagamentoEvento(entity));
+            conteudo = conteudo.replaceAll("#dadosContratante#", substituirDadosContratante(evento));
+            conteudo = conteudo.replaceAll("#dadosEvento#", substituirDadosEvento(evento));
+//            conteudo = conteudo.replaceAll("#formaPagamento#", substituirDadosPagamentoEvento(entity.getEvento()));
         }
 
         entity.setConteudo(conteudo);
 
     }
 
-    public String substituirDadosContratante(ContratoEvento contratoEvento) {
+    public String substituirDadosContratante(Evento evento) {
 
         StringBuilder sb = new StringBuilder("");
 
-        if (contratoEvento != null && contratoEvento.getEvento() != null
-                && CollectionUtils.isNotBlank(contratoEvento.getEvento().getContratantes())) {
+        if (evento != null  && CollectionUtils.isNotBlank(evento.getContratantes())) {
 
-            for (EventoPessoa eventoPessoa : contratoEvento.getEvento().getContratantes()) {
+            for (EventoPessoa eventoPessoa : evento.getContratantes()) {
 
                 if (eventoPessoa.isContratante()) {
 
@@ -235,12 +239,12 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
         return sb.toString();
     }
 
-    public String substituirDadosEvento(ContratoEvento contratoEvento) {
+    public String substituirDadosEvento(Evento evento) {
         StringBuilder sb = new StringBuilder("");
 
-        if (contratoEvento != null && contratoEvento.getEvento() != null) {
+        if (evento != null) {
 
-            sb.append(contratoEvento.getEvento().toStringDadosCompleto());
+            sb.append(evento.toStringDadosCompleto());
 
         }
 
