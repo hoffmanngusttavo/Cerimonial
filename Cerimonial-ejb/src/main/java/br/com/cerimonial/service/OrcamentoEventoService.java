@@ -17,7 +17,7 @@ import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.service.utils.EmpresaCache;
 import br.com.cerimonial.service.utils.InvoiceUtils;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.EmailHelper;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -237,7 +237,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
             orcamento.setValorProposta(modelo.getValorProposta() != null ? modelo.getValorProposta().doubleValue() : 0);
             List<Arquivo> arquivosByModeloProposta = arquivoService.getArquivosByModeloProposta(modelo);
             orcamento.setArquivo(null);
-            if (CerimonialUtils.isListNotBlank(arquivosByModeloProposta)) {
+            if (CollectionUtils.isNotBlank(arquivosByModeloProposta)) {
                 arquivosByModeloProposta.stream().forEach((Arquivo file) -> {
                     orcamento.adicionarAnexo(file.clonar(file));
                 });
@@ -314,7 +314,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     public void aceitarProposta(OrcamentoEvento orcamento) throws Exception {
         if (orcamento != null && orcamento.getId() != null && !orcamento.isPropostaAceita()) {
             List<OrcamentoEvento> orcamentos = findAllByContatoId(orcamento.getContatoEvento().getId());
-            if (CerimonialUtils.isListNotBlank(orcamentos)) {
+            if (CollectionUtils.isNotBlank(orcamentos)) {
                 for (OrcamentoEvento proposta : orcamentos) {
                     if (proposta.isPropostaAceita()) {
                         throw new GenericException("Já existe um orçamento aprovado", ErrorCode.BAD_REQUEST.getCode());

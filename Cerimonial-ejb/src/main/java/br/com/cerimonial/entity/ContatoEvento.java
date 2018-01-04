@@ -8,7 +8,7 @@ package br.com.cerimonial.entity;
 import br.com.cerimonial.enums.ClassificacaoContato;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.enums.TipoEvento;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -290,7 +290,7 @@ public class ContatoEvento implements Serializable, ModelInterface{
     
     
     public boolean isPropostaAceita(){
-        if(CerimonialUtils.isListNotBlank(propostas)){
+        if(CollectionUtils.isNotBlank(propostas)){
             if (propostas.stream().anyMatch((proposta) -> (proposta.isPropostaAceita()))) {
                 return true;
             }

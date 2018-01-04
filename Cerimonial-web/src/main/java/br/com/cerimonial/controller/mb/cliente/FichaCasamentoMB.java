@@ -19,7 +19,7 @@ import br.com.cerimonial.service.ContatoEnvolvidoService;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.EventoPessoaService;
 import br.com.cerimonial.service.EventoService;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +82,7 @@ public class FichaCasamentoMB extends ClienteControl {
 
             if (evento != null) {
 
-                if (CerimonialUtils.isListNotBlank(evento.getContratantes())) {
+                if (CollectionUtils.isNotBlank(evento.getContratantes())) {
 
                     envolvido = evento.getTipoEnvolvidoEvento(TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
                     
@@ -95,7 +95,7 @@ public class FichaCasamentoMB extends ClienteControl {
             }
 
             if (envolvido == null) {
-                envolvido = new EventoPessoa(evento, new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA), TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido), true);
+                envolvido = new EventoPessoa(evento, new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA), TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido), evento.isEventoProprioContratante());
             }
             
             if(envolvido.getPessoa().getEndereco() == null){
@@ -162,6 +162,10 @@ public class FichaCasamentoMB extends ClienteControl {
             
             if(pessoa != null){
                 envolvido.setPessoa(pessoa);
+                
+                RequestContext requestContext = RequestContext.getCurrentInstance();
+                requestContext.update("groupForm");
+                
             }
 
         } catch (Exception ex) {

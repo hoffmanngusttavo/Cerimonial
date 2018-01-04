@@ -202,4 +202,15 @@ public class EventoPessoa implements Serializable, ModelInterface {
         return "br.com.cerimonial.entity.EventoPessoa[ id=" + id + " ]";
     }
 
+    public String toStringPessoa() {
+        
+        StringBuilder sb = new StringBuilder("");
+        
+        if(this.pessoa != null){
+            sb.append(this.pessoa.toStringDadosCompleto());
+        }
+        
+        return sb.toString();
+    }
+
 }

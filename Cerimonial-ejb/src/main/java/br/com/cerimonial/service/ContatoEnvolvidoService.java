@@ -9,7 +9,7 @@ import br.com.cerimonial.entity.ContatoEnvolvido;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContatoEnvolvidoRepository;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
@@ -74,7 +74,7 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
      */
     public void removerContatos(List<ContatoEnvolvido> contatosRemover) {
         
-        if(CerimonialUtils.isListNotBlank(contatosRemover)){
+        if(CollectionUtils.isNotBlank(contatosRemover)){
             
             for (ContatoEnvolvido contato : contatosRemover) {
                 

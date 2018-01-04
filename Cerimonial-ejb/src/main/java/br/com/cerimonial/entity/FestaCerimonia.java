@@ -170,5 +170,20 @@ public class FestaCerimonia implements Serializable, ModelInterface {
     public String toString() {
         return "br.com.cerimonial.entity.FestaCerimonia[ id=" + id + " ]";
     }
+    
+    public String toStringDadosCompleto() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(" Local da Recepção: ").append(this.nomeLocalFesta);
+        
+        if(this.endereco != null){
+            sb.append(" Endereço: ").append(this.endereco.toStringDadosCompleto());
+        }
+
+        sb.append("\n ");
+
+        return sb.toString();
+    }
 
 }

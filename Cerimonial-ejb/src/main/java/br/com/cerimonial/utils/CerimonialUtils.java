@@ -17,7 +17,6 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.UUID;
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -57,13 +56,7 @@ public class CerimonialUtils {
         return buf.toString();
     }
 
-    public static boolean isListNotBlank(List list) {
-        return list != null && !list.isEmpty();
-    }
-
-    public static boolean isListBlank(List list) {
-        return list == null || list.isEmpty();
-    }
+   
 
     public static String callURL(String paramUrl) {
         StringBuilder sb = new StringBuilder();

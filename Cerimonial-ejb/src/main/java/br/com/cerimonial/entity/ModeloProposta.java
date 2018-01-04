@@ -6,7 +6,7 @@
 package br.com.cerimonial.entity;
 
 import br.com.cerimonial.enums.TipoEvento;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -169,7 +169,7 @@ public class ModeloProposta implements Serializable, ModelInterface {
     }
 
     public Arquivo getArquivo() {
-        if (CerimonialUtils.isListNotBlank(anexos)) {
+        if (CollectionUtils.isNotBlank(anexos)) {
             return anexos.get(0);
         }
         return null;

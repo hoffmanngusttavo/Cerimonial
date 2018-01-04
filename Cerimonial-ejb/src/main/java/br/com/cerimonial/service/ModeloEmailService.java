@@ -10,7 +10,7 @@ import br.com.cerimonial.entity.ModeloEmail;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ModeloEmailRepository;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -80,7 +80,7 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
 
         if (entity.getArquivo().getId() == null && entity.getId() != null) {
             List<Arquivo> arquivosAntigos = arquivoService.getArquivosByModeloEmail(entity);
-            if (CerimonialUtils.isListNotBlank(arquivosAntigos)) {
+            if (CollectionUtils.isNotBlank(arquivosAntigos)) {
                 arquivosAntigos.stream().forEach((arquivosAntigo) -> {
                     try {
                         arquivoService.delete(arquivosAntigo);

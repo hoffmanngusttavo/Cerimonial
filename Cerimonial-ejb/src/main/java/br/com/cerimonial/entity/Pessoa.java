@@ -10,7 +10,7 @@ import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,7 +76,7 @@ public class Pessoa implements Serializable, ModelInterface {
     @CNPJ
     private String cnpj;
 
-    @Column(unique = true)
+    @Column
     @NotNull
     private String email;
 
@@ -338,7 +338,7 @@ public class Pessoa implements Serializable, ModelInterface {
 
     public Usuario getUsuarioCliente() {
 
-        if (CerimonialUtils.isListNotBlank(usuariosClientes)) {
+        if (CollectionUtils.isNotBlank(usuariosClientes)) {
             return usuariosClientes.get(0);
         }
 
@@ -351,7 +351,7 @@ public class Pessoa implements Serializable, ModelInterface {
             usuariosClientes = null;
         } else {
 
-            if (CerimonialUtils.isListNotBlank(usuariosClientes)) {
+            if (CollectionUtils.isNotBlank(usuariosClientes)) {
                 usuariosClientes.set(0, usuarioCliente);
             } else {
 
@@ -534,12 +534,36 @@ public class Pessoa implements Serializable, ModelInterface {
             throw new GenericException("Posição do contato não pode ser nula", ErrorCode.BAD_REQUEST.getCode());
         }
         
-        if (CerimonialUtils.isListNotBlank(contatosFamiliares)) {
+        if (CollectionUtils.isNotBlank(contatosFamiliares)) {
 
             contatosFamiliares.remove(posicao.intValue());
 
         }
 
+    }
+
+    public String toStringDadosCompleto() {
+       
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append(this.nome);
+        
+        sb.append(", pessoa física, inscrita no CPF: ").append(this.cpf);
+        
+        sb.append(" e RG: ").append(this.rg);
+        
+        if(this.endereco != null){
+            sb.append(" estabelecido na ").append(this.endereco.toStringDadosCompleto());
+        }
+        
+        sb.append("\n ");
+        
+        sb.append(" Email: ").append(this.email);
+        
+        sb.append(" Telefone(s) ").append(this.telefoneCelular).append(" - " ).append(this.telefoneResidencial);
+        
+        sb.append("\n ");
+        return sb.toString();
     }
 
 }

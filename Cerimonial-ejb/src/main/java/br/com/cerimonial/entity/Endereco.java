@@ -245,5 +245,30 @@ public class Endereco implements Serializable, ModelInterface {
         
         return this;
     }
+    
+    
+     public String toStringDadosCompleto() {
+       
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append(this.logradouro);
+        
+        sb.append(" Nº ").append(this.numero);
+        
+        sb.append(this.bairro);
+        
+        sb.append(" Cep: ").append(this.cep);
+        
+        if(this.cidade != null){
+            sb.append(this.cidade.getNome());
+            
+            if(estado != null){
+                sb.append(this.estado.getSigla());
+            }
+        }
+        
+        sb.append("\n ");
+        return sb.toString();
+    }
 
 }

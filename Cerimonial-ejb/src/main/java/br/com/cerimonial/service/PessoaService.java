@@ -14,6 +14,7 @@ import br.com.cerimonial.repository.PessoaRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -355,7 +356,7 @@ public class PessoaService extends BasicService<Pessoa> {
 
         List<Pessoa> contratantes = repository.getContratantesEvento(idEvento);
 
-        if (CerimonialUtils.isListNotBlank(contratantes)) {
+        if (CollectionUtils.isNotBlank(contratantes)) {
 
             for (Pessoa contratante : contratantes) {
                 if (contratante.getEndereco() != null) {

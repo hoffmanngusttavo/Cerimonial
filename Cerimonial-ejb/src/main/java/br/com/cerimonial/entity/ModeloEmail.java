@@ -5,7 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -127,7 +127,7 @@ public class ModeloEmail implements Serializable, ModelInterface{
     }
 
     public Arquivo getArquivo() {
-        if (CerimonialUtils.isListNotBlank(anexos)) {
+        if (CollectionUtils.isNotBlank(anexos)) {
             return anexos.get(0);
         }
         return null;

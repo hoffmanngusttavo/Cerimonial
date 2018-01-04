@@ -172,4 +172,19 @@ public class CerimoniaEvento implements Serializable, ModelInterface {
         return "CerimoniaEvento{" + "id=" + id + '}';
     }
 
+    public String toStringDadosCompleto() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(" Local da Cerimônia: ").append(this.nomeLocalEvento);
+        
+        if(this.endereco != null){
+            sb.append(" Endereço: ").append(this.endereco.toStringDadosCompleto());
+        }
+
+        sb.append("\n ");
+
+        return sb.toString();
+    }
+
 }

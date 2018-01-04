@@ -5,7 +5,7 @@
  */
 package br.com.cerimonial.controller;
 
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.List;
 import org.primefaces.context.RequestContext;
 
@@ -75,11 +75,11 @@ public abstract class AbstractValidatorJSF extends BasicControl {
 
     public void showMessages() {
 
-        if (CerimonialUtils.isListNotBlank(this.getMessagesError())) {
+        if (CollectionUtils.isNotBlank(this.getMessagesError())) {
             createFacesErrorMessage(this.getMessageError());
         }
 
-        if (CerimonialUtils.isListNotBlank(this.getMessagesWarn())) {
+        if (CollectionUtils.isNotBlank(this.getMessagesWarn())) {
             createFacesWarnMessage(this.getMessageWarn());
         }
 

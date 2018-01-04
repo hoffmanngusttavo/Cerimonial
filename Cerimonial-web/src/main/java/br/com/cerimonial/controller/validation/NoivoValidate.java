@@ -7,7 +7,7 @@ package br.com.cerimonial.controller.validation;
 
 import br.com.cerimonial.controller.AbstractValidatorJSF;
 import br.com.cerimonial.entity.Pessoa;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
 
 /**
@@ -28,7 +28,7 @@ public class NoivoValidate extends AbstractValidatorJSF {
         setMessagesError(new ArrayList<String>());
         setMessagesWarn(new ArrayList<String>());
 
-        if (CerimonialUtils.isListBlank(entity.getContatosFamiliares())) {
+        if (CollectionUtils.isNotBlank(entity.getContatosFamiliares())) {
             getMessagesWarn().add("Cadastre pelo menos um contato familiar");
         }
 

@@ -18,7 +18,7 @@ import br.com.cerimonial.enums.SituacaoEvento;
 import br.com.cerimonial.repository.EventoRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -153,7 +153,7 @@ public class EventoService extends BasicService<Evento> {
 
         List<Evento> retorno = repository.findEventosAtivosCliente(cliente);
 
-        if (CerimonialUtils.isListNotBlank(retorno)) {
+        if (CollectionUtils.isNotBlank(retorno)) {
             // fazer isso para nao ter dados duplicados
             Set<Evento> eventos = new HashSet<Evento>(retorno);
 
@@ -196,7 +196,7 @@ public class EventoService extends BasicService<Evento> {
 
         List<Evento> eventos = repository.getEventosByOrcamento(orcamento);
 
-        if (CerimonialUtils.isListNotBlank(eventos)) {
+        if (CollectionUtils.isNotBlank(eventos)) {
             return eventos.get(0);
         }
 
@@ -212,7 +212,7 @@ public class EventoService extends BasicService<Evento> {
 
         List<Evento> eventos = repository.getEventosByContatoEvento(contatoEvento);
 
-        if (CerimonialUtils.isListNotBlank(eventos)) {
+        if (CollectionUtils.isNotBlank(eventos)) {
             return eventos.get(0);
         }
 
@@ -398,7 +398,7 @@ public class EventoService extends BasicService<Evento> {
 
         List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratanteUsuario());
 //        
-        if (CerimonialUtils.isListNotBlank(eventosAtivos)) {
+        if (CollectionUtils.isNotBlank(eventosAtivos)) {
 
             if (eventosAtivos.size() == 1) {
 
@@ -464,7 +464,7 @@ public class EventoService extends BasicService<Evento> {
 
         List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratanteUsuario());
 //        
-        if (CerimonialUtils.isListNotBlank(eventosAtivos)) {
+        if (CollectionUtils.isNotBlank(eventosAtivos)) {
 
             if (eventosAtivos.size() == 1) {
 

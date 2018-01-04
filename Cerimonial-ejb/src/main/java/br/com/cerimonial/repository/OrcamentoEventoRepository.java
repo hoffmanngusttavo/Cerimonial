@@ -7,7 +7,7 @@ package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -35,7 +35,7 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
         sql.append(" order by o.id desc");
         List<OrcamentoEvento> propostas = getPureList(OrcamentoEvento.class, sql.toString(), id);
         //carregar lazy
-        if (CerimonialUtils.isListNotBlank(propostas)) {
+        if (CollectionUtils.isNotBlank(propostas)) {
             propostas.stream().forEach(item -> {
                 if (item.getModeloProposta() != null) {
                     item.getModeloProposta().getId();

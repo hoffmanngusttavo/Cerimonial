@@ -17,7 +17,7 @@ import br.com.cerimonial.service.ContatoEnvolvidoService;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.EventoPessoaService;
 import br.com.cerimonial.service.EventoService;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +79,7 @@ public class FichaAniversarianteMB extends ClienteControl {
 
             if (evento != null) {
 
-                if (CerimonialUtils.isListNotBlank(evento.getContratantes())) {
+                if (CollectionUtils.isNotBlank(evento.getContratantes())) {
                     envolvido = evento.getTipoEnvolvidoEvento(TipoEnvolvidoEvento.ANIVERSARIANTE);
                 }
 

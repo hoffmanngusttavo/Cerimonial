@@ -9,7 +9,7 @@ import br.com.cerimonial.entity.Empresa;
 import br.com.cerimonial.repository.EmpresaRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
@@ -45,7 +45,7 @@ public class EmpresaService extends BasicService<Empresa> {
 
     public Empresa getEmpresa() throws Exception {
         List<Empresa> empresas = repository.findRangeListagem(1, 0, null, null);
-        if (CerimonialUtils.isListNotBlank(empresas)) {
+        if (CollectionUtils.isNotBlank(empresas)) {
             return empresas.get(0);
         }
         return new Empresa();

@@ -10,6 +10,7 @@ import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.enums.SituacaoEvento;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -94,7 +95,7 @@ public class Evento implements Serializable, ModelInterface {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SituacaoEvento situacaoEvento = SituacaoEvento.ATIVO;
-    
+
     @NotNull(message = "A situação não pode ser nula")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -190,7 +191,7 @@ public class Evento implements Serializable, ModelInterface {
         }
         return false;
     }
-    
+
     public boolean isAcessoSistemaLiberado() {
         if (acessoSistema != null) {
             return acessoSistema.equals(AcessoSistema.LIBERADO);
@@ -264,7 +265,7 @@ public class Evento implements Serializable, ModelInterface {
 
     public ContratoEvento getContrato() {
 
-        if (CerimonialUtils.isListNotBlank(contratos)) {
+        if (CollectionUtils.isNotBlank(contratos)) {
             return contratos.get(0);
         }
 
@@ -277,7 +278,7 @@ public class Evento implements Serializable, ModelInterface {
             contratos = null;
         } else {
 
-            if (CerimonialUtils.isListNotBlank(contratos)) {
+            if (CollectionUtils.isNotBlank(contratos)) {
                 contratos.set(0, contrato);
             }
 
@@ -344,8 +345,6 @@ public class Evento implements Serializable, ModelInterface {
     public void setAcessoSistema(AcessoSistema acessoSistema) {
         this.acessoSistema = acessoSistema;
     }
-    
-    
 
     @PrePersist
     @Override
@@ -432,7 +431,7 @@ public class Evento implements Serializable, ModelInterface {
 
     public EventoPessoa getNoivo() {
 
-        if (CerimonialUtils.isListNotBlank(contratantes)) {
+        if (CollectionUtils.isNotBlank(contratantes)) {
 
             for (EventoPessoa env : contratantes) {
                 if (env.getTipoEnvolvidoEvento() != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.NOIVO)) {
@@ -448,7 +447,7 @@ public class Evento implements Serializable, ModelInterface {
 
     public EventoPessoa getAniversariante() {
 
-        if (CerimonialUtils.isListNotBlank(contratantes)) {
+        if (CollectionUtils.isNotBlank(contratantes)) {
 
             for (EventoPessoa env : contratantes) {
                 if (env.getTipoEnvolvidoEvento() != null && env.getTipoEnvolvidoEvento().equals(TipoEnvolvidoEvento.ANIVERSARIANTE)) {
@@ -473,7 +472,7 @@ public class Evento implements Serializable, ModelInterface {
         return null;
 
     }
-    
+
     public Pessoa getContratanteUsuario() {
 
         for (EventoPessoa env : contratantes) {
@@ -485,8 +484,6 @@ public class Evento implements Serializable, ModelInterface {
         return null;
 
     }
-    
-    
 
     public boolean isCategoriaCasamento() {
         return isEventoCasamento()
@@ -542,6 +539,32 @@ public class Evento implements Serializable, ModelInterface {
         }
 
         return false;
+    }
+
+    public String toStringDadosCompleto() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Data: ").append(this.dataInicio);
+        sb.append("\n ");
+        sb.append("Horário: ").append(this.horaInicio);
+        sb.append("\n ");
+
+        if (this.cerimoniaEvento != null) {
+
+            sb.append(this.cerimoniaEvento.toStringDadosCompleto());
+        }
+        
+        sb.append("\n ");
+        
+        if (this.festaCerimonia != null) {
+
+            sb.append(this.festaCerimonia.toStringDadosCompleto());
+        }
+
+        sb.append("\n ");
+
+        return sb.toString();
     }
 
 }

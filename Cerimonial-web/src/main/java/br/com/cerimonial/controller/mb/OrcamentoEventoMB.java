@@ -16,7 +16,7 @@ import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.OrcamentoEventoService;
 import br.com.cerimonial.utils.ArquivoUtils;
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -75,7 +75,7 @@ public class OrcamentoEventoMB extends BasicControl {
 
                 orcamentos = service.findAllByContatoId(contatoEvento.getId());
 
-                if (CerimonialUtils.isListBlank(orcamentos)) {
+                if (CollectionUtils.isNotBlank(orcamentos)) {
                     instanciarOrcamento();
                 }
 

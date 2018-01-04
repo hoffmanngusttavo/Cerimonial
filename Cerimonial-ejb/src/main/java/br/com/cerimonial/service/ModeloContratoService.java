@@ -5,13 +5,18 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.ContratoEvento;
+import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.ModeloContrato;
 import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.repository.ModeloContratoRepository;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -31,21 +36,17 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ModeloContratoService extends BasicService<ModeloContrato>{
-    
-    
-    private ModeloContratoRepository repository;
+public class ModeloContratoService extends BasicService<ModeloContrato> {
 
-   
+    private ModeloContratoRepository repository;
 
     @PostConstruct
     @PostActivate
     private void postConstruct() {
         repository = new ModeloContratoRepository(em);
     }
-    
-    
-     @Override
+
+    @Override
     public ModeloContrato getEntity(Long id) throws Exception {
         return repository.getEntity(id);
     }
@@ -106,13 +107,15 @@ public class ModeloContratoService extends BasicService<ModeloContrato>{
     }
 
     public List<ModeloContrato> findModelosContratoByTipoEvento(TipoEvento tipoEvento) {
-        
+
         if (tipoEvento == null) {
             throw new GenericException("Tipo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         return repository.findModelosContratoByTipoEvento(tipoEvento);
-        
+
     }
+
     
+
 }

@@ -11,6 +11,7 @@ import br.com.cerimonial.repository.ConfiguracaoEmailRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,7 +50,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
 
     public ConfiguracaoEmail getConfiguracaoEmail() throws Exception {
         List<ConfiguracaoEmail> emails = repository.findRangeListagem(1, 0, null, null);
-        if (CerimonialUtils.isListNotBlank(emails)) {
+        if (CollectionUtils.isNotBlank(emails)) {
             return emails.get(0);
         }
         

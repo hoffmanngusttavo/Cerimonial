@@ -5,7 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
-import br.com.cerimonial.utils.CerimonialUtils;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -198,7 +198,7 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     }
 
     public Arquivo getArquivo() {
-        if (CerimonialUtils.isListNotBlank(anexos)) {
+        if (CollectionUtils.isNotBlank(anexos)) {
             return anexos.get(0);
         }
         return null;
@@ -216,7 +216,7 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
 
     public Evento getEvento() {
 
-        if (CerimonialUtils.isListNotBlank(eventos)) {
+        if (CollectionUtils.isNotBlank(eventos)) {
             return eventos.get(0);
         }
 
@@ -229,7 +229,7 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
             eventos = null;
         } else {
 
-            if (CerimonialUtils.isListNotBlank(eventos)) {
+            if (CollectionUtils.isNotBlank(eventos)) {
 
                 eventos.set(0, evento);
 
