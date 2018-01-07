@@ -6,10 +6,13 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Alerta;
+import br.com.cerimonial.entity.ContratoEvento;
+import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.AlertaRepository;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,9 +33,8 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class AlertaService extends BasicService<Alerta>{
-    
-    
+public class AlertaService extends BasicService<Alerta> {
+
     private AlertaRepository repository;
 
     @PostConstruct
@@ -97,5 +99,50 @@ public class AlertaService extends BasicService<Alerta>{
         }
         return true;
     }
-    
+
+    public void enviarAlertaContratoLiberado(ContratoEvento entity) throws Exception {
+
+        if (entity == null) {
+            throw new GenericException("Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if(entity.getEvento().getContratanteUsuario() == null){
+             throw new GenericException("Usuario do evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        String caminho = "/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento="+entity.getEvento().getId();
+
+        Alerta alerta = criarAlerta(caminho, "Contrato foi liberado para visualização", entity.getEvento().getContratanteUsuario().getUsuarioCliente());
+        
+        this.save(alerta);
+        
+    }
+
+    /**
+     * Instancia um alerta com mensagem, caminho e destinatarios
+     *
+     * @param caminho
+     * @param mensagem
+     * @param destinatario
+     * @return
+     * @throws java.lang.Exception
+     */
+    public Alerta criarAlerta(String caminho, String mensagem, Usuario destinatario) throws Exception {
+
+        if (destinatario == null) {
+            throw new GenericException("Destinatario do alerta nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        Alerta alerta = new Alerta();
+
+        alerta.setDataCadastro(new Date());
+        alerta.setMensagem(mensagem);
+        alerta.setVigenciaInicial(new Date());
+        alerta.setLink(caminho);
+
+        alerta.adicionarDestinatarios(destinatario);
+
+        return alerta;
+    }
+
 }

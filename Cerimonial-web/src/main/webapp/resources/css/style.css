@@ -279,3 +279,28 @@
     margin-bottom: 40px;
 }
 
+.div-alerta-aviso {
+    width: 90px;
+    height: 40px; 
+    background-color: rgb(50, 121, 128); 
+    line-height: 40px;
+    text-align: center; 
+    color: white;
+    margin: auto; 
+    position: absolute; 
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.alerta-aviso {
+    position: absolute;
+    background-color: rgb(0, 204, 255);
+    border-radius: 1000px; 
+    width: 30px; 
+    height: 30px; 
+    text-align: center; 
+    line-height: 30px; 
+    top: 28px; 
+    left: 65px;
+}

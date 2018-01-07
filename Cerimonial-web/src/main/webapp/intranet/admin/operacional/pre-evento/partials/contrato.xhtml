@@ -69,7 +69,9 @@
                                     <p:ajax process="@this"
                                             listener="#{ContratoEventoMB.carregarModeloContrato()}"
                                             update="@this, inptConteudo"
-                                            global="false"/>
+                                            global="false"
+                                            onstart="PF('statusDialog').show();"
+                                            oncomplete="PF('statusDialog').hide();"/>
                                 </h:selectOneMenu>
 
                             </div>
@@ -111,7 +113,6 @@
                                  rendered="#{ContratoEventoMB.entity.id != null 
                                              and !ContratoEventoMB.entity.liberadoCliente}"
                                  icon="fa fa-check" 
-                                 ajax="false"
                                  id="btn-liberar-contrato"
                                  class="btn btn-success"
                                  style="margin-left: 10px;"

@@ -52,6 +52,14 @@ public class AlertaDestinatario implements Serializable, ModelInterface {
     
     @ManyToOne
     private Alerta alerta;
+
+    public AlertaDestinatario() {
+    }
+
+    public AlertaDestinatario(Usuario destinatario, Alerta alerta) {
+        this.destinatario = destinatario;
+        this.alerta = alerta;
+    }
     
 
     @Override

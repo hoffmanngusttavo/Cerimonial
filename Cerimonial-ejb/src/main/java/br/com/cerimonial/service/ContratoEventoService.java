@@ -42,6 +42,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
     
     @EJB
     protected EventoService eventoService;
+    
+    @EJB
+    protected AlertaService alertaService;
 
     @PostConstruct
     @PostActivate
@@ -134,15 +137,23 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
         }
     }
 
+    /**
+     * Vai liberar contrato para o contratante e vai criar um alerta para ele visualizar ao logar
+     * @param entity
+     * @throws java.lang.Exception
+     */
     public void liberarContrato(ContratoEvento entity) throws Exception {
 
         isValid(entity);
 
+        entity = this.getEntity(entity.getId());
+        
         entity.setLiberadoCliente(true);
 
         save(entity);
 
-        //criar notificacao de alerta para os contratantes do evento
+        alertaService.enviarAlertaContratoLiberado(entity);
+        
     }
 
     public List<ContratoEvento> findAll() {
@@ -197,9 +208,10 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
 
     /**
      * Vai preencher o conteudo do contrato do evento de acordo com o modelo
-     * específico TODO[substituir variaves de acordo com hashTags]
+     * específico 
      *
      * @param entity
+     * @throws java.lang.Exception
      */
     public void carregarContratoDeModelo(ContratoEvento entity) throws Exception {
 

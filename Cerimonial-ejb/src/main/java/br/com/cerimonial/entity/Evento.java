@@ -545,21 +545,39 @@ public class Evento implements Serializable, ModelInterface {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Data: ").append(DateUtils.formatDate(this.dataInicio, DateUtils.ddMMyyyy));
+        if (this.dataInicio != null) {
+            sb.append("Data: ").append(DateUtils.formatDate(this.dataInicio, DateUtils.ddMMyyyy));
+        } else {
+            sb.append("Data: Á definir ");
+        }
+
         sb.append("\n ");
-        sb.append("Horário: ").append(DateUtils.formatDate(this.horaInicio, DateUtils.HHmm));
+
+        if (this.horaInicio != null) {
+            sb.append("Horário: ").append(DateUtils.formatDate(this.horaInicio, DateUtils.HHmm));
+        } else {
+            sb.append("Horário: Á definir ");
+        }
+
         sb.append("\n ");
 
         if (this.cerimoniaEvento != null) {
 
             sb.append(this.cerimoniaEvento.toStringDadosCompleto());
+
+        } else {
+
+            sb.append("Local da cerimônia: Á definir ");
         }
-        
+
         sb.append("\n ");
-        
+
         if (this.festaCerimonia != null) {
 
             sb.append(this.festaCerimonia.toStringDadosCompleto());
+        } else {
+
+            sb.append("Local da recepção: Á definir ");
         }
 
         sb.append("\n ");

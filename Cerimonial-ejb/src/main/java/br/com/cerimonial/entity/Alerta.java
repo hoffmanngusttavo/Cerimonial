@@ -5,7 +5,9 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.utils.CollectionUtils;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -140,11 +142,35 @@ public class Alerta implements Serializable, ModelInterface {
         return destinatarios;
     }
 
-    public void setDestinatarios(List<AlertaDestinatario> destinatarios) {
-        this.destinatarios = destinatarios;
+   
+    
+    public void adicionarDestinatarios(List<Usuario> usuarios){
+        
+        if(CollectionUtils.isNotBlank(usuarios)){
+            
+            if(this.destinatarios == null){
+                this.destinatarios = new ArrayList<>();
+            }
+            
+            for (Usuario usuario : usuarios) {
+                
+                this.destinatarios.add(new AlertaDestinatario(usuario, this));
+                
+            }
+            
+        }
+    
     }
     
+    public void adicionarDestinatarios(Usuario usuario){
+        
+        if(usuario != null){
+            List<Usuario> usuarios = new ArrayList<>();
+            usuarios.add(usuario);
+            adicionarDestinatarios(usuarios);
+        }
     
+    }
 
     @Override
     public int hashCode() {
