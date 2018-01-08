@@ -52,13 +52,11 @@ public class AlertaDestinatarioCrudMB extends BasicControl {
 
     public List<AlertaDestinatario> getLazyLista() {
         
-        if(lazyLista == null){
-            try {
-                Usuario user = (Usuario) SecurityUtils.getSubject().getPrincipal();
-                lazyLista = service.findAlertasUsuarioNaoVisualizados(Integer.MAX_VALUE, user);
-            } catch (Exception ex) {
-                Logger.getLogger(AlertaDestinatarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
-            }
+         try {
+            Usuario user = (Usuario) SecurityUtils.getSubject().getPrincipal();
+            lazyLista = service.findAlertasUsuarioNaoVisualizados(Integer.MAX_VALUE, user);
+        } catch (Exception ex) {
+            Logger.getLogger(AlertaDestinatarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return lazyLista;
@@ -85,7 +83,14 @@ public class AlertaDestinatarioCrudMB extends BasicControl {
     }
 
     public void setEntity(AlertaDestinatario entity) {
-        this.entity = entity;
+        try {
+            
+            this.entity = service.alterarAlertaVisualizado(entity);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(AlertaDestinatarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
 }

@@ -111,8 +111,11 @@ public class AlertaService extends BasicService<Alerta> {
         }
         
         String caminho = "/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento="+entity.getEvento().getId();
-
-        Alerta alerta = criarAlerta(caminho, "Contrato foi liberado para visualização", entity.getEvento().getContratanteUsuario().getUsuarioCliente());
+        String titulo = "Contrato";
+        String msg = "Contrato foi gerado e liberado para visualização";
+        
+        
+        Alerta alerta = criarAlerta(caminho, titulo, msg, entity.getEvento().getContratanteUsuario().getUsuarioCliente());
         
         this.save(alerta);
         
@@ -122,12 +125,13 @@ public class AlertaService extends BasicService<Alerta> {
      * Instancia um alerta com mensagem, caminho e destinatarios
      *
      * @param caminho
+     * @param titulo
      * @param mensagem
      * @param destinatario
      * @return
      * @throws java.lang.Exception
      */
-    public Alerta criarAlerta(String caminho, String mensagem, Usuario destinatario) throws Exception {
+    public Alerta criarAlerta(String caminho, String titulo, String mensagem, Usuario destinatario) throws Exception {
 
         if (destinatario == null) {
             throw new GenericException("Destinatario do alerta nulo.", ErrorCode.BAD_REQUEST.getCode());
@@ -136,8 +140,9 @@ public class AlertaService extends BasicService<Alerta> {
         Alerta alerta = new Alerta();
 
         alerta.setDataCadastro(new Date());
-        alerta.setMensagem(mensagem);
         alerta.setVigenciaInicial(new Date());
+        alerta.setTitulo(titulo);
+        alerta.setMensagem(mensagem);
         alerta.setLink(caminho);
 
         alerta.adicionarDestinatarios(destinatario);

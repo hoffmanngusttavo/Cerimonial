@@ -59,25 +59,28 @@
                                           exportable="true"
                                           sortBy="#{item.id}"
                                           headerText="#">
-                                    
+
                                     <h:outputText value="#{item.id}"/>
-                                    
+
                                 </p:column>
 
                                 <p:column id="nomeContato" 
                                           exportable="true"
-                                          sortBy="#{item.alerta.mensagem}"
-                                          headerText="Msg">
-                                    <h:outputText value="#{item.alerta.mensagem}" class="reticencias"/>
+                                          sortBy="#{item.alerta.titulo}"
+                                          headerText="Título">
+                                    <h:outputText value="#{item.alerta.titulo}" class="reticencias"/>
                                 </p:column>
 
                                 <p:column headerText="Ações"
                                           style="text-align: center;width: 70px;">
-                                    <p:commandButton icon="fa fa-pencil" 
+                                    <p:commandButton icon="fa fa-info" 
                                                      styleClass="bt-acoes"
+                                                     actionListener="#{AlertaDestinatarioCrudMB.setEntity(item)}"
                                                      process="@this"
+                                                     update=":form:groupRemove, :form:dataTable"
                                                      immediate="true"
-                                                     onclick="window.location = './form.xhtml?id=#{item.id}'"/>
+                                                     title="Visualizar"
+                                                     oncomplete="$('#removeDialogVar').modal('show');"/>
 
                                 </p:column>
                             </p:dataTable>
@@ -85,6 +88,53 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="modal fade" 
+                 id="removeDialogVar" tabindex="-1" 
+                 role="dialog" aria-labelledby="myModal" 
+                 aria-hidden="true" data-keyboard="false" 
+                 data-backdrop="static">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <h:panelGroup id="groupRemove">
+                            <div class="modal-header modal-header-info">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title">#{AlertaDestinatarioCrudMB.entity.alerta.titulo}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h:outputText value="#{AlertaDestinatarioCrudMB.entity.alerta.mensagem}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h:panelGroup layout="block" styleClass="modal-footer">
+
+                                <p:commandLink value="Fechar"
+                                               immediate="true" 
+                                               styleClass="btn btn-default" 
+                                               oncomplete="$('#removeDialogVar').modal('hide');" />
+
+                                <p:commandButton process="@this"
+                                                 onclick="window.open('#{facesContext.externalContext.requestContextPath}#{AlertaDestinatarioCrudMB.entity.alerta.link}')"
+                                                 value="Confira Aqui"
+                                                 rendered="#{not empty AlertaDestinatarioCrudMB.entity.alerta.link}"
+                                                 styleClass="btn btn-success"
+                                                 title="Redirecionar"/>
+
+
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </div>
+
 
         </h:form>
     </ui:define>

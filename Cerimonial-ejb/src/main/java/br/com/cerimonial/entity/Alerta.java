@@ -43,6 +43,10 @@ public class Alerta implements Serializable, ModelInterface {
     @SequenceGenerator(name = "GENERATE_Alerta", sequenceName = "Alerta_pk_seq", allocationSize = 1)
     private Long id;
     
+    @NotNull(message = "O título não pode ser nulo")
+    @Column
+    private String titulo;
+    
     @NotNull(message = "A mensagem não pode ser nula")
     @Column(columnDefinition = "TEXT")
     private String mensagem;
@@ -140,6 +144,14 @@ public class Alerta implements Serializable, ModelInterface {
 
     public List<AlertaDestinatario> getDestinatarios() {
         return destinatarios;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
    

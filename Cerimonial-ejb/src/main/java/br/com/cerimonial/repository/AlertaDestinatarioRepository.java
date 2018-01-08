@@ -39,12 +39,12 @@ public class AlertaDestinatarioRepository extends AbstractRepository<AlertaDesti
             SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
             StringBuilder sb = new StringBuilder();
             sb.append("SELECT dest FROM AlertaDestinatario dest ");
-            sb.append("INNER JOIN dest.alerta alerta ");
-            sb.append("INNER JOIN dest.destinatario usu ");
-            sb.append("WHERE dest.visualizado = false ");
-            sb.append("AND alerta.vigenciaInicial >= '").append(sdfPi.format(data)).append("'");
-            sb.append("AND usu.id = ").append(usuario.getId());
-            sb.append("ORDER BY dest.id DESC ");
+            sb.append(" INNER JOIN dest.alerta alerta ");
+            sb.append(" INNER JOIN dest.destinatario usu ");
+            sb.append(" WHERE dest.visualizado = false ");
+            sb.append(" AND alerta.vigenciaInicial >= '").append(sdfPi.format(data)).append("'");
+            sb.append(" AND usu.id = ").append(usuario.getId());
+            sb.append(" ORDER BY dest.id DESC ");
 
             return getPureListRange(AlertaDestinatario.class, sb.toString(), limit, 0);
             
