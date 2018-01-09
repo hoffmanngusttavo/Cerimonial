@@ -117,6 +117,24 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
         return repository.findAlertasUsuarioNaoVisualizados(limit, usuario, new Date());
 
     }
+    
+    /**
+     * Contabilizar os ultimos alertas que não foram visualizados do usuário logado
+     *
+     * @param usuario
+     * @return
+     * @throws java.lang.Exception
+     */
+    public Integer countAlertasUsuarioNaoVisualizados(Usuario usuario) throws Exception{
+
+        if (usuario == null) {
+            throw new GenericException("Usuário do alerta nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        
+        return repository.countAlertasUsuarioNaoVisualizados(usuario, new Date());
+
+    }
 
     /**
      * Alterar para visualizado o alerta

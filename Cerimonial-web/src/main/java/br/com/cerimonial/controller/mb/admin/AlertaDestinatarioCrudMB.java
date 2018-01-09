@@ -12,6 +12,7 @@ import br.com.cerimonial.service.AlertaDestinatarioService;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -28,47 +29,40 @@ public class AlertaDestinatarioCrudMB extends BasicControl {
     private List<AlertaDestinatario> lazyLista;
     private Long id;
     private AlertaDestinatario entity;
+    private Integer quantidadeAlertas = null;
 
     @EJB
     private AlertaDestinatarioService service;
 
-    /**
-     * Evento invocado ao abrir o alerta para visualizar
-     */
+    @PostConstruct
     public void init() {
 
-        if (id != null) {
-            try {
-                entity = service.getEntity(id);
-                
-                entity = service.alterarAlertaVisualizado(entity);
-                
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            Usuario user = (Usuario) SecurityUtils.getSubject().getPrincipal();
+
+            quantidadeAlertas = service.countAlertasUsuarioNaoVisualizados(user);
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
     public List<AlertaDestinatario> getLazyLista() {
-        
-         try {
+
+        try {
             Usuario user = (Usuario) SecurityUtils.getSubject().getPrincipal();
             lazyLista = service.findAlertasUsuarioNaoVisualizados(Integer.MAX_VALUE, user);
         } catch (Exception ex) {
             Logger.getLogger(AlertaDestinatarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return lazyLista;
     }
 
     public void setLazyLista(List<AlertaDestinatario> lazyLista) {
         this.lazyLista = lazyLista;
     }
-
-
-    
-    
 
     public Long getId() {
         return id;
@@ -84,13 +78,24 @@ public class AlertaDestinatarioCrudMB extends BasicControl {
 
     public void setEntity(AlertaDestinatario entity) {
         try {
-            
+
             this.entity = service.alterarAlertaVisualizado(entity);
-            
+
         } catch (Exception ex) {
             Logger.getLogger(AlertaDestinatarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
+
+    public Integer getQuantidadeAlertas() {
+        return quantidadeAlertas;
+    }
+
+    public void setQuantidadeAlertas(Integer quantidadeAlertas) {
+        this.quantidadeAlertas = quantidadeAlertas;
+    }
+    
+    
+    
 
 }

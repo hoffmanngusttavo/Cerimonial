@@ -42,7 +42,7 @@ public class AlertaDestinatarioRepository extends AbstractRepository<AlertaDesti
             sb.append(" INNER JOIN dest.alerta alerta ");
             sb.append(" INNER JOIN dest.destinatario usu ");
             sb.append(" WHERE dest.visualizado = false ");
-            sb.append(" AND alerta.vigenciaInicial >= '").append(sdfPi.format(data)).append("'");
+            sb.append(" AND alerta.vigenciaInicial <= '").append(sdfPi.format(data)).append("'");
             sb.append(" AND usu.id = ").append(usuario.getId());
             sb.append(" ORDER BY dest.id DESC ");
 
@@ -52,6 +52,26 @@ public class AlertaDestinatarioRepository extends AbstractRepository<AlertaDesti
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return new ArrayList<AlertaDestinatario>();
+    }
+    
+    public int countAlertasUsuarioNaoVisualizados(Usuario usuario, Date data) {
+        try {
+            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT COUNT(dest) FROM AlertaDestinatario dest ");
+            sb.append(" INNER JOIN dest.alerta alerta ");
+            sb.append(" INNER JOIN dest.destinatario usu ");
+            sb.append(" WHERE dest.visualizado = false ");
+            sb.append(" AND alerta.vigenciaInicial <= '").append(sdfPi.format(data)).append("'");
+            sb.append(" AND usu.id = ").append(usuario.getId());
+
+            return getCount(sb.toString());
+            
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return 0;
     }
     
     
