@@ -75,13 +75,13 @@
                                 </h:selectOneMenu>
 
                             </div>
-                            
+
                             <div class="form-group col-md-6">
-                                
+
                                 <label>
-                                    
+
                                 </label>
-                                
+
                                 <h:outputText rendered="#{ContratoEventoMB.entity.liberadoCliente}"
                                               value="Contrato Liberado para o Cliente"/>
                             </div>
@@ -119,11 +119,24 @@
                                  onstart="PF('statusDialog').show();"
                                  oncomplete="PF('statusDialog').hide();"/>
                 
-                 <p:commandButton value="Salvar"
+                
+
+                <p:commandButton value="Salvar"
                                  action="#{ContratoEventoMB.save()}"
                                  icon="fa fa-check" 
                                  update="@form"
                                  id="btn-salvar-contrato"
+                                 class="btn btn-success"
+                                 style="margin-left: 10px;"
+                                 onstart="PF('statusDialog').show();"
+                                 oncomplete="PF('statusDialog').hide();"/>
+                
+                <p:commandButton value="Imprimir"
+                                 onclick="window.open('#{facesContext.externalContext.requestContextPath}/intranet/admin/operacional/pre-evento/partials/impressao-contrato.xhtml?id=#{ContratoEventoMB.entity.id}')"
+                                 rendered="#{ContratoEventoMB.entity.liberadoCliente}"
+                                 icon="fa fa-check" 
+                                 ajax="false"
+                                 id="btn-imprimir-contrato"
                                  class="btn btn-success"
                                  style="margin-left: 10px;"
                                  onstart="PF('statusDialog').show();"

@@ -75,7 +75,7 @@ public class OrcamentoEventoMB extends BasicControl {
 
                 orcamentos = service.findAllByContatoId(contatoEvento.getId());
 
-                if (CollectionUtils.isNotBlank(orcamentos)) {
+                if (CollectionUtils.isBlank(orcamentos)) {
                     instanciarOrcamento();
                 }
 

@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <div class="form-group col-md-12">
+
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12">
+
+                <span class="asteriskField">
+                    ( Preencha pelo menos 1 informação de contato de familiar )
+                </span>
+                <div class="panel panel-primary">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Contatos Familiares</h3>
+                        <div class="pull-right" style="margin-top: -20px;">
+                            <p:commandButton icon="fa fa-plus" 
+                                             styleClass="bt-acoes"
+                                             actionListener="#{FichaNoivoMB.criarNovoContato()}"
+                                             process="@this"
+                                             title="Adicionar Novo"
+                                             update=":form:groupEdit"
+                                             immediate="true"
+                                             oncomplete="$('#editDialogVar').modal('show');"/>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <h:panelGroup id="dataTable">
+
+                            <table class="table table-hover">
+
+                                <thead>
+                                    <th>#</th>
+                                    <th>Nome</th>
+                                    <th>Grau Parentesco</th>
+                                    <th>Telefone</th>
+                                    <th>Ações</th>
+                                </thead>
+
+                                <tbody>
+
+                                    <ui:repeat value="#{FichaNoivoMB.envolvido.pessoa.contatosFamiliares}"
+                                               var="item"
+                                               varStatus="indice">
+
+                                        <tr>
+                                            <td>#{indice.index + 1}</td>
+                                            <td>#{item.nome}</td>
+                                            <td>#{item.grauParentesco.label}</td>
+                                            <td>#{item.telefoneCelular} - #{item.telefoneResidencial}</td>
+                                            <td>
+                                                <p:commandButton icon="fa fa-pencil" 
+                                                                 styleClass="bt-acoes"
+                                                                 actionListener="#{FichaNoivoMB.carregarContato(item)}"
+                                                                 process="@this"
+                                                                 title="Editar"
+                                                                 update=":form:groupEdit"
+                                                                 immediate="true"
+                                                                 oncomplete="$('#editDialogVar').modal('show');">
+                                                    <f:param name="posicaoContatoNoivo" value="#{indice.index}"/>
+                                                </p:commandButton>
+
+                                                <p:commandButton icon="fa fa-trash" 
+                                                                 styleClass="bt-acoes"
+                                                                 actionListener="#{FichaNoivoMB.carregarContato(item)}"
+                                                                 process="@this"
+                                                                 title="Remover"
+                                                                 update=":form:groupRemove"
+                                                                 immediate="true"
+                                                                 oncomplete="$('#removeDialogVar').modal('show');">
+                                                    <f:param name="posicaoContatoNoivo" value="#{indice.index}"/>
+                                                </p:commandButton>
+                                            </td>
+                                        </tr>
+
+                                    </ui:repeat>
+                                </tbody>
+                            </table>
+                        </h:panelGroup>
+
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+</ui:composition>
+

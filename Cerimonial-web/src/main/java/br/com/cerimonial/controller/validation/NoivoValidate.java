@@ -28,7 +28,7 @@ public class NoivoValidate extends AbstractValidatorJSF {
         setMessagesError(new ArrayList<String>());
         setMessagesWarn(new ArrayList<String>());
 
-        if (CollectionUtils.isNotBlank(entity.getContatosFamiliares())) {
+        if (CollectionUtils.isBlank(entity.getContatosFamiliares())) {
             getMessagesWarn().add("Cadastre pelo menos um contato familiar");
         }
 

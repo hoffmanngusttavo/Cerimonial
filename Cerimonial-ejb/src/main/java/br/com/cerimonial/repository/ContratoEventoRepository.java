@@ -49,7 +49,8 @@ public class ContratoEventoRepository extends AbstractRepository<ContratoEvento>
         StringBuilder sql = new StringBuilder();
         sql.append(" SELECT contrato FROM ContratoEvento contrato");
         sql.append(" INNER JOIN contrato.evento evento");
-        sql.append(" INNER JOIN evento.contratante cliente");
+        sql.append(" INNER JOIN evento.contratantes con");
+        sql.append(" INNER JOIN con.pessoa cliente");
         sql.append(" WHERE 1=1");
         sql.append(" AND evento.id = ?1");
         sql.append(" AND cliente.id = ?2");

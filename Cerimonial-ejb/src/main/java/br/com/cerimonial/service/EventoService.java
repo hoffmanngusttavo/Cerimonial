@@ -294,6 +294,38 @@ public class EventoService extends BasicService<Evento> {
         return evento;
 
     }
+    
+    
+    /**
+     * Vai retornar o evento que pertence a somente esse cliente Carregar em
+     * lazy o cerimonia, festa, tipo evento
+     *
+     * @param idEvento
+     * @return
+     */
+    public Evento findEventoLocalizacaoCerimonia(Long idEvento) {
+
+        if (idEvento == null) {
+            throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        Evento evento = repository.getEntity(idEvento);
+
+        if (evento != null) {
+
+            if (evento.getCerimoniaEvento() != null) {
+                evento.getCerimoniaEvento().getId();
+            }
+
+            if (evento.getFestaCerimonia() != null) {
+                evento.getFestaCerimonia().getId();
+            }
+
+        }
+
+        return evento;
+
+    }
 
     /**
      * Vai retornar o evento que pertence a somente esse cliente Carregar em
@@ -314,6 +346,31 @@ public class EventoService extends BasicService<Evento> {
         }
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
+
+        if (evento != null) {
+            if (evento.getContratantes() != null) {
+                evento.getContratantes().size();
+            }
+        }
+
+        return evento;
+
+    }
+    
+    /**
+     * Vai retornar o evento Carregar em
+     * lazy os noivos
+     *
+     * @param idEvento
+     * @return
+     */
+    public Evento findEventoLazyContratante(Long idEvento) {
+
+        if (idEvento == null) {
+            throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        Evento evento = repository.getEntity(idEvento);
 
         if (evento != null) {
             if (evento.getContratantes() != null) {

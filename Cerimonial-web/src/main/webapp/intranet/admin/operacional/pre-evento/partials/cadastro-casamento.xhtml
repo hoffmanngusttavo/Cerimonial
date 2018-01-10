@@ -1,0 +1,394 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="#{LayoutMB.layout}"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Cadastro Casamento
+    </ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam name="idEvento" value="#{FichaNoivoMB.idEvento}" converter="javax.faces.Long"/>
+            <f:viewParam name="tipoEnvolvido" value="#{FichaNoivoMB.tipoEnvolvido}" converter="javax.faces.Integer"/>
+            <f:viewAction action="#{FichaNoivoMB.initEvento()}"/>
+        </f:metadata>
+
+        <h:form prependId="false"
+                id="form">
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=#{FichaNoivoMB.evento.id}">
+                                    <i class="fa fa-list"></i>
+                                    <span>#{FichaNoivoMB.evento.nome} -  Ficha Cadastral Noivo(a)</span>
+                                </p:link>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div style="margin-left: 28px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <h:panelGroup id="groupForm">
+
+                    <div class="form-group col-md-6">
+
+                        <fieldset>
+                            <legend>Dados Pessoais</legend>
+                        </fieldset>
+
+                        <div class="row">
+
+                            <div class="col-lg-12 col-md-12">
+
+                                <div class="form-group col-md-12" id="div-inptNomeNoiva">
+                                    <label>Nome Completo
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputText id="inptNomeNoiva" 
+                                                 value="#{FichaNoivoMB.envolvido.pessoa.nome}" 
+                                                 required="true"
+                                                 requiredMessage="Preencha o nome completo"
+                                                 class="form-control"
+                                                 label="Nome"/>
+
+                                </div>
+
+                                <div class="form-group col-md-6" id="div-inptCpfNoiva">
+                                    <label class="control-label ">Cpf
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputMask mask="999.999.999-99"
+                                                 value="#{FichaNoivoMB.envolvido.pessoa.cpf}"
+                                                 required="true"
+                                                 requiredMessage="Preencha o cpf"
+                                                 id="inptCpfNoiva"
+                                                 class="form-control"
+                                                 label="Cpf">
+                                        <p:ajax event="change"
+                                                process="@this"
+                                                onstart="PF('statusDialog').show();"
+                                                oncomplete="PF('statusDialog').hide();"
+                                                listener="#{FichaNoivoMB.carregarPessoaCpf()}"/>
+                                    </p:inputMask>
+                                </div>
+
+                                <div class="form-group col-md-6" id="div-inptRgNoiva">
+                                    <label class="control-label ">Rg
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputText value="#{FichaNoivoMB.envolvido.pessoa.rg}"
+                                                 required="true"
+                                                 id="inptRgNoiva"
+                                                 requiredMessage="Preencha o rg"
+                                                 class="form-control"
+                                                 label="Rg"/>
+                                </div>
+
+                                <div class="form-group col-md-6" id="div-dataNascimentoNoiva">
+                                    <label>Data de Nascimento
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:calendar pattern="dd/MM/yyyy"
+                                                mask="true" 
+                                                id="dataNascimentoNoiva" 
+                                                value="#{FichaNoivoMB.envolvido.pessoa.dataNascimento}" 
+                                                navigator="true"
+                                                required="true"
+                                                requiredMessage="Preencha a data de nascimento"
+                                                showOn="button"
+                                                locale="pt"
+                                                timeZone="#{initParam.timezone}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"
+                                                           locale="pt_BR"
+                                                           timeZone="#{initParam.timezone}"/>
+                                    </p:calendar>
+
+                                </div>
+
+                                <div class="form-group col-md-6" id="div-inptProfissaoNoiva">
+                                    <label class="control-label ">Profissão
+                                    </label>
+
+                                    <p:inputText value="#{FichaNoivoMB.envolvido.pessoa.profissao}"
+                                                 id="inptProfissaoNoiva"
+                                                 class="form-control"
+                                                 label="Profissão"/>
+                                </div>
+
+                                <div class="form-group col-md-12" id="div-inptEmailNoiva">
+                                    <label>E-mail
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputText id="inptEmailNoiva" 
+                                                 value="#{FichaNoivoMB.envolvido.pessoa.email}" 
+                                                 class="form-control"
+                                                 required="true"
+                                                 requiredMessage="Preencha um e-mai válido"
+                                                 placeholder="Ex: teste@teste.com"
+                                                 label="Email">
+                                        <f:validator validatorId="EmailValidate"/>
+                                    </p:inputText>
+                                </div>
+
+                                <div class="form-group col-md-6" id="div-inptTelefone1Noiva">
+                                    <label>Telefone Residencial
+                                    </label>
+
+                                    <p:inputText value="#{FichaNoivoMB.envolvido.pessoa.telefoneResidencial}"
+                                                 onfocus="functionMaskPhone();"
+                                                 styleClass="phone"
+                                                 class="form-control phone"
+                                                 id="inptTelefone1Noiva"
+                                                 label="Telefone Residencial"/>
+                                </div>
+
+                                <div class="form-group col-md-6" id="div-inptTelefone2Noiva">
+                                    <label>Telefone Celular
+                                    </label>
+
+                                    <p:inputText value="#{FichaNoivoMB.envolvido.pessoa.telefoneCelular}"
+                                                 onfocus="functionMaskPhone();"
+                                                 styleClass="phone"
+                                                 class="form-control phone"
+                                                 id="inptTelefone2Noiva"
+                                                 label="Telefone Celular"/>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class="control-label ">Facebook
+                                    </label>
+
+                                    <p:inputText id="inptFaceNoiva" 
+                                                 class="form-control"
+                                                 value="#{FichaNoivoMB.envolvido.pessoa.facebook}" 
+                                                 label="Facebook"/>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class="control-label ">Instagram
+                                    </label>
+
+                                    <p:inputText id="inptInstaNoiva" 
+                                                 class="form-control"
+                                                 value="#{FichaNoivoMB.envolvido.pessoa.instagram}" 
+                                                 label="Instagram"/>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group col-md-6">
+
+                        <fieldset>
+                            <legend>Endereço</legend>
+                        </fieldset>
+
+                        <div class="row">
+
+                            <div class="col-lg-12 col-md-12">
+
+                                <h:panelGroup id="enderecoGroupNoiva">
+
+                                    <div class="form-group col-md-6" id="div-inptCepNoiva">
+                                        <label>Cep
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <p:inputMask mask="99.999-999"
+                                                     value="#{FichaNoivoMB.envolvido.pessoa.endereco.cep}"
+                                                     required="true"
+                                                     requiredMessage="Preencha o cep do endereço"
+                                                     class="form-control"
+                                                     id="inptCepNoiva"
+                                                     label="Cep">
+                                            <p:ajax id="eventCepFesta" 
+                                                    event="change" 
+                                                    listener="#{FichaNoivoMB.buscaCepNoivo()}" 
+                                                    process="@this"
+                                                    update="enderecoGroupNoiva"
+                                                    onstart="PF('statusDialog').show();"
+                                                    oncomplete="PF('statusDialog').hide();"
+                                                    partialSubmit="true"/>
+                                        </p:inputMask>
+
+                                    </div>
+
+                                    <div class="form-group col-md-6" id="div-inptBairroNoiva">
+                                        <label>Bairro
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <p:inputText id="inptBairroNoiva" 
+                                                     value="#{FichaNoivoMB.envolvido.pessoa.endereco.bairro}" 
+                                                     required="true"
+                                                     requiredMessage="Preencha o bairro"
+                                                     class="form-control"
+                                                     label="Bairro"/>
+
+                                    </div>
+
+                                    <div class="form-group col-md-12" id="div-inptLogNoiva">
+                                        <label>Logradouro
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <p:inputText id="inptLogNoiva" 
+                                                     value="#{FichaNoivoMB.envolvido.pessoa.endereco.logradouro}" 
+                                                     required="true"
+                                                     requiredMessage="Preencha o logradouro"
+                                                     class="form-control"
+                                                     label="Logradouro"/>
+
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Número</label>
+
+                                        <p:inputText id="inptNumeroNoiva" 
+                                                     value="#{FichaNoivoMB.envolvido.pessoa.endereco.numero}" 
+                                                     class="form-control"
+                                                     label="Número"/>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Complemento</label>
+
+                                        <p:inputText id="inptComplementoNoiva" 
+                                                     value="#{FichaNoivoMB.envolvido.pessoa.endereco.complemento}" 
+                                                     class="form-control"
+                                                     label="Complemento"/>
+                                    </div>
+
+                                    <div class="form-group col-md-6" id="div-inptEstadoNoiva">
+                                        <label>Estado 
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <h:selectOneMenu id="inptEstadoNoiva" 
+                                                         value="#{FichaNoivoMB.envolvido.pessoa.endereco.estado}"
+                                                         converter="EntityConverter"
+                                                         rendered="true"
+                                                         requiredMessage="Preencha o estado"
+                                                         class="form-control"
+                                                         label="Estado">
+                                            <f:selectItem itemValue="" 
+                                                          itemLabel="" /> 
+                                            <f:selectItems value="#{FichaNoivoMB.comboEstado}" />
+                                            <p:ajax process="@this"
+                                                    update="@this, inptCidadeNoiva"
+                                                    global="false"/>
+                                        </h:selectOneMenu>
+                                    </div>
+
+                                    <div class="form-group col-md-6" id="div-inptCidadeNoiva">
+                                        <label>Cidade 
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <h:selectOneMenu id="inptCidadeNoiva" 
+                                                         value="#{FichaNoivoMB.envolvido.pessoa.endereco.cidade}"
+                                                         converter="EntityConverter"
+                                                         required="true"
+                                                         requiredMessage="Preencha a cidade"
+                                                         class="form-control"
+                                                         label="Cidade">
+                                            <f:selectItem itemValue="" 
+                                                          itemLabel="" /> 
+                                            <f:selectItems value="#{FichaNoivoMB.getComboCidade(FichaNoivoMB.envolvido.pessoa.endereco.estado)}" />
+                                            <p:ajax process="@this"
+                                                    update="@this"
+                                                    global="false"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <fieldset>
+                            <legend>Observação</legend>
+                        </fieldset>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group col-md-12">
+                                    <p:inputTextarea value="#{FichaNoivoMB.envolvido.pessoa.observacao}"
+                                                     class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ui:include src="./contatos-casamento.xhtml" />
+
+                </h:panelGroup>
+
+
+                <div class="form-group col-md-12">
+                    <p:commandButton value="Salvar"
+                                     action="#{FichaNoivoMB.save()}"
+                                     icon="fa fa-check" 
+                                     style="margin-left: 10px;float: right;margin-top: 30px;"
+                                     id="btn-salvar-cliente-endereco"
+                                     class="btn btn-success"
+                                     process="@this, :form:groupForm"
+                                     onstart="PF('statusDialog').show();validaFormularioCasamento();"
+                                     oncomplete="PF('statusDialog').hide();"/>
+                </div>
+
+                <ui:include src="./dialog-contatos-casamento.xhtml" />
+
+
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="#{LayoutMB.layout}"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Dados do Contratante
+    </ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam name="idEvento" value="#{DadosContratanteEventoMB.idEvento}" converter="javax.faces.Long"/>
+            <f:viewAction action="#{DadosContratanteEventoMB.init()}"/>
+        </f:metadata>
+
+        <h:form prependId="false"
+                id="form">
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=#{DadosContratanteEventoMB.evento.id}">
+                                    <i class="fa fa-list"></i>
+                                    <span>#{DadosContratanteEventoMB.evento.nome} - Dados do Contratante</span>
+                                </p:link>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div style="margin-left: 28px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+
+                <div class="form-group col-md-6">
+                    <fieldset>
+                        <legend>Dados pessoais</legend>
+                    </fieldset>
+
+                    <div class="row">
+
+                        <div class="col-lg-12 col-md-12">
+
+                            <div class="form-group col-md-12"
+                                 id="divInptNome">
+                                <label class="control-label ">Nome
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputText id="inptNome" 
+                                             value="#{DadosContratanteEventoMB.contratante.nome}" 
+                                             required="true"
+                                             requiredMessage="Preencha um nome válido"
+                                             class="form-control"
+                                             label="Nome"/>
+
+                            </div>
+
+                            <div class="form-group col-md-6" id="div-inptCpf">
+                                <label class="control-label ">Cpf
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputMask mask="999.999.999-99"
+                                             value="#{DadosContratanteEventoMB.contratante.cpf}"
+                                             required="true"
+                                             requiredMessage="Preencha um cpf válido"
+                                             id="inptCpf"
+                                             class="form-control"
+                                             label="Cpf"/>
+                            </div>
+
+                            <div class="form-group col-md-6" id="div-inptRg">
+                                <label class="control-label ">Rg
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputText value="#{DadosContratanteEventoMB.contratante.rg}"
+                                             required="true"
+                                             id="inptRg"
+                                             requiredMessage="Preencha um rg válido"
+                                             class="form-control"
+                                             label="Rg"/>
+                            </div>
+
+                            <div class="form-group col-md-12" id="div-inptEmail">
+                                <label>E-mail
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputText id="inptEmail" 
+                                             value="#{DadosContratanteEventoMB.contratante.email}" 
+                                             class="form-control"
+                                             required="true"
+                                             requiredMessage="Preencha um e-mail válido"
+                                             placeholder="Ex: teste@teste.com"
+                                             label="Email">
+                                    <f:validator validatorId="EmailValidate"/>
+                                </p:inputText>
+                            </div>
+
+                            
+
+                            <div class="form-group col-md-6" id="div-inptTelefone1">
+                                <label>Telefone Residencial
+                                </label>
+
+                                <p:inputText value="#{DadosContratanteEventoMB.contratante.telefoneResidencial}"
+                                             onfocus="functionMaskPhone();"
+                                             styleClass="phone"
+                                             class="form-control phone"
+                                             id="inptTelefone1"
+                                             label="Telefone 1"/>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Telefone Celular
+                                </label>
+
+                                <p:inputText value="#{DadosContratanteEventoMB.contratante.telefoneCelular}"
+                                             onfocus="functionMaskPhone();"
+                                             styleClass="phone"
+                                             class="form-control phone"
+                                             id="inptTelefone2"
+                                             label="Telefone 2"/>
+                            </div>
+                            
+                            <div class="form-group col-md-6" id="div-dataNascimento">
+                                <label>Data de Nascimento
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:calendar pattern="dd/MM/yyyy"
+                                            mask="true" 
+                                            id="dataNascimento" 
+                                            value="#{DadosContratanteEventoMB.contratante.dataNascimento}" 
+                                            label="#{bundle.dataNascimento}" 
+                                            navigator="true"
+                                            showOn="button"
+                                            locale="pt"
+                                            timeZone="#{initParam.timezone}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"
+                                                       locale="pt_BR"
+                                                       timeZone="#{initParam.timezone}"/>
+                                </p:calendar>
+
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label class="control-label ">Facebook
+                                </label>
+
+                                <p:inputText id="inptFace" 
+                                             class="form-control"
+                                             value="#{DadosContratanteEventoMB.contratante.facebook}" 
+                                             label="Facebook"/>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label class="control-label ">Instagram
+                                </label>
+
+                                <p:inputText id="inptInsta" 
+                                             class="form-control"
+                                             value="#{DadosContratanteEventoMB.contratante.instagram}" 
+                                             label="Instagram"/>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="form-group col-md-6">
+
+                    <fieldset>
+                        <legend>Endereço</legend>
+                    </fieldset>
+
+                    <div class="row">
+
+                        <div class="col-lg-12 col-md-12">
+
+                            <h:panelGroup id="enderecoGroup">
+                                <div class="form-group col-md-6" id="div-inptCep">
+                                    <label>Cep
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputMask mask="99.999-999"
+                                                 value="#{DadosContratanteEventoMB.contratante.endereco.cep}"
+                                                 required="true"
+                                                 requiredMessage="Preencha um cep válido"
+                                                 class="form-control"
+                                                 id="inptCep"
+                                                 label="Cep">
+                                        <p:ajax id="eventCep" 
+                                                event="change" 
+                                                listener="#{DadosContratanteEventoMB.buscaCep()}" 
+                                                process="@this"
+                                                update="enderecoGroup"
+                                                onstart="PF('statusDialog').show();"
+                                                oncomplete="PF('statusDialog').hide();"
+                                                partialSubmit="true"/>
+                                    </p:inputMask>
+
+                                </div>
+
+                                <div class="form-group col-md-6" id="div-inptBairro">
+                                    <label>Bairro
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputText id="inptBairro" 
+                                                 value="#{DadosContratanteEventoMB.contratante.endereco.bairro}" 
+                                                 required="true"
+                                                 requiredMessage="Preencha um bairro válido"
+                                                 class="form-control"
+                                                 label="Bairro"/>
+
+                                </div>
+
+                                <div class="form-group col-md-12" id="div-inptLog">
+                                    <label>Logradouro
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputText id="inptLog" 
+                                                 value="#{DadosContratanteEventoMB.contratante.endereco.logradouro}" 
+                                                 required="true"
+                                                 requiredMessage="Preencha um logradouro válido"
+                                                 class="form-control"
+                                                 label="Logradouro"/>
+
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label>Número</label>
+
+                                    <p:inputText id="inptNumero" 
+                                                 value="#{DadosContratanteEventoMB.contratante.endereco.numero}" 
+                                                 class="form-control"
+                                                 label="Número"/>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label>Complemento</label>
+
+                                    <p:inputText id="inptComplemento" 
+                                                 value="#{DadosContratanteEventoMB.contratante.endereco.complemento}" 
+                                                 class="form-control"
+                                                 label="Complemento"/>
+                                </div>
+
+                                <div class="form-group col-md-6" id="div-inptEstado">
+                                    <label>Estado 
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <h:selectOneMenu id="inptEstado" 
+                                                     value="#{DadosContratanteEventoMB.contratante.endereco.estado}"
+                                                     converter="EntityConverter"
+                                                     rendered="true"
+                                                     requiredMessage="Preencha um estado válido"
+                                                     class="form-control"
+                                                     label="Estado">
+                                        <f:selectItem itemValue="" 
+                                                      itemLabel="" /> 
+                                        <f:selectItems value="#{DadosContratanteEventoMB.comboEstado}" />
+                                        <p:ajax process="@this"
+                                                update="@this, inptCidade"
+                                                global="false"/>
+                                    </h:selectOneMenu>
+                                </div>
+
+                                <div class="form-group col-md-6" id="div-inptCidade">
+                                    <label>Cidade 
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <h:selectOneMenu id="inptCidade" 
+                                                     value="#{DadosContratanteEventoMB.contratante.endereco.cidade}"
+                                                     converter="EntityConverter"
+                                                     required="true"
+                                                     requiredMessage="Preencha uma cidade válida"
+                                                     class="form-control"
+                                                     label="Cidade">
+                                        <f:selectItem itemValue="" 
+                                                      itemLabel="" /> 
+                                        <f:selectItems value="#{DadosContratanteEventoMB.getComboCidade(DadosContratanteEventoMB.contratante.endereco.estado)}" />
+                                        <p:ajax process="@this"
+                                                update="@this"
+                                                global="false"/>
+                                    </h:selectOneMenu>
+                                </div>
+
+                            </h:panelGroup>
+
+                            <div class="form-group col-md-12">
+                                <p:commandButton value="Salvar"
+                                                 action="#{DadosContratanteEventoMB.save()}"
+                                                 icon="fa fa-check" 
+                                                 style="margin-left: 10px;float: right;margin-top: 30px;"
+                                                 id="btn-salvar-cliente-endereco"
+                                                 class="btn btn-success"
+                                                 onstart="PF('statusDialog').show();validaFormularioContratante();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -76,8 +76,8 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("SELECT contato FROM ContatoEvento contato ");
-            sb.append("LEFT JOIN contato.propostas orcamento ");
-            sb.append("LEFT JOIN orcamento.eventos evento ");
+            sb.append("INNER JOIN contato.propostas orcamento ");
+            sb.append("INNER JOIN orcamento.eventos evento ");
             sb.append("WHERE contato.status IN(");
             sb.append("'").append(ClassificacaoContato.NEGOCIANDO).append("',");
             sb.append("'").append(ClassificacaoContato.AGUARDANDO_RETORNO).append("',");
