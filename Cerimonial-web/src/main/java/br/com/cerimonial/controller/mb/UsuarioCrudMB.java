@@ -104,7 +104,16 @@ public class UsuarioCrudMB extends BasicControl {
             }
         } catch (Exception ex) {
             Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage(ex.getMessage());
+            
+            if(ex.getCause() != null){
+                
+                createFacesErrorMessage(ex.getCause().getMessage());
+            
+            }else{
+            
+                createFacesErrorMessage(ex.getMessage());
+            }
+            
         } finally {
             scrollTopMessage("form");
         }

@@ -82,7 +82,7 @@ public class AuthFilter implements Filter {
         
         //Verifico a autorização
         String requestPath = ((HttpServletRequest)request).getRequestURI().toLowerCase();
-        if(requestPath.contains("/intranet/admin") && usuario != null && !usuario.isMaster()){
+        if(requestPath.contains("/intranet/admin") && usuario != null && (!usuario.isAdmin())){
             ((HttpServletResponse)response).sendRedirect(request.getServletContext().getContextPath()+"/sem-permissao.xhtml");
             return;
         }

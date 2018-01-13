@@ -53,11 +53,34 @@ public class UsuarioService extends BasicService<Usuario> {
     public Usuario getEntity(Long id) throws Exception {
         return repository.getEntity(id);
     }
+    
+    
 
     @Override
     public synchronized Usuario save(Usuario entity) throws Exception {
 
         isValid(entity);
+        
+        if (StringUtils.isNotBlank(entity.getLogin())) {
+            
+            Usuario userBD = null;
+
+            try {
+
+                userBD = this.getUsuarioByLogin(entity.getLogin());
+
+            } catch (Exception e) {
+                System.out.println("Login valido");
+            }
+
+            if (userBD != null) {
+                if (!userBD.getId().equals(entity.getId())) {
+                    throw new GenericException("Este login já existe.", ErrorCode.BAD_REQUEST.getCode());
+                }
+            }
+
+        }
+        
 
         if (entity.getId() == null) {
             alterarSaltSenha(entity);
@@ -147,6 +170,7 @@ public class UsuarioService extends BasicService<Usuario> {
 
         usuario.setMaster(true);
         usuario.setAtivo(true);
+        usuario.setAdmin(true);
 
         return usuario;
     }

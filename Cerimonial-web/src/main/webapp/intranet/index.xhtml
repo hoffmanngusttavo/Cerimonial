@@ -15,13 +15,13 @@
         <h:form prependId="false"
                 id="form">
 
-            <h:panelGroup rendered="#{AutenticacaoMB.usuarioLogado.master}">
+            <h:panelGroup rendered="#{AutenticacaoMB.usuarioLogado.admin}">
                 <script language="javascript">
                     window.location = "#{facesContext.externalContext.requestContextPath}/intranet/admin/index.xhtml?faces-redirect=true";
                 </script>
             </h:panelGroup>
 
-            <h:panelGroup rendered="#{!AutenticacaoMB.usuarioLogado.master}">
+            <h:panelGroup rendered="#{!AutenticacaoMB.usuarioLogado.admin}">
                 <script language="javascript">
                     window.location = "#{facesContext.externalContext.requestContextPath}/intranet/cliente/index.xhtml?faces-redirect=true";
                 </script>
