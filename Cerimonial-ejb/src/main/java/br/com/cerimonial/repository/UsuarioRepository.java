@@ -79,5 +79,12 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
         return super.findRangeListagem(modelFilter); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public List<Usuario> findUsuariosAdminAtivos() {
+        
+        
+        return getPureList(Usuario.class, "select usr from Usuario usr where usr.admin = true and usr.ativo = true");
+        
+    }
+
     
 }

@@ -10,7 +10,6 @@ import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.service.LoginService;
 import br.com.cerimonial.service.UsuarioService;
 import br.com.cerimonial.service.utils.ServiceLookupUtil;
-import br.com.cerimonial.utils.ConstantsProject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,9 +18,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -52,7 +48,7 @@ public class Realm extends AuthorizingRealm {
 
             List<String> listaPermissoes = new ArrayList<String>();
 
-            if (usuario.isMaster()) {
+            if (usuario.isMaster() || usuario.isAdmin()) {
                 
                 listaPermissoes.add("ADMIN");
                 

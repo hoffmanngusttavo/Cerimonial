@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,6 +20,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -57,6 +59,9 @@ public class EventoPessoa implements Serializable, ModelInterface {
     
     @Column(columnDefinition = "boolean default false")
     private boolean contratante = false;
+    
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private EvolucaoPreenchimento evolucaoPreenchimento;
 
     public EventoPessoa() {
     }
@@ -66,6 +71,7 @@ public class EventoPessoa implements Serializable, ModelInterface {
         this.pessoa = pessoa;
         this.tipoEnvolvidoEvento = tipoEnvolvidoEvento;
         this.contratante = contratante;
+        evolucaoPreenchimento = new EvolucaoPreenchimento();
     }
     
     public EventoPessoa(Evento evento, Pessoa pessoa, TipoEnvolvidoEvento tipoEnvolvidoEvento) {
@@ -140,8 +146,23 @@ public class EventoPessoa implements Serializable, ModelInterface {
         this.contratante = contratante;
     }
 
-   
+    public EvolucaoPreenchimento getEvolucaoPreenchimento() {
+        return evolucaoPreenchimento;
+    }
 
+    public void setEvolucaoPreenchimento(EvolucaoPreenchimento evolucaoPreenchimento) {
+        this.evolucaoPreenchimento = evolucaoPreenchimento;
+    }
+
+   
+    public int getPorcentagemPreenchimentoConcluida(){
+        
+        if(this.evolucaoPreenchimento != null){
+            return this.evolucaoPreenchimento.getPorcentagemConcluida();
+        }
+    
+        return 0;
+    }
     
     
     @PrePersist

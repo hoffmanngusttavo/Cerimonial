@@ -307,6 +307,12 @@ public class UsuarioService extends BasicService<Usuario> {
         repository.edit(usuario);
 
     }
+
+    public List<Usuario> findUsuariosAdminAtivos() {
+        
+        return repository.findUsuariosAdminAtivos();
+    
+    }
     
    
 

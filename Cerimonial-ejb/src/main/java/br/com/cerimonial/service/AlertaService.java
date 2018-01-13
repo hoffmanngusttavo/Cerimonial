@@ -11,7 +11,9 @@ import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.AlertaRepository;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -137,6 +139,26 @@ public class AlertaService extends BasicService<Alerta> {
             throw new GenericException("Destinatario do alerta nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 
+        return criarAlerta(caminho, titulo, mensagem, Arrays.asList(destinatario));
+    }
+    
+
+    /**
+     * Instancia um alerta com mensagem, caminho e destinatarios
+     *
+     * @param caminho
+     * @param titulo
+     * @param mensagem
+     * @param destinatarios
+     * @return
+     * @throws java.lang.Exception
+     */
+    public Alerta criarAlerta(String caminho, String titulo, String mensagem, List<Usuario> destinatarios) throws Exception {
+
+        if (CollectionUtils.isBlank(destinatarios)) {
+            throw new GenericException("Destinatarios do alerta não pode ser nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
         Alerta alerta = new Alerta();
 
         alerta.setDataCadastro(new Date());
@@ -145,7 +167,7 @@ public class AlertaService extends BasicService<Alerta> {
         alerta.setMensagem(mensagem);
         alerta.setLink(caminho);
 
-        alerta.adicionarDestinatarios(destinatario);
+        alerta.adicionarDestinatarios(destinatarios);
 
         return alerta;
     }

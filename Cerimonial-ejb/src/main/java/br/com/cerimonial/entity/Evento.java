@@ -472,6 +472,18 @@ public class Evento implements Serializable, ModelInterface {
         return null;
 
     }
+    
+    public EventoPessoa getContratante() {
+
+        for (EventoPessoa env : contratantes) {
+            if (env.isContratante()) {
+                return env;
+            }
+        }
+
+        return null;
+
+    }
 
     public Pessoa getContratanteUsuario() {
 

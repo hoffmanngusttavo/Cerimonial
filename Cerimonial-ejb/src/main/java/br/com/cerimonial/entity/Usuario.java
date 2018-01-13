@@ -76,6 +76,9 @@ public class Usuario implements Serializable, ModelInterface {
     @Column(columnDefinition = "boolean default false")
     private boolean master = false;
     
+    @Column(columnDefinition = "boolean default false")
+    private boolean admin = false;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
     
@@ -188,6 +191,14 @@ public class Usuario implements Serializable, ModelInterface {
 
     public void setLogins(List<Login> logins) {
         this.logins = logins;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     
