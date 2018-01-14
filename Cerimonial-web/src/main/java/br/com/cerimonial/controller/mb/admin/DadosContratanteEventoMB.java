@@ -9,10 +9,13 @@ import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.service.EnderecoService;
+import br.com.cerimonial.service.EventoPessoaService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.PessoaService;
+import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,11 +35,12 @@ import javax.faces.model.SelectItem;
 public class DadosContratanteEventoMB  extends BasicControl{
     
     protected Long idEvento;
-    protected Pessoa contratante;
+    protected EventoPessoa contratante;
     protected Evento evento;
 
     @EJB
-    protected PessoaService service;
+    protected EventoPessoaService service;
+   
     @EJB
     protected EnderecoService enderecoService;
     @EJB
@@ -55,15 +59,26 @@ public class DadosContratanteEventoMB  extends BasicControl{
 
         try {
 
-            List<Pessoa> contratantes = service.getContratantesEvento(idEvento);
-            
-            contratante = contratantes.get(0);
+           evento = eventoService.findEventoLazyContratante(idEvento);
 
-            if (contratante != null && contratante.getEndereco() == null) {
-                contratante.setEndereco(new Endereco());
+            if (evento != null) {
+
+                if (CollectionUtils.isNotBlank(evento.getContratantes())) {
+
+                    contratante = evento.getContratante();
+
+                    if (contratante != null && contratante.getId() != null) {
+                        
+                        contratante = service.findEntityLazy(contratante.getId());
+
+                        if (contratante.getPessoa().getEndereco() == null) {
+                            contratante.getPessoa().setEndereco(new Endereco());
+                        }
+                    }
+
+                }
+
             }
-
-            evento = eventoService.getEventoByIdEventoContratante(idEvento, contratante);
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -80,7 +95,7 @@ public class DadosContratanteEventoMB  extends BasicControl{
     public synchronized String save() {
         try {
 
-            service.editCliente(contratante);
+            service.saveContratante(contratante);
 
             createFacesInfoMessage("Dados gravados com sucesso!");
 
@@ -98,9 +113,9 @@ public class DadosContratanteEventoMB  extends BasicControl{
     }
 
     public void buscaCep() {
-        if (contratante != null && contratante.getEndereco() != null) {
+        if (contratante != null && contratante.getPessoa().getEndereco() != null) {
             try {
-                contratante.setEndereco(enderecoService.buscaCep(contratante.getEndereco()));
+                contratante.getPessoa().setEndereco(enderecoService.buscaCep(contratante.getPessoa().getEndereco()));
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
@@ -123,14 +138,15 @@ public class DadosContratanteEventoMB  extends BasicControl{
         this.idEvento = idEvento;
     }
 
-    public Pessoa getContratante() {
+    public EventoPessoa getContratante() {
         return contratante;
     }
 
-    public void setContratante(Pessoa contratante) {
+    public void setContratante(EventoPessoa contratante) {
         this.contratante = contratante;
     }
 
+   
     public Evento getEvento() {
         return evento;
     }

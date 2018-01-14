@@ -7,6 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Alerta;
 import br.com.cerimonial.entity.ContratoEvento;
+import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -36,6 +38,9 @@ import javax.ejb.TransactionManagementType;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class AlertaService extends BasicService<Alerta> {
+
+    @EJB
+    protected UsuarioService usuarioService;
 
     private AlertaRepository repository;
 
@@ -108,19 +113,66 @@ public class AlertaService extends BasicService<Alerta> {
             throw new GenericException("Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        if(entity.getEvento().getContratanteUsuario() == null){
-             throw new GenericException("Usuario do evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        if (entity.getEvento().getContratanteUsuario() == null) {
+            throw new GenericException("Usuario do evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        String caminho = "/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento="+entity.getEvento().getId();
+
+        String caminho = "/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento=" + entity.getEvento().getId();
         String titulo = "Contrato";
         String msg = "Contrato foi gerado e liberado para visualização";
-        
-        
+
         Alerta alerta = criarAlerta(caminho, titulo, msg, entity.getEvento().getContratanteUsuario().getUsuarioCliente());
-        
+
         this.save(alerta);
-        
+
+    }
+
+    /**
+     * enviar alerta ao administrador que foi concluido preenchimento.
+     *
+     * @param entity
+     */
+    public void enviarAlertaUsuarioAdminContratante(EventoPessoa entity) {
+
+        try {
+
+            List<Usuario> usuarios = usuarioService.findUsuariosAdminAtivos();
+
+            String path = "/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=" + entity.getEvento().getId();
+            String titulo = "Dados do contratante";
+            String mensagem = "Todos as informações obrigatórias do contratante foram preenchidas";
+
+            Alerta alerta = this.criarAlerta(path, titulo, mensagem, usuarios);
+
+            this.save(alerta);
+
+        } catch (Exception ex) {
+            Logger.getLogger(EventoPessoaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    /**
+     * enviar alerta ao administrador que foi concluido preenchimento.
+     * @param entity
+     */
+    public void enviarAlertaUsuarioAdminDadosNoivo(EventoPessoa entity) {
+        try {
+
+            List<Usuario> usuarios = usuarioService.findUsuariosAdminAtivos();
+
+            String path = "/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=" + entity.getEvento().getId();
+            String titulo = "Dados do noivo(a)";
+            String mensagem = "Todos as informações obrigatórias do(a) noivo(a) foram preenchido(a)s";
+
+            Alerta alerta = this.criarAlerta(path, titulo, mensagem, usuarios);
+            
+            this.save(alerta);
+
+        } catch (Exception ex) {
+            Logger.getLogger(EventoPessoaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**
@@ -141,7 +193,6 @@ public class AlertaService extends BasicService<Alerta> {
 
         return criarAlerta(caminho, titulo, mensagem, Arrays.asList(destinatario));
     }
-    
 
     /**
      * Instancia um alerta com mensagem, caminho e destinatarios

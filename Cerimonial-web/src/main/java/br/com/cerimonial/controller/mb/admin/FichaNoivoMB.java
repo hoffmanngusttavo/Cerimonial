@@ -92,7 +92,7 @@ public class FichaNoivoMB extends BasicControl {
                     envolvido = evento.getTipoEnvolvidoEvento(TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
 
                     if (envolvido != null && envolvido.getId() != null) {
-                        envolvido = eventoPessoaService.getEntity(envolvido.getId());
+                        envolvido = eventoPessoaService.findEntityLazy(envolvido.getId());
                     }
 
                 }

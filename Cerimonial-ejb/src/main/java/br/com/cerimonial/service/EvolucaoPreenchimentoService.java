@@ -127,8 +127,8 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
             evolucaoPreenchimento = new EvolucaoPreenchimento(eventoPessoa);
         }
 
-        int totalCamposValidar = 11;
-        int totalCamposValidos = 0;
+        double totalCamposValidar = 11;
+        double totalCamposValidos = 0;
         StringBuilder sb = new StringBuilder();
         Pessoa pessoa = eventoPessoa.getPessoa();
 
@@ -206,9 +206,13 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
 
         }
 
-        evolucaoPreenchimento.setPorcentagemConcluida((totalCamposValidos / totalCamposValidar) * 100);
+        double porcentagem = (totalCamposValidos / totalCamposValidar) * 100;
+
+        evolucaoPreenchimento.setPorcentagemConcluida((int) porcentagem);
 
         evolucaoPreenchimento.setMensagem(sb.toString());
+        
+        eventoPessoa.setEvolucaoPreenchimento(evolucaoPreenchimento);
 
     }
 
@@ -233,8 +237,8 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
             evolucaoPreenchimento = new EvolucaoPreenchimento(eventoPessoa);
         }
 
-        int totalCamposValidar = 12;
-        int totalCamposValidos = 0;
+        double totalCamposValidar = 12;
+        double totalCamposValidos = 0;
         StringBuilder sb = new StringBuilder();
         Pessoa pessoa = eventoPessoa.getPessoa();
 
@@ -318,9 +322,13 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
             sb.append("Contato familiar \n");
         }
 
-        evolucaoPreenchimento.setPorcentagemConcluida((totalCamposValidos / totalCamposValidar) * 100);
+        double porcentagem = (totalCamposValidos / totalCamposValidar) * 100;
+        
+        evolucaoPreenchimento.setPorcentagemConcluida((int)porcentagem);
 
         evolucaoPreenchimento.setMensagem(sb.toString());
+        
+        eventoPessoa.setEvolucaoPreenchimento(evolucaoPreenchimento);
 
     }
 

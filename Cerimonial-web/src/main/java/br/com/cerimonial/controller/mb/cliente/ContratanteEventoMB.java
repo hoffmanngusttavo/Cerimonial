@@ -65,7 +65,7 @@ public class ContratanteEventoMB extends ClienteControl {
 
                     if (contratante != null && contratante.getId() != null) {
                         
-                        contratante = service.getEntity(contratante.getId());
+                        contratante = service.findEntityLazy(contratante.getId());
 
                         if (contratante.getPessoa().getEndereco() == null) {
                             contratante.getPessoa().setEndereco(new Endereco());
@@ -91,7 +91,7 @@ public class ContratanteEventoMB extends ClienteControl {
     public synchronized String save() {
         try {
 
-            service.saveContratante(contratante);
+            service.saveContratanteCliente(contratante);
 
             createFacesInfoMessage("Dados gravados com sucesso!");
 

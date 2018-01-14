@@ -64,7 +64,7 @@
                                 </label>
 
                                 <p:inputText id="inptNome" 
-                                             value="#{DadosContratanteEventoMB.contratante.nome}" 
+                                             value="#{DadosContratanteEventoMB.contratante.pessoa.nome}" 
                                              required="true"
                                              requiredMessage="Preencha um nome válido"
                                              class="form-control"
@@ -80,7 +80,7 @@
                                 </label>
 
                                 <p:inputMask mask="999.999.999-99"
-                                             value="#{DadosContratanteEventoMB.contratante.cpf}"
+                                             value="#{DadosContratanteEventoMB.contratante.pessoa.cpf}"
                                              required="true"
                                              requiredMessage="Preencha um cpf válido"
                                              id="inptCpf"
@@ -95,7 +95,7 @@
                                     </span>
                                 </label>
 
-                                <p:inputText value="#{DadosContratanteEventoMB.contratante.rg}"
+                                <p:inputText value="#{DadosContratanteEventoMB.contratante.pessoa.rg}"
                                              required="true"
                                              id="inptRg"
                                              requiredMessage="Preencha um rg válido"
@@ -111,7 +111,7 @@
                                 </label>
 
                                 <p:inputText id="inptEmail" 
-                                             value="#{DadosContratanteEventoMB.contratante.email}" 
+                                             value="#{DadosContratanteEventoMB.contratante.pessoa.email}" 
                                              class="form-control"
                                              required="true"
                                              requiredMessage="Preencha um e-mail válido"
@@ -127,7 +127,7 @@
                                 <label>Telefone Residencial
                                 </label>
 
-                                <p:inputText value="#{DadosContratanteEventoMB.contratante.telefoneResidencial}"
+                                <p:inputText value="#{DadosContratanteEventoMB.contratante.pessoa.telefoneResidencial}"
                                              onfocus="functionMaskPhone();"
                                              styleClass="phone"
                                              class="form-control phone"
@@ -139,7 +139,7 @@
                                 <label>Telefone Celular
                                 </label>
 
-                                <p:inputText value="#{DadosContratanteEventoMB.contratante.telefoneCelular}"
+                                <p:inputText value="#{DadosContratanteEventoMB.contratante.pessoa.telefoneCelular}"
                                              onfocus="functionMaskPhone();"
                                              styleClass="phone"
                                              class="form-control phone"
@@ -157,7 +157,7 @@
                                 <p:calendar pattern="dd/MM/yyyy"
                                             mask="true" 
                                             id="dataNascimento" 
-                                            value="#{DadosContratanteEventoMB.contratante.dataNascimento}" 
+                                            value="#{DadosContratanteEventoMB.contratante.pessoa.dataNascimento}" 
                                             label="#{bundle.dataNascimento}" 
                                             navigator="true"
                                             showOn="button"
@@ -176,7 +176,7 @@
 
                                 <p:inputText id="inptFace" 
                                              class="form-control"
-                                             value="#{DadosContratanteEventoMB.contratante.facebook}" 
+                                             value="#{DadosContratanteEventoMB.contratante.pessoa.facebook}" 
                                              label="Facebook"/>
                             </div>
 
@@ -186,7 +186,7 @@
 
                                 <p:inputText id="inptInsta" 
                                              class="form-control"
-                                             value="#{DadosContratanteEventoMB.contratante.instagram}" 
+                                             value="#{DadosContratanteEventoMB.contratante.pessoa.instagram}" 
                                              label="Instagram"/>
                             </div>
 
@@ -216,7 +216,7 @@
                                     </label>
 
                                     <p:inputMask mask="99.999-999"
-                                                 value="#{DadosContratanteEventoMB.contratante.endereco.cep}"
+                                                 value="#{DadosContratanteEventoMB.contratante.pessoa.endereco.cep}"
                                                  required="true"
                                                  requiredMessage="Preencha um cep válido"
                                                  class="form-control"
@@ -242,7 +242,7 @@
                                     </label>
 
                                     <p:inputText id="inptBairro" 
-                                                 value="#{DadosContratanteEventoMB.contratante.endereco.bairro}" 
+                                                 value="#{DadosContratanteEventoMB.contratante.pessoa.endereco.bairro}" 
                                                  required="true"
                                                  requiredMessage="Preencha um bairro válido"
                                                  class="form-control"
@@ -258,7 +258,7 @@
                                     </label>
 
                                     <p:inputText id="inptLog" 
-                                                 value="#{DadosContratanteEventoMB.contratante.endereco.logradouro}" 
+                                                 value="#{DadosContratanteEventoMB.contratante.pessoa.endereco.logradouro}" 
                                                  required="true"
                                                  requiredMessage="Preencha um logradouro válido"
                                                  class="form-control"
@@ -270,7 +270,7 @@
                                     <label>Número</label>
 
                                     <p:inputText id="inptNumero" 
-                                                 value="#{DadosContratanteEventoMB.contratante.endereco.numero}" 
+                                                 value="#{DadosContratanteEventoMB.contratante.pessoa.endereco.numero}" 
                                                  class="form-control"
                                                  label="Número"/>
                                 </div>
@@ -279,7 +279,7 @@
                                     <label>Complemento</label>
 
                                     <p:inputText id="inptComplemento" 
-                                                 value="#{DadosContratanteEventoMB.contratante.endereco.complemento}" 
+                                                 value="#{DadosContratanteEventoMB.contratante.pessoa.endereco.complemento}" 
                                                  class="form-control"
                                                  label="Complemento"/>
                                 </div>
@@ -292,7 +292,7 @@
                                     </label>
 
                                     <h:selectOneMenu id="inptEstado" 
-                                                     value="#{DadosContratanteEventoMB.contratante.endereco.estado}"
+                                                     value="#{DadosContratanteEventoMB.contratante.pessoa.endereco.estado}"
                                                      converter="EntityConverter"
                                                      rendered="true"
                                                      requiredMessage="Preencha um estado válido"
@@ -315,7 +315,7 @@
                                     </label>
 
                                     <h:selectOneMenu id="inptCidade" 
-                                                     value="#{DadosContratanteEventoMB.contratante.endereco.cidade}"
+                                                     value="#{DadosContratanteEventoMB.contratante.pessoa.endereco.cidade}"
                                                      converter="EntityConverter"
                                                      required="true"
                                                      requiredMessage="Preencha uma cidade válida"
@@ -323,7 +323,7 @@
                                                      label="Cidade">
                                         <f:selectItem itemValue="" 
                                                       itemLabel="" /> 
-                                        <f:selectItems value="#{DadosContratanteEventoMB.getComboCidade(DadosContratanteEventoMB.contratante.endereco.estado)}" />
+                                        <f:selectItems value="#{DadosContratanteEventoMB.getComboCidade(DadosContratanteEventoMB.contratante.pessoa.endereco.estado)}" />
                                         <p:ajax process="@this"
                                                 update="@this"
                                                 global="false"/>

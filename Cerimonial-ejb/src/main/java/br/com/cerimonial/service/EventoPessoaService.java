@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Alerta;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.Pessoa;
@@ -43,7 +44,7 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
 
     @EJB
     protected AlertaService alertaService;
-    
+
     @EJB
     protected UsuarioService usuarioService;
 
@@ -68,6 +69,36 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
 
             if (entity.getPessoa().getEndereco() != null) {
                 entity.getPessoa().getEndereco().getId();
+            }
+        }
+
+        return entity;
+    }
+
+    /**
+     * Vai carregar objeto em lazy
+     *
+     * @param id
+     * @return
+     * @throws java.lang.Exception
+     */
+    public EventoPessoa findEntityLazy(Long id) throws Exception {
+        EventoPessoa entity = repository.getEntity(id);
+
+        if (entity != null ) {
+
+            if (entity.getPessoa() != null) {
+                if (entity.getPessoa().getContatosFamiliares() != null) {
+                    entity.getPessoa().getContatosFamiliares().size();
+                }
+
+                if (entity.getPessoa().getEndereco() != null) {
+                    entity.getPessoa().getEndereco().getId();
+                }
+            }
+
+            if (entity.getEvolucaoPreenchimento() != null) {
+                entity.getEvolucaoPreenchimento().getId();
             }
         }
 
@@ -100,8 +131,9 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
     /**
      * Salvar os dados do noivo(a) e validar a porcentagem de preenchimento
      * enviar alerta se alcançar os 100%.
+     *
      * @param entity
-     * @return 
+     * @return
      * @throws java.lang.Exception
      */
     public EventoPessoa saveNoivo(EventoPessoa entity) throws Exception {
@@ -121,9 +153,8 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
         }
 
         if (porcentagemConcluidaAntesSalvar < 100 && entity.getPorcentagemPreenchimentoConcluida() == 100) {
-            // TODO
-            // enviar alerta ao administrador que foi cloncluido preenchimento
 
+            alertaService.enviarAlertaUsuarioAdminDadosNoivo(entity);
         }
 
         return entity;
@@ -132,11 +163,12 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
     /**
      * Salvar os dados do contratante e validar a porcentagem de preenchimento
      * enviar alerta se alcançar os 100%.
+     *
      * @param entity
-     * @return 
+     * @return
      * @throws java.lang.Exception
      */
-    public EventoPessoa saveContratante(EventoPessoa entity) throws Exception {
+    public EventoPessoa saveContratanteCliente(EventoPessoa entity) throws Exception {
 
         isValid(entity);
 
@@ -154,55 +186,41 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
 
         if (porcentagemConcluidaAntesSalvar < 100 && entity.getPorcentagemPreenchimentoConcluida() == 100) {
 
-            enviarAlertaUsuarioAdminContratante();
+            alertaService.enviarAlertaUsuarioAdminContratante(entity);
 
         }
 
         return entity;
     }
 
-     
     /**
-     * enviar alerta ao administrador que foi concluido preenchimento.
-     */ 
-    private void enviarAlertaUsuarioAdminContratante() {
+     * Salvar os dados do contratante e validar a porcentagem de preenchimento
+     * enviar alerta se alcançar os 100%.
+     *
+     * @param entity
+     * @return
+     * @throws java.lang.Exception
+     */
+    public EventoPessoa saveContratante(EventoPessoa entity) throws Exception {
 
-        try {
-            
-            List<Usuario> usuarios = usuarioService.findUsuariosAdminAtivos();
-            
-            String path = "";
-            String titulo = "Dados do contratante";
-            String mensagem = "Todos as informações obrigatórias do contratante foram preenchidas";
-            
-            alertaService.criarAlerta(path, titulo, mensagem, usuarios);
-            
-        } catch (Exception ex) {
-            Logger.getLogger(EventoPessoaService.class.getName()).log(Level.SEVERE, null, ex);
+        isValid(entity);
+
+        preenchimentoService.validarPorcentagemPreenchimentoContratante(entity);
+
+        pessoaService.saveCliente(entity.getPessoa());
+
+        if (entity.getId() == null) {
+            repository.create(entity);
+        } else {
+            repository.edit(entity);
         }
 
+        return entity;
     }
-    
-    
-    /**
-     * enviar alerta ao administrador que foi concluido preenchimento.
-     */ 
-    private void enviarAlertaUsuarioAdminDadosNoivo() {
-        try {
-            
-            List<Usuario> usuarios = usuarioService.findUsuariosAdminAtivos();
-            
-            String path = "";
-            String titulo = "Dados do noivo(a)";
-            String mensagem = "Todos as informações obrigatórias do(a) noivo(a) foram preenchido(a)s";
-            
-            alertaService.criarAlerta(path, titulo, mensagem, usuarios);
-            
-        } catch (Exception ex) {
-            Logger.getLogger(EventoPessoaService.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
-    }
+    
+
+   
 
     @Override
     public boolean isValid(EventoPessoa entity) {
