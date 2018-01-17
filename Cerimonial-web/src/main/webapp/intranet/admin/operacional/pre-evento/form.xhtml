@@ -198,9 +198,12 @@
                                     </h3>
                                 </div>
                                 <div class="panel-body" style="min-height: 66px;">
-                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/dados-contratante.xhtml?idEvento=#{PreEventoMB.evento.id}">
+                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/dados-contratante.xhtml?idEvento=#{PreEventoMB.evento.id}"
+                                            title="#{PreEventoMB.evolucaoContratante.mensagem}">
                                         <i class="fa fa-user"></i>
-                                        <span></span>
+                                        <span style="margin-left: 20px;">
+                                            #{PreEventoMB.evolucaoContratante.porcentagemConcluida}% Concluído
+                                        </span>
                                     </p:link>
                                 </div>
                             </div>
@@ -209,7 +212,7 @@
 
                     <h:panelGroup rendered="#{PreEventoMB.evento != null}">
                         <div class="form-group col-md-4 text-center">
-                            <div class="panel panel-success">
+                            <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
                                         Ficha Cadastral Evento
@@ -218,7 +221,9 @@
                                 <div class="panel-body" style="min-height: 66px;">
                                     <p:link href="/intranet/admin/operacional/pre-evento/partials/ficha-cadastral.xhtml?idEvento=#{PreEventoMB.evento.id}">
                                         <i class="fa fa-object-group"></i>
-                                        <span style="margin-left: 20px;">100% Concluído</span>
+                                        <span style="margin-left: 20px;">
+                                            #{PreEventoMB.evolucaoEvento.porcentagemConcluida}% Concluído
+                                        </span>
                                     </p:link>
                                 </div>
                             </div>
@@ -229,7 +234,7 @@
                                               or PreEventoMB.evento.eventoBodas}">
 
                         <div class=" form-group col-md-4 text-center">
-                            <div class="panel panel-warning">
+                            <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
                                         Ficha Cadastral Noivo
@@ -238,7 +243,9 @@
                                 <div class="panel-body" style="min-height: 66px;">
                                     <p:link href="/intranet/admin/operacional/pre-evento/partials/cadastro-casamento.xhtml?idEvento=#{PreEventoMB.evento.id}&amp;tipoEnvolvido=0">
                                         <i class="fa fa-users"></i>
-                                        <span style="margin-left: 20px;">50% Concluído</span>
+                                        <span style="margin-left: 20px;">
+                                            #{PreEventoMB.evolucaoNoivo.porcentagemConcluida}% Concluído
+                                        </span>
                                     </p:link>
                                 </div>
                             </div>
@@ -254,7 +261,9 @@
                                 <div class="panel-body" style="min-height: 66px;">
                                     <p:link href="/intranet/admin/operacional/pre-evento/partials/cadastro-casamento.xhtml?idEvento=#{PreEventoMB.evento.id}&amp;tipoEnvolvido=1">
                                         <i class="fa fa-users"></i>
-                                        <span></span>
+                                        <span style="margin-left: 20px;">
+                                            #{PreEventoMB.evolucaoNoiva.porcentagemConcluida}% Concluído
+                                        </span>
                                     </p:link>
                                 </div>
                             </div>

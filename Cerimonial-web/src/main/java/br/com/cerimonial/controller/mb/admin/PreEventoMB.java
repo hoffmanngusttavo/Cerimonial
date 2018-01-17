@@ -11,9 +11,11 @@ import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.EmailContatoEvento;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.EvolucaoPreenchimento;
 import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.EmailContatoEventoService;
 import br.com.cerimonial.service.EventoService;
+import br.com.cerimonial.service.EvolucaoPreenchimentoService;
 import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.List;
@@ -41,12 +43,20 @@ public class PreEventoMB extends BasicControl {
     protected Long id;
     protected Long idEvento;
 
+    private EvolucaoPreenchimento evolucaoEvento;
+    private EvolucaoPreenchimento evolucaoContratante;
+    private EvolucaoPreenchimento evolucaoNoivo;
+    private EvolucaoPreenchimento evolucaoNoiva;
+
     @EJB
     protected ContatoEventoService service;
     @EJB
     protected EventoService eventoService;
     @EJB
     protected EmailContatoEventoService emailContatoEventoService;
+    @EJB
+    protected EvolucaoPreenchimentoService evolucaoPreenchimentoService;
+
     protected SelectItemUtils selectItemUtils;
 
     public PreEventoMB() {
@@ -63,8 +73,10 @@ public class PreEventoMB extends BasicControl {
             if (id != null) {
 
                 entity = service.getEntity(id);
-                
+
                 evento = eventoService.getEventoByContatoInicial(entity);
+                
+                preencherPorcentagemConcluida(evento);
 
             }
         } catch (Exception ex) {
@@ -80,18 +92,27 @@ public class PreEventoMB extends BasicControl {
         try {
             if (idEvento != null) {
 
-                evento = eventoService.getEntity(idEvento);
-                
+                evento = eventoService.findEventoLazyContratanteEvolucao(idEvento);
+
                 entity = service.getContatoInicialByEvento(evento);
                 
+                preencherPorcentagemConcluida(evento);
+
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
         }
     }
+
+    public void preencherPorcentagemConcluida(Evento evento) {
+
+        evolucaoContratante = evolucaoPreenchimentoService.getEvolucaoDadosContratante(evento);
+        evolucaoNoivo = evolucaoPreenchimentoService.getEvolucaoDadosNoivo(evento);
+        evolucaoNoiva = evolucaoPreenchimentoService.getEvolucaoDadosNoiva(evento);
+        evolucaoEvento = evolucaoPreenchimentoService.getEvolucaoDadosEvento(evento);
     
-     
+    }
 
     /**
      * Evento invocado pela tela para cancelar um evento
@@ -110,8 +131,7 @@ public class PreEventoMB extends BasicControl {
             createFacesErrorMessage("Não foi possível cancelar o evento: " + ex.getCause().getMessage());
         }
     }
-    
-    
+
     /**
      * Evento invocado pela tela para liberar acesso um evento
      */
@@ -129,7 +149,7 @@ public class PreEventoMB extends BasicControl {
             createFacesErrorMessage("Não foi possível liberar o acesso: " + ex.getCause().getMessage());
         }
     }
-    
+
     /**
      * Evento invocado pela tela para liberar acesso um evento
      */
@@ -222,6 +242,18 @@ public class PreEventoMB extends BasicControl {
         }
     }
 
+    /**
+     * Método vai retornar o nome do css que deve atribuir ao panel de acordo
+     * com a porcentagem do preenchimento
+     *
+     * @param evolucaoPreenchimento
+     * @return
+     */
+    public String getNomePanelEvolucaoPreenchimento(EvolucaoPreenchimento evolucaoPreenchimento) {
+
+        return evolucaoPreenchimentoService.getNomePanelEvolucaoPreenchimento(evolucaoPreenchimento);
+    }
+
     public List<SelectItem> getComboModeloEmail() {
         return selectItemUtils.getComboModeloEmail();
     }
@@ -274,8 +306,42 @@ public class PreEventoMB extends BasicControl {
         this.file = file;
     }
 
-   
+    public EvolucaoPreenchimento getEvolucaoEvento() {
+        return evolucaoEvento;
+    }
+
+    public void setEvolucaoEvento(EvolucaoPreenchimento evolucaoEvento) {
+        this.evolucaoEvento = evolucaoEvento;
+    }
+
+    public EvolucaoPreenchimento getEvolucaoNoivo() {
+        return evolucaoNoivo;
+    }
+
+    public void setEvolucaoNoivo(EvolucaoPreenchimento evolucaoNoivo) {
+        this.evolucaoNoivo = evolucaoNoivo;
+    }
+
+    public EvolucaoPreenchimento getEvolucaoNoiva() {
+        return evolucaoNoiva;
+    }
+
+    public void setEvolucaoNoiva(EvolucaoPreenchimento evolucaoNoiva) {
+        this.evolucaoNoiva = evolucaoNoiva;
+    }
+
+    public EvolucaoPreenchimento getEvolucaoContratante() {
+        return evolucaoContratante;
+    }
+
+    public void setEvolucaoContratante(EvolucaoPreenchimento evolucaoContratante) {
+        this.evolucaoContratante = evolucaoContratante;
+    }
+ 
     
+
+    
+
     
 
 }

@@ -9,6 +9,7 @@ import br.com.cerimonial.entity.CerimoniaEvento;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
@@ -213,7 +214,23 @@ public class EventoService extends BasicService<Evento> {
         List<Evento> eventos = repository.getEventosByContatoEvento(contatoEvento);
 
         if (CollectionUtils.isNotBlank(eventos)) {
-            return eventos.get(0);
+
+            for (Evento evento : eventos) {
+
+                if (evento.getContratantes() != null) {
+
+                    evento.getContratantes().size();
+
+                    for (EventoPessoa eventoPessoa : evento.getContratantes()) {
+
+                        if (eventoPessoa.getEvolucaoPreenchimento() != null) {
+                            eventoPessoa.getEvolucaoPreenchimento().getId();
+                        }
+                    }
+                }
+
+                return evento;
+            }
         }
 
         return null;
@@ -251,6 +268,18 @@ public class EventoService extends BasicService<Evento> {
         if (evento != null) {
             if (evento.getContrato() != null) {
                 evento.getContrato().getId();
+            }
+
+            if (evento.getContratantes() != null) {
+
+                evento.getContratantes().size();
+
+                for (EventoPessoa eventoPessoa : evento.getContratantes()) {
+
+                    if (eventoPessoa.getEvolucaoPreenchimento() != null) {
+                        eventoPessoa.getEvolucaoPreenchimento().getId();
+                    }
+                }
             }
 
         }
@@ -294,8 +323,7 @@ public class EventoService extends BasicService<Evento> {
         return evento;
 
     }
-    
-    
+
     /**
      * Vai retornar o evento que pertence a somente esse cliente Carregar em
      * lazy o cerimonia, festa, tipo evento
@@ -356,10 +384,9 @@ public class EventoService extends BasicService<Evento> {
         return evento;
 
     }
-    
+
     /**
-     * Vai retornar o evento Carregar em
-     * lazy os noivos
+     * Vai retornar o evento Carregar em lazy os noivos
      *
      * @param idEvento
      * @return
@@ -375,6 +402,36 @@ public class EventoService extends BasicService<Evento> {
         if (evento != null) {
             if (evento.getContratantes() != null) {
                 evento.getContratantes().size();
+            }
+        }
+
+        return evento;
+
+    }
+
+    /**
+     * Vai retornar o evento Carregar em lazy os noivos
+     *
+     * @param idEvento
+     * @return
+     */
+    public Evento findEventoLazyContratanteEvolucao(Long idEvento) {
+
+        if (idEvento == null) {
+            throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        Evento evento = repository.getEntity(idEvento);
+
+        if (evento.getContratantes() != null) {
+
+            evento.getContratantes().size();
+
+            for (EventoPessoa eventoPessoa : evento.getContratantes()) {
+
+                if (eventoPessoa.getEvolucaoPreenchimento() != null) {
+                    eventoPessoa.getEvolucaoPreenchimento().getId();
+                }
             }
         }
 
@@ -480,9 +537,9 @@ public class EventoService extends BasicService<Evento> {
     public void liberarAcessoSistemaContratanteEvento(Evento evento) throws Exception {
 
         isValid(evento);
-        
+
         evento = getEntity(evento.getId());
-        
+
         Pessoa cliente = pessoaService.criarClienteFromContato(evento.getOrcamentoEvento());
         pessoaService.saveCliente(cliente);
 

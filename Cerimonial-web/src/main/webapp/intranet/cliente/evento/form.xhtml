@@ -69,30 +69,36 @@
                                         </h3>
                                     </div>
                                     <div class="panel-body" style="max-height: 45px;">
-                                        <p:link href="/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=#{EventoClienteMB.evento.id}">
+                                        <p:link href="/intranet/cliente/evento/partials/dados-contratante.xhtml?idEvento=#{EventoClienteMB.evento.id}"
+                                                title="#{EventoClienteMB.evolucaoContratante.mensagem}">
                                             <i class="fa fa-user"></i>
-                                            <span></span>
+                                            <span style="margin-left: 20px;">
+                                                #{EventoClienteMB.evolucaoContratante.porcentagemConcluida}% Concluído
+                                            </span>
                                         </p:link>
                                     </div>
                                 </div>
                             </div>
                         </h:panelGroup>
-                        
-                        
+
+
                         <h:panelGroup rendered="#{EventoClienteMB.evento.eventoCasamento
                                                   or EventoClienteMB.evento.eventoBodas}">
 
                             <div class=" form-group col-md-4 text-center">
-                                <div class="panel panel-warning">
+                                <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <h3 class="panel-title">
                                             Ficha Cadastral Noivo
                                         </h3>
                                     </div>
                                     <div class="panel-body" style="max-height: 45px;">
-                                        <p:link href="/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=#{EventoClienteMB.evento.id}&amp;tipoEnvolvido=0">
+                                        <p:link href="/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=#{EventoClienteMB.evento.id}&amp;tipoEnvolvido=0"
+                                                title="#{EventoClienteMB.evolucaoNoivo.mensagem}">
                                             <i class="fa fa-users"></i>
-                                            <span style="margin-left: 20px;">50% Concluído</span>
+                                            <span style="margin-left: 20px;">
+                                                #{EventoClienteMB.evolucaoNoivo.porcentagemConcluida}% Concluído
+                                            </span>
                                         </p:link>
                                     </div>
                                 </div>
@@ -106,9 +112,12 @@
                                         </h3>
                                     </div>
                                     <div class="panel-body" style="max-height: 45px;">
-                                        <p:link href="/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=#{EventoClienteMB.evento.id}&amp;tipoEnvolvido=1">
+                                        <p:link href="/intranet/cliente/evento/partials/cadastro-casamento.xhtml?idEvento=#{EventoClienteMB.evento.id}&amp;tipoEnvolvido=1"
+                                                title="#{EventoClienteMB.evolucaoNoiva.mensagem}">
                                             <i class="fa fa-users"></i>
-                                            <span></span>
+                                            <span style="margin-left: 20px;">
+                                                #{EventoClienteMB.evolucaoNoiva.porcentagemConcluida}% Concluído
+                                            </span>
                                         </p:link>
                                     </div>
                                 </div>
@@ -135,7 +144,7 @@
 
                         <h:panelGroup rendered="#{EventoClienteMB.evento.categoriaAniversario}">
                             <div class=" form-group col-md-4 text-center">
-                                <div class="panel panel-warning">
+                                <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <h3 class="panel-title">
                                             Ficha Cadastral Aniversariante
@@ -150,9 +159,9 @@
                                 </div>
                             </div>
                         </h:panelGroup>
-                        
+
                         <div class="form-group col-md-4 text-center">
-                            <div class="panel panel-success">
+                            <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
                                         Ficha Cadastral Evento
@@ -167,8 +176,8 @@
                             </div>
                         </div>
 
-                        
-                        
+
+
 
                         <h:panelGroup rendered="#{EventoClienteMB.evento.contrato.liberadoCliente}">
                             <div class="form-group col-md-4 text-center">

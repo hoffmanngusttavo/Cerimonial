@@ -87,7 +87,7 @@ public class FichaCasamentoMB extends ClienteControl {
                     envolvido = evento.getTipoEnvolvidoEvento(TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
                     
                     if(envolvido != null && envolvido.getId() != null){
-                        envolvido = eventoPessoaService.getEntity(envolvido.getId());
+                        envolvido = eventoPessoaService.findEntityLazy(envolvido.getId());
                     }
 
                 }
@@ -120,7 +120,7 @@ public class FichaCasamentoMB extends ClienteControl {
 
             if (validate.isValid()) {
 
-                eventoPessoaService.save(envolvido);
+                eventoPessoaService.saveNoivo(envolvido);
 
                 contatoEnvolvidoService.removerContatos(contatosRemover);
 

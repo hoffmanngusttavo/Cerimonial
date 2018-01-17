@@ -125,7 +125,7 @@ public class FichaNoivoMB extends BasicControl {
 
             if (validate.isValid()) {
 
-                eventoPessoaService.saveNoivo(envolvido);
+                eventoPessoaService.save(envolvido);
 
                 contatoEnvolvidoService.removerContatos(contatosRemover);
 

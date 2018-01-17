@@ -24,6 +24,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -65,7 +66,6 @@ public class EvolucaoPreenchimento implements Serializable, ModelInterface {
     }
     
     
-    
 
     @Override
     public Usuario getModificadoPor() {
@@ -102,6 +102,13 @@ public class EvolucaoPreenchimento implements Serializable, ModelInterface {
     }
 
     public void setMensagem(String mensagem) {
+        
+        if(StringUtils.isNotBlank(mensagem)){
+           StringBuilder sb = new StringBuilder("Você deve preencher os seguintes campos: ");
+           sb.append(mensagem);
+           mensagem = sb.toString();
+        }
+        
         this.mensagem = mensagem;
     }
 

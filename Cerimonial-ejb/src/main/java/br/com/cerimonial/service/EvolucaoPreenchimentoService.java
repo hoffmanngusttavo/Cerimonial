@@ -6,6 +6,7 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Endereco;
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.EvolucaoPreenchimento;
 import br.com.cerimonial.entity.Pessoa;
@@ -94,16 +95,16 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
         if (evolucaoPreenchimento == null) {
             evolucaoPreenchimento = new EvolucaoPreenchimento(eventoPessoa);
         }
-        
-        if(eventoPessoa.isContratante()){
-            
+
+        if (eventoPessoa.isContratante()) {
+
             validarPorcentagemPreenchimentoContratante(eventoPessoa);
-            
-        }else{
-        
+
+        } else {
+
             //TODO: VALIDAR DE ACORDO COM O TIPO DO ENVOLVIDO
         }
-            
+
     }
 
     /**
@@ -174,34 +175,40 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
 
             Endereco endereco = pessoa.getEndereco();
 
-            if (StringUtils.isNotBlank(endereco.getCep())) {
-                totalCamposValidos += 1;
-            } else {
-                sb.append("Cep, \n");
-            }
+            if (endereco != null) {
 
-            if (StringUtils.isNotBlank(endereco.getBairro())) {
-                totalCamposValidos += 1;
-            } else {
-                sb.append("Bairro, \n");
-            }
+                if (StringUtils.isNotBlank(endereco.getCep())) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Cep, \n");
+                }
 
-            if (StringUtils.isNotBlank(endereco.getLogradouro())) {
-                totalCamposValidos += 1;
-            } else {
-                sb.append("Logradouro, \n");
-            }
+                if (StringUtils.isNotBlank(endereco.getBairro())) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Bairro, \n");
+                }
 
-            if (endereco.getCidade() != null) {
-                totalCamposValidos += 1;
-            } else {
-                sb.append("Cidade, \n");
-            }
+                if (StringUtils.isNotBlank(endereco.getLogradouro())) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Logradouro, \n");
+                }
 
-            if (endereco.getEstado() != null) {
-                totalCamposValidos += 1;
+                if (endereco.getCidade() != null) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Cidade, \n");
+                }
+
+                if (endereco.getEstado() != null) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Estado, \n");
+                }
             } else {
-                sb.append("Estado, \n");
+
+                sb.append("Endereço, \n");
             }
 
         }
@@ -211,7 +218,7 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
         evolucaoPreenchimento.setPorcentagemConcluida((int) porcentagem);
 
         evolucaoPreenchimento.setMensagem(sb.toString());
-        
+
         eventoPessoa.setEvolucaoPreenchimento(evolucaoPreenchimento);
 
     }
@@ -284,52 +291,143 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
 
             Endereco endereco = pessoa.getEndereco();
 
-            if (StringUtils.isNotBlank(endereco.getCep())) {
-                totalCamposValidos += 1;
-            } else {
-                sb.append("Cep, \n");
-            }
+            if (endereco != null) {
 
-            if (StringUtils.isNotBlank(endereco.getBairro())) {
-                totalCamposValidos += 1;
-            } else {
-                sb.append("Bairro, \n");
-            }
+                if (StringUtils.isNotBlank(endereco.getCep())) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Cep, \n");
+                }
 
-            if (StringUtils.isNotBlank(endereco.getLogradouro())) {
-                totalCamposValidos += 1;
-            } else {
-                sb.append("Logradouro, \n");
-            }
+                if (StringUtils.isNotBlank(endereco.getBairro())) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Bairro, \n");
+                }
 
-            if (endereco.getCidade() != null) {
-                totalCamposValidos += 1;
-            } else {
-                sb.append("Cidade, \n");
-            }
+                if (StringUtils.isNotBlank(endereco.getLogradouro())) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Logradouro, \n");
+                }
 
-            if (endereco.getEstado() != null) {
-                totalCamposValidos += 1;
+                if (endereco.getCidade() != null) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Cidade, \n");
+                }
+
+                if (endereco.getEstado() != null) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Estado, \n");
+                }
             } else {
-                sb.append("Estado, \n");
+
+                sb.append("Endereço, \n");
             }
 
         }
-        
-        if(CollectionUtils.isNotBlank(pessoa.getContatosFamiliares())){
-             totalCamposValidos += 1;
-        }else{
+
+        if (CollectionUtils.isNotBlank(pessoa.getContatosFamiliares())) {
+            totalCamposValidos += 1;
+        } else {
             sb.append("Contato familiar \n");
         }
 
         double porcentagem = (totalCamposValidos / totalCamposValidar) * 100;
-        
-        evolucaoPreenchimento.setPorcentagemConcluida((int)porcentagem);
+
+        evolucaoPreenchimento.setPorcentagemConcluida((int) porcentagem);
 
         evolucaoPreenchimento.setMensagem(sb.toString());
-        
+
         eventoPessoa.setEvolucaoPreenchimento(evolucaoPreenchimento);
 
+    }
+
+    /**
+     * Método vai retornar o nome do css que deve atribuir ao panel de acordo
+     * com a porcentagem do preenchimento
+     *
+     * @param evolucaoPreenchimento
+     * @return
+     */
+    public String getNomePanelEvolucaoPreenchimento(EvolucaoPreenchimento evolucaoPreenchimento) {
+
+        if (evolucaoPreenchimento != null) {
+
+            if (evolucaoPreenchimento.getPorcentagemConcluida() == 100) {
+                return "success";
+            }
+
+            if (evolucaoPreenchimento.getPorcentagemConcluida() > 0 && evolucaoPreenchimento.getPorcentagemConcluida() < 100) {
+                return "warning";
+            }
+        }
+
+        return "primary";
+    }
+
+    public EvolucaoPreenchimento getEvolucaoDadosContratante(Evento evento) {
+
+        if (evento == null) {
+            return null;
+        }
+
+        if (!evento.isEventoProprioContratante()) {
+
+            EventoPessoa contratante = evento.getContratante();
+
+            if (contratante != null && contratante.getEvolucaoPreenchimento() != null) {
+                return contratante.getEvolucaoPreenchimento();
+            }
+        }
+
+        return null;
+    }
+
+    public EvolucaoPreenchimento getEvolucaoDadosNoivo(Evento evento) {
+
+        if (evento == null) {
+            return null;
+        }
+
+        if (evento.isEventoCasamento() || evento.isEventoBodas()) {
+
+            EventoPessoa noivo = evento.getNoivo();
+
+            if (noivo != null && noivo.getEvolucaoPreenchimento() != null) {
+                return noivo.getEvolucaoPreenchimento();
+            }
+        }
+
+        return null;
+
+    }
+
+    public EvolucaoPreenchimento getEvolucaoDadosNoiva(Evento evento) {
+        if (evento == null) {
+            return null;
+        }
+
+        if (evento.isEventoCasamento() || evento.isEventoBodas()) {
+
+            EventoPessoa noiva = evento.getNoiva();
+
+            if (noiva != null && noiva.getEvolucaoPreenchimento() != null) {
+                return noiva.getEvolucaoPreenchimento();
+            }
+        }
+
+        return null;
+    }
+
+    public EvolucaoPreenchimento getEvolucaoDadosEvento(Evento evento) {
+        if (evento == null) {
+            return null;
+        }
+
+        return null;
     }
 
 }

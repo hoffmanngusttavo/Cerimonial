@@ -6,7 +6,9 @@
 package br.com.cerimonial.controller.mb.cliente;
 
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.EvolucaoPreenchimento;
 import br.com.cerimonial.service.EventoService;
+import br.com.cerimonial.service.EvolucaoPreenchimentoService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -23,9 +25,16 @@ public class EventoClienteMB extends ClienteControl {
 
     protected Long idEvento;
     protected Evento evento;
+    
+    private EvolucaoPreenchimento evolucaoEvento;
+    private EvolucaoPreenchimento evolucaoContratante;
+    private EvolucaoPreenchimento evolucaoNoivo;
+    private EvolucaoPreenchimento evolucaoNoiva;
 
     @EJB
     protected EventoService eventoService;
+    @EJB
+    protected EvolucaoPreenchimentoService evolucaoPreenchimentoService;
 
     /**
      * Evento invocado ao abrir o xhtml de um contato inicial de pre evento
@@ -34,12 +43,24 @@ public class EventoClienteMB extends ClienteControl {
         try {
 
             evento = eventoService.getEventoByIdEventoContratante(idEvento, cliente);
+            
+            preencherPorcentagemConcluida(evento);
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
         }
     }
+    
+     public void preencherPorcentagemConcluida(Evento evento) {
+
+        evolucaoContratante = evolucaoPreenchimentoService.getEvolucaoDadosContratante(evento);
+        evolucaoNoivo = evolucaoPreenchimentoService.getEvolucaoDadosNoivo(evento);
+        evolucaoNoiva = evolucaoPreenchimentoService.getEvolucaoDadosNoiva(evento);
+        evolucaoEvento = evolucaoPreenchimentoService.getEvolucaoDadosEvento(evento);
+    
+    }
+    
 
     public Long getIdEvento() {
         return idEvento;
@@ -57,4 +78,38 @@ public class EventoClienteMB extends ClienteControl {
         this.evento = evento;
     }
 
+    public EvolucaoPreenchimento getEvolucaoEvento() {
+        return evolucaoEvento;
+    }
+
+    public void setEvolucaoEvento(EvolucaoPreenchimento evolucaoEvento) {
+        this.evolucaoEvento = evolucaoEvento;
+    }
+
+    public EvolucaoPreenchimento getEvolucaoContratante() {
+        return evolucaoContratante;
+    }
+
+    public void setEvolucaoContratante(EvolucaoPreenchimento evolucaoContratante) {
+        this.evolucaoContratante = evolucaoContratante;
+    }
+
+    public EvolucaoPreenchimento getEvolucaoNoivo() {
+        return evolucaoNoivo;
+    }
+
+    public void setEvolucaoNoivo(EvolucaoPreenchimento evolucaoNoivo) {
+        this.evolucaoNoivo = evolucaoNoivo;
+    }
+
+    public EvolucaoPreenchimento getEvolucaoNoiva() {
+        return evolucaoNoiva;
+    }
+
+    public void setEvolucaoNoiva(EvolucaoPreenchimento evolucaoNoiva) {
+        this.evolucaoNoiva = evolucaoNoiva;
+    }
+
+    
+    
 }
