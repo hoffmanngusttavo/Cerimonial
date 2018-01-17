@@ -27,6 +27,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -124,6 +125,11 @@ public class Evento implements Serializable, ModelInterface {
      */
     @Column(columnDefinition = "boolean default false")
     private boolean eventoProprioContratante = false;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<EvolucaoPreenchimento> evolucoesPreenchimento;
+    
+    
 
     @Override
     public Long getId() {
@@ -345,6 +351,35 @@ public class Evento implements Serializable, ModelInterface {
     public void setAcessoSistema(AcessoSistema acessoSistema) {
         this.acessoSistema = acessoSistema;
     }
+    
+    public EvolucaoPreenchimento getEvolucaoPreenchimento(){
+        
+        if(CollectionUtils.isNotBlank(evolucoesPreenchimento)){
+            return evolucoesPreenchimento.get(0);
+        }
+        
+        return null;
+    }
+    
+    public void setEvolucaoPreenchimento(EvolucaoPreenchimento evolucaoPreenchimento) {
+         
+        if(evolucaoPreenchimento == null){
+            evolucoesPreenchimento = null;
+        }else{
+            
+            if(evolucoesPreenchimento == null){
+                evolucoesPreenchimento = new ArrayList<>();
+            }
+            
+            if(CollectionUtils.isNotBlank(evolucoesPreenchimento)){
+              evolucoesPreenchimento.set(0, evolucaoPreenchimento);
+            }else{
+                evolucoesPreenchimento.add(evolucaoPreenchimento);
+            }
+            
+        }
+        
+    }
 
     @PrePersist
     @Override
@@ -406,6 +441,17 @@ public class Evento implements Serializable, ModelInterface {
         return "Evento{" + "id=" + id + '}';
     }
 
+    public int getPorcentagemPreenchimentoConcluida(){
+        
+        if(getEvolucaoPreenchimento() != null){
+            return getEvolucaoPreenchimento().getPorcentagemConcluida();
+        }
+    
+        return 0;
+    }
+    
+    
+    
     public EventoPessoa getTipoEnvolvidoEvento(TipoEnvolvidoEvento tipo) {
 
         if (tipo != null) {
@@ -596,5 +642,7 @@ public class Evento implements Serializable, ModelInterface {
 
         return sb.toString();
     }
+
+   
 
 }

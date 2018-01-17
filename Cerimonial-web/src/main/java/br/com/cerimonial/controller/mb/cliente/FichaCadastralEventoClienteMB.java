@@ -75,7 +75,7 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
     public synchronized String save() {
         try {
 
-            eventoService.save(evento);
+            eventoService.saveEventoCliente(evento);
 
             createFacesInfoMessage("Dados gravados com sucesso!");
 

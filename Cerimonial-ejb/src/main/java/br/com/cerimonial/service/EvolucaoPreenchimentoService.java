@@ -345,6 +345,58 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
 
     }
 
+    public void validarPorcentagemPreenchimentoEvento(Evento evento) {
+
+        if (evento == null) {
+            throw new GenericException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        EvolucaoPreenchimento evolucaoPreenchimento = evento.getEvolucaoPreenchimento();
+
+        if (evolucaoPreenchimento == null) {
+            evolucaoPreenchimento = new EvolucaoPreenchimento(evento);
+        }
+        
+        if(evento.isEventoCasamento() || evento.isEventoBodas()){
+            
+            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento);
+            
+        }else if(evento.isEventoAniversario15Anos()){
+            
+            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento);
+            
+        }else if(evento.isEventoAniversario()){
+            
+            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento);
+            
+        }else if(evento.isEventoAniversarioInfantil()){
+            
+            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento);
+        }
+
+        evento.setEvolucaoPreenchimento(evolucaoPreenchimento);
+
+    }
+
+    private EvolucaoPreenchimento validarPorcentagemPreenchimentoCasamento(EvolucaoPreenchimento evolucaoPreenchimento) {
+
+        if (evolucaoPreenchimento != null) {
+
+            double totalCamposValidar = 12;
+            double totalCamposValidos = 0;
+            StringBuilder sb = new StringBuilder();
+
+            double porcentagem = (totalCamposValidos / totalCamposValidar) * 100;
+
+            evolucaoPreenchimento.setPorcentagemConcluida((int) porcentagem);
+
+            evolucaoPreenchimento.setMensagem(sb.toString());
+
+        }
+
+        return evolucaoPreenchimento;
+    }
+
     /**
      * Método vai retornar o nome do css que deve atribuir ao panel de acordo
      * com a porcentagem do preenchimento
@@ -425,6 +477,10 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
     public EvolucaoPreenchimento getEvolucaoDadosEvento(Evento evento) {
         if (evento == null) {
             return null;
+        }
+
+        if (evento.getEvolucaoPreenchimento() != null) {
+            return evento.getEvolucaoPreenchimento();
         }
 
         return null;

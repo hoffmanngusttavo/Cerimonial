@@ -76,7 +76,7 @@ public class FichaCadastralEventoMB extends BasicControl{
     public synchronized String save() {
         try {
 
-            eventoService.save(evento);
+            eventoService.saveEventoAdmin(evento);
 
             createFacesInfoMessage("Dados gravados com sucesso!");
 

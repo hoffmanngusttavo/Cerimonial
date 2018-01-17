@@ -6,7 +6,9 @@
 package br.com.cerimonial.entity;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
@@ -15,6 +17,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -57,12 +60,19 @@ public class EvolucaoPreenchimento implements Serializable, ModelInterface {
     
     @OneToOne(mappedBy = "evolucaoPreenchimento")
     private EventoPessoa eventoPessoa;
+    
+    @ManyToMany(mappedBy = "evolucoesPreenchimento")
+    private List<Evento> eventos;
 
     public EvolucaoPreenchimento() {
     }
 
     public EvolucaoPreenchimento(EventoPessoa eventoPessoa) {
         this.eventoPessoa = eventoPessoa;
+    }
+    
+    public EvolucaoPreenchimento(Evento evento) {
+        this.eventos = Arrays.asList(evento);
     }
     
     
@@ -126,6 +136,14 @@ public class EvolucaoPreenchimento implements Serializable, ModelInterface {
 
     public void setEventoPessoa(EventoPessoa eventoPessoa) {
         this.eventoPessoa = eventoPessoa;
+    }
+
+    public List<Evento> getEventos() {
+        return eventos;
+    }
+
+    public void setEventos(List<Evento> eventos) {
+        this.eventos = eventos;
     }
     
     

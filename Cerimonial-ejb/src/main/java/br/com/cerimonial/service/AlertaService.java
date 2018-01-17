@@ -7,6 +7,7 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Alerta;
 import br.com.cerimonial.entity.ContratoEvento;
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.exceptions.ErrorCode;
@@ -154,6 +155,7 @@ public class AlertaService extends BasicService<Alerta> {
 
     /**
      * enviar alerta ao administrador que foi concluido preenchimento.
+     *
      * @param entity
      */
     public void enviarAlertaUsuarioAdminDadosNoivo(EventoPessoa entity) {
@@ -166,13 +168,31 @@ public class AlertaService extends BasicService<Alerta> {
             String mensagem = "Todos as informações obrigatórias do(a) noivo(a) foram preenchido(a)s";
 
             Alerta alerta = this.criarAlerta(path, titulo, mensagem, usuarios);
-            
+
             this.save(alerta);
 
         } catch (Exception ex) {
             Logger.getLogger(EventoPessoaService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void enviarAlertaUsuarioAdminDadosEvento(Evento entity) {
+        try {
+
+            List<Usuario> usuarios = usuarioService.findUsuariosAdminAtivos();
+
+            String path = "/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=" + entity.getId();
+            String titulo = "Dados do Evento ";
+            String mensagem = "Todos as informações obrigatórias do(a) noivo(a) foram preenchido(a)s";
+
+            Alerta alerta = this.criarAlerta(path, titulo, mensagem, usuarios);
+
+            this.save(alerta);
+
+        } catch (Exception ex) {
+            Logger.getLogger(EventoPessoaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

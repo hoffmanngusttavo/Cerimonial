@@ -54,6 +54,10 @@ public class EventoService extends BasicService<Evento> {
     protected PessoaService pessoaService;
     @EJB
     protected UsuarioService usuarioService;
+    @EJB
+    protected EvolucaoPreenchimentoService preenchimentoService;
+    @EJB
+    protected AlertaService alertaService;
 
     @PostConstruct
     @PostActivate
@@ -76,6 +80,35 @@ public class EventoService extends BasicService<Evento> {
         } else {
             return repository.edit(entity);
         }
+
+    }
+
+    public Evento saveEventoCliente(Evento entity) throws Exception {
+
+        isValid(entity);
+
+        int porcentagemConcluidaAntesSalvar = entity.getPorcentagemPreenchimentoConcluida();
+
+        preenchimentoService.validarPorcentagemPreenchimentoEvento(entity);
+
+        entity = save(entity);
+
+        if (porcentagemConcluidaAntesSalvar < 100 && entity.getPorcentagemPreenchimentoConcluida() == 100) {
+
+            alertaService.enviarAlertaUsuarioAdminDadosEvento(entity);
+        }
+
+        return entity;
+
+    }
+
+    public Evento saveEventoAdmin(Evento entity) throws Exception {
+        
+        isValid(entity);
+
+        preenchimentoService.validarPorcentagemPreenchimentoEvento(entity);
+
+        return save(entity);
 
     }
 
@@ -347,6 +380,10 @@ public class EventoService extends BasicService<Evento> {
 
             if (evento.getFestaCerimonia() != null) {
                 evento.getFestaCerimonia().getId();
+            }
+
+            if (evento.getEvolucaoPreenchimento() != null) {
+                evento.getEvolucaoPreenchimento().getId();
             }
 
         }
