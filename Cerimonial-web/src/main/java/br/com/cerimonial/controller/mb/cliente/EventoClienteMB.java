@@ -52,13 +52,13 @@ public class EventoClienteMB extends ClienteControl {
         }
     }
     
-     public void preencherPorcentagemConcluida(Evento evento) {
+    public void preencherPorcentagemConcluida(Evento evento) {
 
         evolucaoContratante = evolucaoPreenchimentoService.getEvolucaoDadosContratante(evento);
         evolucaoNoivo = evolucaoPreenchimentoService.getEvolucaoDadosNoivo(evento);
         evolucaoNoiva = evolucaoPreenchimentoService.getEvolucaoDadosNoiva(evento);
         evolucaoEvento = evolucaoPreenchimentoService.getEvolucaoDadosEvento(evento);
-    
+
     }
     
 

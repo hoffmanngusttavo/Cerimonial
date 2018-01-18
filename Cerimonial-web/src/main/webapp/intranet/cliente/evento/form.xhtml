@@ -170,7 +170,9 @@
                                 <div class="panel-body" style="max-height: 45px;">
                                     <p:link href="/intranet/cliente/evento/partials/ficha-cadastral.xhtml?idEvento=#{EventoClienteMB.evento.id}">
                                         <i class="fa fa-object-group"></i>
-                                        <span style="margin-left: 20px;">100% Concluído</span>
+                                        <span style="margin-left: 20px;">
+                                            #{EventoClienteMB.evolucaoEvento.porcentagemConcluida}% Concluído
+                                        </span>
                                     </p:link>
                                 </div>
                             </div>

@@ -5,10 +5,12 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.CerimoniaEvento;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.EvolucaoPreenchimento;
+import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
@@ -356,35 +358,157 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
         if (evolucaoPreenchimento == null) {
             evolucaoPreenchimento = new EvolucaoPreenchimento(evento);
         }
-        
-        if(evento.isEventoCasamento() || evento.isEventoBodas()){
-            
-            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento);
-            
-        }else if(evento.isEventoAniversario15Anos()){
-            
-            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento);
-            
-        }else if(evento.isEventoAniversario()){
-            
-            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento);
-            
-        }else if(evento.isEventoAniversarioInfantil()){
-            
-            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento);
+
+        if (evento.isEventoCasamento() || evento.isEventoBodas()) {
+
+            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento, evento);
+
+        } else if (evento.isEventoAniversario15Anos()) {
+
+            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento, evento);
+
+        } else if (evento.isEventoAniversario()) {
+
+            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento, evento);
+
+        } else if (evento.isEventoAniversarioInfantil()) {
+
+            evolucaoPreenchimento = validarPorcentagemPreenchimentoCasamento(evolucaoPreenchimento, evento);
         }
 
         evento.setEvolucaoPreenchimento(evolucaoPreenchimento);
 
     }
 
-    private EvolucaoPreenchimento validarPorcentagemPreenchimentoCasamento(EvolucaoPreenchimento evolucaoPreenchimento) {
+    private EvolucaoPreenchimento validarPorcentagemPreenchimentoCasamento(EvolucaoPreenchimento evolucaoPreenchimento, Evento evento) {
 
-        if (evolucaoPreenchimento != null) {
+        if (evolucaoPreenchimento != null && evento != null) {
 
-            double totalCamposValidar = 12;
+            double totalCamposValidar = 15;
             double totalCamposValidos = 0;
             StringBuilder sb = new StringBuilder();
+
+            if (evento.getQuantidadeConvidados() != null && evento.getQuantidadeConvidados() > 0) {
+                totalCamposValidos += 1;
+            } else {
+                sb.append("Quantidade de convidados, \n");
+            }
+
+            if (evento.getDataInicio() != null) {
+                totalCamposValidos += 1;
+            } else {
+                sb.append("Data de início, \n");
+            }
+
+            if (evento.getHoraInicio() != null) {
+                totalCamposValidos += 1;
+            } else {
+                sb.append("Hora de início, \n");
+            }
+
+            CerimoniaEvento cerimonia = evento.getCerimoniaEvento();
+
+            if (cerimonia != null) {
+
+                if (StringUtils.isNotBlank(cerimonia.getNomeLocalEvento())) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Nome do local da cerimônia, \n");
+                }
+
+                Endereco endereco = cerimonia.getEndereco();
+
+                if (endereco != null) {
+
+                    if (StringUtils.isNotBlank(endereco.getCep())) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Cep, \n");
+                    }
+
+                    if (StringUtils.isNotBlank(endereco.getBairro())) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Bairro, \n");
+                    }
+
+                    if (StringUtils.isNotBlank(endereco.getLogradouro())) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Logradouro, \n");
+                    }
+
+                    if (endereco.getCidade() != null) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Cidade, \n");
+                    }
+
+                    if (endereco.getEstado() != null) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Estado, \n");
+                    }
+                } else {
+
+                    sb.append("Endereço da cerimônia, \n");
+                }
+
+            } else {
+                sb.append("Dados da cerimônia, \n");
+            }
+            
+            FestaCerimonia festaCerimonia = evento.getFestaCerimonia();
+            
+            if (festaCerimonia != null) {
+
+                if (StringUtils.isNotBlank(festaCerimonia.getNomeLocalFesta())) {
+                    totalCamposValidos += 1;
+                } else {
+                    sb.append("Nome do local da festa, \n");
+                }
+
+                Endereco endereco = festaCerimonia.getEndereco();
+
+                if (endereco != null) {
+
+                    if (StringUtils.isNotBlank(endereco.getCep())) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Cep, \n");
+                    }
+
+                    if (StringUtils.isNotBlank(endereco.getBairro())) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Bairro, \n");
+                    }
+
+                    if (StringUtils.isNotBlank(endereco.getLogradouro())) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Logradouro, \n");
+                    }
+
+                    if (endereco.getCidade() != null) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Cidade, \n");
+                    }
+
+                    if (endereco.getEstado() != null) {
+                        totalCamposValidos += 1;
+                    } else {
+                        sb.append("Estado, \n");
+                    }
+                } else {
+
+                    sb.append("Endereço da festa, \n");
+                }
+
+            } else {
+                sb.append("Dados da festa, \n");
+            }
 
             double porcentagem = (totalCamposValidos / totalCamposValidar) * 100;
 

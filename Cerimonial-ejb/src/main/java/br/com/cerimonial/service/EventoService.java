@@ -103,7 +103,7 @@ public class EventoService extends BasicService<Evento> {
     }
 
     public Evento saveEventoAdmin(Evento entity) throws Exception {
-        
+
         isValid(entity);
 
         preenchimentoService.validarPorcentagemPreenchimentoEvento(entity);
@@ -262,6 +262,10 @@ public class EventoService extends BasicService<Evento> {
                     }
                 }
 
+                if (evento.getEvolucaoPreenchimento() != null) {
+                    evento.getEvolucaoPreenchimento().getId();
+                }
+
                 return evento;
             }
         }
@@ -299,8 +303,13 @@ public class EventoService extends BasicService<Evento> {
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
         if (evento != null) {
+            
             if (evento.getContrato() != null) {
                 evento.getContrato().getId();
+            }
+            
+            if (evento.getEvolucaoPreenchimento()!= null) {
+                evento.getEvolucaoPreenchimento().getId();
             }
 
             if (evento.getContratantes() != null) {
@@ -349,6 +358,10 @@ public class EventoService extends BasicService<Evento> {
 
             if (evento.getFestaCerimonia() != null) {
                 evento.getFestaCerimonia().getId();
+            }
+            
+            if (evento.getEvolucaoPreenchimento()!= null) {
+                evento.getEvolucaoPreenchimento().getId();
             }
 
         }
@@ -470,6 +483,10 @@ public class EventoService extends BasicService<Evento> {
                     eventoPessoa.getEvolucaoPreenchimento().getId();
                 }
             }
+        }
+
+        if (evento.getEvolucaoPreenchimento() != null) {
+            evento.getEvolucaoPreenchimento().getId();
         }
 
         return evento;
