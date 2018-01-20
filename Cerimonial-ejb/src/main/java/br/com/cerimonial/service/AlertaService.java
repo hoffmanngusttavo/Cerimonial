@@ -114,6 +114,10 @@ public class AlertaService extends BasicService<Alerta> {
             throw new GenericException("Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 
+        if (entity.getEvento() == null) {
+            throw new GenericException("Evento nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
         if (entity.getEvento().getContratanteUsuario() == null) {
             throw new GenericException("Usuario do evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -135,11 +139,19 @@ public class AlertaService extends BasicService<Alerta> {
      */
     public void enviarAlertaUsuarioAdminContratante(EventoPessoa entity) {
 
+        if (entity == null) {
+            throw new GenericException("EventoPessoa nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (entity.getEvento() == null) {
+            throw new GenericException("Evento nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
         try {
 
             List<Usuario> usuarios = usuarioService.findUsuariosAdminAtivos();
 
-            String path = "/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=" + entity.getEvento().getId();
+            String path = "/intranet/admin/operacional/pre-evento/partials/dados-contratante.xhtml?idEvento" + entity.getEvento().getId();
             String titulo = "Dados do contratante";
             String mensagem = "Todos as informações obrigatórias do contratante foram preenchidas";
 
@@ -159,6 +171,15 @@ public class AlertaService extends BasicService<Alerta> {
      * @param entity
      */
     public void enviarAlertaUsuarioAdminDadosNoivo(EventoPessoa entity) {
+
+        if (entity == null) {
+            throw new GenericException("EventoPessoa nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (entity.getEvento() == null) {
+            throw new GenericException("Evento nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
         try {
 
             List<Usuario> usuarios = usuarioService.findUsuariosAdminAtivos();
@@ -178,13 +199,18 @@ public class AlertaService extends BasicService<Alerta> {
     }
 
     public void enviarAlertaUsuarioAdminDadosEvento(Evento entity) {
+
+        if (entity == null) {
+            throw new GenericException("Evento nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
         try {
 
             List<Usuario> usuarios = usuarioService.findUsuariosAdminAtivos();
 
-            String path = "/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=" + entity.getId();
-            String titulo = "Dados do Evento ";
-            String mensagem = "Todos as informações obrigatórias do(a) noivo(a) foram preenchido(a)s";
+            String path = "/intranet/admin/operacional/pre-evento/partials/ficha-cadastral.xhtml?idEvento=" + entity.getId();
+            String titulo = "Dados do Evento " + entity.getNome();
+            String mensagem = "Todos as informações obrigatórias do evento foram preenchidas";
 
             Alerta alerta = this.criarAlerta(path, titulo, mensagem, usuarios);
 

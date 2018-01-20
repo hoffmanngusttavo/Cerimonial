@@ -30,6 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -129,6 +130,9 @@ public class Evento implements Serializable, ModelInterface {
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<EvolucaoPreenchimento> evolucoesPreenchimento;
     
+    
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private CustoEvento custoEvento;
     
 
     @Override
@@ -380,6 +384,18 @@ public class Evento implements Serializable, ModelInterface {
         }
         
     }
+
+    public CustoEvento getCustoEvento() {
+        return custoEvento;
+    }
+
+    public void setCustoEvento(CustoEvento custoEvento) {
+        this.custoEvento = custoEvento;
+    }
+    
+    
+    
+    
 
     @PrePersist
     @Override

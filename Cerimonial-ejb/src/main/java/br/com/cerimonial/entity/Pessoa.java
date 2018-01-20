@@ -146,6 +146,9 @@ public class Pessoa implements Serializable, ModelInterface {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<CategoriaFornecedor> categoriasFornecedor;
     
+    @OneToMany(mappedBy = "envolvido", fetch = FetchType.LAZY)
+    private List<Lancamento> lancamentos;
+    
 
     
     public Pessoa(TipoEnvolvido tipoEnvolvido, TipoPessoa tipoPessoa) {
@@ -391,6 +394,14 @@ public class Pessoa implements Serializable, ModelInterface {
 
     public List<EventoPessoa> getEventos() {
         return eventos;
+    }
+
+    public List<Lancamento> getLancamentos() {
+        return lancamentos;
+    }
+
+    public void setLancamentos(List<Lancamento> lancamentos) {
+        this.lancamentos = lancamentos;
     }
     
     
