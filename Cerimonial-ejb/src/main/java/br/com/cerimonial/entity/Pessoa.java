@@ -14,7 +14,6 @@ import br.com.cerimonial.utils.CollectionUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -31,7 +30,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -142,10 +140,6 @@ public class Pessoa implements Serializable, ModelInterface {
     @Column(columnDefinition = "boolean default true")
     private boolean carroProprio = true;
 
-    //Particularidades Fornecedor
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<CategoriaFornecedor> categoriasFornecedor;
-    
     @OneToMany(mappedBy = "envolvido", fetch = FetchType.LAZY)
     private List<Lancamento> lancamentos;
     
@@ -331,14 +325,6 @@ public class Pessoa implements Serializable, ModelInterface {
         this.dataNascimento = dataNascimento;
     }
 
-    public List<CategoriaFornecedor> getCategoriasFornecedor() {
-        return categoriasFornecedor;
-    }
-
-    public void setCategoriasFornecedor(List<CategoriaFornecedor> categoriasFornecedor) {
-        this.categoriasFornecedor = categoriasFornecedor;
-    }
-
     public Usuario getUsuarioCliente() {
 
         if (CollectionUtils.isNotBlank(usuariosClientes)) {
@@ -464,29 +450,6 @@ public class Pessoa implements Serializable, ModelInterface {
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
         }
-    }
-
-    public void adicionarCategoria(CategoriaFornecedor categoriaFornecedor) throws Exception {
-        if (categoriaFornecedor == null) {
-            throw new Exception("Categoria Inválida");
-        }
-        if (this.getCategoriasFornecedor() == null) {
-            this.setCategoriasFornecedor(new LinkedList<>());
-        }
-
-        if (!this.getCategoriasFornecedor().contains(categoriaFornecedor)) {
-            this.getCategoriasFornecedor().add(categoriaFornecedor);
-        }
-    }
-
-    public void removerCategoria(CategoriaFornecedor categoriaFornecedor) throws Exception {
-        if (categoriaFornecedor == null) {
-            throw new Exception("Categoria Inválida");
-        }
-        if (this.getCategoriasFornecedor().isEmpty()) {
-            throw new Exception("Lista de Categorias está vazia");
-        }
-        this.getCategoriasFornecedor().remove(categoriaFornecedor);
     }
 
     public void setTipoEnvolvido(TipoEnvolvido tipoEnvolvido) {

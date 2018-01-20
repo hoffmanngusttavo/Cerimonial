@@ -6,6 +6,7 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Servico;
+import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
@@ -19,4 +20,13 @@ public class ServicoRepository extends AbstractRepository<Servico>{
         super(entityManager, Servico.class);
     }
     
+    
+    public List<Servico> findAllByNome(String nome) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM servico as cf");
+        sb.append(" WHERE 1=1 ");
+        sb.append(" AND TRANSLATE(UPPER(cf.nome), 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ', 'aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC')");
+        sb.append(" LIKE TRANSLATE('%").append(nome).append("%', 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ', 'aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC')");
+        return getPureListNative(Servico.class, sb.toString());
+    }
 }

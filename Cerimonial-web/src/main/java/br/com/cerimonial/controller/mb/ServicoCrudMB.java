@@ -6,8 +6,8 @@
 package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.BasicControl;
-import br.com.cerimonial.entity.CategoriaFornecedor;
-import br.com.cerimonial.service.CategoriaFornecedorService;
+import br.com.cerimonial.entity.Servico;
+import br.com.cerimonial.service.ServicoService;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -23,16 +23,16 @@ import org.primefaces.model.SortOrder;
  *
  * @author Gustavo Hoffmann
  */
-@ManagedBean(name = "CategoriaFornecedorCrudMB")
+@ManagedBean(name = "ServicoCrudMB")
 @ViewScoped
-public class CategoriaFornecedorCrudMB extends BasicControl {
+public class ServicoCrudMB extends BasicControl {
 
-    protected LazyDataModel<CategoriaFornecedor> lazyLista;
+    protected LazyDataModel<Servico> lazyLista;
     protected Long id;
-    protected CategoriaFornecedor entity;
-    protected List<CategoriaFornecedor> itensSelecionados;
+    protected Servico entity;
+    protected List<Servico> itensSelecionados;
     @EJB
-    protected CategoriaFornecedorService service;
+    protected ServicoService service;
 
     /**
      * Evento invocado ao abrir o xhtml na edição de um cliente objetivo de
@@ -47,7 +47,7 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            entity = new CategoriaFornecedor();
+            entity = new Servico();
         }
     }
 
@@ -93,15 +93,15 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
      *
      * @return
      */
-    public LazyDataModel<CategoriaFornecedor> getLazyDataModel() {
+    public LazyDataModel<Servico> getLazyDataModel() {
 
         if (lazyLista == null) {
-            lazyLista = new LazyDataModel<CategoriaFornecedor>() {
+            lazyLista = new LazyDataModel<Servico>() {
 
                 @Override
-                public CategoriaFornecedor getRowData(String rowKey) {
-                    List<CategoriaFornecedor> list = (List<CategoriaFornecedor>) getWrappedData();
-                    for (CategoriaFornecedor cli : list) {
+                public Servico getRowData(String rowKey) {
+                    List<Servico> list = (List<Servico>) getWrappedData();
+                    for (Servico cli : list) {
                         if (cli.getId().toString().equals(rowKey)) {
                             return cli;
                         }
@@ -110,12 +110,12 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
                 }
 
                 @Override
-                public Object getRowKey(CategoriaFornecedor object) {
+                public Object getRowKey(Servico object) {
                     return object.getId(); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
-                public List<CategoriaFornecedor> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+                public List<Servico> load(int offset, int max, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
                     int count = service.countAll();
                     this.setRowCount(count);
@@ -125,7 +125,7 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
                         sortAscDesc = SortOrder.ASCENDING == sortOrder ? "ASC" : "DESC";
                     }
 
-                    List<CategoriaFornecedor> clientes = service.findRangeListagem(max, offset, sortField, sortAscDesc);
+                    List<Servico> clientes = service.findRangeListagem(max, offset, sortField, sortAscDesc);
                     return clientes;
                 }
             };
@@ -145,19 +145,19 @@ public class CategoriaFornecedorCrudMB extends BasicControl {
         this.id = id;
     }
 
-    public CategoriaFornecedor getEntity() {
+    public Servico getEntity() {
         return entity;
     }
 
-    public void setEntity(CategoriaFornecedor entity) {
+    public void setEntity(Servico entity) {
         this.entity = entity;
     }
 
-    public List<CategoriaFornecedor> getItensSelecionados() {
+    public List<Servico> getItensSelecionados() {
         return itensSelecionados;
     }
 
-    public void setItensSelecionados(List<CategoriaFornecedor> itensSelecionados) {
+    public void setItensSelecionados(List<Servico> itensSelecionados) {
         this.itensSelecionados = itensSelecionados;
     }
 

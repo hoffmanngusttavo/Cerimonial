@@ -1,0 +1,385 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="#{LayoutMB.layout}"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Lançamento Serviço Contratado
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <f:metadata>
+            <f:viewParam name="idContato" value="#{LancamentoOrcamentoMB.idOrcamento}" converter="javax.faces.Long"/>
+            <f:viewAction action="#{LancamentoOrcamentoMB.init()}"/>
+        </f:metadata>
+
+
+        <h:form prependId="false"
+                enctype="multipart/form-data"
+                id="form">
+
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{OrcamentoEventoMB.contatoEvento.id}">
+                                    <i class="fa fa-list"></i>
+                                    <span>#{OrcamentoEventoMB.contatoEvento.nomeEvento} - Serviço Contratado</span>
+                                </p:link>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div style="margin-left: 28px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <h:panelGroup id="groupOrcamento">
+                <h:panelGroup rendered="#{OrcamentoEventoMB.abrirFormOrcamento}">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Tipo de Evento
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+                            <p:inputText value="#{OrcamentoEventoMB.entity.contatoEvento.tipoEvento.label}" 
+                                         class="form-control"
+                                         disabled="true"/>
+
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label class="control-label ">Modelo de Propostas
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+                            <h:selectOneMenu id="inptModeloProposta" 
+                                             value="#{OrcamentoEventoMB.entity.modeloProposta}"
+                                             disabled="#{OrcamentoEventoMB.entity.id != null}"
+                                             converter="EntityConverter"
+                                             required="true"
+                                             requiredMessage="Preencha um modelo de proposta válido"
+                                             class="form-control"
+                                             label="Tipo de Evento">
+                                <f:selectItem itemValue="" 
+                                              itemLabel="Selecione" /> 
+                                <f:selectItems value="#{OrcamentoEventoMB.comboModelosProposta}" />
+                                <p:ajax process="@this"
+                                        update="groupOrcamento"
+                                        listener="#{OrcamentoEventoMB.carregarDadosProposta}"
+                                        global="false"
+                                        event="change"
+                                        onstart="PF('statusDialog').show();"
+                                        oncomplete="PF('statusDialog').hide();"/>
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label>Valor
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                                <p:commandButton icon="fa fa-pencil" 
+                                                 styleClass="bt-acoes"
+                                                 process="@this"
+                                                 rendered="#{OrcamentoEventoMB.entity.id == null}"
+                                                 title="Alterar Valor"
+                                                 actionListener="#{OrcamentoEventoMB.alterarValorProposta()}"
+                                                 update=":form:groupValorAlterado"
+                                                 immediate="true"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+                            </label>
+                            <h:panelGroup>
+                                <p:inputText value="#{OrcamentoEventoMB.entity.valorProposta}" 
+                                             disabled="true"
+                                             class="form-control">
+                                    <f:convertNumber maxFractionDigits="2"
+                                                     minFractionDigits="2"
+                                                     locale="pt_BR"/>
+                                    <p:ajax process="@this"
+                                            update="@this"
+                                            global="false"/>
+                                </p:inputText>
+
+                                
+                            </h:panelGroup>
+                        </div>
+
+                        <h:panelGroup id="groupValorAlterado">
+                            <h:panelGroup rendered="#{OrcamentoEventoMB.entity.valorAlterado gt -1}">
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label>Valor Alterado
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                            <p:commandButton icon="fa fa-times" 
+                                                         styleClass="bt-acoes"
+                                                         process="@this"
+                                                         rendered="#{OrcamentoEventoMB.entity.id == null}"
+                                                         title="Alterar Valor"
+                                                         actionListener="#{OrcamentoEventoMB.cancelarAlterarValorProposta()}"
+                                                         update=":form:groupValorAlterado"
+                                                         immediate="true"
+                                                         onstart="PF('statusDialog').show();"
+                                                         oncomplete="PF('statusDialog').hide();"/>
+                                        </label>
+                                        <p:inputText value="#{OrcamentoEventoMB.entity.valorAlterado}" 
+                                                     disabled="#{OrcamentoEventoMB.entity.id != null}"
+                                                     class="form-control">
+                                            <f:convertNumber maxFractionDigits="2"
+                                                             minFractionDigits="2"
+                                                             locale="pt_BR"/>
+                                            <p:ajax process="@this"
+                                                    update="@this"
+                                                    global="false"/>
+                                        </p:inputText>
+                                        
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label ">Observação</label>
+                            
+                            <p:editor value="#{OrcamentoEventoMB.entity.proposta}"
+                                      disabled="#{OrcamentoEventoMB.entity.id != null}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p:commandButton value="Salvar Orçamento"
+                                         rendered="#{OrcamentoEventoMB.entity.id == null}"
+                                         action="#{OrcamentoEventoMB.saveOrcamento()}"
+                                         update=":form:groupOrcamento"
+                                         style="margin-right: 10px; float: right;"
+                                         icon="fa fa-check" 
+                                         class="btn btn-success"
+                                         onstart="PF('statusDialog').show();"
+                                         oncomplete="PF('statusDialog').hide();"/>
+
+                        <p:commandButton value="Cancelar/Voltar"
+                                         immediate="true"
+                                         actionListener="#{OrcamentoEventoMB.setAbrirFormOrcamento(false)}"
+                                         process="@this"
+                                         style="margin-right: 10px; float: right;"
+                                         update="groupOrcamento"
+                                         class="btn btn-default"
+                                         icon="fa fa-close"/>
+
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{!OrcamentoEventoMB.abrirFormOrcamento}"
+                              id="groupPropostas">
+                    <div class="row">
+                        <p:commandButton process="@this"
+                                         actionListener="#{OrcamentoEventoMB.instanciarOrcamento()}"
+                                         style="float: right;"
+                                         rendered="#{OrcamentoEventoMB.evento == null}"
+                                         id="btn-criar-orcamento"
+                                         update="groupOrcamento"
+                                         class="btn btn-info"
+                                         icon="fa fa-plus"
+                                         value="Criar Nova Proposta"/>
+
+
+
+                        <table class="table table-hover table-inverse table-striped table-responsive">
+                            <thead class="thead-inverse">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Modelo Proposta</th>
+                                    <th>Valor</th>
+                                    <th>Proposta Aceita</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <p:repeat value="#{OrcamentoEventoMB.orcamentos}" var="proposta">
+                                    <tr>
+                                        <th scope="row">
+                                            <h:outputText value="#{proposta.id}"/>
+                                        </th>
+
+                                        <td>
+                                            <h:outputText value="#{proposta.modeloProposta.titulo}"/>
+                                        </td>
+
+                                        <td>
+                                            <h:outputText value="#{proposta.valorProposta}"
+                                                          rendered="#{proposta.valorAlterado lt 0}">
+                                                <f:convertNumber maxFractionDigits="2"
+                                                                 minFractionDigits="2"
+                                                                 locale="pt_BR"/>
+                                            </h:outputText>
+                                            <h:outputText value="#{proposta.valorAlterado}"
+                                                          rendered="#{proposta.valorAlterado gt -1}">
+                                                <f:convertNumber maxFractionDigits="2"
+                                                                 minFractionDigits="2"
+                                                                 locale="pt_BR"/>
+                                            </h:outputText>
+                                        </td>
+
+                                        <td>
+                                            <h:outputText value="#{proposta.propostaAceita ? 'Sim': 'Não'}"/>
+                                        </td>
+
+                                        <td>
+                                            <p:commandButton icon="fa fa-edit" 
+                                                             styleClass="bt-acoes"
+                                                             process="@this"
+                                                             title="Visualizar Orçamento"
+                                                             actionListener="#{OrcamentoEventoMB.visualizarOrcamento(proposta)}"
+                                                             update=":form:groupOrcamento"/>
+
+                                            <p:commandButton icon="fa fa-download" 
+                                                             styleClass="bt-acoes"
+                                                             process="@this"
+                                                             title="Baixar Arquivo"
+                                                             rendered="#{proposta.arquivo != null}"
+                                                             actionListener="#{OrcamentoEventoMB.baixarArquivoOrcamento(proposta)}"
+                                                             ajax="false"
+                                                             immediate="true"
+                                                             onstart="PF('statusDialog').show();"
+                                                             oncomplete="PF('statusDialog').hide();"/>
+
+                                            <p:commandButton icon="fa fa-check" 
+                                                             styleClass="bt-acoes"
+                                                             actionListener="#{OrcamentoEventoMB.aceitarProposta(proposta)}"
+                                                             process="@this"
+                                                             rendered="#{!proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
+                                                             title="Aprovar Proposta"
+                                                             update=":form:groupPropostas"
+                                                             immediate="true"
+                                                             onstart="PF('statusDialog').show();"
+                                                             oncomplete="PF('statusDialog').hide();"/>
+
+                                            <p:commandButton icon="fa fa-times" 
+                                                             styleClass="bt-acoes"
+                                                             actionListener="#{OrcamentoEventoMB.cancelarProposta(proposta)}"
+                                                             process="@this"
+                                                             rendered="#{proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
+                                                             title="Cancelar Proposta"
+                                                             update=":form:groupPropostas"
+                                                             immediate="true"
+                                                             onstart="PF('statusDialog').show();"
+                                                             oncomplete="PF('statusDialog').hide();"/>
+
+                                            <p:commandButton process="@this"
+                                                             action="#{OrcamentoEventoMB.criarEvento(proposta)}"
+                                                             rendered="#{proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
+                                                             id="btn-criar-criar-ficha"
+                                                             update="@form"
+                                                             styleClass="btn btn-success"
+                                                             value="Criar Evento"
+                                                             onstart="PF('statusDialog').show();"
+                                                             oncomplete="PF('statusDialog').hide();"/>
+
+                                            <p:commandButton icon="fa fa-trash" 
+                                                             styleClass="bt-acoes"
+                                                             actionListener="#{OrcamentoEventoMB.setEntity(proposta)}"
+                                                             rendered="#{OrcamentoEventoMB.evento == null and !proposta.propostaAceita}"
+                                                             process="@this"
+                                                             title="Remover"
+                                                             update=":form:groupRemove"
+                                                             immediate="true"
+                                                             oncomplete="$('#removeDialogVar').modal('show');"/>
+                                        </td>
+                                    </tr>
+                                </p:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+
+
+            <div class="modal fade" 
+                 id="removeDialogVar" tabindex="-1" 
+                 role="dialog" aria-labelledby="myModal" 
+                 aria-hidden="true" data-keyboard="false" 
+                 data-backdrop="static">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <h:panelGroup id="groupRemove">
+                            <div class="modal-header modal-header-danger">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title">Deseja Remover ?</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label ">Id
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-3">
+                                            <h:outputText value="#{OrcamentoEventoMB.entity.id}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label ">Valor
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-3">
+                                            <h:outputText value="#{OrcamentoEventoMB.entity.valorProposta}" >
+                                                <f:convertNumber maxFractionDigits="2"
+                                                                 minFractionDigits="2"
+                                                                 locale="pt_BR"/>
+                                            </h:outputText>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h:panelGroup layout="block" styleClass="modal-footer">
+                                <p:commandLink value="Fechar"
+                                               immediate="true" 
+                                               styleClass="btn btn-default" 
+                                               oncomplete="$('#removeDialogVar').modal('hide');" />
+
+                                <p:commandLink value="Confirmar" 
+                                               action="#{OrcamentoEventoMB.deleteOrcamento()}" 
+                                               update="groupPropostas"
+                                               styleClass="btn btn-primary"
+                                               process="groupRemove" 
+                                               onstart="PF('statusDialog').show();"
+                                               oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

@@ -26,6 +26,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -44,7 +45,6 @@ import org.hibernate.envers.Audited;
 @Audited
 public class Lancamento implements Serializable, ModelInterface {
     
-
     @Id
     @GeneratedValue(generator = "GENERATE_Lancamento", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Lancamento", sequenceName = "Lancamento_pk_seq", allocationSize = 1)
@@ -77,6 +77,9 @@ public class Lancamento implements Serializable, ModelInterface {
     @ManyToOne
     private CustoEvento custoEvento;
     
+    @OneToOne(mappedBy = "lancamento")
+    private OrcamentoEvento orcamentoEvento;
+    
     
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
@@ -84,6 +87,18 @@ public class Lancamento implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
+    public Lancamento() {
+    }
+
+    public Lancamento(TipoLancamento tipoLancamento) {
+        this.tipoLancamento = tipoLancamento;
+    }
+
+    
+    
+    
+    
+    
     @Override
     public Long getId() {
         return id;
@@ -172,6 +187,16 @@ public class Lancamento implements Serializable, ModelInterface {
         this.custoEvento = custoEvento;
     }
 
+    public OrcamentoEvento getOrcamentoEvento() {
+        return orcamentoEvento;
+    }
+
+    public void setOrcamentoEvento(OrcamentoEvento orcamentoEvento) {
+        this.orcamentoEvento = orcamentoEvento;
+    }
+
+    
+    
     public void calcularParcelas(){
         
         this.valorTotalPago = 0D;

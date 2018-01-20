@@ -6,6 +6,7 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
+import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.ModeloProposta;
@@ -63,6 +64,8 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     protected EventoService eventoService;
     @EJB
     protected EventoPessoaService eventoPessoaService;
+    @EJB
+    protected CustoEventoService custoEventoService;
 
     @PostConstruct
     @PostActivate
@@ -356,15 +359,16 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         }
 
         Pessoa cliente = pessoaService.criarClienteFromContato(entity);
-        pessoaService.saveCliente(cliente);
-
         Evento evento = eventoService.criarEventoFromOrcamento(entity);
-        eventoService.save(evento);
-        
-        // atrelar os dados do contratante de acordo com o tipo do evento
+        CustoEvento custoEvento = custoEventoService.criarCustoEvento(entity, evento);
         EventoPessoa eventoPessoa = eventoPessoaService.criarContratanteEvento(evento, cliente);
+        
+        //salvar em cascata
+        pessoaService.saveCliente(cliente);
+        eventoService.save(evento);
         eventoPessoaService.save(eventoPessoa);
-
+        custoEventoService.save(custoEvento);
+        
     }
 
     @Override

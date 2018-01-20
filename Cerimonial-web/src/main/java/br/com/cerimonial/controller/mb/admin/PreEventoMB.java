@@ -77,7 +77,7 @@ public class PreEventoMB extends BasicControl {
                 evento = eventoService.getEventoByContatoInicial(entity);
                 
                 preencherPorcentagemConcluida(evento);
-
+                
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

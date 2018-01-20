@@ -21,6 +21,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -90,6 +91,18 @@ public class ServicoService extends BasicService<Servico>{
         }
         return null;
     }
+    
+    public List<Servico> findAllByNome(String nome) {
+        try {
+            if (StringUtils.isNotEmpty(nome)) {
+                return repository.findAllByNome(nome.toUpperCase());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
+    }
+    
 
     @Override
     public boolean isValid(Servico entity) {

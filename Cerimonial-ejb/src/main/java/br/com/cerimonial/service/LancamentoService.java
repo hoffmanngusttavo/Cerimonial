@@ -99,4 +99,30 @@ public class LancamentoService extends BasicService<Lancamento> {
         return true;
     }
 
+    
+    /**
+     * Vai buscar um lançamento que foi gerado a partir de um orçamento
+     * carregando em lazy as parcelas
+     * @param idOrcamento
+     * @return 
+     */
+    public Lancamento findLancamentoOrcamento(Long idOrcamento) {
+        
+        if (idOrcamento == null) {
+            throw new GenericException("Id Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        Lancamento lancamento = repository.findLancamentoOrcamento(idOrcamento);
+        
+        if(lancamento != null){
+                
+            if(lancamento.getParcelas() != null){
+                lancamento.getParcelas().size();
+            }
+            
+        }
+        
+        return lancamento;
+    }
+
 }

@@ -22,6 +22,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -82,6 +83,10 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Arquivo> anexos;
+    
+    @OneToOne(cascade = {CascadeType.REMOVE})
+    public Lancamento lancamento;
+    
 
     public OrcamentoEvento(ContatoEvento contatoEvento) {
         this.contatoEvento = contatoEvento;
@@ -243,6 +248,16 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
             }
         }
     }
+
+    public Lancamento getLancamento() {
+        return lancamento;
+    }
+
+    public void setLancamento(Lancamento lancamento) {
+        this.lancamento = lancamento;
+    }
+    
+    
     
     public double getValorFinal(){
         if(valorAlterado > -1){

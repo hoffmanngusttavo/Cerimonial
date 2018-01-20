@@ -53,10 +53,6 @@ public class PessoaService extends BasicService<Pessoa> {
 
         if (entity != null) {
             
-            if (entity.getCategoriasFornecedor() != null) {
-                entity.getCategoriasFornecedor().size();
-            }
-            
             if (entity.getEndereco() != null) {
                 entity.getEndereco().getId();
             }

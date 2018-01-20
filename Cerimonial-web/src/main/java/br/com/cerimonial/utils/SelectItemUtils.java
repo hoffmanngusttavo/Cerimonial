@@ -5,23 +5,23 @@
  */
 package br.com.cerimonial.utils;
 
-import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.ModeloEmail;
 import br.com.cerimonial.entity.ModeloProposta;
+import br.com.cerimonial.entity.Servico;
 import br.com.cerimonial.enums.ClassificacaoContato;
 import br.com.cerimonial.enums.TipoEvento;
 import br.com.cerimonial.enums.GrauParentesco;
 import br.com.cerimonial.enums.TipoEmail;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.enums.TipoPessoa;
-import br.com.cerimonial.service.CategoriaFornecedorService;
 import br.com.cerimonial.service.CidadeService;
 import br.com.cerimonial.service.EstadoService;
 import br.com.cerimonial.service.ModeloContratoService;
 import br.com.cerimonial.service.ModeloEmailService;
 import br.com.cerimonial.service.ModeloPropostaService;
+import br.com.cerimonial.service.ServicoService;
 import br.com.cerimonial.service.utils.ServiceLookupUtil;
 import java.util.LinkedList;
 import java.util.List;
@@ -126,14 +126,14 @@ public class SelectItemUtils {
         return items;
     }
 
-    public List<SelectItem> getComboCategoriasFornecedor() {
+    public List<SelectItem> getComboServicos() {
         List<SelectItem> items = new LinkedList<>();
 
         ServiceLookupUtil lookupUtil = new ServiceLookupUtil();
-        CategoriaFornecedorService service = lookupUtil.lookupService(CategoriaFornecedorService.class);
+        ServicoService service = lookupUtil.lookupService(ServicoService.class);
 
         try {
-            for (CategoriaFornecedor item : service.findAll()) {
+            for (Servico item : service.findAll()) {
                 items.add(new SelectItem(item, item.getNome()));
             }
         } catch (Exception ex) {

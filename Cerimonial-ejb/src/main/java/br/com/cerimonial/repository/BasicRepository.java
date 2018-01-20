@@ -10,6 +10,7 @@ import br.com.cerimonial.exceptions.ErrorCode;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -154,8 +155,10 @@ abstract class BasicRepository implements Serializable {
             singleResult = qr.getSingleResult();
         } catch (IllegalArgumentException ex) {
             throw new GenericException("Erro ao recuperar objeto do banco: " + ex.getMessage(), ErrorCode.SERVER_ERROR.getCode());
-        } catch (RuntimeException e) {
+        } catch (NoResultException e) {
             throw new GenericException("Objeto não existe: " + e.getMessage(), ErrorCode.NOT_FOUND.getCode());
+        } catch (RuntimeException e) {
+            throw new GenericException("Erro ao recuperar objeto do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
 
         return (T) singleResult;
@@ -166,8 +169,12 @@ abstract class BasicRepository implements Serializable {
         try {
             Query qr = getEntityManager().createNativeQuery(query);
             singleResult = qr.getSingleResult();
+        } catch (IllegalArgumentException ex) {
+            throw new GenericException("Erro ao recuperar objeto do banco: " + ex.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+        } catch (NoResultException e) {
+            throw new GenericException("Objeto não existe: " + e.getMessage(), ErrorCode.NOT_FOUND.getCode());
         } catch (RuntimeException e) {
-            throw new GenericException("Erro ao recuperar todos os itens do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+            throw new GenericException("Erro ao recuperar objeto do banco: " + e.getMessage(), ErrorCode.SERVER_ERROR.getCode());
         }
         return (T) singleResult;
     }

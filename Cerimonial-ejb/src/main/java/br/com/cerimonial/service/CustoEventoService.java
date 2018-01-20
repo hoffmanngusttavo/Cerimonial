@@ -6,9 +6,14 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.CustoEvento;
+import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.Lancamento;
+import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.CustoEventoRepository;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,8 +35,8 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class CustoEventoService extends BasicService<CustoEvento>{
-    
+public class CustoEventoService extends BasicService<CustoEvento> {
+
     private CustoEventoRepository repository;
 
     @PostConstruct
@@ -51,7 +56,11 @@ public class CustoEventoService extends BasicService<CustoEvento>{
 
         isValid(entity);
 
-        return repository.create(entity);
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
+        }
     }
 
     public List<CustoEvento> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {
@@ -71,14 +80,70 @@ public class CustoEventoService extends BasicService<CustoEvento>{
         if (entity == null) {
             throw new GenericException("Custo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         if (entity.getEvento() == null) {
             throw new GenericException("Evento de Custo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         return true;
     }
 
-    
-    
+    /**
+     * Vai retornar o custo do evento carregando em lazy os lançamentos e
+     * parcelas
+     *
+     * @param idEvento
+     * @return
+     */
+    public CustoEvento findCustoEventoByIdEvento(Long idEvento) {
+
+        if (idEvento == null) {
+            throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        CustoEvento custo = repository.findCustoEventoByIdEvento(idEvento);
+
+        if (custo != null) {
+
+            if (custo.getLancamentos() != null) {
+                
+                custo.getLancamentos().size();
+                
+                for (Lancamento lancamento : custo.getLancamentos()) {
+                    
+                    if (lancamento.getParcelas() != null) {
+                        
+                        lancamento.getParcelas().size();
+                    }
+                }
+            }
+        }
+        return custo;
+    }
+
+    /**
+     * Só vai instanciar um novo custo de evento
+     * @param orcamento
+     * @param evento
+     * @return 
+     */
+    public CustoEvento criarCustoEvento(OrcamentoEvento orcamento, Evento evento) {
+        
+        if (orcamento == null) {
+            throw new GenericException("Orçamento Nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if (evento == null) {
+            throw new GenericException("Evento Nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        CustoEvento custoEvento = evento.getCustoEvento();
+        
+        if(custoEvento == null){
+            custoEvento = new CustoEvento(evento);
+        }
+        
+        return custoEvento;
+    }
+
 }

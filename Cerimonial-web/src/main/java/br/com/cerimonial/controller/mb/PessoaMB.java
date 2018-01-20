@@ -8,10 +8,8 @@ package br.com.cerimonial.controller.mb;
 import br.com.cerimonial.controller.AbstractFilter;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.controller.filter.FilterPessoa;
-import br.com.cerimonial.entity.CategoriaFornecedor;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Pessoa;
-import br.com.cerimonial.service.CategoriaFornecedorService;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.utils.SelectItemUtils;
@@ -39,15 +37,14 @@ public class PessoaMB extends BasicControl {
     protected PessoaService service;
     @EJB
     protected EnderecoService enderecoService;
-    @EJB
-    protected CategoriaFornecedorService categoriaFornecedorService;
+    
     
     protected LazyDataModel<Pessoa> lazyLista;
     protected AbstractFilter filtros;
     protected Long id;
     protected Pessoa entity;
     protected List<Pessoa> itensSelecionados;
-    private CategoriaFornecedor categoriaFornecedor;
+    
     
     protected final SelectItemUtils selectItemUtils;
     
@@ -170,49 +167,6 @@ public class PessoaMB extends BasicControl {
         }
         return lazyLista;
     }
-    
-    
-    public void removerCategoria(CategoriaFornecedor categoria) {
-        try {
-            if (entity != null) {
-                entity.removerCategoria(categoria);
-                createFacesInfoMessage("Categoria removida com sucesso!");
-            }
-        } catch (Exception e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
-            createFacesErrorMessage(e.getMessage());
-        }
-    }
-    
-    public void adicionarCategoria() {
-        try {
-            if (entity != null) {
-                entity.adicionarCategoria(categoriaFornecedor);
-                categoriaFornecedor = null;
-                createFacesInfoMessage("Categoria adicionada com sucesso!");
-            }
-        } catch (Exception e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
-            createFacesErrorMessage(e.getMessage());
-        }
-    }
-    
-    
-    
-    
-
-    /**
-     * Método invocado pela tela form de fornecedor para buscar
-     * uma categoria pelo nome
-     * @param nome
-     * @return 
-     */
-    public List<CategoriaFornecedor> completeCategorias(String nome) {
-        return categoriaFornecedorService.findAllByNome(nome);
-    }
-
-    
-    
     
 
     public List<SelectItem> getComboCidade(Estado estado) {
