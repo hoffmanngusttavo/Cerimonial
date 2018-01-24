@@ -84,13 +84,13 @@ public class EventoRepository extends AbstractRepository<Evento> {
     /**
      * Recuperar um evento a partir de um orçamento
      *
-     * @param orcamento
+     * @param idOrcamento
      * @return
      */
-    public List<Evento> getEventosByOrcamento(OrcamentoEvento orcamento) {
+    public List<Evento> getEventosByOrcamento(Long idOrcamento) {
 
         try {
-            return getPureList(Evento.class, "select eve from Evento eve where eve.orcamentoEvento.id = ?1", orcamento.getId());
+            return getPureList(Evento.class, "select eve from Evento eve where eve.orcamentoEvento.id = ?1", idOrcamento);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }

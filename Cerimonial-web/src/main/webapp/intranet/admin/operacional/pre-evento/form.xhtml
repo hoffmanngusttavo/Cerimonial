@@ -190,10 +190,11 @@
                                                                  and PreEventoMB.evento.orcamentoEvento.lancamento == null}"
                                                      styleClass="btn btn-warning"
                                                      title="Gerar Lançamento"
+                                                     style="margin-left: 20px;"
                                                      value="Gerar Lançamento"
                                                      onstart="PF('statusDialog').show();"
                                                      oncomplete="PF('statusDialog').hide();"
-                                                     onclick="window.location='#{facesContext.externalContext.requestContextPath}/intranet/admin/operacional/pre-evento/partials/lancamento-orcamento?idOrcamento=#{PreEventoMB.evento.orcamentoEvento.id}'"/>
+                                                     onclick="window.location='#{facesContext.externalContext.requestContextPath}/intranet/admin/operacional/pre-evento/partials/lancamento-orcamento.xhtml?idOrcamento=#{PreEventoMB.evento.orcamentoEvento.id}'"/>
 
                                 </div>
                             </div>

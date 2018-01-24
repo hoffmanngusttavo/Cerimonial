@@ -44,43 +44,43 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Lancamento implements Serializable, ModelInterface {
-    
+
     @Id
     @GeneratedValue(generator = "GENERATE_Lancamento", strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "GENERATE_Lancamento", sequenceName = "Lancamento_pk_seq", allocationSize = 1)
     private Long id;
-    
+
     @NotNull(message = "O tipo não pode ser nulo")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoLancamento tipoLancamento = TipoLancamento.DESPESA;
-    
+
     @DecimalMin("0.0")
     @Column(precision = 16, scale = 2)
     private Double valorBase;
-    
+
     @DecimalMin("0.0")
     @Column(precision = 16, scale = 2)
     private Double valorTotalPago;
-    
+
+    @Column
+    private int numeroParcelas = 1;
+
     @ManyToOne
     private Pessoa envolvido;
-    
+
     @ManyToOne
     private Servico servico;
-    
-    
+
     @OneToMany(mappedBy = "lancamento", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Parcela> parcelas;
-    
-    
+
     @ManyToOne
     private CustoEvento custoEvento;
-    
+
     @OneToOne(mappedBy = "lancamento")
     private OrcamentoEvento orcamentoEvento;
-    
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
 
@@ -94,11 +94,6 @@ public class Lancamento implements Serializable, ModelInterface {
         this.tipoLancamento = tipoLancamento;
     }
 
-    
-    
-    
-    
-    
     @Override
     public Long getId() {
         return id;
@@ -153,8 +148,6 @@ public class Lancamento implements Serializable, ModelInterface {
         this.valorTotalPago = valorTotalPago;
     }
 
-    
-
     public Pessoa getEnvolvido() {
         return envolvido;
     }
@@ -195,40 +188,74 @@ public class Lancamento implements Serializable, ModelInterface {
         this.orcamentoEvento = orcamentoEvento;
     }
 
-    
-    
-    public void calcularParcelas(){
-        
+    public int getNumeroParcelas() {
+        return numeroParcelas;
+    }
+
+    public void setNumeroParcelas(int numeroParcelas) {
+        this.numeroParcelas = numeroParcelas;
+    }
+
+    public void calcularParcelas() {
+
         this.valorTotalPago = 0D;
-        
-        if(CollectionUtils.isNotBlank(parcelas)){
-             
+
+        if (CollectionUtils.isNotBlank(parcelas)) {
+
             for (Parcela parcela : parcelas) {
-                
+
                 this.valorTotalPago += parcela.getValorPago();
-                
+
             }
         }
-    
+
     }
-    
-    public void adicionarParcela(Parcela parcela){
-            
-        if(parcela == null){
+
+    public void adicionarParcela(Parcela parcela) {
+
+        if (parcela == null) {
             throw new GenericException("Parcela nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        if(parcelas == null){
+
+        if (parcelas == null) {
             parcelas = new ArrayList<>();
         }
-        
+
         parcela.setLancamento(this);
-        
+
         parcelas.add(parcela);
-        
+
     }
-    
-    
+
+    public Date getDataVencimentoUltimaParcelaPaga() {
+        Date dataUltimaParcelaPaga = null;
+
+        if (CollectionUtils.isNotBlank(parcelas)) {
+            for (Parcela parcela : this.parcelas) {
+                if (parcela.isPago()) {
+                    if (dataUltimaParcelaPaga == null || parcela.getDataVencimento().after(dataUltimaParcelaPaga)) {
+                        dataUltimaParcelaPaga = parcela.getDataVencimento();
+                    }
+                }
+            }
+        }
+        return dataUltimaParcelaPaga;
+    }
+
+    public Date getDataVencimentoPrimeiraParcela() {
+        Date dataPrimeiraParcela = null;
+
+        if (CollectionUtils.isNotBlank(parcelas)) {
+            for (Parcela parcela : this.parcelas) {
+                if (parcela.getNumeroParcela() == 1) {
+                    dataPrimeiraParcela = parcela.getDataVencimento();
+                    break;
+                }
+            }
+        }
+        return dataPrimeiraParcela;
+    }
+
     @PrePersist
     @Override
     public void prePersistEntity() {

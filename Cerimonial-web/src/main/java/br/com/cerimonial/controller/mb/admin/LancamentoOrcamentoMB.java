@@ -6,20 +6,22 @@
 package br.com.cerimonial.controller.mb.admin;
 
 import br.com.cerimonial.controller.BasicControl;
-import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
 import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Servico;
+import br.com.cerimonial.enums.FormaPagamento;
 import br.com.cerimonial.enums.TipoLancamento;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.LancamentoService;
 import br.com.cerimonial.service.OrcamentoEventoService;
-import br.com.cerimonial.utils.CollectionUtils;
-import br.com.cerimonial.utils.SelectItemUtils;
+import br.com.cerimonial.service.PessoaService;
+import br.com.cerimonial.service.ServicoService;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -35,7 +37,11 @@ public class LancamentoOrcamentoMB extends BasicControl {
     protected Long idOrcamento;
     protected OrcamentoEvento orcamentoEvento;
     protected Evento evento;
-    protected Lancamento lancamento;
+    protected Lancamento entity;
+
+    protected List<Pessoa> contratantes;
+    protected List<Servico> servicos;
+    protected List<FormaPagamento> formasPagamentos;
 
     @EJB
     protected OrcamentoEventoService orcamentoService;
@@ -44,10 +50,19 @@ public class LancamentoOrcamentoMB extends BasicControl {
     protected EventoService eventoService;
 
     @EJB
-    protected LancamentoService lancamentoService;
+    protected LancamentoService service;
 
-    
-    
+    @EJB
+    protected PessoaService pessoaService;
+
+    @EJB
+    protected ServicoService servicoService;
+
+    public LancamentoOrcamentoMB() {
+
+       
+    }
+
     /**
      * Evento invocado ao abrir o xhtml carregar os dados do contrato do evento
      */
@@ -56,15 +71,25 @@ public class LancamentoOrcamentoMB extends BasicControl {
         if (idOrcamento != null) {
             try {
 
-              lancamento = lancamentoService.findLancamentoOrcamento(idOrcamento);
-              
-              if(lancamento == null){
-                  
-                  orcamentoEvento = orcamentoService.getEntity(idOrcamento);
-                  
-                  lancamento = new Lancamento(TipoLancamento.DESPESA);
-                  lancamento.setValorBase(orcamentoEvento.getValorFinal());
-              }
+                entity = service.findLancamentoOrcamento(idOrcamento);
+
+                evento = eventoService.findEventoByIdOrcamento(idOrcamento);
+
+                if (entity == null) {
+
+                    orcamentoEvento = orcamentoService.getEntity(idOrcamento);
+
+                    entity = new Lancamento(TipoLancamento.DESPESA);
+                    entity.setValorBase(orcamentoEvento.getValorFinal());
+                    
+                    atualizarNumeroParcelas();
+                }
+
+                contratantes = pessoaService.getContratantesEvento(evento.getId());
+
+                servicos = servicoService.findAll();
+
+                formasPagamentos = FormaPagamento.getList();
 
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -73,7 +98,26 @@ public class LancamentoOrcamentoMB extends BasicControl {
             }
         }
 
+    }
 
+    public void atualizarNumeroParcelas() {
+
+        entity = service.atualizarNumeroParcelas(entity.getNumeroParcelas(), entity);
+
+    }
+
+    public String save() {
+
+        try {
+
+            service.save(entity);
+
+            return null;
+        } catch (Exception ex) {
+            Logger.getLogger(LancamentoOrcamentoMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
 
     public Long getIdOrcamento() {
@@ -84,17 +128,32 @@ public class LancamentoOrcamentoMB extends BasicControl {
         this.idOrcamento = idOrcamento;
     }
 
-    public Lancamento getLancamento() {
-        return lancamento;
+    public Lancamento getEntity() {
+        return entity;
     }
 
-    public void setLancamento(Lancamento lancamento) {
-        this.lancamento = lancamento;
+    public void setEntity(Lancamento entity) {
+        this.entity = entity;
     }
-    
-    
-    
-    
-    
-    
+
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+
+    public List<Pessoa> getContratantes() {
+        return contratantes;
+    }
+
+    public List<Servico> getServicos() {
+        return servicos;
+    }
+
+    public List<FormaPagamento> getFormasPagamentos() {
+        return formasPagamentos;
+    }
+
 }

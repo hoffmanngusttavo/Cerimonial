@@ -62,6 +62,9 @@ public class Parcela implements Serializable, ModelInterface {
     @Column(precision = 16, scale = 2)
     private Double valorPago;
     
+    @Column(nullable = false, columnDefinition = "int default 1")
+    private int numeroParcela = 1;
+    
     @Column(columnDefinition = "boolean default false")
     private boolean pago = false;
     
@@ -165,6 +168,14 @@ public class Parcela implements Serializable, ModelInterface {
 
     public void setFormaPagamento(FormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
+    }
+
+    public int getNumeroParcela() {
+        return numeroParcela;
+    }
+
+    public void setNumeroParcela(int numeroParcela) {
+        this.numeroParcela = numeroParcela;
     }
 
     

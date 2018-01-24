@@ -6,10 +6,14 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Lancamento;
+import br.com.cerimonial.entity.Parcela;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.LancamentoRepository;
+import br.com.cerimonial.utils.DateUtils;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,30 +103,106 @@ public class LancamentoService extends BasicService<Lancamento> {
         return true;
     }
 
-    
     /**
      * Vai buscar um lançamento que foi gerado a partir de um orçamento
      * carregando em lazy as parcelas
+     *
      * @param idOrcamento
-     * @return 
+     * @return
      */
     public Lancamento findLancamentoOrcamento(Long idOrcamento) {
-        
+
         if (idOrcamento == null) {
             throw new GenericException("Id Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         Lancamento lancamento = repository.findLancamentoOrcamento(idOrcamento);
-        
-        if(lancamento != null){
-                
-            if(lancamento.getParcelas() != null){
+
+        if (lancamento != null) {
+
+            if (lancamento.getParcelas() != null) {
                 lancamento.getParcelas().size();
             }
-            
+
+        }
+
+        return lancamento;
+    }
+
+    /**
+     * Vai incrementar no lançamento a quantidade de parcelas que é passado por
+     * parametro
+     *
+     * @param numeroParcelas
+     * @param entity
+     * @return
+     */
+    public Lancamento atualizarNumeroParcelas(int numeroParcelas, Lancamento entity) {
+
+        isValid(entity);
+
+        if (numeroParcelas <= 0) {
+            throw new GenericException("O número de parcelas deve ser maior que zero", ErrorCode.BAD_REQUEST.getCode());
         }
         
-        return lancamento;
+        double valorBase = entity.getValorBase() != null ? entity.getValorBase() : 0;
+        double valorPago = entity.getValorTotalPago() != null ? entity.getValorTotalPago() : 0;
+        
+        //
+        double valorRestanteBruto = valorBase - valorPago;
+
+        //INICIO calibragem
+        int criarRemoverParcelas = numeroParcelas;
+
+        if (criarRemoverParcelas > 0) {//adicionar
+
+            for (int i = 0; i < criarRemoverParcelas; i++) {
+
+                entity.adicionarParcela(new Parcela());
+
+            }
+        } else if (criarRemoverParcelas < 0) {
+
+            int qntdeRemover = criarRemoverParcelas * -1;
+
+            for (int i = 0; i < qntdeRemover; i++) {
+
+                entity.getParcelas().remove(entity.getParcelas().size() - 1);
+            }
+        }
+        //FIM calibragem
+        //
+        double valorCadaParcelaBruto = ((int) ((valorRestanteBruto / numeroParcelas) * 100d)) / 100d;
+        double compensarArredondamentoBruto = valorRestanteBruto - (valorCadaParcelaBruto * (double) numeroParcelas);
+
+        int countParcelaRecalculada = 1;//pegar mes sequinte
+
+        Date dataUltimaParcelaPaga = entity.getDataVencimentoUltimaParcelaPaga();
+
+        if (dataUltimaParcelaPaga == null) {
+            dataUltimaParcelaPaga = entity.getDataVencimentoPrimeiraParcela();
+        
+        }
+
+        for (int i = 0; i < entity.getParcelas().size(); i++) {
+
+            if (entity.getParcelas().get(i).isPago()) {
+                continue;
+            }
+
+            entity.getParcelas().get(i).setNumeroParcela(i + 1);
+            entity.getParcelas().get(i).setValorCobrado(valorCadaParcelaBruto);
+
+            if (i == (entity.getParcelas().size() - 1)) {
+                entity.getParcelas().get(i).setValorCobrado(entity.getParcelas().get(i).getValorCobrado() + compensarArredondamentoBruto);
+            }
+
+            entity.getParcelas().get(i).setDataVencimento(DateUtils.somaSubtraiDatasDeDataBase(dataUltimaParcelaPaga, countParcelaRecalculada, GregorianCalendar.MONTH));
+            //
+            countParcelaRecalculada++;
+        }
+
+        return entity;
     }
 
 }

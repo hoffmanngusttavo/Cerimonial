@@ -15,7 +15,7 @@
 
 
         <f:metadata>
-            <f:viewParam name="idContato" value="#{LancamentoOrcamentoMB.idOrcamento}" converter="javax.faces.Long"/>
+            <f:viewParam name="idOrcamento" value="#{LancamentoOrcamentoMB.idOrcamento}" converter="javax.faces.Long"/>
             <f:viewAction action="#{LancamentoOrcamentoMB.init()}"/>
         </f:metadata>
 
@@ -30,9 +30,9 @@
                     <div class="panel panel-danger">
                         <div class="panel-heading">
                             <h3 class="panel-title">
-                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{OrcamentoEventoMB.contatoEvento.id}">
+                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=#{LancamentoOrcamentoMB.evento.id}">
                                     <i class="fa fa-list"></i>
-                                    <span>#{OrcamentoEventoMB.contatoEvento.nomeEvento} - Serviço Contratado</span>
+                                    <span>#{LancamentoOrcamentoMB.evento.nome} - Serviço Contratado</span>
                                 </p:link>
                             </h3>
                         </div>
@@ -45,340 +45,273 @@
                 </div>
             </div>
 
-            
-            <h:panelGroup id="groupOrcamento">
-                <h:panelGroup rendered="#{OrcamentoEventoMB.abrirFormOrcamento}">
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label>Tipo de Evento
-                                <span class="asteriskField">
-                                    *
-                                </span>
-                            </label>
-                            <p:inputText value="#{OrcamentoEventoMB.entity.contatoEvento.tipoEvento.label}" 
-                                         class="form-control"
-                                         disabled="true"/>
 
-                        </div>
+            <div class="row">
 
-                        <div class="form-group col-md-6">
-                            <label class="control-label ">Modelo de Propostas
-                                <span class="asteriskField">
-                                    *
-                                </span>
-                            </label>
-                            <h:selectOneMenu id="inptModeloProposta" 
-                                             value="#{OrcamentoEventoMB.entity.modeloProposta}"
-                                             disabled="#{OrcamentoEventoMB.entity.id != null}"
-                                             converter="EntityConverter"
-                                             required="true"
-                                             requiredMessage="Preencha um modelo de proposta válido"
-                                             class="form-control"
-                                             label="Tipo de Evento">
-                                <f:selectItem itemValue="" 
-                                              itemLabel="Selecione" /> 
-                                <f:selectItems value="#{OrcamentoEventoMB.comboModelosProposta}" />
-                                <p:ajax process="@this"
-                                        update="groupOrcamento"
-                                        listener="#{OrcamentoEventoMB.carregarDadosProposta}"
-                                        global="false"
-                                        event="change"
-                                        onstart="PF('statusDialog').show();"
-                                        oncomplete="PF('statusDialog').hide();"/>
-                            </h:selectOneMenu>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-3">
-                            <label>Valor
-                                <span class="asteriskField">
-                                    *
-                                </span>
-                                <p:commandButton icon="fa fa-pencil" 
-                                                 styleClass="bt-acoes"
-                                                 process="@this"
-                                                 rendered="#{OrcamentoEventoMB.entity.id == null}"
-                                                 title="Alterar Valor"
-                                                 actionListener="#{OrcamentoEventoMB.alterarValorProposta()}"
-                                                 update=":form:groupValorAlterado"
-                                                 immediate="true"
-                                                 onstart="PF('statusDialog').show();"
-                                                 oncomplete="PF('statusDialog').hide();"/>
-                            </label>
-                            <h:panelGroup>
-                                <p:inputText value="#{OrcamentoEventoMB.entity.valorProposta}" 
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="etapa1">
+
+
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label for="inptTipoLancamento">
+                                    Tipo de Lançamento
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+                                <p:inputText id="inptTipoLancamento" 
+                                             value="#{LancamentoOrcamentoMB.entity.tipoLancamento.label}" 
                                              disabled="true"
-                                             class="form-control">
+                                             class="form-control"
+                                             label="Tipo de Lançamento"/>
+
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="inptValor">
+                                    Valor
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+
+                                <p:inputText value="#{LancamentoOrcamentoMB.entity.valorBase}"
+                                             required="true"
+                                             disabled="true"
+                                             class="form-control"
+                                             requiredMessage="Preencha um valor válido"
+                                             id="inptValor"
+                                             label="Valor">
                                     <f:convertNumber maxFractionDigits="2"
                                                      minFractionDigits="2"
                                                      locale="pt_BR"/>
-                                    <p:ajax process="@this"
-                                            update="@this"
-                                            global="false"/>
                                 </p:inputText>
+                            </div>
 
-                                
-                            </h:panelGroup>
-                        </div>
+                            <div class="form-group col-md-6">
+                                <label for="inptResponsavel">
+                                    Responsável Pagamento
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+                                <h:selectOneMenu id="inptResponsavel" 
+                                                 value="#{LancamentoOrcamentoMB.entity.envolvido}"
+                                                 required="true"
+                                                 requiredMessage="Preencha um responsável válido"
+                                                 class="form-control"
+                                                 converter="EntityConverter"
+                                                 label="Responsável Pagamento">
 
-                        <h:panelGroup id="groupValorAlterado">
-                            <h:panelGroup rendered="#{OrcamentoEventoMB.entity.valorAlterado gt -1}">
-                                <div class="row">
-                                    <div class="form-group col-md-3">
-                                        <label>Valor Alterado
-                                            <span class="asteriskField">
-                                                *
-                                            </span>
-                                            <p:commandButton icon="fa fa-times" 
-                                                         styleClass="bt-acoes"
-                                                         process="@this"
-                                                         rendered="#{OrcamentoEventoMB.entity.id == null}"
-                                                         title="Alterar Valor"
-                                                         actionListener="#{OrcamentoEventoMB.cancelarAlterarValorProposta()}"
-                                                         update=":form:groupValorAlterado"
-                                                         immediate="true"
-                                                         onstart="PF('statusDialog').show();"
-                                                         oncomplete="PF('statusDialog').hide();"/>
-                                        </label>
-                                        <p:inputText value="#{OrcamentoEventoMB.entity.valorAlterado}" 
-                                                     disabled="#{OrcamentoEventoMB.entity.id != null}"
-                                                     class="form-control">
-                                            <f:convertNumber maxFractionDigits="2"
-                                                             minFractionDigits="2"
-                                                             locale="pt_BR"/>
-                                            <p:ajax process="@this"
-                                                    update="@this"
-                                                    global="false"/>
-                                        </p:inputText>
-                                        
-                                    </div>
-                                </div>
-                            </h:panelGroup>
-                        </h:panelGroup>
-                    </div>
+                                    <f:selectItem itemValue="" 
+                                                  itemLabel="Selecione" /> 
 
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label class="control-label ">Observação</label>
+                                    <f:selectItems value="#{LancamentoOrcamentoMB.contratantes}" 
+                                                   var="contratante"
+                                                   itemValue="#{contratante}"
+                                                   itemLabel="#{contratante.nome}"/>
+
+                                    <p:ajax process="@this"
+                                            global="false"/>
+
+                                </h:selectOneMenu>
+
+                            </div>
+
                             
-                            <p:editor value="#{OrcamentoEventoMB.entity.proposta}"
-                                      disabled="#{OrcamentoEventoMB.entity.id != null}"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <p:commandButton value="Salvar Orçamento"
-                                         rendered="#{OrcamentoEventoMB.entity.id == null}"
-                                         action="#{OrcamentoEventoMB.saveOrcamento()}"
-                                         update=":form:groupOrcamento"
-                                         style="margin-right: 10px; float: right;"
-                                         icon="fa fa-check" 
-                                         class="btn btn-success"
-                                         onstart="PF('statusDialog').show();"
-                                         oncomplete="PF('statusDialog').hide();"/>
+                            
+                            <div class="form-group col-md-6">
+                                <label>Serviço Prestado
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
 
-                        <p:commandButton value="Cancelar/Voltar"
-                                         immediate="true"
-                                         actionListener="#{OrcamentoEventoMB.setAbrirFormOrcamento(false)}"
-                                         process="@this"
-                                         style="margin-right: 10px; float: right;"
-                                         update="groupOrcamento"
-                                         class="btn btn-default"
-                                         icon="fa fa-close"/>
+                                <h:selectOneMenu id="inptServico" 
+                                                 value="#{LancamentoOrcamentoMB.entity.servico}"
+                                                 required="true"
+                                                 requiredMessage="Preencha um serviço válido"
+                                                 class="form-control"
+                                                 converter="EntityConverter"
+                                                 label="Serviço Prestado">
 
-                    </div>
-                </h:panelGroup>
+                                    <f:selectItem itemValue="" 
+                                                  itemLabel="Selecione" /> 
 
-                <h:panelGroup rendered="#{!OrcamentoEventoMB.abrirFormOrcamento}"
-                              id="groupPropostas">
-                    <div class="row">
-                        <p:commandButton process="@this"
-                                         actionListener="#{OrcamentoEventoMB.instanciarOrcamento()}"
-                                         style="float: right;"
-                                         rendered="#{OrcamentoEventoMB.evento == null}"
-                                         id="btn-criar-orcamento"
-                                         update="groupOrcamento"
-                                         class="btn btn-info"
-                                         icon="fa fa-plus"
-                                         value="Criar Nova Proposta"/>
+                                    <f:selectItems value="#{LancamentoOrcamentoMB.servicos}" 
+                                                   var="servico"
+                                                   itemValue="#{servico}"
+                                                   itemLabel="#{servico.nome}"/>
 
+                                    <p:ajax process="@this"
+                                            global="false"/>
 
-
-                        <table class="table table-hover table-inverse table-striped table-responsive">
-                            <thead class="thead-inverse">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Modelo Proposta</th>
-                                    <th>Valor</th>
-                                    <th>Proposta Aceita</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <p:repeat value="#{OrcamentoEventoMB.orcamentos}" var="proposta">
-                                    <tr>
-                                        <th scope="row">
-                                            <h:outputText value="#{proposta.id}"/>
-                                        </th>
-
-                                        <td>
-                                            <h:outputText value="#{proposta.modeloProposta.titulo}"/>
-                                        </td>
-
-                                        <td>
-                                            <h:outputText value="#{proposta.valorProposta}"
-                                                          rendered="#{proposta.valorAlterado lt 0}">
-                                                <f:convertNumber maxFractionDigits="2"
-                                                                 minFractionDigits="2"
-                                                                 locale="pt_BR"/>
-                                            </h:outputText>
-                                            <h:outputText value="#{proposta.valorAlterado}"
-                                                          rendered="#{proposta.valorAlterado gt -1}">
-                                                <f:convertNumber maxFractionDigits="2"
-                                                                 minFractionDigits="2"
-                                                                 locale="pt_BR"/>
-                                            </h:outputText>
-                                        </td>
-
-                                        <td>
-                                            <h:outputText value="#{proposta.propostaAceita ? 'Sim': 'Não'}"/>
-                                        </td>
-
-                                        <td>
-                                            <p:commandButton icon="fa fa-edit" 
-                                                             styleClass="bt-acoes"
-                                                             process="@this"
-                                                             title="Visualizar Orçamento"
-                                                             actionListener="#{OrcamentoEventoMB.visualizarOrcamento(proposta)}"
-                                                             update=":form:groupOrcamento"/>
-
-                                            <p:commandButton icon="fa fa-download" 
-                                                             styleClass="bt-acoes"
-                                                             process="@this"
-                                                             title="Baixar Arquivo"
-                                                             rendered="#{proposta.arquivo != null}"
-                                                             actionListener="#{OrcamentoEventoMB.baixarArquivoOrcamento(proposta)}"
-                                                             ajax="false"
-                                                             immediate="true"
-                                                             onstart="PF('statusDialog').show();"
-                                                             oncomplete="PF('statusDialog').hide();"/>
-
-                                            <p:commandButton icon="fa fa-check" 
-                                                             styleClass="bt-acoes"
-                                                             actionListener="#{OrcamentoEventoMB.aceitarProposta(proposta)}"
-                                                             process="@this"
-                                                             rendered="#{!proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
-                                                             title="Aprovar Proposta"
-                                                             update=":form:groupPropostas"
-                                                             immediate="true"
-                                                             onstart="PF('statusDialog').show();"
-                                                             oncomplete="PF('statusDialog').hide();"/>
-
-                                            <p:commandButton icon="fa fa-times" 
-                                                             styleClass="bt-acoes"
-                                                             actionListener="#{OrcamentoEventoMB.cancelarProposta(proposta)}"
-                                                             process="@this"
-                                                             rendered="#{proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
-                                                             title="Cancelar Proposta"
-                                                             update=":form:groupPropostas"
-                                                             immediate="true"
-                                                             onstart="PF('statusDialog').show();"
-                                                             oncomplete="PF('statusDialog').hide();"/>
-
-                                            <p:commandButton process="@this"
-                                                             action="#{OrcamentoEventoMB.criarEvento(proposta)}"
-                                                             rendered="#{proposta.propostaAceita and OrcamentoEventoMB.evento == null}"
-                                                             id="btn-criar-criar-ficha"
-                                                             update="@form"
-                                                             styleClass="btn btn-success"
-                                                             value="Criar Evento"
-                                                             onstart="PF('statusDialog').show();"
-                                                             oncomplete="PF('statusDialog').hide();"/>
-
-                                            <p:commandButton icon="fa fa-trash" 
-                                                             styleClass="bt-acoes"
-                                                             actionListener="#{OrcamentoEventoMB.setEntity(proposta)}"
-                                                             rendered="#{OrcamentoEventoMB.evento == null and !proposta.propostaAceita}"
-                                                             process="@this"
-                                                             title="Remover"
-                                                             update=":form:groupRemove"
-                                                             immediate="true"
-                                                             oncomplete="$('#removeDialogVar').modal('show');"/>
-                                        </td>
-                                    </tr>
-                                </p:repeat>
-                            </tbody>
-                        </table>
-                    </div>
-                </h:panelGroup>
-            </h:panelGroup>
-
-
-            <div class="modal fade" 
-                 id="removeDialogVar" tabindex="-1" 
-                 role="dialog" aria-labelledby="myModal" 
-                 aria-hidden="true" data-keyboard="false" 
-                 data-backdrop="static">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <h:panelGroup id="groupRemove">
-                            <div class="modal-header modal-header-danger">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <h4 class="modal-title">Deseja Remover ?</h4>
+                                </h:selectOneMenu>
                             </div>
-                            <div class="modal-body">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label ">Id
-                                            </label>
-                                        </div>
-                                        <div class="col-md-3 col-md-offset-3">
-                                            <h:outputText value="#{OrcamentoEventoMB.entity.id}" />
-                                        </div>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label ">Valor
-                                            </label>
-                                        </div>
-                                        <div class="col-md-3 col-md-offset-3">
-                                            <h:outputText value="#{OrcamentoEventoMB.entity.valorProposta}" >
-                                                <f:convertNumber maxFractionDigits="2"
-                                                                 minFractionDigits="2"
-                                                                 locale="pt_BR"/>
-                                            </h:outputText>
+                            
+                        </div>
+
+                        <div class="row">
+
+                            <div class="form-group col-md-12">
+
+                                <div class="row">
+
+                                    <div class="col-lg-12 col-md-12">
+
+                                        <div class="panel panel-primary">
+
+                                            <div class="table-responsive">
+
+                                                <h:panelGroup id="parcelas">
+
+                                                    <table class="table table-hover">
+
+                                                        <thead>
+                                                            <th>#</th>
+                                                            <th>Vencimento</th>
+                                                            <th>Forma de Pagamento</th>
+                                                            <th>Valor Parcela</th>
+                                                            <th>Data de Pagamento</th>
+                                                            <th>Valor Pago</th>
+                                                            <th>Ações</th>
+                                                        </thead>
+
+                                                        <tbody>
+
+                                                            <ui:repeat value="#{LancamentoOrcamentoMB.entity.parcelas}"
+                                                                       var="parcela"
+                                                                       varStatus="indice">
+
+                                                                <tr>
+                                                                    <td>
+                                                                        #{indice.index + 1}
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <p:calendar pattern="dd/MM/yyyy"
+                                                                                    mask="true" 
+                                                                                    id="inptVencimento"
+                                                                                    style="display: block;"
+                                                                                    value="#{parcela.dataVencimento}"
+                                                                                    label="Vencimento" 
+                                                                                    navigator="true"
+                                                                                    locale="pt"
+                                                                                    timeZone="GMT-3">
+                                                                            <f:convertDateTime pattern="dd/MM/yyyy"
+                                                                                               locale="pt_BR"
+                                                                                               timeZone="GMT-3"/>
+                                                                        </p:calendar>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <h:selectOneMenu id="inptFormaPagamento" 
+                                                                                         value="#{parcela.formaPagamento}"
+                                                                                         class="form-control"
+                                                                                         label="Forma de Pagamento">
+
+                                                                            <f:selectItem itemValue="" 
+                                                                                          itemLabel="Selecione" /> 
+
+                                                                            <f:selectItems value="#{LancamentoOrcamentoMB.formasPagamentos}" 
+                                                                                           var="forma"
+                                                                                           itemValue="#{forma}"
+                                                                                           itemLabel="#{forma.label}"/>
+
+                                                                            <p:ajax process="@this"
+                                                                                    global="false"/>
+
+                                                                        </h:selectOneMenu>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <p:calendar pattern="dd/MM/yyyy"
+                                                                                    mask="true" 
+                                                                                    id="inptDataPagamento"
+                                                                                    style="display: block;"
+                                                                                    value="#{parcela.dataPagamento}"
+                                                                                    label="Vencimento" 
+                                                                                    navigator="true"
+                                                                                    locale="pt"
+                                                                                    timeZone="GMT-3">
+                                                                            <f:convertDateTime pattern="dd/MM/yyyy"
+                                                                                               locale="pt_BR"
+                                                                                               timeZone="GMT-3"/>
+                                                                        </p:calendar>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <p:inputText value="#{parcela.valorCobrado}"
+                                                                                     id="inptValorParcela"
+                                                                                     label="Valor Parcela">
+
+                                                                            <p:ajax event="change" 
+                                                                                    process="@this"
+                                                                                    update="@this"/>
+
+                                                                            <f:convertNumber maxFractionDigits="2"
+                                                                                             minFractionDigits="2"
+                                                                                             locale="pt_BR"/>
+                                                                        </p:inputText>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <p:inputText value="#{parcela.valorPago}"
+                                                                                     id="inptValorPago"
+                                                                                     label="Valor">
+
+                                                                            <p:ajax event="change" 
+                                                                                    process="@this"
+                                                                                    update="@this"/>
+
+                                                                            <f:convertNumber maxFractionDigits="2"
+                                                                                             minFractionDigits="2"
+                                                                                             locale="pt_BR"/>
+                                                                        </p:inputText>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <p:selectBooleanCheckbox value="#{parcela.pago}"/>
+                                                                    </td>
+                                                                </tr>
+
+                                                            </ui:repeat>
+                                                        </tbody>
+                                                    </table>
+                                                </h:panelGroup>
+
+                                                <div class="clearfix"></div>
+
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <h:panelGroup layout="block" styleClass="modal-footer">
-                                <p:commandLink value="Fechar"
-                                               immediate="true" 
-                                               styleClass="btn btn-default" 
-                                               oncomplete="$('#removeDialogVar').modal('hide');" />
 
-                                <p:commandLink value="Confirmar" 
-                                               action="#{OrcamentoEventoMB.deleteOrcamento()}" 
-                                               update="groupPropostas"
-                                               styleClass="btn btn-primary"
-                                               process="groupRemove" 
-                                               onstart="PF('statusDialog').show();"
-                                               oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
-                            </h:panelGroup>
-                        </h:panelGroup>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <p:commandButton value="Salvar"
+                                                 action="#{LancamentoOrcamentoMB.save()}"
+                                                 update="@form"
+                                                 style="margin-right: 10px;"
+                                                 icon="fa fa-check" 
+                                                 class="btn btn-success"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-
-
-
-
         </h:form>
-
 
     </ui:define>
 

@@ -29,7 +29,7 @@ public class DateUtils {
 
             return sdf.format(data);
         }
-        
+
         return "";
     }
 
@@ -86,6 +86,18 @@ public class DateUtils {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         return c.get(Calendar.YEAR);
+    }
+
+    public static Date somaSubtraiDatasDeDataBase(Date dataBase, int quantidadeDeUnidadesCorridas, int calendarIndex) {
+
+        if (dataBase == null) {
+            dataBase = new Date();
+        }
+
+        Calendar inicio = Calendar.getInstance();
+        inicio.setTime(dataBase);
+        inicio.add(calendarIndex, quantidadeDeUnidadesCorridas);
+        return inicio.getTime();
     }
 
 }

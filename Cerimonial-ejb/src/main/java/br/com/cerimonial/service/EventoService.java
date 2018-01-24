@@ -204,7 +204,7 @@ public class EventoService extends BasicService<Evento> {
             throw new GenericException("Orçamento Nulo", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        Evento evento = this.getEventoByOrcamento(orcamento);
+        Evento evento = this.findEventoByIdOrcamento(orcamento.getId());
 
         if (evento == null) {
             evento = new Evento();
@@ -222,13 +222,13 @@ public class EventoService extends BasicService<Evento> {
         return evento;
     }
 
-    public Evento getEventoByOrcamento(OrcamentoEvento orcamento) throws Exception {
+    public Evento findEventoByIdOrcamento(Long idOrcamento) throws Exception {
 
-        if (orcamento == null || orcamento.getId() == null) {
-            throw new GenericException("Orçamento nulo", ErrorCode.BAD_REQUEST.getCode());
+        if (idOrcamento == null) {
+            throw new GenericException("Id Orçamento nulo", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        List<Evento> eventos = repository.getEventosByOrcamento(orcamento);
+        List<Evento> eventos = repository.getEventosByOrcamento(idOrcamento);
 
         if (CollectionUtils.isNotBlank(eventos)) {
             return eventos.get(0);
@@ -264,6 +264,14 @@ public class EventoService extends BasicService<Evento> {
 
                 if (evento.getEvolucaoPreenchimento() != null) {
                     evento.getEvolucaoPreenchimento().getId();
+                }
+
+                if (evento.getOrcamentoEvento() != null) {
+                    evento.getOrcamentoEvento().getId();
+
+                    if (evento.getOrcamentoEvento().getLancamento() != null) {
+                        evento.getOrcamentoEvento().getLancamento().getId();
+                    }
                 }
 
                 return evento;
@@ -303,12 +311,12 @@ public class EventoService extends BasicService<Evento> {
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
         if (evento != null) {
-            
+
             if (evento.getContrato() != null) {
                 evento.getContrato().getId();
             }
-            
-            if (evento.getEvolucaoPreenchimento()!= null) {
+
+            if (evento.getEvolucaoPreenchimento() != null) {
                 evento.getEvolucaoPreenchimento().getId();
             }
 
@@ -359,8 +367,8 @@ public class EventoService extends BasicService<Evento> {
             if (evento.getFestaCerimonia() != null) {
                 evento.getFestaCerimonia().getId();
             }
-            
-            if (evento.getEvolucaoPreenchimento()!= null) {
+
+            if (evento.getEvolucaoPreenchimento() != null) {
                 evento.getEvolucaoPreenchimento().getId();
             }
 
@@ -487,6 +495,14 @@ public class EventoService extends BasicService<Evento> {
 
         if (evento.getEvolucaoPreenchimento() != null) {
             evento.getEvolucaoPreenchimento().getId();
+        }
+
+        if (evento.getOrcamentoEvento() != null) {
+            evento.getOrcamentoEvento().getId();
+
+            if (evento.getOrcamentoEvento().getLancamento() != null) {
+                evento.getOrcamentoEvento().getLancamento().getId();
+            }
         }
 
         return evento;

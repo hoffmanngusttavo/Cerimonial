@@ -21,5 +21,6 @@ Any value defined here will override the pom.xml file value but is only applicab
     <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
         <word>contratante</word>
         <word>destinatários</word>
+        <word>parametro</word>
     </spellchecker-wordlist>
 </project-shared-configuration>
