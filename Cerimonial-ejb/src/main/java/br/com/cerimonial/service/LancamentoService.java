@@ -6,10 +6,15 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Lancamento;
+import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Parcela;
+import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.enums.TipoLancamento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.LancamentoRepository;
+import br.com.cerimonial.service.utils.EmpresaCache;
+import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.DateUtils;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -144,10 +150,10 @@ public class LancamentoService extends BasicService<Lancamento> {
         if (numeroParcelas <= 0) {
             throw new GenericException("O número de parcelas deve ser maior que zero", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         double valorBase = entity.getValorBase() != null ? entity.getValorBase() : 0;
         double valorPago = entity.getValorTotalPago() != null ? entity.getValorTotalPago() : 0;
-        
+
         //
         double valorRestanteBruto = valorBase - valorPago;
 
@@ -181,7 +187,7 @@ public class LancamentoService extends BasicService<Lancamento> {
 
         if (dataUltimaParcelaPaga == null) {
             dataUltimaParcelaPaga = entity.getDataVencimentoPrimeiraParcela();
-        
+
         }
 
         for (int i = 0; i < entity.getParcelas().size(); i++) {
@@ -203,6 +209,57 @@ public class LancamentoService extends BasicService<Lancamento> {
         }
 
         return entity;
+    }
+
+    /**
+     * Vai instanciar um lançamento a partir dos dados do orçamento aprovado do evento
+     * @param orcamentoEvento relacionamento 1 to 1 lançamento
+     * @param contratantes
+     * @return 
+     * @throws java.lang.Exception 
+     */
+    public Lancamento criarNovoLancamentoSaidaOrcamento(OrcamentoEvento orcamentoEvento, List<Pessoa> contratantes) throws Exception {
+
+        if (orcamentoEvento == null) {
+            throw new GenericException("Orçamento é nulo para o lançamento", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(CollectionUtils.isBlank(contratantes)){
+            throw new GenericException("Para o lançamento deve ter pelo menos 1 contratante responsável pelo pagamento", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        Lancamento entity = new Lancamento(TipoLancamento.DESPESA);
+        
+        entity.setOrcamentoEvento(orcamentoEvento);
+
+        entity.setValorBase(orcamentoEvento.getValorFinal());
+        
+        //rita
+        entity.setEnvolvidoOrigem(EmpresaCache.getEmpresa().getPessoa());
+        
+        // responsavel pelo pagamento
+        entity.setEnvolvidoDestino(contratantes.get(0));
+        
+        entity.adicionarParcela(new Parcela(entity, orcamentoEvento.getValorFinal(), new Date()));
+        
+        return entity;
+    }
+
+    public Lancamento saveLancamentoOrcamento(Lancamento entity) throws Exception {
+        
+        isValid(entity);
+        
+        if(entity.getId() == null){
+            
+            // criar vinculo com lancamento de saida do evento com lancamento de entrada da empresa
+            
+            return save(entity);
+            
+        }else{
+        
+            return save(entity);
+        }
+        
     }
 
 }

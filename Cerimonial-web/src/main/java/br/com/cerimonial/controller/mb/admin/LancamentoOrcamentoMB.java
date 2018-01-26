@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -60,7 +61,6 @@ public class LancamentoOrcamentoMB extends BasicControl {
 
     public LancamentoOrcamentoMB() {
 
-       
     }
 
     /**
@@ -75,17 +75,15 @@ public class LancamentoOrcamentoMB extends BasicControl {
 
                 evento = eventoService.findEventoByIdOrcamento(idOrcamento);
 
+                contratantes = pessoaService.getContratantesEvento(evento.getId());
+
                 if (entity == null) {
 
                     orcamentoEvento = orcamentoService.getEntity(idOrcamento);
 
-                    entity = new Lancamento(TipoLancamento.DESPESA);
-                    entity.setValorBase(orcamentoEvento.getValorFinal());
-                    
-                    atualizarNumeroParcelas();
-                }
+                    entity = service.criarNovoLancamentoSaidaOrcamento(orcamentoEvento, contratantes);
 
-                contratantes = pessoaService.getContratantesEvento(evento.getId());
+                }
 
                 servicos = servicoService.findAll();
 
@@ -107,16 +105,21 @@ public class LancamentoOrcamentoMB extends BasicControl {
     }
 
     public String save() {
-
         try {
+            
+            service.saveLancamentoOrcamento(entity);
 
-            service.save(entity);
+            createFacesInfoMessage("Dados gravados com sucesso!");
 
-            return null;
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
+            return "/intranet/admin/operacional/pre-evento/partials/lancamento-orcamento.xhtml?idOrcamento=" + orcamentoEvento.getId() + "&faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(LancamentoOrcamentoMB.class.getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
+        } finally {
+            scrollTopMessage();
         }
-
         return null;
     }
 

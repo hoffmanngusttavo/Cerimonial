@@ -67,7 +67,10 @@ public class Lancamento implements Serializable, ModelInterface {
     private int numeroParcelas = 1;
 
     @ManyToOne
-    private Pessoa envolvido;
+    private Pessoa envolvidoOrigem;
+    
+    @ManyToOne
+    private Pessoa envolvidoDestino;
 
     @ManyToOne
     private Servico servico;
@@ -148,12 +151,20 @@ public class Lancamento implements Serializable, ModelInterface {
         this.valorTotalPago = valorTotalPago;
     }
 
-    public Pessoa getEnvolvido() {
-        return envolvido;
+    public Pessoa getEnvolvidoOrigem() {
+        return envolvidoOrigem;
     }
 
-    public void setEnvolvido(Pessoa envolvido) {
-        this.envolvido = envolvido;
+    public void setEnvolvidoOrigem(Pessoa envolvidoOrigem) {
+        this.envolvidoOrigem = envolvidoOrigem;
+    }
+
+    public Pessoa getEnvolvidoDestino() {
+        return envolvidoDestino;
+    }
+
+    public void setEnvolvidoDestino(Pessoa envolvidoDestino) {
+        this.envolvidoDestino = envolvidoDestino;
     }
 
     public Servico getServico() {

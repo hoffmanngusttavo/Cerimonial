@@ -143,6 +143,7 @@ public class Pessoa implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "envolvido", fetch = FetchType.LAZY)
     private List<Lancamento> lancamentos;
     
+    
 
     
     public Pessoa(TipoEnvolvido tipoEnvolvido, TipoPessoa tipoPessoa) {

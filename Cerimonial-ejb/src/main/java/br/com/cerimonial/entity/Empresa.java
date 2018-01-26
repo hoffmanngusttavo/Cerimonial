@@ -89,9 +89,13 @@ public class Empresa implements Serializable, ModelInterface {
     @Column
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa = TipoPessoa.JURIDICA;
+    
+    @OneToOne(cascade = {CascadeType.REMOVE})
+    private Pessoa pessoa;
 
     public Empresa() {
         endereco = new Endereco();
+        pessoa = new Pessoa();
     }
 
     public String getNome() {
@@ -215,6 +219,16 @@ public class Empresa implements Serializable, ModelInterface {
     public boolean isPessoaFisica() {
         return this.getTipoPessoa().equals(TipoPessoa.FISICA);
     }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+    
+    
 
     @Override
     public int hashCode() {

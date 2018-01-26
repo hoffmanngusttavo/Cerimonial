@@ -6,12 +6,16 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Empresa;
+import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.enums.TipoEnvolvido;
+import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.repository.EmpresaRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -30,6 +34,9 @@ import javax.ejb.TransactionManagementType;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class EmpresaService extends BasicService<Empresa> {
 
+    @EJB
+    protected PessoaService pessoaService;
+    
     private EmpresaRepository repository;
 
     @PostConstruct
@@ -55,7 +62,11 @@ public class EmpresaService extends BasicService<Empresa> {
     public Empresa save(Empresa entity) throws Exception {
 
         isValid(entity);
+        
+        entity.setPessoa(atualizarDadosPessoa(entity));
 
+        pessoaService.save(entity.getPessoa());
+        
         if (entity.getId() == null) {
             return repository.create(entity);
         } else {
@@ -65,10 +76,35 @@ public class EmpresaService extends BasicService<Empresa> {
 
     @Override
     public boolean isValid(Empresa entity) {
+        
         if (entity == null) {
-            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException("Empresa nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
+        
         return true;
+    }
+
+    private Pessoa atualizarDadosPessoa(Empresa entity) {
+        
+        Pessoa pessoa = entity.getPessoa();
+        
+        if(pessoa == null){
+            pessoa = new Pessoa();
+        }
+        
+        pessoa.setAtivo(true);
+        pessoa.setCnpj(entity.getCnpj());
+        pessoa.setCpf(entity.getCpf());
+        pessoa.setEmail(entity.getEmail());
+        pessoa.setNome(entity.getNome());
+        pessoa.setTelefoneCelular(entity.getTelefone1());
+        pessoa.setTelefoneResidencial(entity.getTelefone2());
+        pessoa.setTipoEnvolvido(TipoEnvolvido.FORNECEDOR);
+        pessoa.setTipoPessoa(TipoPessoa.JURIDICA);
+        
+        pessoa.setEndereco(pessoa.getEndereco().copiarEndereco(entity.getEndereco()));
+        
+        return pessoa;
     }
 
 }

@@ -84,6 +84,12 @@ public class Parcela implements Serializable, ModelInterface {
         this.lancamento = lancamento;
     }
     
+    public Parcela(Lancamento lancamento, double valorParcela, Date dataVencimento) {
+        this.lancamento = lancamento;
+        this.valorCobrado = valorParcela;
+        this.dataVencimento = dataVencimento;
+    }
+    
     @Override
     public Long getId() {
         return id;

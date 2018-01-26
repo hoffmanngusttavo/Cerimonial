@@ -119,8 +119,8 @@
 
                             </div>
 
-                            
-                            
+
+
                             <div class="form-group col-md-6">
                                 <label>Serviço Prestado
                                     <span class="asteriskField">
@@ -150,7 +150,6 @@
                                 </h:selectOneMenu>
                             </div>
 
-                            
                         </div>
 
                         <div class="row">
@@ -163,6 +162,25 @@
 
                                         <div class="panel panel-primary">
 
+                                            <div class="panel-heading" style="height: 44px;">
+                                                <h3 class="panel-title">Parcelas</h3>
+                                                <div class="pull-right" style="margin-top: -22px;">
+                                                    <p:spinner value="#{LancamentoOrcamentoMB.entity.numeroParcelas}"
+                                                               required="true"
+                                                               min="1"
+                                                               requiredMessage="Preencha número de parcelas">
+
+                                                        <p:ajax event="change"
+                                                                process="@this"
+                                                                listener="#{LancamentoOrcamentoMB.atualizarNumeroParcelas()}"
+                                                                onstart="PF('statusDialog').show();"
+                                                                oncomplete="PF('statusDialog').hide();"
+                                                                update="parcelas"/>
+
+                                                    </p:spinner>
+                                                </div>
+                                            </div>
+
                                             <div class="table-responsive">
 
                                                 <h:panelGroup id="parcelas">
@@ -174,9 +192,9 @@
                                                             <th>Vencimento</th>
                                                             <th>Forma de Pagamento</th>
                                                             <th>Valor Parcela</th>
-                                                            <th>Data de Pagamento</th>
                                                             <th>Valor Pago</th>
-                                                            <th>Ações</th>
+                                                            <th>Data de Pagamento</th>
+                                                            <th>Pago</th>
                                                         </thead>
 
                                                         <tbody>
@@ -194,7 +212,6 @@
                                                                         <p:calendar pattern="dd/MM/yyyy"
                                                                                     mask="true" 
                                                                                     id="inptVencimento"
-                                                                                    style="display: block;"
                                                                                     value="#{parcela.dataVencimento}"
                                                                                     label="Vencimento" 
                                                                                     navigator="true"
@@ -226,21 +243,7 @@
                                                                         </h:selectOneMenu>
                                                                     </td>
 
-                                                                    <td>
-                                                                        <p:calendar pattern="dd/MM/yyyy"
-                                                                                    mask="true" 
-                                                                                    id="inptDataPagamento"
-                                                                                    style="display: block;"
-                                                                                    value="#{parcela.dataPagamento}"
-                                                                                    label="Vencimento" 
-                                                                                    navigator="true"
-                                                                                    locale="pt"
-                                                                                    timeZone="GMT-3">
-                                                                            <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                                               locale="pt_BR"
-                                                                                               timeZone="GMT-3"/>
-                                                                        </p:calendar>
-                                                                    </td>
+                                                                    
 
                                                                     <td>
                                                                         <p:inputText value="#{parcela.valorCobrado}"
@@ -256,7 +259,7 @@
                                                                                              locale="pt_BR"/>
                                                                         </p:inputText>
                                                                     </td>
-
+                                                                    
                                                                     <td>
                                                                         <p:inputText value="#{parcela.valorPago}"
                                                                                      id="inptValorPago"
@@ -270,6 +273,21 @@
                                                                                              minFractionDigits="2"
                                                                                              locale="pt_BR"/>
                                                                         </p:inputText>
+                                                                    </td>
+                                                                    
+                                                                    <td>
+                                                                        <p:calendar pattern="dd/MM/yyyy"
+                                                                                    mask="true" 
+                                                                                    id="inptDataPagamento"
+                                                                                    value="#{parcela.dataPagamento}"
+                                                                                    label="Vencimento" 
+                                                                                    navigator="true"
+                                                                                    locale="pt"
+                                                                                    timeZone="GMT-3">
+                                                                            <f:convertDateTime pattern="dd/MM/yyyy"
+                                                                                               locale="pt_BR"
+                                                                                               timeZone="GMT-3"/>
+                                                                        </p:calendar>
                                                                     </td>
 
                                                                     <td>
