@@ -55,6 +55,12 @@ public class Lancamento implements Serializable, ModelInterface {
     @Column(nullable = false)
     private TipoLancamento tipoLancamento = TipoLancamento.DESPESA;
 
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataCadastro;
+    
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataVencimento;
+    
     @DecimalMin("0.0")
     @Column(precision = 16, scale = 2)
     private Double valorBase;
@@ -66,9 +72,11 @@ public class Lancamento implements Serializable, ModelInterface {
     @Column
     private int numeroParcelas = 1;
 
+    
     @ManyToOne
     private Pessoa envolvidoOrigem;
     
+   
     @ManyToOne
     private Pessoa envolvidoDestino;
 
@@ -91,10 +99,14 @@ public class Lancamento implements Serializable, ModelInterface {
     private Date dataUltimaAlteracao;
 
     public Lancamento() {
+        this.dataCadastro = new Date();
+        this.dataVencimento = new Date();
     }
 
     public Lancamento(TipoLancamento tipoLancamento) {
         this.tipoLancamento = tipoLancamento;
+        this.dataCadastro = new Date();
+        this.dataVencimento = new Date();
     }
 
     @Override
@@ -207,6 +219,24 @@ public class Lancamento implements Serializable, ModelInterface {
         this.numeroParcelas = numeroParcelas;
     }
 
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public Date getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public void setDataVencimento(Date dataVencimento) {
+        this.dataVencimento = dataVencimento;
+    }
+
+    
+    
     public void calcularParcelas() {
 
         this.valorTotalPago = 0D;

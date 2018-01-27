@@ -66,12 +66,12 @@ public class Pessoa implements Serializable, ModelInterface {
     @Column
     private String rg;
 
+//    @CPF
     @Column
-    @CPF
     private String cpf;
 
+//    @CNPJ
     @Column
-    @CNPJ
     private String cnpj;
 
     @Column
@@ -139,9 +139,11 @@ public class Pessoa implements Serializable, ModelInterface {
     //Particularidades Colaborador
     @Column(columnDefinition = "boolean default true")
     private boolean carroProprio = true;
-
-    @OneToMany(mappedBy = "envolvido", fetch = FetchType.LAZY)
+    
+    @OneToMany(mappedBy = "envolvidoDestino")
     private List<Lancamento> lancamentos;
+
+    
     
     
 
@@ -390,8 +392,8 @@ public class Pessoa implements Serializable, ModelInterface {
     public void setLancamentos(List<Lancamento> lancamentos) {
         this.lancamentos = lancamentos;
     }
-    
-    
+
+   
 
     @Override
     public int hashCode() {

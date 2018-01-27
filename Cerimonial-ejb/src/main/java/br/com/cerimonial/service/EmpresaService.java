@@ -63,9 +63,11 @@ public class EmpresaService extends BasicService<Empresa> {
 
         isValid(entity);
         
-        entity.setPessoa(atualizarDadosPessoa(entity));
-
-        pessoaService.save(entity.getPessoa());
+        Pessoa pessoa = atualizarDadosPessoa(entity);
+        
+        pessoaService.save(pessoa);
+        
+        entity.setPessoa(pessoa);
         
         if (entity.getId() == null) {
             return repository.create(entity);

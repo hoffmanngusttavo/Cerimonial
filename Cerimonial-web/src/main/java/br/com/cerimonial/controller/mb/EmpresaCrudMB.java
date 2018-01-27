@@ -35,7 +35,7 @@ public class EmpresaCrudMB extends BasicControl {
     @EJB
     private EnderecoService enderecoService;
     private final SelectItemUtils selectItemUtils;
-    
+
     public EmpresaCrudMB() {
         selectItemUtils = new SelectItemUtils();
     }
@@ -68,12 +68,14 @@ public class EmpresaCrudMB extends BasicControl {
      */
     public synchronized String save() {
         try {
-            if (entity != null) {
-                service.save(entity);
-                createFacesInfoMessage("Dados gravados com sucesso!");
-                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-                return "index.xhtml?faces-redirect=true";
-            }
+            service.save(entity);
+            
+            createFacesInfoMessage("Dados gravados com sucesso!");
+            
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            
+            return "index.xhtml?faces-redirect=true";
+            
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getCause().getMessage());

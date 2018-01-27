@@ -97,7 +97,7 @@
                                     </span>
                                 </label>
                                 <h:selectOneMenu id="inptResponsavel" 
-                                                 value="#{LancamentoOrcamentoMB.entity.envolvido}"
+                                                 value="#{LancamentoOrcamentoMB.entity.envolvidoDestino}"
                                                  required="true"
                                                  requiredMessage="Preencha um responsável válido"
                                                  class="form-control"
@@ -119,7 +119,47 @@
 
                             </div>
 
+                        </div>
 
+                        <div class="row">
+
+                            <div class="form-group col-md-3">
+                                <label class="control-label ">Data Vencimento 1ª Parcela
+                                </label>
+
+                                <p:calendar pattern="dd/MM/yyyy"
+                                            mask="true" 
+                                            id="inptDataVencimento"
+                                            style="display: block;"
+                                            value="#{LancamentoOrcamentoMB.entity.dataVencimento}"
+                                            label="Data Vencimento" 
+                                            showOn="button"
+                                            navigator="true"
+                                            locale="pt"
+                                            timeZone="GMT-3">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"
+                                                       locale="pt_BR"
+                                                       timeZone="GMT-3"/>
+                                </p:calendar>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="inptFornecedor">
+                                    Fornecedor
+                                    <span class="asteriskField">
+                                        *
+                                    </span>
+                                </label>
+                                
+                                <p:inputText value="#{LancamentoOrcamentoMB.entity.envolvidoOrigem.nome}"
+                                             required="true"
+                                             disabled="true"
+                                             class="form-control"
+                                             requiredMessage="Preencha um responsável válido"
+                                             id="inptFornecedor"
+                                             label="Fornecedor"/>
+                                    
+                            </div>
 
                             <div class="form-group col-md-6">
                                 <label>Serviço Prestado
@@ -243,7 +283,7 @@
                                                                         </h:selectOneMenu>
                                                                     </td>
 
-                                                                    
+
 
                                                                     <td>
                                                                         <p:inputText value="#{parcela.valorCobrado}"
@@ -259,7 +299,7 @@
                                                                                              locale="pt_BR"/>
                                                                         </p:inputText>
                                                                     </td>
-                                                                    
+
                                                                     <td>
                                                                         <p:inputText value="#{parcela.valorPago}"
                                                                                      id="inptValorPago"
@@ -274,7 +314,7 @@
                                                                                              locale="pt_BR"/>
                                                                         </p:inputText>
                                                                     </td>
-                                                                    
+
                                                                     <td>
                                                                         <p:calendar pattern="dd/MM/yyyy"
                                                                                     mask="true" 

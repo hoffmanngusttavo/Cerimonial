@@ -151,14 +151,13 @@ public class LancamentoService extends BasicService<Lancamento> {
             throw new GenericException("O número de parcelas deve ser maior que zero", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        double valorBase = entity.getValorBase() != null ? entity.getValorBase() : 0;
-        double valorPago = entity.getValorTotalPago() != null ? entity.getValorTotalPago() : 0;
-
-        //
-        double valorRestanteBruto = valorBase - valorPago;
+        if(entity.getParcelas() == null){
+            entity.setParcelas(new ArrayList<Parcela>());
+        }
+        
 
         //INICIO calibragem
-        int criarRemoverParcelas = numeroParcelas;
+        int criarRemoverParcelas =  numeroParcelas - entity.getParcelas().size();
 
         if (criarRemoverParcelas > 0) {//adicionar
 
@@ -177,18 +176,16 @@ public class LancamentoService extends BasicService<Lancamento> {
             }
         }
         //FIM calibragem
+        
+        double valorBase = entity.getValorBase() != null ? entity.getValorBase() : 0;
+        double valorPago = entity.getValorTotalPago() != null ? entity.getValorTotalPago() : 0;
+        //
+        double valorRestanteBruto = valorBase - valorPago;
         //
         double valorCadaParcelaBruto = ((int) ((valorRestanteBruto / numeroParcelas) * 100d)) / 100d;
         double compensarArredondamentoBruto = valorRestanteBruto - (valorCadaParcelaBruto * (double) numeroParcelas);
 
         int countParcelaRecalculada = 1;//pegar mes sequinte
-
-        Date dataUltimaParcelaPaga = entity.getDataVencimentoUltimaParcelaPaga();
-
-        if (dataUltimaParcelaPaga == null) {
-            dataUltimaParcelaPaga = entity.getDataVencimentoPrimeiraParcela();
-
-        }
 
         for (int i = 0; i < entity.getParcelas().size(); i++) {
 
@@ -203,7 +200,7 @@ public class LancamentoService extends BasicService<Lancamento> {
                 entity.getParcelas().get(i).setValorCobrado(entity.getParcelas().get(i).getValorCobrado() + compensarArredondamentoBruto);
             }
 
-            entity.getParcelas().get(i).setDataVencimento(DateUtils.somaSubtraiDatasDeDataBase(dataUltimaParcelaPaga, countParcelaRecalculada, GregorianCalendar.MONTH));
+            entity.getParcelas().get(i).setDataVencimento(DateUtils.somaSubtraiDatasDeDataBase(entity.getDataVencimento(), countParcelaRecalculada, GregorianCalendar.MONTH));
             //
             countParcelaRecalculada++;
         }
