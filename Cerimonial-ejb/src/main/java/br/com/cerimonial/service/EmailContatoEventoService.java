@@ -6,14 +6,12 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
-import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.EmailContatoEvento;
 import br.com.cerimonial.entity.ModeloEmail;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EmailContatoEventoRepository;
 import br.com.cerimonial.utils.EmailHelper;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,10 +56,9 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
      * @throws java.lang.Exception
      */
     @Override
-    public EmailContatoEvento getEntity(Long id) throws Exception {
-        EmailContatoEvento entity = repository.getEntity(id);
+    public EmailContatoEvento findEntityById(Long id) throws Exception {
 
-        return entity;
+        return repository.getEntity(id);
     }
 
     @Override
@@ -135,7 +132,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
         }
 
         // carregar em lazy os anexoss
-        modeloEmail = modeloEmailService.getEntity(modeloEmail.getId());
+        modeloEmail = modeloEmailService.findEntityById(modeloEmail.getId());
 
         if (entity != null) {
 

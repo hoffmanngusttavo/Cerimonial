@@ -55,7 +55,7 @@ public class UsuarioCrudMB extends BasicControl {
 
         if (id != null) {
             try {
-                entity = usuarioService.getEntity(id);
+                entity = usuarioService.findEntityById(id);
             } catch (Exception ex) {
                 Logger.getLogger(UsuarioCrudMB.class.getName()).log(Level.SEVERE, null, ex);
             }

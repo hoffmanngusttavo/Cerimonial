@@ -48,7 +48,7 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
     }
 
     @Override
-    public ModeloProposta getEntity(Long id) throws Exception {
+    public ModeloProposta findEntityById(Long id) throws Exception {
         ModeloProposta modeloProposta = repository.getEntity(id);
         if (modeloProposta != null && modeloProposta.getAnexos() != null) {
             modeloProposta.getAnexos().size();
@@ -142,9 +142,11 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
 
     @Override
     public boolean isValid(ModeloProposta entity) {
+        
         if (entity == null) {
             throw new GenericException("Modelo nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
+        
         return true;
     }
 

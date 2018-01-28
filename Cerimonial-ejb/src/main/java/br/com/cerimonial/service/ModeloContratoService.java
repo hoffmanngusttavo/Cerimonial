@@ -42,7 +42,7 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
     }
 
     @Override
-    public ModeloContrato getEntity(Long id) throws Exception {
+    public ModeloContrato findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 
@@ -95,9 +95,11 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
 
     @Override
     public boolean isValid(ModeloContrato entity) {
+        
         if (entity == null) {
             throw new GenericException("Modelo Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
+        
         return true;
     }
 

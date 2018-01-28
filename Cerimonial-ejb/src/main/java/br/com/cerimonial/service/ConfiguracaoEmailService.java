@@ -10,7 +10,6 @@ import br.com.cerimonial.enums.TipoEmail;
 import br.com.cerimonial.repository.ConfiguracaoEmailRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
     }
 
     @Override
-    public ConfiguracaoEmail getEntity(Long id) throws Exception {
+    public ConfiguracaoEmail findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

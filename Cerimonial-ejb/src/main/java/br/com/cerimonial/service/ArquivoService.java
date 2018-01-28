@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -34,6 +35,12 @@ import javax.ejb.TransactionManagementType;
 public class ArquivoService extends BasicService<Arquivo> {
 
     private ArquivoRepository repository;
+    
+    @EJB
+    private ModeloPropostaService modeloPropostaService;
+    
+    @EJB
+    private ModeloEmailService modeloEmailService;
 
     @PostConstruct
     @PostActivate
@@ -42,7 +49,7 @@ public class ArquivoService extends BasicService<Arquivo> {
     }
 
     @Override
-    public Arquivo getEntity(Long id) throws Exception {
+    public Arquivo findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 
@@ -67,8 +74,11 @@ public class ArquivoService extends BasicService<Arquivo> {
     }
 
     public List<Arquivo> getArquivosByModeloProposta(ModeloProposta entity) {
+        
+        modeloPropostaService.isValid(entity);
+        
         try {
-            if (entity != null && entity.getId() != null) {
+            if (entity.getId() != null) {
                 return repository.getArquivosByModeloProposta(entity);
             }
         } catch (Exception ex) {
@@ -88,8 +98,11 @@ public class ArquivoService extends BasicService<Arquivo> {
     }
 
     public List<Arquivo> getArquivosByModeloEmail(ModeloEmail entity) {
+        
+        modeloEmailService.isValid(entity);
+        
         try {
-            if (entity != null && entity.getId() != null) {
+            if (entity.getId() != null) {
                 return repository.getArquivosByModeloProposta(entity);
             }
         } catch (Exception ex) {

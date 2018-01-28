@@ -42,6 +42,9 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
 
     @EJB
     protected UsuarioService usuarioService;
+    
+    @EJB
+    protected EventoService eventoService;
 
     private EventoPessoaRepository repository;
 
@@ -53,7 +56,8 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
     }
 
     @Override
-    public EventoPessoa getEntity(Long id) throws Exception {
+    public EventoPessoa findEntityById(Long id) throws Exception {
+
         EventoPessoa entity = repository.getEntity(id);
 
         if (entity != null && entity.getPessoa() != null) {
@@ -80,7 +84,7 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
     public EventoPessoa findEntityLazy(Long id) throws Exception {
         EventoPessoa entity = repository.getEntity(id);
 
-        if (entity != null ) {
+        if (entity != null) {
 
             if (entity.getPessoa() != null) {
                 if (entity.getPessoa().getContatosFamiliares() != null) {
@@ -213,23 +217,17 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
         return entity;
     }
 
-    
-
-   
-
     @Override
     public boolean isValid(EventoPessoa entity) {
+
         if (entity == null) {
             throw new GenericException("Evento Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
+        
+        eventoService.isValid(entity.getEvento());
 
-        if (entity.getPessoa() == null) {
-            throw new GenericException("Contratate nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (entity.getEvento() == null) {
-            throw new GenericException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        pessoaService.isValid(entity.getPessoa());
+        
         return true;
     }
 

@@ -51,7 +51,7 @@ public class ClienteResource {
     @GET
     @Path("{clienteId}")
     public Pessoa getProduto(@PathParam("clienteId") long id) throws Exception {
-        return service.getEntity(id);
+        return service.findEntityById(id);
     }
 
     @POST
@@ -72,7 +72,7 @@ public class ClienteResource {
     @DELETE
     @Path("{clienteId}")
     public void delete(@PathParam("clienteId") long id) throws Exception {
-        Pessoa entity = service.getEntity(id);
+        Pessoa entity = service.findEntityById(id);
         service.delete(entity);
     }
 

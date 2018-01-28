@@ -42,7 +42,7 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
     }
 
     @Override
-    public TipoIndicacao getEntity(Long id) throws Exception {
+    public TipoIndicacao findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

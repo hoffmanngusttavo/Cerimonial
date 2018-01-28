@@ -42,7 +42,7 @@ public class LoginService extends BasicService<Login> {
     }
 
     @Override
-    public Login getEntity(Long id) throws Exception {
+    public Login findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

@@ -77,7 +77,7 @@ public class LancamentoOrcamentoMB extends BasicControl {
 
                 if (entity == null) {
 
-                    orcamentoEvento = orcamentoService.getEntity(idOrcamento);
+                    orcamentoEvento = orcamentoService.findEntityById(idOrcamento);
 
                     entity = service.criarNovoLancamentoSaidaOrcamento(orcamentoEvento, contratantes);
 

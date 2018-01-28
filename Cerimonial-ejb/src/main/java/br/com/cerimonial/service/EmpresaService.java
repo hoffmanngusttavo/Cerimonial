@@ -46,7 +46,7 @@ public class EmpresaService extends BasicService<Empresa> {
     }
 
     @Override
-    public Empresa getEntity(Long id) throws Exception {
+    public Empresa findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

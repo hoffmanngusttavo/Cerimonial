@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -35,6 +36,9 @@ import javax.ejb.TransactionManagementType;
 public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> {
 
     private AlertaDestinatarioRepository repository;
+    
+    @EJB
+    private UsuarioService usuarioService;
 
     @PostConstruct
     @PostActivate
@@ -43,20 +47,21 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
     }
 
     @Override
-    public AlertaDestinatario getEntity(Long id) throws Exception {
+    public AlertaDestinatario findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 
     @Override
     public AlertaDestinatario save(AlertaDestinatario entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
+
     }
 
     public List<AlertaDestinatario> findAll() {
@@ -69,8 +74,11 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
     }
 
     public void delete(AlertaDestinatario categoria) throws Exception {
+        
         isValid(categoria);
+        
         repository.delete(categoria.getId());
+        
     }
 
     public int countAll() {
@@ -93,9 +101,11 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
 
     @Override
     public boolean isValid(AlertaDestinatario entity) {
+        
         if (entity == null) {
             throw new GenericException("AlertaDestinatario nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
+        
         return true;
     }
 
@@ -107,55 +117,49 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      * @return
      * @throws java.lang.Exception
      */
-    public List<AlertaDestinatario> findAlertasUsuarioNaoVisualizados(int limit, Usuario usuario) throws Exception{
+    public List<AlertaDestinatario> findAlertasUsuarioNaoVisualizados(int limit, Usuario usuario) throws Exception {
 
-        if (usuario == null) {
-            throw new GenericException("Usuário do alerta nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
+        usuarioService.isValid(usuario);
         
         return repository.findAlertasUsuarioNaoVisualizados(limit, usuario, new Date());
 
     }
-    
+
     /**
-     * Contabilizar os ultimos alertas que não foram visualizados do usuário logado
+     * Contabilizar os ultimos alertas que não foram visualizados do usuário
+     * logado
      *
      * @param usuario
      * @return
      * @throws java.lang.Exception
      */
-    public Integer countAlertasUsuarioNaoVisualizados(Usuario usuario) throws Exception{
+    public Integer countAlertasUsuarioNaoVisualizados(Usuario usuario) throws Exception {
 
-        if (usuario == null) {
-            throw new GenericException("Usuário do alerta nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        
+        usuarioService.isValid(usuario);
+
         return repository.countAlertasUsuarioNaoVisualizados(usuario, new Date());
 
     }
 
     /**
      * Alterar para visualizado o alerta
+     *
      * @param entity
-     * @return 
+     * @return
      * @throws java.lang.Exception
      */
     public AlertaDestinatario alterarAlertaVisualizado(AlertaDestinatario entity) throws Exception {
-        
+
         isValid(entity);
-        
-        if(!entity.isVisualizado()){
-             
+
+        if (!entity.isVisualizado()) {
+
             entity.setVisualizado(true);
-            
+
             return this.save(entity);
         }
-        
+
         return entity;
     }
-
-   
 
 }

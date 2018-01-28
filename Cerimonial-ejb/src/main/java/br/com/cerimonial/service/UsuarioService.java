@@ -50,7 +50,7 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     @Override
-    public Usuario getEntity(Long id) throws Exception {
+    public Usuario findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
     
@@ -127,7 +127,7 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     public synchronized Usuario alterarSenha(Usuario entity) throws Exception {
-        Usuario usuario = this.getEntity(entity.getId());
+        Usuario usuario = this.findEntityById(entity.getId());
         if (usuario != null && !usuario.getSenha().equals(entity.getSenha())) {
             alterarSaltSenha(entity);
         }
@@ -135,7 +135,7 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     public synchronized Usuario alterarSenha(Usuario entity, String novaSenha) throws Exception {
-        Usuario usuario = this.getEntity(entity.getId());
+        Usuario usuario = this.findEntityById(entity.getId());
 
         if (usuario != null && !usuario.getSenha().equals(novaSenha)) {
             entity.setSenha(novaSenha);
@@ -311,9 +311,11 @@ public class UsuarioService extends BasicService<Usuario> {
 
     @Override
     public boolean isValid(Usuario entity) {
+        
         if (entity == null) {
             throw new GenericException("Usuário nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
+        
         return true;
     }
 

@@ -72,7 +72,7 @@ public class PreEventoMB extends BasicControl {
         try {
             if (id != null) {
 
-                entity = service.getEntity(id);
+                entity = service.findEntityById(id);
 
                 evento = eventoService.getEventoByContatoInicial(entity);
                 
@@ -122,7 +122,7 @@ public class PreEventoMB extends BasicControl {
 
             eventoService.cancelarEvento(evento.getId(), evento.getMotivoCancelamento());
 
-            evento = eventoService.getEntity(evento.getId());
+            evento = eventoService.findEntityById(evento.getId());
 
             createFacesInfoMessage("Evento cancelado com sucesso");
 
@@ -140,7 +140,7 @@ public class PreEventoMB extends BasicControl {
 
             eventoService.liberarAcessoSistemaContratanteEvento(evento);
 
-            evento = eventoService.getEntity(evento.getId());
+            evento = eventoService.findEntityById(evento.getId());
 
             createFacesInfoMessage("Liberado acesso com sucesso");
 
@@ -158,7 +158,7 @@ public class PreEventoMB extends BasicControl {
 
             eventoService.cancelarAcessoSistemaContratanteEvento(evento);
 
-            evento = eventoService.getEntity(evento.getId());
+            evento = eventoService.findEntityById(evento.getId());
 
             createFacesInfoMessage("Cancelado acesso com sucesso");
 

@@ -44,6 +44,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
     protected EventoService eventoService;
     
     @EJB
+    protected ModeloContratoService modeloContratoService;
+    
+    @EJB
     protected AlertaService alertaService;
 
     @PostConstruct
@@ -59,7 +62,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      * @throws java.lang.Exception
      */
     @Override
-    public ContratoEvento getEntity(Long id) throws Exception {
+    public ContratoEvento findEntityById(Long id) throws Exception {
         ContratoEvento entity = repository.getEntity(id);
 
         return entity;
@@ -146,7 +149,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
 
         isValid(entity);
 
-        entity = this.getEntity(entity.getId());
+        entity = this.findEntityById(entity.getId());
         
         entity.setLiberadoCliente(true);
 
@@ -192,17 +195,15 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
 
     @Override
     public boolean isValid(ContratoEvento entity) {
+        
         if (entity == null) {
             throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        if (entity.getEvento() == null) {
-            throw new GenericException("Evento do Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (entity.getModeloContrato() == null) {
-            throw new GenericException("Modelo de Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        eventoService.isValid(entity.getEvento());
+        
+        modeloContratoService.isValid(entity.getModeloContrato());
+        
         return true;
     }
 
@@ -221,7 +222,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
         
         if (StringUtils.isNotBlank(conteudo)) {
             
-            Evento evento = eventoService.getEntity(entity.getEvento().getId());
+            Evento evento = eventoService.findEntityById(entity.getEvento().getId());
 
             conteudo = conteudo.replaceAll("#dadosContratante#", substituirDadosContratante(evento));
             conteudo = conteudo.replaceAll("#dadosEvento#", substituirDadosEvento(evento));

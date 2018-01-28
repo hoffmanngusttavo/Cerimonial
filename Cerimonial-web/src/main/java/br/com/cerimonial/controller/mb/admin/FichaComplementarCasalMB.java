@@ -36,7 +36,7 @@ public class FichaComplementarCasalMB extends BasicControl{
     public void initEvento() {
         try {
             
-            evento = eventoService.getEntity(idEvento);
+            evento = eventoService.findEntityById(idEvento);
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

@@ -48,7 +48,8 @@ public class PessoaService extends BasicService<Pessoa> {
     }
 
     @Override
-    public Pessoa getEntity(Long id) throws Exception {
+    public Pessoa findEntityById(Long id) throws Exception {
+        
         Pessoa entity = repository.getEntity(id);
 
         if (entity != null) {

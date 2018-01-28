@@ -95,7 +95,7 @@ public class EnderecoService extends BasicService<Endereco> {
     }
 
     @Override
-    public Endereco getEntity(Long id) throws Exception {
+    public Endereco findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

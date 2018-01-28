@@ -39,7 +39,7 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
     }
 
     @Override
-    public ContatoEnvolvido getEntity(Long id) throws Exception {
+    public ContatoEnvolvido findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

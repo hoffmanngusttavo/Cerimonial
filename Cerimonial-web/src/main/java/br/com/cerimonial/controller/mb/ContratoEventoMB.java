@@ -56,7 +56,7 @@ public class ContratoEventoMB extends BasicControl {
                 entity = service.getContratoByEvento(id);
 
                 if (entity == null) {
-                    Evento evento = eventoService.getEntity(id);
+                    Evento evento = eventoService.findEntityById(id);
                     entity = new ContratoEvento(evento);
                 }
 
@@ -79,7 +79,7 @@ public class ContratoEventoMB extends BasicControl {
         if (id != null) {
             try {
 
-                entity = service.getEntity(id);
+                entity = service.findEntityById(id);
 
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

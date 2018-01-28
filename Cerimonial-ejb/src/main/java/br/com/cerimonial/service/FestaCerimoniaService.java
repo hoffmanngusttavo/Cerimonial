@@ -37,7 +37,7 @@ public class FestaCerimoniaService extends BasicService<FestaCerimonia>{
     }
 
     @Override
-    public FestaCerimonia getEntity(Long id) throws Exception {
+    public FestaCerimonia findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

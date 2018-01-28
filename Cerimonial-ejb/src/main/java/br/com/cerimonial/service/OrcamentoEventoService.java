@@ -74,7 +74,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     }
 
     @Override
-    public OrcamentoEvento getEntity(Long id) throws Exception {
+    public OrcamentoEvento findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

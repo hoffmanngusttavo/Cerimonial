@@ -51,7 +51,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
      * @throws java.lang.Exception
      */
     @Override
-    public ContatoEvento getEntity(Long id) throws Exception {
+    public ContatoEvento findEntityById(Long id) throws Exception {
         ContatoEvento entity = repository.getEntity(id);
         
         if (entity != null) {

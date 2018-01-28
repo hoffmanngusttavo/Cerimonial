@@ -41,7 +41,7 @@ public class ParcelaService extends BasicService<Parcela>{
     }
 
     @Override
-    public Parcela getEntity(Long id) throws Exception {
+    public Parcela findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

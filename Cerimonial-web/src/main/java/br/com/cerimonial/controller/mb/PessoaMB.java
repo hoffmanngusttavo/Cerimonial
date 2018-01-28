@@ -62,7 +62,7 @@ public class PessoaMB extends BasicControl {
 
         if (id != null) {
             try {
-                entity = service.getEntity(id);
+                entity = service.findEntityById(id);
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }

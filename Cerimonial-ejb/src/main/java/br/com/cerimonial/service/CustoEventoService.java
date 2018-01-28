@@ -9,11 +9,9 @@ import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
 import br.com.cerimonial.entity.OrcamentoEvento;
-import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.CustoEventoRepository;
-import br.com.cerimonial.utils.CollectionUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,7 +45,7 @@ public class CustoEventoService extends BasicService<CustoEvento> {
     }
 
     @Override
-    public CustoEvento getEntity(Long id) throws Exception {
+    public CustoEvento findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

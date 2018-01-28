@@ -42,7 +42,7 @@ public class EstadoService extends BasicService<Estado> {
     }
 
     @Override
-    public Estado getEntity(Long id) throws Exception {
+    public Estado findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

@@ -51,7 +51,7 @@ public class LancamentoService extends BasicService<Lancamento> {
     }
 
     @Override
-    public Lancamento getEntity(Long id) throws Exception {
+    public Lancamento findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

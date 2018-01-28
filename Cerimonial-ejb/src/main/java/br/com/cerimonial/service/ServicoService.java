@@ -42,7 +42,7 @@ public class ServicoService extends BasicService<Servico>{
     }
 
     @Override
-    public Servico getEntity(Long id) throws Exception {
+    public Servico findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

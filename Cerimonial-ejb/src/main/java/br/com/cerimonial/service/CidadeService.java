@@ -42,7 +42,7 @@ public class CidadeService extends BasicService<Cidade> {
     }
 
     @Override
-    public Cidade getEntity(Long id) throws Exception {
+    public Cidade findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

@@ -35,6 +35,7 @@ public class AlertaDestinatarioRepository extends AbstractRepository<AlertaDesti
      * @return
      */
     public List<AlertaDestinatario> findAlertasUsuarioNaoVisualizados(int limit, Usuario usuario, Date data) {
+        
         try {
             SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
             StringBuilder sb = new StringBuilder();

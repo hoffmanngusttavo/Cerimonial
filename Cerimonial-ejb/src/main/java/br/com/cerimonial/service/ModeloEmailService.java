@@ -48,11 +48,14 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
     }
 
     @Override
-    public ModeloEmail getEntity(Long id) throws Exception {
+    public ModeloEmail findEntityById(Long id) throws Exception {
+        
         ModeloEmail entity = repository.getEntity(id);
+        
         if (entity != null && entity.getAnexos() != null) {
             entity.getAnexos().size();
         }
+        
         return entity;
     }
 

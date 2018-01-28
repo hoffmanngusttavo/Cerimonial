@@ -66,7 +66,7 @@ public class EventoService extends BasicService<Evento> {
     }
 
     @Override
-    public Evento getEntity(Long id) throws Exception {
+    public Evento findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 
@@ -284,9 +284,11 @@ public class EventoService extends BasicService<Evento> {
 
     @Override
     public boolean isValid(Evento entity) {
+        
         if (entity == null) {
             throw new GenericException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
+        
         return true;
     }
 
@@ -578,7 +580,7 @@ public class EventoService extends BasicService<Evento> {
             throw new GenericException("Motivo de cancelamento não deve ser vazio", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        Evento evento = getEntity(idEvento);
+        Evento evento = findEntityById(idEvento);
 
         List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratanteUsuario());
 //        
@@ -608,7 +610,7 @@ public class EventoService extends BasicService<Evento> {
 
         isValid(evento);
 
-        evento = getEntity(evento.getId());
+        evento = findEntityById(evento.getId());
 
         Pessoa cliente = pessoaService.criarClienteFromContato(evento.getOrcamentoEvento());
         pessoaService.saveCliente(cliente);
@@ -644,7 +646,7 @@ public class EventoService extends BasicService<Evento> {
 
         isValid(evento);
 
-        evento = getEntity(evento.getId());
+        evento = findEntityById(evento.getId());
 
         List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratanteUsuario());
 //        

@@ -50,7 +50,7 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
     }
 
     @Override
-    public EvolucaoPreenchimento getEntity(Long id) throws Exception {
+    public EvolucaoPreenchimento findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 

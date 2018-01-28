@@ -16,7 +16,6 @@ import br.com.cerimonial.repository.AlertaRepository;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +41,18 @@ public class AlertaService extends BasicService<Alerta> {
 
     @EJB
     protected UsuarioService usuarioService;
+    
+    @EJB
+    protected ContratoEventoService contratoEventoService;
+    
+    @EJB
+    protected PessoaService pessoaService;
+    
+    @EJB
+    protected EventoPessoaService eventoPessoaService;
+    
+    @EJB
+    protected EventoService eventoService;
 
     private AlertaRepository repository;
 
@@ -52,20 +63,21 @@ public class AlertaService extends BasicService<Alerta> {
     }
 
     @Override
-    public Alerta getEntity(Long id) throws Exception {
+    public Alerta findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
 
     @Override
     public Alerta save(Alerta entity) throws Exception {
-        if (entity != null) {
-            if (entity.getId() == null) {
-                return repository.create(entity);
-            } else {
-                return repository.edit(entity);
-            }
+
+        isValid(entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
         }
-        return null;
+        
     }
 
     public List<Alerta> findAll() {
@@ -110,17 +122,9 @@ public class AlertaService extends BasicService<Alerta> {
 
     public void enviarAlertaContratoLiberado(ContratoEvento entity) throws Exception {
 
-        if (entity == null) {
-            throw new GenericException("Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (entity.getEvento() == null) {
-            throw new GenericException("Evento nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (entity.getEvento().getContratanteUsuario() == null) {
-            throw new GenericException("Usuario do evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        contratoEventoService.isValid(entity);
+        
+        pessoaService.isValid(entity.getEvento().getContratanteUsuario());
 
         String caminho = "/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento=" + entity.getEvento().getId();
         String titulo = "Contrato";
@@ -138,14 +142,8 @@ public class AlertaService extends BasicService<Alerta> {
      * @param entity
      */
     public void enviarAlertaUsuarioAdminContratante(EventoPessoa entity) {
-
-        if (entity == null) {
-            throw new GenericException("EventoPessoa nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (entity.getEvento() == null) {
-            throw new GenericException("Evento nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        
+        eventoPessoaService.isValid(entity);
 
         try {
 
@@ -171,14 +169,8 @@ public class AlertaService extends BasicService<Alerta> {
      * @param entity
      */
     public void enviarAlertaUsuarioAdminDadosNoivo(EventoPessoa entity) {
-
-        if (entity == null) {
-            throw new GenericException("EventoPessoa nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (entity.getEvento() == null) {
-            throw new GenericException("Evento nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        
+        eventoPessoaService.isValid(entity);
 
         try {
 
@@ -200,10 +192,8 @@ public class AlertaService extends BasicService<Alerta> {
 
     public void enviarAlertaUsuarioAdminDadosEvento(Evento entity) {
 
-        if (entity == null) {
-            throw new GenericException("Evento nulo para enviar alerta.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
+        eventoService.isValid(entity);
+        
         try {
 
             List<Usuario> usuarios = usuarioService.findUsuariosAdminAtivos();
@@ -233,9 +223,7 @@ public class AlertaService extends BasicService<Alerta> {
      */
     public Alerta criarAlerta(String caminho, String titulo, String mensagem, Usuario destinatario) throws Exception {
 
-        if (destinatario == null) {
-            throw new GenericException("Destinatario do alerta nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        usuarioService.isValid(destinatario);
 
         return criarAlerta(caminho, titulo, mensagem, Arrays.asList(destinatario));
     }
@@ -256,17 +244,8 @@ public class AlertaService extends BasicService<Alerta> {
             throw new GenericException("Destinatarios do alerta não pode ser nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        Alerta alerta = new Alerta();
+        return new Alerta(titulo, mensagem, caminho, destinatarios);
 
-        alerta.setDataCadastro(new Date());
-        alerta.setVigenciaInicial(new Date());
-        alerta.setTitulo(titulo);
-        alerta.setMensagem(mensagem);
-        alerta.setLink(caminho);
-
-        alerta.adicionarDestinatarios(destinatarios);
-
-        return alerta;
     }
 
 }

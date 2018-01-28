@@ -36,7 +36,7 @@ public class ClienteControl extends BasicControl implements Serializable {
             
             Usuario user = (Usuario) SecurityUtils.getSubject().getPrincipal();
             
-            usuarioLogado = usuarioService.getEntity(user.getId());
+            usuarioLogado = usuarioService.findEntityById(user.getId());
 
             cliente = pessoaService.getClienteByUsuario(usuarioLogado);
 

@@ -81,7 +81,6 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
 
     public List<Usuario> findUsuariosAdminAtivos() {
         
-        
         return getPureList(Usuario.class, "select usr from Usuario usr where usr.admin = true and usr.ativo = true");
         
     }

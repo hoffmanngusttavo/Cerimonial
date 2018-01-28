@@ -72,6 +72,27 @@ public class Alerta implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "alerta", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<AlertaDestinatario> destinatarios;
 
+    public Alerta() {
+    }
+
+    public Alerta( String titulo, String mensagem, String link, List<Usuario> destinatarios) {
+        
+        this.dataCadastro = new Date();
+        this.vigenciaInicial = new Date();
+        
+        this.titulo = titulo;
+        this.mensagem = mensagem;
+        this.link = link;
+        
+        this.adicionarDestinatarios(destinatarios);
+        
+    }
+
+    
+    
+    
+    
+    
      @Override
     public Long getId() {
         return id;
@@ -156,7 +177,7 @@ public class Alerta implements Serializable, ModelInterface {
 
    
     
-    public void adicionarDestinatarios(List<Usuario> usuarios){
+    private void adicionarDestinatarios(List<Usuario> usuarios){
         
         if(CollectionUtils.isNotBlank(usuarios)){
             
@@ -164,11 +185,9 @@ public class Alerta implements Serializable, ModelInterface {
                 this.destinatarios = new ArrayList<>();
             }
             
-            for (Usuario usuario : usuarios) {
-                
+            usuarios.stream().forEach((usuario) -> {
                 this.destinatarios.add(new AlertaDestinatario(usuario, this));
-                
-            }
+            });
             
         }
     

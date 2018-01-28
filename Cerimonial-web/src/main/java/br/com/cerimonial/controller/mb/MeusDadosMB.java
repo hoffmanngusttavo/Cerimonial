@@ -41,7 +41,7 @@ public class MeusDadosMB extends BasicControl {
                 if (SecurityUtils.getSubject().getPrincipal() != null) {
                     Usuario usuario = (Usuario) SecurityUtils.getSubject().getPrincipal();
 
-                    entity = service.getEntity(usuario.getId());
+                    entity = service.findEntityById(usuario.getId());
                 }
             }
         } catch (Exception ex) {

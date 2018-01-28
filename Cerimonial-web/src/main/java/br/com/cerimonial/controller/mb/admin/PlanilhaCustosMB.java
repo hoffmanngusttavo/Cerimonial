@@ -6,12 +6,10 @@
 package br.com.cerimonial.controller.mb.admin;
 
 import br.com.cerimonial.controller.BasicControl;
-import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.service.CustoEventoService;
 import br.com.cerimonial.service.EventoService;
-import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -48,7 +46,7 @@ public class PlanilhaCustosMB extends BasicControl {
             
             if(entity == null){
                 
-                Evento evento = eventoService.getEntity(idEvento);
+                Evento evento = eventoService.findEntityById(idEvento);
                 
                 entity = new CustoEvento(evento);
             }

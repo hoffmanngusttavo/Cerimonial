@@ -65,7 +65,7 @@ public class OrcamentoEventoMB extends BasicControl {
         if (idContato != null) {
             try {
 
-                contatoEvento = contatoEventoService.getEntity(idContato);
+                contatoEvento = contatoEventoService.findEntityById(idContato);
 
                 evento = eventoService.getEventoByContatoInicial(contatoEvento);
 

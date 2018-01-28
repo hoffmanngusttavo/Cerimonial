@@ -20,7 +20,7 @@ abstract class BasicService<T> implements Serializable {
     @PersistenceContext(unitName = "CerimonialPU")
     protected EntityManager em;
 
-    public abstract T getEntity(Long id) throws Exception;
+    public abstract T findEntityById(Long id) throws Exception;
     
     public abstract T save(T entity) throws Exception;
     
