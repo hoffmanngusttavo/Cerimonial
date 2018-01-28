@@ -48,18 +48,20 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
     }
 
     public ConfiguracaoEmail getConfiguracaoEmail() throws Exception {
-        List<ConfiguracaoEmail> emails = repository.findRangeListagem(1, 0, null, null);
-        if (CollectionUtils.isNotBlank(emails)) {
-            return emails.get(0);
+        
+        List<ConfiguracaoEmail> emails = repository.findAll();
+        
+        if (CollectionUtils.isBlank(emails)) {
+            throw new GenericException("Não há nenhuma configuração de email cadastrada", ErrorCode.BAD_REQUEST.getCode());
         }
         
-        throw new GenericException("Não há nenhuma configuração de email cadastrada", ErrorCode.BAD_REQUEST.getCode());
+        return emails.get(0);
     }
 
     @Override
     public ConfiguracaoEmail save(ConfiguracaoEmail entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -79,7 +81,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
 
     public void delete(ConfiguracaoEmail contato) throws Exception {
 
-        isValid(contato);
+        validateObject(contato);
 
         repository.delete(contato.getId());
     }
@@ -134,12 +136,6 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
         return email;
     }
 
-    @Override
-    public boolean isValid(ConfiguracaoEmail entity) {
-        if (entity == null) {
-            throw new GenericException("Configuração de email nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
+    
 
 }

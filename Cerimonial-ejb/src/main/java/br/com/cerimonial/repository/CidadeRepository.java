@@ -29,12 +29,12 @@ public class CidadeRepository extends AbstractRepository<Cidade> {
         return getPurePojo(Cidade.class, sql.toString(), city, sigla);
     }
 
-    public List<Cidade> findByEstado(Estado estado) throws Exception {
+    public List<Cidade> findByIdEstado(Long idEstado) throws Exception {
         StringBuilder sql = new StringBuilder("select city from Cidade city  ");
         sql.append("INNER JOIN city.estado estado");
         sql.append(" where 1=1");
         sql.append(" and estado.id = ?1");
-        return getPureList(Cidade.class, sql.toString(), estado.getId());
+        return getPureList(Cidade.class, sql.toString(), idEstado);
     }
 
 }

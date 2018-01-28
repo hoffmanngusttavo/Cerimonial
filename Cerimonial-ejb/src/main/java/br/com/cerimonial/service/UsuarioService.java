@@ -59,7 +59,7 @@ public class UsuarioService extends BasicService<Usuario> {
     @Override
     public synchronized Usuario save(Usuario entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
         
         if (StringUtils.isNotBlank(entity.getLogin())) {
             
@@ -92,7 +92,7 @@ public class UsuarioService extends BasicService<Usuario> {
 
     public void delete(Usuario user) throws Exception {
 
-        isValid(user);
+        validateObject(user);
 
         if (user.isMaster()) {
             throw new Exception("Usuário master não pode ser removido");
@@ -242,7 +242,7 @@ public class UsuarioService extends BasicService<Usuario> {
      */
     public void enviarEmailBoasVindas(Usuario user, String senha) throws Exception {
 
-        isValid(user);
+        validateObject(user);
 
         CerimonialUtils.validarEmail(user.getEmail());
 
@@ -273,7 +273,7 @@ public class UsuarioService extends BasicService<Usuario> {
      */
     public void enviarEmailEsqueciMinhaSenha(Usuario user, String senha) throws Exception {
         
-        isValid(user);
+        validateObject(user);
 
         //carregar invoice padrao
         String body = InvoiceUtils.readFileToString("esqueci-minha-senha.html");
@@ -298,7 +298,7 @@ public class UsuarioService extends BasicService<Usuario> {
         CerimonialUtils.validarEmail(email);
 
         Usuario usuario = getUsuarioByEmail(email);
-        isValid(usuario);
+        validateObject(usuario);
         if (!usuario.isAtivo()) {
             throw new Exception("Seu usuário está inativo, entre em contato com seu cerimonial");
         }
@@ -309,16 +309,6 @@ public class UsuarioService extends BasicService<Usuario> {
         this.enviarEmailEsqueciMinhaSenha(usuario, senhaNova);
     }
 
-    @Override
-    public boolean isValid(Usuario entity) {
-        
-        if (entity == null) {
-            throw new GenericException("Usuário nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        return true;
-    }
-
     
     /**
      * Metodo para inativar usuário
@@ -326,7 +316,7 @@ public class UsuarioService extends BasicService<Usuario> {
      */
     public void inativarUsuario(Usuario usuario) {
 
-        isValid(usuario);
+        validateObject(usuario);
 
         usuario.setAtivo(false);
 

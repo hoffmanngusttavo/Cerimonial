@@ -49,7 +49,7 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
     @Override
     public ModeloContrato save(ModeloContrato entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         //salvar ModeloContrato
         if (entity.getId() == null) {
@@ -70,7 +70,7 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
 
     public void delete(ModeloContrato categoria) throws Exception {
 
-        isValid(categoria);
+        validateObject(categoria);
 
         repository.delete(categoria.getId());
     }
@@ -93,15 +93,7 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
         return null;
     }
 
-    @Override
-    public boolean isValid(ModeloContrato entity) {
-        
-        if (entity == null) {
-            throw new GenericException("Modelo Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        return true;
-    }
+
 
     public List<ModeloContrato> findModelosContratoByTipoEvento(TipoEvento tipoEvento) {
 

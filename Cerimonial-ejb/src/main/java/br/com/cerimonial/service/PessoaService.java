@@ -66,7 +66,7 @@ public class PessoaService extends BasicService<Pessoa> {
     @Override
     public synchronized Pessoa save(Pessoa entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -81,7 +81,7 @@ public class PessoaService extends BasicService<Pessoa> {
 
     public void delete(Pessoa entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         repository.delete(entity.getId());
     }
@@ -126,7 +126,7 @@ public class PessoaService extends BasicService<Pessoa> {
     //-----------Clientes----------------------
     public Pessoa saveCliente(Pessoa entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -150,7 +150,7 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public Pessoa editCliente(Pessoa entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
         
         isValidCliente(entity);
 
@@ -170,7 +170,7 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public Pessoa createCliente(Pessoa entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         entity.setId(null);
         return saveCliente(entity);
@@ -196,7 +196,7 @@ public class PessoaService extends BasicService<Pessoa> {
     //-----------Fornecedores----------------------
     public Pessoa saveFornecedor(Pessoa entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -214,7 +214,7 @@ public class PessoaService extends BasicService<Pessoa> {
     //--------------------COLABORADOR----------------------------
     public Pessoa saveColaborador(Pessoa entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -304,15 +304,7 @@ public class PessoaService extends BasicService<Pessoa> {
     
    
 
-    @Override
-    public boolean isValid(Pessoa entity) {
 
-        if (entity == null) {
-            throw new GenericException("Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-
-    }
     
     public boolean isValidCliente(Pessoa entity) throws Exception {
 
@@ -376,7 +368,7 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public void inativarPessoa(Pessoa contratante) {
         
-        isValid(contratante);
+        validateObject(contratante);
         
         contratante.setAtivo(false);
         

@@ -49,7 +49,7 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
     @Override
     public TipoIndicacao save(TipoIndicacao entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -69,7 +69,7 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
 
     public void delete(TipoIndicacao categoria) throws Exception {
 
-        isValid(categoria);
+        validateObject(categoria);
 
         repository.delete(categoria.getId());
     }
@@ -103,12 +103,6 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
         return null;
     }
 
-    @Override
-    public boolean isValid(TipoIndicacao entity) {
-        if (entity == null) {
-            throw new GenericException("Tipo Indicação nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
+   
 
 }

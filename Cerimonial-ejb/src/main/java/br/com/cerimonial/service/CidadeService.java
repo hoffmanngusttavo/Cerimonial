@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -22,6 +23,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -34,6 +36,9 @@ import javax.ejb.TransactionManagementType;
 public class CidadeService extends BasicService<Cidade> {
 
     private CidadeRepository repository;
+
+    @EJB
+    private EstadoService estadoService;
 
     @PostConstruct
     @PostActivate
@@ -51,6 +56,15 @@ public class CidadeService extends BasicService<Cidade> {
     }
 
     public Cidade findByNomeEstado(String city, String sigla) {
+
+        if (StringUtils.isBlank(city)) {
+            throw new GenericException("Nome da cidade não pode ser nula", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (StringUtils.isBlank(sigla)) {
+            throw new GenericException("Sigla do estado não pode ser nula", ErrorCode.BAD_REQUEST.getCode());
+        }
+
         try {
             return repository.findByNomeEstado(city, sigla);
         } catch (Exception ex) {
@@ -60,12 +74,13 @@ public class CidadeService extends BasicService<Cidade> {
     }
 
     public List<Cidade> findByEstado(Estado estado) {
-        if (estado != null) {
-            try {
-                return repository.findByEstado(estado);
-            } catch (Exception ex) {
-                Logger.getLogger(CidadeService.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+       estadoService.validateObjectAndId(estado);
+
+        try {
+            return repository.findByIdEstado(estado.getId());
+        } catch (Exception ex) {
+            Logger.getLogger(CidadeService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new ArrayList<>();
     }
@@ -78,24 +93,18 @@ public class CidadeService extends BasicService<Cidade> {
     @Override
     public Cidade save(Cidade entity) {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
-            
+
             return repository.create(entity);
 
         } else {
-            
+
             return repository.edit(entity);
         }
     }
 
-    @Override
-    public boolean isValid(Cidade entity) {
-        if (entity == null) {
-            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
+   
 
 }

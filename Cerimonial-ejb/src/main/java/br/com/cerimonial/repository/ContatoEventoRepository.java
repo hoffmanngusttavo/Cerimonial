@@ -8,7 +8,6 @@ package br.com.cerimonial.repository;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.enums.ClassificacaoContato;
-import br.com.cerimonial.enums.SituacaoEvento;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

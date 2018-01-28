@@ -52,7 +52,7 @@ public class CustoEventoService extends BasicService<CustoEvento> {
     @Override
     public CustoEvento save(CustoEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -73,18 +73,18 @@ public class CustoEventoService extends BasicService<CustoEvento> {
         return null;
     }
 
-    @Override
-    public boolean isValid(CustoEvento entity) {
-        if (entity == null) {
-            throw new GenericException("Custo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (entity.getEvento() == null) {
-            throw new GenericException("Evento de Custo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        return true;
-    }
+//    @Override
+//    public boolean validateObject(CustoEvento entity) {
+//        if (entity == null) {
+//            throw new GenericException("Custo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+//        }
+//
+//        if (entity.getEvento() == null) {
+//            throw new GenericException("Evento de Custo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+//        }
+//
+//        return true;
+//    }
 
     /**
      * Vai retornar o custo do evento carregando em lazy os lançamentos e

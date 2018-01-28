@@ -54,7 +54,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
     @Override
     public AlertaDestinatario save(AlertaDestinatario entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -75,7 +75,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
 
     public void delete(AlertaDestinatario categoria) throws Exception {
         
-        isValid(categoria);
+        validateObject(categoria);
         
         repository.delete(categoria.getId());
         
@@ -99,15 +99,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
         return null;
     }
 
-    @Override
-    public boolean isValid(AlertaDestinatario entity) {
-        
-        if (entity == null) {
-            throw new GenericException("AlertaDestinatario nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        return true;
-    }
+   
 
     /**
      * Carregar os ultimos alertas que não foram visualizados do usuário logado
@@ -119,7 +111,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      */
     public List<AlertaDestinatario> findAlertasUsuarioNaoVisualizados(int limit, Usuario usuario) throws Exception {
 
-        usuarioService.isValid(usuario);
+        usuarioService.validateObject(usuario);
         
         return repository.findAlertasUsuarioNaoVisualizados(limit, usuario, new Date());
 
@@ -135,7 +127,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      */
     public Integer countAlertasUsuarioNaoVisualizados(Usuario usuario) throws Exception {
 
-        usuarioService.isValid(usuario);
+        usuarioService.validateObject(usuario);
 
         return repository.countAlertasUsuarioNaoVisualizados(usuario, new Date());
 
@@ -150,7 +142,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      */
     public AlertaDestinatario alterarAlertaVisualizado(AlertaDestinatario entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (!entity.isVisualizado()) {
 

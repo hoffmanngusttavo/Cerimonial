@@ -61,7 +61,7 @@ public class EmpresaService extends BasicService<Empresa> {
     @Override
     public Empresa save(Empresa entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
         
         Pessoa pessoa = atualizarDadosPessoa(entity);
         
@@ -76,15 +76,7 @@ public class EmpresaService extends BasicService<Empresa> {
         }
     }
 
-    @Override
-    public boolean isValid(Empresa entity) {
-        
-        if (entity == null) {
-            throw new GenericException("Empresa nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        return true;
-    }
+   
 
     private Pessoa atualizarDadosPessoa(Empresa entity) {
         

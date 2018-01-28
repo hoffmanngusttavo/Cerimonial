@@ -48,7 +48,7 @@ public class ParcelaService extends BasicService<Parcela>{
     @Override
     public Parcela save(Parcela entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -68,7 +68,7 @@ public class ParcelaService extends BasicService<Parcela>{
 
     public void delete(Parcela categoria) throws Exception {
 
-        isValid(categoria);
+        validateObject(categoria);
 
         repository.delete(categoria.getId());
     }
@@ -92,7 +92,7 @@ public class ParcelaService extends BasicService<Parcela>{
     }
 
     @Override
-    public boolean isValid(Parcela entity) {
+    public void validateObject(Parcela entity) {
         if (entity == null) {
             throw new GenericException("Parcela nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -100,7 +100,7 @@ public class ParcelaService extends BasicService<Parcela>{
         if (entity.getLancamento() == null) {
             throw new GenericException("Lançamento da Parcela nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        return true;
+       
     }
     
     

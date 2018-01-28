@@ -170,7 +170,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     @Override
     public OrcamentoEvento save(OrcamentoEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         //salvar arquivo
         if (entity.getArquivo() != null) {
@@ -196,7 +196,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
     public void delete(OrcamentoEvento proposta) throws Exception {
 
-        isValid(proposta);
+        validateObject(proposta);
 
         if (proposta.isPropostaAceita()) {
             throw new GenericException("Não pode remover um orçamento aprovado", ErrorCode.BAD_REQUEST.getCode());
@@ -273,7 +273,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      */
     public void enviarOrcamentoEmail(OrcamentoEvento proposta) throws Exception {
 
-        isValid(proposta);
+        validateObject(proposta);
 
         //carregar invoice padrao
         String body = InvoiceUtils.readFileToString("proposta-orcamento.html");
@@ -352,7 +352,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      */
     public void criarEvento(OrcamentoEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (!entity.isPropostaAceita()) {
             throw new GenericException("Proposta não aceita", ErrorCode.BAD_REQUEST.getCode());
@@ -372,7 +372,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     }
 
     @Override
-    public boolean isValid(OrcamentoEvento entity) {
+    public void validateObject(OrcamentoEvento entity) {
         if (entity == null) {
             throw new GenericException("Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -380,7 +380,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         if (entity.getContatoEvento() == null) {
             throw new GenericException("Orçamento possui um contato nulo", ErrorCode.BAD_REQUEST.getCode());
         }
-        return true;
+        
     }
 
 }

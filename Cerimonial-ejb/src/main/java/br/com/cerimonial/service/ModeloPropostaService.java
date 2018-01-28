@@ -59,7 +59,7 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
     @Override
     public ModeloProposta save(ModeloProposta entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         //salvar arquivo
         if (entity.getArquivo() != null) {
@@ -117,7 +117,7 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
 
     public void delete(ModeloProposta categoria) throws Exception {
 
-        isValid(categoria);
+        validateObject(categoria);
 
         repository.delete(categoria.getId());
     }
@@ -140,14 +140,6 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
         return null;
     }
 
-    @Override
-    public boolean isValid(ModeloProposta entity) {
-        
-        if (entity == null) {
-            throw new GenericException("Modelo nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        return true;
-    }
+
 
 }

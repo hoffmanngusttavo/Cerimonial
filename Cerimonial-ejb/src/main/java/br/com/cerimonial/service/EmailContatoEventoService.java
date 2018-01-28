@@ -64,7 +64,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
     @Override
     public EmailContatoEvento save(EmailContatoEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
 
@@ -80,7 +80,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     public void delete(EmailContatoEvento contato) throws Exception {
 
-        isValid(contato);
+        validateObject(contato);
 
         repository.delete(contato.getId());
     }
@@ -104,7 +104,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
     }
 
     @Override
-    public boolean isValid(EmailContatoEvento entity) {
+    public void validateObject(EmailContatoEvento entity) {
         if (entity == null) {
             throw new GenericException("Objeto nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -116,7 +116,6 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
             throw new GenericException("Corpo do email vazio.", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        return true;
     }
 
     public EmailContatoEvento carregarDadosModeloEmail(EmailContatoEvento entity, ModeloEmail modeloEmail) throws Exception {
@@ -155,7 +154,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     private void enviarEmail(EmailContatoEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         EmailHelper emailUtil = new EmailHelper();
 

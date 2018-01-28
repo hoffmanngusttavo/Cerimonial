@@ -58,7 +58,7 @@ public class LancamentoService extends BasicService<Lancamento> {
     @Override
     public Lancamento save(Lancamento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -78,7 +78,7 @@ public class LancamentoService extends BasicService<Lancamento> {
 
     public void delete(Lancamento categoria) throws Exception {
 
-        isValid(categoria);
+        validateObject(categoria);
 
         repository.delete(categoria.getId());
     }
@@ -101,14 +101,7 @@ public class LancamentoService extends BasicService<Lancamento> {
         return null;
     }
 
-    @Override
-    public boolean isValid(Lancamento entity) {
-        if (entity == null) {
-            throw new GenericException("Lançamento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
-
+   
     /**
      * Vai buscar um lançamento que foi gerado a partir de um orçamento
      * carregando em lazy as parcelas
@@ -145,7 +138,7 @@ public class LancamentoService extends BasicService<Lancamento> {
      */
     public Lancamento atualizarNumeroParcelas(int numeroParcelas, Lancamento entity) {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (numeroParcelas <= 0) {
             throw new GenericException("O número de parcelas deve ser maior que zero", ErrorCode.BAD_REQUEST.getCode());
@@ -244,7 +237,7 @@ public class LancamentoService extends BasicService<Lancamento> {
 
     public Lancamento saveLancamentoOrcamento(Lancamento entity) throws Exception {
         
-        isValid(entity);
+        validateObject(entity);
         
         if(entity.getId() == null){
             

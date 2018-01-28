@@ -131,7 +131,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
     @Override
     public ContratoEvento save(ContratoEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -147,7 +147,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      */
     public void liberarContrato(ContratoEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         entity = this.findEntityById(entity.getId());
         
@@ -170,7 +170,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
 
     public void delete(ContratoEvento contato) throws Exception {
 
-        isValid(contato);
+        validateObject(contato);
 
         repository.delete(contato.getId());
     }
@@ -193,19 +193,19 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
         return null;
     }
 
-    @Override
-    public boolean isValid(ContratoEvento entity) {
-        
-        if (entity == null) {
-            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        eventoService.isValid(entity.getEvento());
-        
-        modeloContratoService.isValid(entity.getModeloContrato());
-        
-        return true;
-    }
+//    @Override
+//    public boolean validateObject(ContratoEvento entity) {
+//        
+//        if (entity == null) {
+//            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+//        }
+//
+//        eventoService.validateObject(entity.getEvento());
+//        
+//        modeloContratoService.validateObject(entity.getModeloContrato());
+//        
+//        return true;
+//    }
 
     /**
      * Vai preencher o conteudo do contrato do evento de acordo com o modelo
@@ -216,7 +216,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      */
     public void carregarContratoDeModelo(ContratoEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         String conteudo = entity.getModeloContrato().getConteudo();
         

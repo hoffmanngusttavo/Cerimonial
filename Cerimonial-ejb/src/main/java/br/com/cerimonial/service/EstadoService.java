@@ -58,7 +58,7 @@ public class EstadoService extends BasicService<Estado> {
     @Override
     public Estado save(Estado entity) {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -82,12 +82,6 @@ public class EstadoService extends BasicService<Estado> {
         return null;
     }
 
-    @Override
-    public boolean isValid(Estado entity) {
-        if (entity == null) {
-            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
+   
 
 }

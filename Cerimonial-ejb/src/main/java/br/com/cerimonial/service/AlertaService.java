@@ -70,7 +70,7 @@ public class AlertaService extends BasicService<Alerta> {
     @Override
     public Alerta save(Alerta entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -89,9 +89,11 @@ public class AlertaService extends BasicService<Alerta> {
         return new ArrayList<>();
     }
 
-    public void delete(Alerta categoria) throws Exception {
-        isValid(categoria);
-        repository.delete(categoria.getId());
+    public void delete(Alerta alerta) throws Exception {
+        
+        validateObjectAndId(alerta);
+        
+        repository.delete(alerta.getId());
     }
 
     public int countAll() {
@@ -112,19 +114,14 @@ public class AlertaService extends BasicService<Alerta> {
         return null;
     }
 
-    @Override
-    public boolean isValid(Alerta entity) {
-        if (entity == null) {
-            throw new GenericException("Alerta nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
-
+    
     public void enviarAlertaContratoLiberado(ContratoEvento entity) throws Exception {
 
-        contratoEventoService.isValid(entity);
+       
         
-        pessoaService.isValid(entity.getEvento().getContratanteUsuario());
+//        contratoEventoService.validateObject(entity.getEvento());
+//        
+//        pessoaService.validateObject(entity.getEvento().getContratanteUsuario());
 
         String caminho = "/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento=" + entity.getEvento().getId();
         String titulo = "Contrato";
@@ -143,7 +140,7 @@ public class AlertaService extends BasicService<Alerta> {
      */
     public void enviarAlertaUsuarioAdminContratante(EventoPessoa entity) {
         
-        eventoPessoaService.isValid(entity);
+        eventoPessoaService.validateObject(entity);
 
         try {
 
@@ -170,7 +167,7 @@ public class AlertaService extends BasicService<Alerta> {
      */
     public void enviarAlertaUsuarioAdminDadosNoivo(EventoPessoa entity) {
         
-        eventoPessoaService.isValid(entity);
+        eventoPessoaService.validateObject(entity);
 
         try {
 
@@ -192,7 +189,7 @@ public class AlertaService extends BasicService<Alerta> {
 
     public void enviarAlertaUsuarioAdminDadosEvento(Evento entity) {
 
-        eventoService.isValid(entity);
+        eventoService.validateObject(entity);
         
         try {
 
@@ -223,7 +220,7 @@ public class AlertaService extends BasicService<Alerta> {
      */
     public Alerta criarAlerta(String caminho, String titulo, String mensagem, Usuario destinatario) throws Exception {
 
-        usuarioService.isValid(destinatario);
+        usuarioService.validateObject(destinatario);
 
         return criarAlerta(caminho, titulo, mensagem, Arrays.asList(destinatario));
     }

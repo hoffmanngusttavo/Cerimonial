@@ -73,7 +73,7 @@ public class EventoService extends BasicService<Evento> {
     @Override
     public Evento save(Evento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -85,7 +85,7 @@ public class EventoService extends BasicService<Evento> {
 
     public Evento saveEventoCliente(Evento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         int porcentagemConcluidaAntesSalvar = entity.getPorcentagemPreenchimentoConcluida();
 
@@ -104,7 +104,7 @@ public class EventoService extends BasicService<Evento> {
 
     public Evento saveEventoAdmin(Evento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         preenchimentoService.validarPorcentagemPreenchimentoEvento(entity);
 
@@ -123,7 +123,7 @@ public class EventoService extends BasicService<Evento> {
 
     public void delete(Evento categoria) throws Exception {
 
-        isValid(categoria);
+        validateObject(categoria);
 
         repository.delete(categoria.getId());
     }
@@ -282,15 +282,7 @@ public class EventoService extends BasicService<Evento> {
 
     }
 
-    @Override
-    public boolean isValid(Evento entity) {
-        
-        if (entity == null) {
-            throw new GenericException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        return true;
-    }
+    
 
     /**
      * Vai retornar o evento que pertence a somente esse cliente Carregar em
@@ -608,7 +600,7 @@ public class EventoService extends BasicService<Evento> {
      */
     public void liberarAcessoSistemaContratanteEvento(Evento evento) throws Exception {
 
-        isValid(evento);
+        validateObject(evento);
 
         evento = findEntityById(evento.getId());
 
@@ -644,7 +636,7 @@ public class EventoService extends BasicService<Evento> {
      */
     public void cancelarAcessoSistemaContratanteEvento(Evento evento) throws Exception {
 
-        isValid(evento);
+        validateObject(evento);
 
         evento = findEntityById(evento.getId());
 

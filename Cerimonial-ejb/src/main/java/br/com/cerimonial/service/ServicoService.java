@@ -49,7 +49,7 @@ public class ServicoService extends BasicService<Servico>{
     @Override
     public Servico save(Servico entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -69,7 +69,7 @@ public class ServicoService extends BasicService<Servico>{
 
     public void delete(Servico categoria) throws Exception {
 
-        isValid(categoria);
+        validateObject(categoria);
 
         repository.delete(categoria.getId());
     }
@@ -104,14 +104,5 @@ public class ServicoService extends BasicService<Servico>{
     }
     
 
-    @Override
-    public boolean isValid(Servico entity) {
-        if (entity == null) {
-            throw new GenericException("Serviço nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
-    
-    
     
 }

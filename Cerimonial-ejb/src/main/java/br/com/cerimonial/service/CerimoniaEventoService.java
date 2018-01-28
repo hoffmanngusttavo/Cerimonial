@@ -44,7 +44,7 @@ public class CerimoniaEventoService extends BasicService<CerimoniaEvento> {
     @Override
     public CerimoniaEvento save(CerimoniaEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -54,13 +54,7 @@ public class CerimoniaEventoService extends BasicService<CerimoniaEvento> {
 
     }
     
-    @Override
-    public boolean isValid(CerimoniaEvento entity) {
-        if (entity == null) {
-            throw new GenericException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
+   
 
   
 }

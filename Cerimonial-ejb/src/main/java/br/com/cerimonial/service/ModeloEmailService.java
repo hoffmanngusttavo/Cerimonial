@@ -62,7 +62,7 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
     @Override
     public ModeloEmail save(ModeloEmail entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         //salvar arquivo
         if (entity.getArquivo() != null) {
@@ -107,7 +107,7 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
    
     public void delete(ModeloEmail categoria) throws Exception {
 
-        isValid(categoria);
+        validateObject(categoria);
 
         repository.delete(categoria.getId());
     }
@@ -130,12 +130,6 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
         return null;
     }
 
-    @Override
-    public boolean isValid(ModeloEmail entity) {
-        if (entity == null) {
-            throw new GenericException("Modelo nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
+    
     
 }

@@ -35,10 +35,10 @@ import javax.ejb.TransactionManagementType;
 public class ArquivoService extends BasicService<Arquivo> {
 
     private ArquivoRepository repository;
-    
+
     @EJB
     private ModeloPropostaService modeloPropostaService;
-    
+
     @EJB
     private ModeloEmailService modeloEmailService;
 
@@ -56,7 +56,7 @@ public class ArquivoService extends BasicService<Arquivo> {
     @Override
     public Arquivo save(Arquivo entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -68,15 +68,15 @@ public class ArquivoService extends BasicService<Arquivo> {
 
     public void delete(Arquivo categoria) throws Exception {
 
-        isValid(categoria);
+        validateObject(categoria);
 
         repository.delete(categoria.getId());
     }
 
     public List<Arquivo> getArquivosByModeloProposta(ModeloProposta entity) {
-        
-        modeloPropostaService.isValid(entity);
-        
+
+        modeloPropostaService.validateObject(entity);
+
         try {
             if (entity.getId() != null) {
                 return repository.getArquivosByModeloProposta(entity);
@@ -87,24 +87,14 @@ public class ArquivoService extends BasicService<Arquivo> {
         return null;
     }
 
-    @Override
-    public boolean isValid(Arquivo entity) {
-
-        if (entity == null) {
-            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        return true;
-    }
-
     public List<Arquivo> getArquivosByModeloEmail(ModeloEmail entity) {
-        
-        modeloEmailService.isValid(entity);
-        
+
+        modeloEmailService.validateObjectAndId(entity);
+
         try {
-            if (entity.getId() != null) {
-                return repository.getArquivosByModeloProposta(entity);
-            }
+
+            return repository.getArquivosByModeloProposta(entity);
+            
         } catch (Exception ex) {
             Logger.getLogger(ArquivoService.class.getName()).log(Level.SEVERE, null, ex);
         }

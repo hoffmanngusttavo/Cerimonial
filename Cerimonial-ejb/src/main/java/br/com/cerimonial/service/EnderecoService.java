@@ -102,7 +102,7 @@ public class EnderecoService extends BasicService<Endereco> {
     @Override
     public Endereco save(Endereco entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -111,12 +111,5 @@ public class EnderecoService extends BasicService<Endereco> {
         }
     }
 
-    @Override
-    public boolean isValid(Endereco entity) {
-        if (entity == null) {
-            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
-
+   
 }

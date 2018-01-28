@@ -46,7 +46,7 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
     @Override
     public ContatoEnvolvido save(ContatoEnvolvido entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -56,16 +56,7 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
 
     }
 
-    @Override
-    public boolean isValid(ContatoEnvolvido entity) {
-
-        if (entity == null) {
-            throw new GenericException("Contato nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        
-        return true;
-    }
+   
 
     /**
      * Método responsável por remover os contatos.

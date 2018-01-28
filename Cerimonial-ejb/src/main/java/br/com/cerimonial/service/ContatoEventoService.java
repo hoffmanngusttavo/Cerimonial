@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -35,6 +36,9 @@ import org.apache.commons.lang.StringUtils;
 public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     private ContatoEventoRepository repository;
+    
+    @EJB
+    private EventoService eventoService;
 
     @PostConstruct
     @PostActivate
@@ -52,24 +56,26 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
      */
     @Override
     public ContatoEvento findEntityById(Long id) throws Exception {
+
         ContatoEvento entity = repository.getEntity(id);
-        
-        if (entity != null) {
-            if (entity.getTipoIndicacao() != null) {
-                entity.getTipoIndicacao().getId();
-            }
-            
-            if(entity.getEmailsContato() != null){
-                entity.getEmailsContato().size();
-            }
+
+        validateObject(entity);
+
+        if (entity.getTipoIndicacao() != null) {
+            entity.getTipoIndicacao().getId();
         }
+
+        if (entity.getEmailsContato() != null) {
+            entity.getEmailsContato().size();
+        }
+
         return entity;
     }
 
     @Override
     public ContatoEvento save(ContatoEvento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -89,7 +95,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     public void delete(ContatoEvento contato) throws Exception {
 
-        isValid(contato);
+        validateObject(contato);
 
         repository.delete(contato.getId());
     }
@@ -105,11 +111,12 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     /**
      * Método para retornar os contatos da listagem em lazy o status
+     *
      * @param max
      * @param offset
      * @param sortField
      * @param sortAscDesc
-     * @return 
+     * @return
      */
     public List<ContatoEvento> findRangeListagem(int max, int offset, String sortField, String sortAscDesc) {
         try {
@@ -132,40 +139,31 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
         return null;
     }
 
-    @Override
-    public boolean isValid(ContatoEvento entity) {
-        if (entity == null) {
-            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        if (StringUtils.isBlank(entity.getNomeContato())) {
-            throw new GenericException("Contato sem nome.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        if (StringUtils.isBlank(entity.getNomeEvento())) {
-            throw new GenericException("Contato sem nome de evento.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
+   
 
     public ContatoEvento getContatoInicialByEvento(Evento evento) {
+
+        eventoService.validateObject(evento);
         
-         if (evento == null || evento.getId() == null) {
+        if (evento.getId() == null) {
             throw new GenericException("Evento nulo", ErrorCode.BAD_REQUEST.getCode());
         }
 
         ContatoEvento entity = repository.getContatoInicialByEvento(evento);
-        if (entity != null) {
 
-            if (entity.getEmailsContato() != null) {
-                entity.getEmailsContato().size();
-            }
+        validateObject(entity);
+
+        if (entity.getEmailsContato() != null) {
+            entity.getEmailsContato().size();
         }
-            return entity;
+
+        return entity;
 
     }
 
-     /**
-     * Vai retornar todos os contatos ativos {NEGOCIANDO, REUNIAO_REALIZADA, AGUARDANDO_RETORNO, CONTRATO_FECHADO}
-     * e que não tem evento criado
+    /**
+     * Vai retornar todos os contatos ativos {NEGOCIANDO, REUNIAO_REALIZADA,
+     * AGUARDANDO_RETORNO, CONTRATO_FECHADO} e que não tem evento criado
      *
      * @param limit
      * @return

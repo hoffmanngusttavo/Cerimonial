@@ -57,7 +57,7 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
     @Override
     public EvolucaoPreenchimento save(EvolucaoPreenchimento entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         return repository.create(entity);
     }
@@ -72,14 +72,6 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }
-
-    @Override
-    public boolean isValid(EvolucaoPreenchimento entity) {
-        if (entity == null) {
-            throw new GenericException("Evolucao Preenchimento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
     }
 
     public void validarPorcentagemPreenchimento(EventoPessoa eventoPessoa) {

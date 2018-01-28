@@ -49,7 +49,7 @@ public class LoginService extends BasicService<Login> {
     @Override
     public Login save(Login entity) throws Exception {
 
-        isValid(entity);
+        validateObject(entity);
 
         return repository.create(entity);
     }
@@ -66,12 +66,6 @@ public class LoginService extends BasicService<Login> {
         return null;
     }
 
-    @Override
-    public boolean isValid(Login entity) {
-        if (entity == null) {
-            throw new GenericException("Login nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        return true;
-    }
+   
 
 }
