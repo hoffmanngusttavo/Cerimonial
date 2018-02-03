@@ -9,6 +9,8 @@ import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
 import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.CustoEventoRepository;
 import java.util.HashMap;
 import java.util.List;
@@ -57,9 +59,9 @@ public class CustoEventoService extends BasicService<CustoEvento> {
     @Override
     public CustoEvento save(CustoEvento entity) throws Exception {
 
-        validateObjectNull(CustoEvento.class, entity);
+        validateObjectNull(entity);
         
-        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+        eventoService.validateObjectNull(entity.getEvento());
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -80,19 +82,6 @@ public class CustoEventoService extends BasicService<CustoEvento> {
         return null;
     }
 
-//    @Override
-//    public boolean validateObject(CustoEvento entity) {
-//        if (entity == null) {
-//            throw new GenericException("Custo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-//        }
-//
-//        if (entity.getEvento() == null) {
-//            throw new GenericException("Evento de Custo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-//        }
-//
-//        return true;
-//    }
-
     /**
      * Vai retornar o custo do evento carregando em lazy os lançamentos e
      * parcelas
@@ -102,7 +91,7 @@ public class CustoEventoService extends BasicService<CustoEvento> {
      */
     public CustoEvento findCustoEventoByIdEvento(Long idEvento) {
 
-        validateId(idEvento);
+        eventoService.validateId(idEvento);
 
         CustoEvento custo = repository.findCustoEventoByIdEvento(idEvento);
 
@@ -133,9 +122,9 @@ public class CustoEventoService extends BasicService<CustoEvento> {
      */
     public CustoEvento criarCustoEvento(OrcamentoEvento orcamento, Evento evento) {
         
-        orcamentoEventoService.validateObjectNull(OrcamentoEvento.class, orcamento);
+        orcamentoEventoService.validateObjectNull(orcamento);
         
-        eventoService.validateObjectNull(Evento.class, evento);
+        eventoService.validateObjectNull(evento);
         
         CustoEvento custoEvento = evento.getCustoEvento();
         
@@ -146,4 +135,36 @@ public class CustoEventoService extends BasicService<CustoEvento> {
         return custoEvento;
     }
 
+    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(CustoEvento entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Custo Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(CustoEvento entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
+    
 }

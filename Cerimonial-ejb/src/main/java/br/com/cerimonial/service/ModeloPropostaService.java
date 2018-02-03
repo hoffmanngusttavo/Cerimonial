@@ -49,17 +49,20 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
 
     @Override
     public ModeloProposta findEntityById(Long id) throws Exception {
+        
         ModeloProposta modeloProposta = repository.getEntity(id);
+        
         if (modeloProposta != null && modeloProposta.getAnexos() != null) {
             modeloProposta.getAnexos().size();
         }
+        
         return modeloProposta;
     }
 
     @Override
     public ModeloProposta save(ModeloProposta entity) throws Exception {
 
-        validateObjectNull(ModeloProposta.class, entity);
+        validateObjectNull(entity);
 
         //salvar arquivo
         if (entity.getArquivo() != null) {
@@ -100,14 +103,14 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
         }
         return new ArrayList<>();
     }
-    
+
     public List<ModeloProposta> findModelosPropostaByTipoEvento(TipoEvento tipoEvento) {
         try {
-            
-            if(tipoEvento == null){
+
+            if (tipoEvento == null) {
                 throw new GenericException("TipoEvento nulo.", ErrorCode.BAD_REQUEST.getCode());
             }
-            
+
             return repository.findModelosPropostaByTipoEvento(tipoEvento);
         } catch (Exception ex) {
             Logger.getLogger(ModeloPropostaService.class.getName()).log(Level.SEVERE, null, ex);
@@ -117,7 +120,7 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
 
     public void delete(ModeloProposta entity) throws Exception {
 
-        validateObjectAndIdNull(ModeloProposta.class, entity);
+        validateObjectAndIdNull(entity);
 
         repository.delete(entity.getId());
     }
@@ -140,6 +143,35 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
         return null;
     }
 
+    @Override
+    public void validateId(Long idEntity) {
 
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+    }
+
+    @Override
+    public void validateObjectNull(ModeloProposta entity) {
+
+        if (entity == null) {
+            throw new GenericException(" Modelo Proposta nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+    }
+
+    @Override
+    public void validateObjectAndIdNull(ModeloProposta entity) {
+
+        validateObjectNull(entity);
+
+        validateId(entity.getId());
+
+    }
 
 }

@@ -7,6 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.AlertaDestinatario;
 import br.com.cerimonial.entity.Usuario;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.AlertaDestinatarioRepository;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +54,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
     @Override
     public AlertaDestinatario save(AlertaDestinatario entity) throws Exception {
 
-        validateObjectNull(AlertaDestinatario.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -73,7 +75,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
 
     public void delete(AlertaDestinatario alertaDestinatario) throws Exception {
         
-        validateObjectAndIdNull(AlertaDestinatario.class, alertaDestinatario);
+        validateObjectAndIdNull(alertaDestinatario);
         
         repository.delete(alertaDestinatario.getId());
         
@@ -109,7 +111,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      */
     public List<AlertaDestinatario> findAlertasUsuarioNaoVisualizados(int limit, Usuario usuario) throws Exception {
 
-        usuarioService.validateObjectNull(Usuario.class, usuario);
+        usuarioService.validateObjectNull(usuario);
         
         return repository.findAlertasUsuarioNaoVisualizados(limit, usuario, new Date());
 
@@ -125,7 +127,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      */
     public Integer countAlertasUsuarioNaoVisualizados(Usuario usuario) throws Exception {
 
-        usuarioService.validateObjectNull(Usuario.class, usuario);
+        usuarioService.validateObjectNull(usuario);
 
         return repository.countAlertasUsuarioNaoVisualizados(usuario, new Date());
 
@@ -140,7 +142,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      */
     public AlertaDestinatario alterarAlertaVisualizado(AlertaDestinatario entity) throws Exception {
 
-        validateObjectNull(AlertaDestinatario.class, entity);
+        validateObjectNull(entity);
 
         if (!entity.isVisualizado()) {
 
@@ -150,6 +152,37 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
         }
 
         return entity;
+    }
+    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(AlertaDestinatario entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Alerta Destinatario nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(AlertaDestinatario entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
     }
 
 }

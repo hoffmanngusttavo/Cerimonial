@@ -6,6 +6,8 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ContatoEnvolvido;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContatoEnvolvidoRepository;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.List;
@@ -44,7 +46,7 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
     @Override
     public ContatoEnvolvido save(ContatoEnvolvido entity) throws Exception {
 
-        validateObjectNull(ContatoEnvolvido.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -67,7 +69,7 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
             
             for (ContatoEnvolvido contato : contatosRemover) {
                 
-                validateObjectAndIdNull(ContatoEnvolvido.class, contato);
+                validateObjectAndIdNull(contato);
                 
                 repository.delete(contato.getId());
                 
@@ -76,5 +78,37 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
         }
         
     }
+    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(ContatoEnvolvido entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Contato Envolvido nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(ContatoEnvolvido entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
+    
 
 }

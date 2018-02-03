@@ -42,7 +42,7 @@ import org.apache.commons.lang.StringUtils;
 public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchimento> {
 
     private EvolucaoPreenchimentoRepository repository;
-    
+
     @EJB
     private EventoPessoaService eventoPessoaService;
     @EJB
@@ -65,7 +65,7 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
     @Override
     public EvolucaoPreenchimento save(EvolucaoPreenchimento entity) throws Exception {
 
-        validateObjectNull(EvolucaoPreenchimento.class, entity);
+        validateObjectNull(entity);
 
         return repository.create(entity);
     }
@@ -84,13 +84,9 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
 
     public void validarPorcentagemPreenchimento(EventoPessoa eventoPessoa) {
 
-        if (eventoPessoa == null) {
-            throw new GenericException("Evolucao Preenchimento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        eventoPessoaService.validateObjectNull(eventoPessoa);
 
-        if (eventoPessoa.getPessoa() == null) {
-            throw new GenericException("Evolucao Preenchimento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        pessoaService.validateObjectNull(eventoPessoa.getPessoa());
 
         EvolucaoPreenchimento evolucaoPreenchimento = eventoPessoa.getEvolucaoPreenchimento();
 
@@ -116,13 +112,9 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
      */
     public void validarPorcentagemPreenchimentoContratante(EventoPessoa eventoPessoa) {
 
-        if (eventoPessoa == null) {
-            throw new GenericException("Evolucao Preenchimento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        eventoPessoaService.validateObjectNull(eventoPessoa);
 
-        if (eventoPessoa.getPessoa() == null) {
-            throw new GenericException("Evolucao Preenchimento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        pessoaService.validateObjectNull(eventoPessoa.getPessoa());
 
         EvolucaoPreenchimento evolucaoPreenchimento = eventoPessoa.getEvolucaoPreenchimento();
 
@@ -232,10 +224,10 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
      */
     public void validarPorcentagemPreenchimentoNoivo(EventoPessoa eventoPessoa) {
 
-        eventoPessoaService.validateObjectAndIdNull(EventoPessoa.class, eventoPessoa);
-        
-        pessoaService.validateObjectAndIdNull(Pessoa.class, eventoPessoa.getPessoa());
-        
+        eventoPessoaService.validateObjectAndIdNull(eventoPessoa);
+
+        pessoaService.validateObjectAndIdNull(eventoPessoa.getPessoa());
+
         EvolucaoPreenchimento evolucaoPreenchimento = eventoPessoa.getEvolucaoPreenchimento();
 
         if (evolucaoPreenchimento == null) {
@@ -345,8 +337,8 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
 
     public void validarPorcentagemPreenchimentoEvento(Evento evento) {
 
-        eventoService.validateObjectAndIdNull(Evento.class, evento);
-        
+        eventoService.validateObjectAndIdNull(evento);
+
         EvolucaoPreenchimento evolucaoPreenchimento = evento.getEvolucaoPreenchimento();
 
         if (evolucaoPreenchimento == null) {
@@ -451,9 +443,9 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
             } else {
                 sb.append("Dados da cerimônia, \n");
             }
-            
+
             FestaCerimonia festaCerimonia = evento.getFestaCerimonia();
-            
+
             if (festaCerimonia != null) {
 
                 if (StringUtils.isNotBlank(festaCerimonia.getNomeLocalFesta())) {
@@ -602,6 +594,37 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
         }
 
         return null;
+    }
+
+    @Override
+    public void validateId(Long idEntity) {
+
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+    }
+
+    @Override
+    public void validateObjectNull(EvolucaoPreenchimento entity) {
+
+        if (entity == null) {
+            throw new GenericException(" Evolucao Preenchimento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+    }
+
+    @Override
+    public void validateObjectAndIdNull(EvolucaoPreenchimento entity) {
+
+        validateObjectNull(entity);
+
+        validateId(entity.getId());
+
     }
 
 }

@@ -77,7 +77,7 @@ public class EventoService extends BasicService<Evento> {
     @Override
     public Evento save(Evento entity) throws Exception {
 
-        validateObjectNull(Evento.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -89,7 +89,7 @@ public class EventoService extends BasicService<Evento> {
 
     public Evento saveEventoCliente(Evento entity) throws Exception {
 
-        validateObjectNull(Evento.class, entity);
+        validateObjectNull(entity);
 
         int porcentagemConcluidaAntesSalvar = entity.getPorcentagemPreenchimentoConcluida();
 
@@ -108,7 +108,7 @@ public class EventoService extends BasicService<Evento> {
 
     public Evento saveEventoAdmin(Evento entity) throws Exception {
 
-        validateObjectNull(Evento.class, entity);
+        validateObjectNull(entity);
 
         preenchimentoService.validarPorcentagemPreenchimentoEvento(entity);
 
@@ -127,7 +127,7 @@ public class EventoService extends BasicService<Evento> {
 
     public void delete(Evento entity) throws Exception {
 
-        validateObjectAndIdNull(Evento.class, entity);
+        validateObjectAndIdNull(entity);
 
         repository.delete(entity.getId());
     }
@@ -185,7 +185,7 @@ public class EventoService extends BasicService<Evento> {
      */
     public List<Evento> findEventosAtivosCliente(Pessoa cliente) {
 
-        pessoaService.validateObjectAndIdNull(Pessoa.class, cliente);
+        pessoaService.validateObjectAndIdNull(cliente);
 
         List<Evento> retorno = repository.findEventosAtivosCliente(cliente);
 
@@ -202,7 +202,7 @@ public class EventoService extends BasicService<Evento> {
 
     public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento) throws Exception {
 
-        orcamentoEventoService.validateObjectNull(OrcamentoEvento.class, orcamento);
+        orcamentoEventoService.validateObjectNull(orcamento);
 
         Evento evento = this.findEventoByIdOrcamento(orcamento.getId());
 
@@ -237,7 +237,7 @@ public class EventoService extends BasicService<Evento> {
 
     public Evento getEventoByContatoInicial(ContatoEvento contatoEvento) throws Exception {
 
-        contatoEventoService.validateObjectAndIdNull(ContatoEvento.class, contatoEvento);
+        contatoEventoService.validateObjectAndIdNull(contatoEvento);
 
         List<Evento> eventos = repository.getEventosByContatoEvento(contatoEvento);
 
@@ -289,7 +289,7 @@ public class EventoService extends BasicService<Evento> {
 
         validateId(idEvento);
 
-        pessoaService.validateObjectAndIdNull(Pessoa.class, contratante);
+        pessoaService.validateObjectAndIdNull(contratante);
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
@@ -333,7 +333,7 @@ public class EventoService extends BasicService<Evento> {
 
         validateId(idEvento);
 
-        pessoaService.validateObjectAndIdNull(Pessoa.class, contratante);
+        pessoaService.validateObjectAndIdNull(contratante);
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
@@ -402,7 +402,7 @@ public class EventoService extends BasicService<Evento> {
 
         validateId(idEvento);
 
-        pessoaService.validateObjectAndIdNull(Pessoa.class, contratante);
+        pessoaService.validateObjectAndIdNull(contratante);
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
@@ -490,7 +490,7 @@ public class EventoService extends BasicService<Evento> {
 
         validateId(idEvento);
 
-        pessoaService.validateObjectAndIdNull(Pessoa.class, contratante);
+        pessoaService.validateObjectAndIdNull(contratante);
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
@@ -571,7 +571,7 @@ public class EventoService extends BasicService<Evento> {
      */
     public void liberarAcessoSistemaContratanteEvento(Evento evento) throws Exception {
 
-        validateObjectNull(Evento.class, evento);
+        validateObjectAndIdNull(evento);
 
         evento = findEntityById(evento.getId());
 
@@ -607,7 +607,7 @@ public class EventoService extends BasicService<Evento> {
      */
     public void cancelarAcessoSistemaContratanteEvento(Evento evento) throws Exception {
 
-        validateObjectNull(Evento.class, evento);
+        validateObjectAndIdNull(evento);
 
         evento = findEntityById(evento.getId());
 
@@ -626,5 +626,37 @@ public class EventoService extends BasicService<Evento> {
         this.repository.edit(evento);
 
     }
+    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Evento entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Evento entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
+    
 
 }

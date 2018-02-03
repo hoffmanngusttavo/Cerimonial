@@ -6,6 +6,8 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Servico;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ServicoRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,7 @@ public class ServicoService extends BasicService<Servico>{
     @Override
     public Servico save(Servico entity) throws Exception {
 
-        validateObjectNull(Servico.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -67,7 +69,7 @@ public class ServicoService extends BasicService<Servico>{
 
     public void delete(Servico entity) throws Exception {
 
-        validateObjectAndIdNull(Servico.class, entity);
+        validateObjectAndIdNull(entity);
 
         repository.delete(entity.getId());
     }
@@ -101,6 +103,35 @@ public class ServicoService extends BasicService<Servico>{
         return new ArrayList<>();
     }
     
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
 
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Servico entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Servico nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Servico entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
     
 }

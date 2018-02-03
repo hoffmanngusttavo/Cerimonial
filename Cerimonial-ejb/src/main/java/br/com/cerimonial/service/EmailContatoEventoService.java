@@ -8,6 +8,8 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.EmailContatoEvento;
 import br.com.cerimonial.entity.ModeloEmail;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EmailContatoEventoRepository;
 import br.com.cerimonial.utils.EmailHelper;
 import java.util.Date;
@@ -62,7 +64,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
     @Override
     public EmailContatoEvento save(EmailContatoEvento entity) throws Exception {
 
-        validateObjectNull(EmailContatoEvento.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
 
@@ -78,7 +80,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     public void delete(EmailContatoEvento contato) throws Exception {
 
-        validateObjectAndIdNull(EmailContatoEvento.class, contato);
+        validateObjectAndIdNull(contato);
 
         repository.delete(contato.getId());
     }
@@ -103,7 +105,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     public EmailContatoEvento carregarDadosModeloEmail(EmailContatoEvento entity, ModeloEmail modeloEmail) throws Exception {
 
-        modeloEmailService.validateObjectAndIdNull(ModeloEmail.class, modeloEmail);
+        modeloEmailService.validateObjectAndIdNull(modeloEmail);
         
         if (entity != null) {
             entity.setArquivo(null);
@@ -135,7 +137,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     private void enviarEmail(EmailContatoEvento entity) throws Exception {
 
-        validateObjectNull(EmailContatoEvento.class, entity);
+        validateObjectNull(entity);
 
         EmailHelper emailUtil = new EmailHelper();
 
@@ -153,4 +155,36 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     }
 
+    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(EmailContatoEvento entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Email Contato Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(EmailContatoEvento entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
+    
 }

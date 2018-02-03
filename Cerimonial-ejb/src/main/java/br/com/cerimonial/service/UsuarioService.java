@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;
@@ -46,7 +47,10 @@ public class UsuarioService extends BasicService<Usuario> {
 
     @EJB
     private PessoaService pessoaService;
-    
+
+    @EJB
+    private LoginService loginService;
+
     @PostConstruct
     @PostActivate
     private void postConstruct() {
@@ -57,38 +61,18 @@ public class UsuarioService extends BasicService<Usuario> {
     public Usuario findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
-    
-    
 
     @Override
     public synchronized Usuario save(Usuario entity) throws Exception {
 
-        validateObjectNull(Usuario.class, entity);
-        
-        if (StringUtils.isNotBlank(entity.getLogin())) {
-            
-            Usuario userBD = null;
-
-            try {
-
-                userBD = this.getUsuarioByLogin(entity.getLogin());
-
-            } catch (Exception e) {
-                System.out.println("Login valido");
-            }
-
-            if (userBD != null) {
-                if (!userBD.getId().equals(entity.getId())) {
-                    throw new GenericException("Este login já existe.", ErrorCode.BAD_REQUEST.getCode());
-                }
-            }
-
-        }
-        
+        validarLoginJaExistente(entity);
 
         if (entity.getId() == null) {
+
             alterarSaltSenha(entity);
+
             return repository.create(entity);
+
         } else {
             return repository.edit(entity);
         }
@@ -96,12 +80,12 @@ public class UsuarioService extends BasicService<Usuario> {
 
     public void delete(Usuario user) throws Exception {
 
-        validateObjectAndIdNull(Usuario.class, user);
+        validateObjectAndIdNull(user);
 
         if (user.isMaster()) {
             throw new Exception("Usuário master não pode ser removido");
         }
-        
+
         repository.delete(user.getId());
     }
 
@@ -124,9 +108,9 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     public Usuario getUsuarioByLogin(String login) throws Exception {
-        if (StringUtils.isBlank(login)) {
-            throw new Exception("O login está vazio");
-        }
+
+        loginService.validateLogin(login);
+
         return repository.getUsuarioByLogin(login);
     }
 
@@ -149,8 +133,17 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     public void alterarSaltSenha(Usuario entity) {
+        
+        validateObjectNull(entity);
+        
+        if(StringUtils.isBlank(entity.getSenha())){
+            throw new GenericException(" Senha Inválida.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
         ByteSource salt = new SecureRandomNumberGenerator().nextBytes();
+        
         entity.setSenha(Criptografia.md5(entity.getSenha() + salt.toString()));
+        
         entity.setSalt(salt.toString());
     }
 
@@ -164,6 +157,7 @@ public class UsuarioService extends BasicService<Usuario> {
         Usuario usuario = this.getUsuarioByLogin("master");
 
         if (usuario == null) {
+            
             usuario = new Usuario();
             usuario.setNome("Master");
             usuario.setLogin("master");
@@ -188,9 +182,9 @@ public class UsuarioService extends BasicService<Usuario> {
      * @throws java.lang.Exception
      */
     public Usuario criarUsuarioCliente(Pessoa cliente) throws Exception {
-        
-        pessoaService.validateObjectNull(Pessoa.class, cliente);
-        
+
+        pessoaService.validateObjectNull(cliente);
+
         Usuario usuario = this.getUsuarioByLogin(cliente.getEmail());
 
         if (usuario == null) {
@@ -245,7 +239,7 @@ public class UsuarioService extends BasicService<Usuario> {
      */
     public void enviarEmailBoasVindas(Usuario user, String senha) throws Exception {
 
-        validateObjectNull(Usuario.class, user);
+        validateObjectNull(user);
 
         CerimonialUtils.validarEmail(user.getEmail());
 
@@ -275,8 +269,8 @@ public class UsuarioService extends BasicService<Usuario> {
      * @throws java.lang.Exception
      */
     public void enviarEmailEsqueciMinhaSenha(Usuario user, String senha) throws Exception {
-        
-        validateObjectNull(Usuario.class, user);
+
+        validateObjectNull(user);
 
         //carregar invoice padrao
         String body = InvoiceUtils.readFileToString("esqueci-minha-senha.html");
@@ -301,9 +295,9 @@ public class UsuarioService extends BasicService<Usuario> {
         CerimonialUtils.validarEmail(email);
 
         Usuario usuario = getUsuarioByEmail(email);
-        
-        validateObjectNull(Usuario.class, usuario);
-        
+
+        validateObjectNull(usuario);
+
         if (!usuario.isAtivo()) {
             throw new Exception("Seu usuário está inativo, entre em contato com seu cerimonial");
         }
@@ -314,14 +308,14 @@ public class UsuarioService extends BasicService<Usuario> {
         this.enviarEmailEsqueciMinhaSenha(usuario, senhaNova);
     }
 
-    
     /**
      * Metodo para inativar usuário
+     *
      * @param usuario
      */
     public void inativarUsuario(Usuario usuario) {
 
-        validateObjectNull(Usuario.class, usuario);
+        validateObjectNull(usuario);
 
         usuario.setAtivo(false);
 
@@ -330,11 +324,54 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     public List<Usuario> findUsuariosAdminAtivos() {
-        
+
         return repository.findUsuariosAdminAtivos();
-    
+
     }
-    
-   
+
+    @Override
+    public void validateId(Long idEntity) {
+
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+    }
+
+    @Override
+    public void validateObjectNull(Usuario entity) {
+
+        if (entity == null) {
+            throw new GenericException(" Cidade nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Usuario entity) {
+
+        validateObjectNull(entity);
+
+        validateId(entity.getId());
+
+    }
+
+    public void validarLoginJaExistente(Usuario entity) throws Exception {
+
+        validateObjectNull(entity);
+
+        loginService.validateLogin(entity.getLogin());
+
+        Usuario userBD = this.getUsuarioByLogin(entity.getLogin());
+
+        if (userBD != null && !userBD.getId().equals(entity.getId())) {
+            throw new GenericException("Este login já existe.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+    }
 
 }

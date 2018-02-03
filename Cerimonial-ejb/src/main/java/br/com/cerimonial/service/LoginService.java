@@ -6,6 +6,8 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Login;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.LoginRepository;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -47,7 +50,7 @@ public class LoginService extends BasicService<Login> {
     @Override
     public Login save(Login entity) throws Exception {
 
-        validateObjectNull(Login.class, entity);
+        validateObjectNull(entity);
 
         return repository.create(entity);
     }
@@ -64,6 +67,43 @@ public class LoginService extends BasicService<Login> {
         return null;
     }
 
-   
+    @Override
+    public void validateId(Long idEntity) {
+
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+    }
+
+    @Override
+    public void validateObjectNull(Login entity) {
+
+        if (entity == null) {
+            throw new GenericException(" Login nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Login entity) {
+
+        validateObjectNull(entity);
+
+        validateId(entity.getId());
+
+    }
+
+    public void validateLogin(String login) {
+        
+        if (StringUtils.isBlank(login)) {
+            throw new GenericException(" Login Inválido.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
 
 }

@@ -114,11 +114,11 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
     @Override
     public EventoPessoa save(EventoPessoa entity) throws Exception {
 
-        validateObjectNull(EventoPessoa.class, entity);
+        validateObjectNull(entity);
         
-        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+        eventoService.validateObjectNull(entity.getEvento());
 
-        pessoaService.validateObjectNull(Pessoa.class, entity.getPessoa());
+        pessoaService.validateObjectNull(entity.getPessoa());
 
         preenchimentoService.validarPorcentagemPreenchimento(entity);
 
@@ -141,11 +141,11 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      */
     public EventoPessoa saveNoivo(EventoPessoa entity) throws Exception {
 
-        validateObjectNull(EventoPessoa.class, entity);
+        validateObjectNull(entity);
         
-        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+        eventoService.validateObjectNull(entity.getEvento());
 
-        pessoaService.validateObjectNull(Pessoa.class, entity.getPessoa());
+        pessoaService.validateObjectNull(entity.getPessoa());
 
         int porcentagemConcluidaAntesSalvar = entity.getPorcentagemPreenchimentoConcluida();
 
@@ -177,11 +177,11 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      */
     public EventoPessoa saveContratanteCliente(EventoPessoa entity) throws Exception {
 
-        validateObjectNull(EventoPessoa.class, entity);
+        validateObjectNull(entity);
         
-        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+        eventoService.validateObjectNull(entity.getEvento());
 
-        pessoaService.validateObjectNull(Pessoa.class, entity.getPessoa());
+        pessoaService.validateObjectNull(entity.getPessoa());
 
         int porcentagemConcluidaAntesSalvar = entity.getPorcentagemPreenchimentoConcluida();
 
@@ -214,11 +214,11 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      */
     public EventoPessoa saveContratante(EventoPessoa entity) throws Exception {
 
-        validateObjectNull(EventoPessoa.class, entity);
+        validateObjectNull(entity);
         
-        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+        eventoService.validateObjectNull(entity.getEvento());
 
-        pessoaService.validateObjectNull(Pessoa.class, entity.getPessoa());
+        pessoaService.validateObjectNull(entity.getPessoa());
 
         preenchimentoService.validarPorcentagemPreenchimentoContratante(entity);
 
@@ -243,14 +243,10 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      */
     public EventoPessoa criarContratanteEvento(Evento evento, Pessoa cliente) throws Exception {
 
-        if (evento == null) {
-            throw new GenericException("Evento Nulo", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (cliente == null) {
-            throw new GenericException("Cliente Nulo", ErrorCode.BAD_REQUEST.getCode());
-        }
-
+        eventoService.validateObjectAndIdNull(evento);
+        
+        pessoaService.validateObjectNull(cliente);
+        
         EventoPessoa eventoPessoa = this.getEntityByEvento(evento);
 
         if (eventoPessoa == null) {
@@ -270,16 +266,41 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      */
     public EventoPessoa getEntityByEvento(Evento evento) {
 
-        if (evento == null) {
-            throw new GenericException("Evento Nulo", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (evento.getId() == null) {
-            throw new GenericException("Id do Evento Nulo", ErrorCode.BAD_REQUEST.getCode());
-        }
-
+        eventoService.validateObjectAndIdNull(evento);
+        
         return repository.getEntityByEvento(evento);
 
     }
 
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(EventoPessoa entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Evento Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(EventoPessoa entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
+    
 }

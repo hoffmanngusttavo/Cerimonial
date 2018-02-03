@@ -9,6 +9,8 @@ import br.com.cerimonial.entity.Empresa;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EmpresaRepository;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.List;
@@ -59,7 +61,7 @@ public class EmpresaService extends BasicService<Empresa> {
     @Override
     public Empresa save(Empresa entity) throws Exception {
 
-        validateObjectNull(Empresa.class, entity);
+        validateObjectNull(entity);
         
         Pessoa pessoa = atualizarDadosPessoa(entity);
         
@@ -98,5 +100,37 @@ public class EmpresaService extends BasicService<Empresa> {
         
         return pessoa;
     }
+    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Empresa entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Empresa nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Empresa entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
+    
 
 }

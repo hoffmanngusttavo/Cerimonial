@@ -59,7 +59,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
         ContatoEvento entity = repository.getEntity(id);
 
-        validateObjectNull(ContatoEvento.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getTipoIndicacao() != null) {
             entity.getTipoIndicacao().getId();
@@ -75,7 +75,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     @Override
     public ContatoEvento save(ContatoEvento entity) throws Exception {
 
-        validateObjectNull(ContatoEvento.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -95,7 +95,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     public void delete(ContatoEvento contato) throws Exception {
 
-        validateObjectAndIdNull(ContatoEvento.class, contato);
+        validateObjectAndIdNull(contato);
 
         repository.delete(contato.getId());
     }
@@ -144,7 +144,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     public ContatoEvento getContatoInicialByEvento(Evento evento) {
 
-        eventoService.validateObjectAndIdNull(Evento.class, evento);
+        eventoService.validateObjectAndIdNull(evento);
         
         if (evento.getId() == null) {
             throw new GenericException("Evento nulo", ErrorCode.BAD_REQUEST.getCode());
@@ -152,7 +152,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
         ContatoEvento entity = repository.getContatoInicialByEvento(evento);
 
-        validateObjectNull(ContatoEvento.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getEmailsContato() != null) {
             entity.getEmailsContato().size();
@@ -178,4 +178,35 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
         return new ArrayList<ContatoEvento>();
     }
 
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(ContatoEvento entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Contato Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(ContatoEvento entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
+    
 }

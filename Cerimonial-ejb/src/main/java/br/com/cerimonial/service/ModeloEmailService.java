@@ -7,6 +7,8 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloEmail;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ModeloEmailRepository;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
     @Override
     public ModeloEmail save(ModeloEmail entity) throws Exception {
 
-        validateObjectNull(ModeloEmail.class, entity);
+        validateObjectNull(entity);
 
         //salvar arquivo
         if (entity.getArquivo() != null) {
@@ -105,7 +107,7 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
    
     public void delete(ModeloEmail entity) throws Exception {
 
-        validateObjectAndIdNull(ModeloEmail.class, entity);
+        validateObjectAndIdNull(entity);
 
         repository.delete(entity.getId());
     }
@@ -128,6 +130,35 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
         return null;
     }
 
-    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(ModeloEmail entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Modelo Email nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(ModeloEmail entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
     
 }

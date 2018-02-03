@@ -58,7 +58,7 @@ public class EstadoService extends BasicService<Estado> {
     @Override
     public Estado save(Estado entity) {
 
-        validateObjectNull(Estado.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -82,6 +82,35 @@ public class EstadoService extends BasicService<Estado> {
         return null;
     }
 
-   
+   @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Estado entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Estado nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Estado entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
 
 }

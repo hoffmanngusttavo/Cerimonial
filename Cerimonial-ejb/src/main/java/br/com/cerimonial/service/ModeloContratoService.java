@@ -49,7 +49,7 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
     @Override
     public ModeloContrato save(ModeloContrato entity) throws Exception {
 
-        validateObjectNull(ModeloContrato.class, entity);
+        validateObjectNull(entity);
 
         //salvar ModeloContrato
         if (entity.getId() == null) {
@@ -70,7 +70,7 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
 
     public void delete(ModeloContrato entity) throws Exception {
 
-        validateObjectAndIdNull(ModeloContrato.class, entity);
+        validateObjectAndIdNull(entity);
 
         repository.delete(entity.getId());
     }
@@ -105,6 +105,35 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
 
     }
 
-    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(ModeloContrato entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Modelo Contrato nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(ModeloContrato entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
 
 }

@@ -6,7 +6,6 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
-import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
@@ -129,7 +128,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
         validateId(idEvento);
 
-        pessoaService.validateObjectAndIdNull(Pessoa.class, contratante);
+        pessoaService.validateObjectAndIdNull(contratante);
 
         OrcamentoEvento orcamento = repository.getOrcamentoContratante(idEvento, contratante);
 
@@ -156,9 +155,9 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     @Override
     public OrcamentoEvento save(OrcamentoEvento entity) throws Exception {
 
-        validateObjectNull(OrcamentoEvento.class, entity);
+        validateObjectNull(entity);
         
-        contatoEventoService.validateObjectNull(ContatoEvento.class, entity.getContatoEvento());
+        contatoEventoService.validateObjectNull(entity.getContatoEvento());
 
         //salvar arquivo
         if (entity.getArquivo() != null) {
@@ -184,7 +183,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
     public void delete(OrcamentoEvento proposta) throws Exception {
 
-        validateObjectAndIdNull(OrcamentoEvento.class, proposta);
+        validateObjectAndIdNull(proposta);
 
         if (proposta.isPropostaAceita()) {
             throw new GenericException("Não pode remover um orçamento aprovado", ErrorCode.BAD_REQUEST.getCode());
@@ -264,11 +263,11 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      */
     public void enviarOrcamentoEmail(OrcamentoEvento proposta) throws Exception {
 
-        validateObjectNull(OrcamentoEvento.class, proposta);
+        validateObjectNull(proposta);
 
-        contatoEventoService.validateObjectNull(ContatoEvento.class, proposta.getContatoEvento());
+        contatoEventoService.validateObjectNull(proposta.getContatoEvento());
 
-        modeloPropostaService.validateObjectNull(ModeloProposta.class, proposta.getModeloProposta());
+        modeloPropostaService.validateObjectNull(proposta.getModeloProposta());
 
         //carregar invoice padrao
         String body = InvoiceUtils.readFileToString("proposta-orcamento.html");
@@ -346,9 +345,9 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      */
     public void criarEvento(OrcamentoEvento entity) throws Exception {
 
-        validateObjectNull(OrcamentoEvento.class, entity);
+        validateObjectNull(entity);
 
-        contatoEventoService.validateObjectNull(ContatoEvento.class, entity.getContatoEvento());
+        contatoEventoService.validateObjectNull(entity.getContatoEvento());
 
         if (!entity.isPropostaAceita()) {
             throw new GenericException("Proposta não aceita", ErrorCode.BAD_REQUEST.getCode());
@@ -366,5 +365,37 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         custoEventoService.save(custoEvento);
 
     }
+    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(OrcamentoEvento entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Orcamento Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(OrcamentoEvento entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
+    
 
 }

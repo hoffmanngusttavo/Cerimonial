@@ -61,7 +61,7 @@ public class LancamentoService extends BasicService<Lancamento> {
     @Override
     public Lancamento save(Lancamento entity) throws Exception {
 
-        validateObjectNull(Lancamento.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -81,7 +81,7 @@ public class LancamentoService extends BasicService<Lancamento> {
 
     public void delete(Lancamento entity) throws Exception {
 
-        validateObjectAndIdNull(Lancamento.class, entity);
+        validateObjectAndIdNull(entity);
 
         repository.delete(entity.getId());
     }
@@ -138,7 +138,7 @@ public class LancamentoService extends BasicService<Lancamento> {
      */
     public Lancamento atualizarNumeroParcelas(int numeroParcelas, Lancamento entity) {
 
-        validateObjectNull(Lancamento.class, entity);
+        validateObjectNull(entity);
 
         if (numeroParcelas <= 0) {
             throw new GenericException("O número de parcelas deve ser maior que zero", ErrorCode.BAD_REQUEST.getCode());
@@ -211,7 +211,7 @@ public class LancamentoService extends BasicService<Lancamento> {
      */
     public Lancamento criarNovoLancamentoSaidaOrcamento(OrcamentoEvento orcamentoEvento, List<Pessoa> contratantes) throws Exception {
 
-        orcamentoEventoService.validateObjectAndIdNull(OrcamentoEvento.class, orcamentoEvento);
+        orcamentoEventoService.validateObjectAndIdNull(orcamentoEvento);
 
         if (CollectionUtils.isBlank(contratantes)) {
             throw new GenericException("Para o lançamento deve ter pelo menos 1 contratante responsável pelo pagamento", ErrorCode.BAD_REQUEST.getCode());
@@ -236,7 +236,7 @@ public class LancamentoService extends BasicService<Lancamento> {
 
     public Lancamento saveLancamentoOrcamento(Lancamento entity) throws Exception {
 
-        validateObjectNull(Lancamento.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
 
@@ -250,4 +250,35 @@ public class LancamentoService extends BasicService<Lancamento> {
 
     }
 
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Lancamento entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Lancamento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Lancamento entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
+    
 }

@@ -5,8 +5,9 @@
  */
 package br.com.cerimonial.service;
 
-import br.com.cerimonial.entity.Lancamento;
 import br.com.cerimonial.entity.Parcela;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ParcelaRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +52,9 @@ public class ParcelaService extends BasicService<Parcela>{
     @Override
     public Parcela save(Parcela entity) throws Exception {
 
-        validateObjectNull(Parcela.class, entity);
+        validateObjectNull(entity);
         
-        lancamentoService.validateObjectNull(Lancamento.class, entity.getLancamento());
+        lancamentoService.validateObjectNull(entity.getLancamento());
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -73,7 +74,7 @@ public class ParcelaService extends BasicService<Parcela>{
 
     public void delete(Parcela entity) throws Exception {
 
-        validateObjectAndIdNull(Parcela.class, entity);
+        validateObjectAndIdNull(entity);
 
         repository.delete(entity.getId());
     }
@@ -96,7 +97,36 @@ public class ParcelaService extends BasicService<Parcela>{
         return null;
     }
 
-    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Parcela entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Parcela nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Parcela entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
     
     
 }

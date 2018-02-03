@@ -9,7 +9,6 @@ import br.com.cerimonial.entity.Alerta;
 import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
-import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
@@ -71,7 +70,7 @@ public class AlertaService extends BasicService<Alerta> {
     @Override
     public Alerta save(Alerta entity) throws Exception {
 
-        validateObjectNull(Alerta.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -92,7 +91,7 @@ public class AlertaService extends BasicService<Alerta> {
 
     public void delete(Alerta alerta) throws Exception {
         
-        validateObjectAndIdNull(Alerta.class, alerta);
+        validateObjectAndIdNull(alerta);
         
         repository.delete(alerta.getId());
     }
@@ -118,11 +117,11 @@ public class AlertaService extends BasicService<Alerta> {
     
     public void enviarAlertaContratoLiberado(ContratoEvento entity) throws Exception {
 
-        contratoEventoService.validateObjectNull(ContratoEvento.class, entity);
+        contratoEventoService.validateObjectNull(entity);
         
-        eventoService.validateObjectAndIdNull(Evento.class, entity.getEvento());
+        eventoService.validateObjectAndIdNull(entity.getEvento());
         
-        pessoaService.validateObjectNull(Pessoa.class, entity.getEvento().getContratanteUsuario());
+        pessoaService.validateObjectNull(entity.getEvento().getContratanteUsuario());
 
         String caminho = "/intranet/cliente/evento/partials/impressao-contrato.xhtml?idEvento=" + entity.getEvento().getId();
         String titulo = "Contrato";
@@ -141,9 +140,9 @@ public class AlertaService extends BasicService<Alerta> {
      */
     public void enviarAlertaUsuarioAdminContratante(EventoPessoa entity) {
         
-        eventoPessoaService.validateObjectNull(EventoPessoa.class, entity);
+        eventoPessoaService.validateObjectNull(entity);
 
-         eventoService.validateObjectAndIdNull(Evento.class, entity.getEvento());
+         eventoService.validateObjectAndIdNull(entity.getEvento());
          
         try {
 
@@ -170,9 +169,9 @@ public class AlertaService extends BasicService<Alerta> {
      */
     public void enviarAlertaUsuarioAdminDadosNoivo(EventoPessoa entity) {
         
-        eventoPessoaService.validateObjectNull(EventoPessoa.class, entity);
+        eventoPessoaService.validateObjectNull(entity);
         
-        eventoService.validateObjectAndIdNull(Evento.class, entity.getEvento());
+        eventoService.validateObjectAndIdNull(entity.getEvento());
 
         try {
 
@@ -194,7 +193,7 @@ public class AlertaService extends BasicService<Alerta> {
 
     public void enviarAlertaUsuarioAdminDadosEvento(Evento entity) {
 
-        eventoService.validateObjectAndIdNull(Evento.class, entity);
+        eventoService.validateObjectAndIdNull(entity);
         
         try {
 
@@ -225,7 +224,7 @@ public class AlertaService extends BasicService<Alerta> {
      */
     public Alerta criarAlerta(String caminho, String titulo, String mensagem, Usuario destinatario) throws Exception {
 
-        usuarioService.validateObjectNull(Usuario.class, destinatario);
+        usuarioService.validateObjectNull(destinatario);
 
         return criarAlerta(caminho, titulo, mensagem, Arrays.asList(destinatario));
     }
@@ -248,6 +247,38 @@ public class AlertaService extends BasicService<Alerta> {
 
         return new Alerta(titulo, mensagem, caminho, destinatarios);
 
+    }
+    
+    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Alerta entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Alerta Destinatario nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Alerta entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
     }
 
 }

@@ -5,7 +5,6 @@
  */
 package br.com.cerimonial.service;
 
-import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
@@ -75,7 +74,7 @@ public class PessoaService extends BasicService<Pessoa> {
     @Override
     public synchronized Pessoa save(Pessoa entity) throws Exception {
 
-        validateObjectNull(Pessoa.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -90,7 +89,7 @@ public class PessoaService extends BasicService<Pessoa> {
 
     public void delete(Pessoa entity) throws Exception {
 
-        validateObjectAndIdNull(Pessoa.class, entity);
+        validateObjectAndIdNull(entity);
 
         repository.delete(entity.getId());
     }
@@ -135,7 +134,7 @@ public class PessoaService extends BasicService<Pessoa> {
     //-----------Clientes----------------------
     public Pessoa saveCliente(Pessoa entity) throws Exception {
 
-        validateObjectNull(Pessoa.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -159,7 +158,7 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public Pessoa editCliente(Pessoa entity) throws Exception {
 
-        validateObjectNull(Pessoa.class, entity);
+        validateObjectNull(entity);
         
         isValidCliente(entity);
 
@@ -179,7 +178,7 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public Pessoa createCliente(Pessoa entity) throws Exception {
 
-        validateObjectNull(Pessoa.class, entity);
+        validateObjectNull(entity);
 
         entity.setId(null);
         
@@ -195,7 +194,7 @@ public class PessoaService extends BasicService<Pessoa> {
       */
      public Pessoa getClienteByUsuario(Usuario usuarioLogado) {
         
-         usuarioService.validateObjectAndIdNull(Usuario.class, usuarioLogado);
+         usuarioService.validateObjectAndIdNull(usuarioLogado);
          
         return repository.getClienteByUsuario(usuarioLogado);
     }
@@ -204,7 +203,7 @@ public class PessoaService extends BasicService<Pessoa> {
     //-----------Fornecedores----------------------
     public Pessoa saveFornecedor(Pessoa entity) throws Exception {
 
-        validateObjectNull(Pessoa.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -222,7 +221,7 @@ public class PessoaService extends BasicService<Pessoa> {
     //--------------------COLABORADOR----------------------------
     public Pessoa saveColaborador(Pessoa entity) throws Exception {
 
-        validateObjectNull(Pessoa.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -247,9 +246,9 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public Pessoa criarClienteFromContato(OrcamentoEvento entity) throws Exception {
 
-        orcamentoEventoService.validateObjectAndIdNull(OrcamentoEvento.class, entity);
+        orcamentoEventoService.validateObjectAndIdNull(entity);
         
-        contatoEventoService.validateObjectNull(ContatoEvento.class, entity.getContatoEvento());
+        contatoEventoService.validateObjectNull(entity.getContatoEvento());
         
         Pessoa cliente = this.getPessoaByEmail(entity.getContatoEvento().getEmailContato());
 
@@ -378,7 +377,7 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public void inativarPessoa(Pessoa contratante) {
         
-        validateObjectNull(Pessoa.class, contratante);
+        validateObjectNull(contratante);
         
         contratante.setAtivo(false);
         
@@ -388,6 +387,35 @@ public class PessoaService extends BasicService<Pessoa> {
 
     
 
-    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Pessoa entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Pessoa entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
 
 }

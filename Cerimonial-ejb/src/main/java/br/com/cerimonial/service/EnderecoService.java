@@ -8,6 +8,8 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Estado;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EnderecoRepository;
 import br.com.cerimonial.utils.CerimonialUtils;
 import javax.annotation.PostConstruct;
@@ -52,7 +54,7 @@ public class EnderecoService extends BasicService<Endereco> {
     @Override
     public Endereco save(Endereco entity) throws Exception {
 
-        validateObjectNull(Endereco.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -64,7 +66,7 @@ public class EnderecoService extends BasicService<Endereco> {
     
     public Endereco buscaCep(Endereco endereco) throws Exception {
         
-        validateObjectNull(Endereco.class, endereco);
+        validateObjectNull(endereco);
 
         String cep = endereco.getCep();
         String strCep = CerimonialUtils.removerNaoDigitos(cep);
@@ -112,7 +114,36 @@ public class EnderecoService extends BasicService<Endereco> {
         return buscaCep(endereco);
     }
 
-   
+   @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Endereco entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Endereco nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Endereco entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
 
    
 }

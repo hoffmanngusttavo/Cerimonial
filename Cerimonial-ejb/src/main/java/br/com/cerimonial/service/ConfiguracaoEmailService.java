@@ -61,7 +61,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
     @Override
     public ConfiguracaoEmail save(ConfiguracaoEmail entity) throws Exception {
 
-        validateObjectNull(ConfiguracaoEmail.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -81,7 +81,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
 
     public void delete(ConfiguracaoEmail contato) throws Exception {
 
-        validateObjectAndIdNull(ConfiguracaoEmail.class, contato);
+        validateObjectAndIdNull(contato);
 
         repository.delete(contato.getId());
     }
@@ -136,6 +136,35 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
         return email;
     }
 
-    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(ConfiguracaoEmail entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Configuracao Email nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(ConfiguracaoEmail entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
+    }
 
 }

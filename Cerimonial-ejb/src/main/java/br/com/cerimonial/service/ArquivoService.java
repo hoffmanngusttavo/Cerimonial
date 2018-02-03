@@ -8,6 +8,8 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloEmail;
 import br.com.cerimonial.entity.ModeloProposta;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ArquivoRepository;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,7 +56,7 @@ public class ArquivoService extends BasicService<Arquivo> {
     @Override
     public Arquivo save(Arquivo entity) throws Exception {
 
-        validateObjectNull(Arquivo.class, entity);
+        validateObjectNull(entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -66,14 +68,14 @@ public class ArquivoService extends BasicService<Arquivo> {
 
     public void delete(Arquivo arquivo) throws Exception {
 
-        validateObjectAndIdNull(Arquivo.class, arquivo);
+        validateObjectAndIdNull(arquivo);
 
         repository.delete(arquivo.getId());
     }
 
     public List<Arquivo> getArquivosByModeloProposta(ModeloProposta modeloProposta) {
 
-        modeloPropostaService.validateObjectAndIdNull(ModeloProposta.class, modeloProposta);
+        modeloPropostaService.validateObjectAndIdNull(modeloProposta);
 
         try {
            
@@ -87,7 +89,7 @@ public class ArquivoService extends BasicService<Arquivo> {
 
     public List<Arquivo> getArquivosByModeloEmail(ModeloEmail modeloEmail) {
 
-        modeloEmailService.validateObjectAndIdNull(ModeloEmail.class, modeloEmail);
+        modeloEmailService.validateObjectAndIdNull(modeloEmail);
 
         try {
 
@@ -97,6 +99,37 @@ public class ArquivoService extends BasicService<Arquivo> {
             Logger.getLogger(ArquivoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    @Override
+    public void validateId(Long idEntity) {
+        
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectNull(Arquivo entity) {
+        
+         if (entity == null) {
+            throw new GenericException(" Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+    }
+
+    @Override
+    public void validateObjectAndIdNull(Arquivo entity) {
+        
+        validateObjectNull(entity);
+        
+        validateId(entity.getId());
+        
     }
 
 }
