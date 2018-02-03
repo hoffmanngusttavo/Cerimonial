@@ -7,6 +7,8 @@ package br.com.cerimonial.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -88,16 +90,30 @@ public class DateUtils {
         return c.get(Calendar.YEAR);
     }
 
-    public static Date somaSubtraiDatasDeDataBase(Date dataBase, int quantidadeDeUnidadesCorridas, int calendarIndex) {
+    public static Date addDays(Date currentDate, int qtdDias){
+    
+        // convert date to localdatetime
+        LocalDateTime localDateTime = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-        if (dataBase == null) {
-            dataBase = new Date();
-        }
-
-        Calendar inicio = Calendar.getInstance();
-        inicio.setTime(dataBase);
-        inicio.add(calendarIndex, quantidadeDeUnidadesCorridas);
-        return inicio.getTime();
+        // plus one
+        localDateTime = localDateTime.plusDays(qtdDias);
+        
+        // convert LocalDateTime to date
+        return  Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
+    
+    public static Date addMonths(Date currentDate, int qtdMeses){
+    
+        // convert date to localdatetime
+        LocalDateTime localDateTime = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+        // plus one
+        localDateTime = localDateTime.plusMonths(qtdMeses);
+        
+        // convert LocalDateTime to date
+        return  Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+    
+    
 
 }

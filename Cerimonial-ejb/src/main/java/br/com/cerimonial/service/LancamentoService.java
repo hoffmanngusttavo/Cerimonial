@@ -111,11 +111,11 @@ public class LancamentoService extends BasicService<Lancamento> {
      * @param idOrcamento
      * @return
      */
-    public Lancamento findLancamentoOrcamento(Long idOrcamento) {
+    public Lancamento findLancamentoByOrcamentoId(Long idOrcamento) {
 
         validateId(idOrcamento);
 
-        Lancamento lancamento = repository.findLancamentoOrcamento(idOrcamento);
+        Lancamento lancamento = repository.findLancamentoByOrcamentoId(idOrcamento);
 
         if (lancamento != null) {
 
@@ -177,7 +177,7 @@ public class LancamentoService extends BasicService<Lancamento> {
         double valorCadaParcelaBruto = ((int) ((valorRestanteBruto / numeroParcelas) * 100d)) / 100d;
         double compensarArredondamentoBruto = valorRestanteBruto - (valorCadaParcelaBruto * (double) numeroParcelas);
 
-        int countParcelaRecalculada = 1;//pegar mes sequinte
+        Date dataVencimento = entity.getDataVencimento();
 
         for (int i = 0; i < entity.getParcelas().size(); i++) {
 
@@ -192,9 +192,17 @@ public class LancamentoService extends BasicService<Lancamento> {
                 entity.getParcelas().get(i).setValorCobrado(entity.getParcelas().get(i).getValorCobrado() + compensarArredondamentoBruto);
             }
 
-            entity.getParcelas().get(i).setDataVencimento(DateUtils.somaSubtraiDatasDeDataBase(entity.getDataVencimento(), countParcelaRecalculada, GregorianCalendar.MONTH));
-            //
-            countParcelaRecalculada++;
+            if (i == 0) {
+
+                entity.getParcelas().get(i).setDataVencimento(dataVencimento);
+
+            } else {
+
+                entity.getParcelas().get(i).setDataVencimento(DateUtils.addMonths(dataVencimento, 1));
+
+            }
+
+            dataVencimento = entity.getParcelas().get(i).getDataVencimento();
         }
 
         return entity;
@@ -252,7 +260,7 @@ public class LancamentoService extends BasicService<Lancamento> {
 
     @Override
     public void validateId(Long idEntity) {
-        
+
         if (idEntity == null) {
             throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -260,25 +268,25 @@ public class LancamentoService extends BasicService<Lancamento> {
         if (idEntity <= 0) {
             throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectNull(Lancamento entity) {
-        
-         if (entity == null) {
+
+        if (entity == null) {
             throw new GenericException(" Lancamento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectAndIdNull(Lancamento entity) {
-        
+
         validateObjectNull(entity);
-        
+
         validateId(entity.getId());
-        
+
     }
-    
+
 }

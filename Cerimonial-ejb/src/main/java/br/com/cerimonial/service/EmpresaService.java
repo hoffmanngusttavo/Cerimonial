@@ -53,7 +53,19 @@ public class EmpresaService extends BasicService<Empresa> {
     public Empresa getEmpresa() throws Exception {
         List<Empresa> empresas = repository.findRangeListagem(1, 0, null, null);
         if (CollectionUtils.isNotBlank(empresas)) {
-            return empresas.get(0);
+            
+            for (Empresa empresa : empresas) {
+                
+                if(empresa.getPessoa() != null){
+                    empresa.getPessoa().getId();
+                    
+                    if(empresa.getPessoa().getEndereco() != null){
+                        empresa.getPessoa().getEndereco().getId();
+                    }
+                }
+                
+                return empresa;
+            }
         }
         return new Empresa();
     }

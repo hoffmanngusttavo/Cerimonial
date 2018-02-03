@@ -5,10 +5,7 @@
  */
 package br.com.cerimonial.repository;
 
-import br.com.cerimonial.entity.CustoEvento;
-import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
-import br.com.cerimonial.enums.SituacaoEvento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import javax.persistence.EntityManager;
@@ -23,7 +20,7 @@ public class LancamentoRepository extends AbstractRepository<Lancamento> {
         super(entityManager, Lancamento.class);
     }
 
-    public Lancamento findLancamentoOrcamento(Long idOrcamento) {
+    public Lancamento findLancamentoByOrcamentoId(Long idOrcamento) {
 
         StringBuilder sb = new StringBuilder();
 

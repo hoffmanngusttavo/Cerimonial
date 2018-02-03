@@ -32,7 +32,7 @@
                             <h3 class="panel-title">
                                 <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=#{LancamentoOrcamentoMB.evento.id}">
                                     <i class="fa fa-list"></i>
-                                    <span>#{LancamentoOrcamentoMB.evento.nome} - Serviço Contratado</span>
+                                    <span>#{LancamentoOrcamentoMB.evento.nome} - Lançamento do Evento</span>
                                 </p:link>
                             </h3>
                         </div>
@@ -137,20 +137,31 @@
                                             navigator="true"
                                             locale="pt"
                                             timeZone="GMT-3">
+
                                     <f:convertDateTime pattern="dd/MM/yyyy"
                                                        locale="pt_BR"
                                                        timeZone="GMT-3"/>
+
+                                    
+
+                                    <p:ajax event="dateSelect"
+                                            process="@this"
+                                            update="parcelas"
+                                            listener="#{LancamentoOrcamentoMB.atualizarNumeroParcelas()}"
+                                            onstart="PF('statusDialog').show();"
+                                            oncomplete="PF('statusDialog').hide();"/>
+
                                 </p:calendar>
                             </div>
-                            
+
                             <div class="form-group col-md-6">
                                 <label for="inptFornecedor">
-                                    Fornecedor
+                                    Prestador pelo Serviço
                                     <span class="asteriskField">
                                         *
                                     </span>
                                 </label>
-                                
+
                                 <p:inputText value="#{LancamentoOrcamentoMB.entity.envolvidoOrigem.nome}"
                                              required="true"
                                              disabled="true"
@@ -158,7 +169,7 @@
                                              requiredMessage="Preencha um responsável válido"
                                              id="inptFornecedor"
                                              label="Fornecedor"/>
-                                    
+
                             </div>
 
                             <div class="form-group col-md-6">

@@ -348,11 +348,11 @@ public class PessoaService extends BasicService<Pessoa> {
      * @param idEvento
      * @return 
      */
-    public List<Pessoa> getContratantesEvento(Long idEvento) {
+    public List<Pessoa> findContratantesByEventoId(Long idEvento) {
 
         validateId(idEvento);
         
-        List<Pessoa> contratantes = repository.getContratantesEvento(idEvento);
+        List<Pessoa> contratantes = repository.findContratantesByEventoId(idEvento);
 
         if (CollectionUtils.isNotBlank(contratantes)) {
 

@@ -69,11 +69,11 @@ public class LancamentoOrcamentoMB extends BasicControl {
         if (idOrcamento != null) {
             try {
 
-                entity = service.findLancamentoOrcamento(idOrcamento);
+                entity = service.findLancamentoByOrcamentoId(idOrcamento);
 
                 evento = eventoService.findEventoByIdOrcamento(idOrcamento);
 
-                contratantes = pessoaService.getContratantesEvento(evento.getId());
+                contratantes = pessoaService.findContratantesByEventoId(evento.getId());
 
                 if (entity == null) {
 

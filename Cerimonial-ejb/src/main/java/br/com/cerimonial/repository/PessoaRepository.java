@@ -121,7 +121,7 @@ public class PessoaRepository extends AbstractRepository<Pessoa> {
      * @param idEvento
      * @return
      */
-    public List<Pessoa> getContratantesEvento(Long idEvento) {
+    public List<Pessoa> findContratantesByEventoId(Long idEvento) {
 
         try {
             StringBuilder sb = new StringBuilder();
