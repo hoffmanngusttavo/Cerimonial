@@ -59,7 +59,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
         ContatoEvento entity = repository.getEntity(id);
 
-        validateObject(entity);
+        validateObjectNull(ContatoEvento.class, entity);
 
         if (entity.getTipoIndicacao() != null) {
             entity.getTipoIndicacao().getId();
@@ -75,7 +75,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     @Override
     public ContatoEvento save(ContatoEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(ContatoEvento.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -95,7 +95,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     public void delete(ContatoEvento contato) throws Exception {
 
-        validateObject(contato);
+        validateObjectAndIdNull(ContatoEvento.class, contato);
 
         repository.delete(contato.getId());
     }
@@ -129,6 +129,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     }
 
     public List<String> getLocaisEvento(String value) {
+        
         if (StringUtils.isNotBlank(value)) {
             try {
                 return repository.getLocaisEvento(value.toUpperCase());
@@ -143,7 +144,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
     public ContatoEvento getContatoInicialByEvento(Evento evento) {
 
-        eventoService.validateObject(evento);
+        eventoService.validateObjectAndIdNull(Evento.class, evento);
         
         if (evento.getId() == null) {
             throw new GenericException("Evento nulo", ErrorCode.BAD_REQUEST.getCode());
@@ -151,7 +152,7 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
         ContatoEvento entity = repository.getContatoInicialByEvento(evento);
 
-        validateObject(entity);
+        validateObjectNull(ContatoEvento.class, entity);
 
         if (entity.getEmailsContato() != null) {
             entity.getEmailsContato().size();

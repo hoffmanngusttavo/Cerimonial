@@ -59,7 +59,7 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
     @Override
     public ModeloProposta save(ModeloProposta entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(ModeloProposta.class, entity);
 
         //salvar arquivo
         if (entity.getArquivo() != null) {
@@ -115,11 +115,11 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
         return new ArrayList<>();
     }
 
-    public void delete(ModeloProposta categoria) throws Exception {
+    public void delete(ModeloProposta entity) throws Exception {
 
-        validateObject(categoria);
+        validateObjectAndIdNull(ModeloProposta.class, entity);
 
-        repository.delete(categoria.getId());
+        repository.delete(entity.getId());
     }
 
     public int countAll() {

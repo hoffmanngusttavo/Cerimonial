@@ -53,7 +53,8 @@ public class ContratoEventoMB extends BasicControl {
 
         if (id != null) {
             try {
-                entity = service.getContratoByEvento(id);
+                
+                entity = service.getContratoByEventoId(id);
 
                 if (entity == null) {
                     Evento evento = eventoService.findEntityById(id);

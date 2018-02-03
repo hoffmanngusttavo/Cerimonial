@@ -7,8 +7,6 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.TipoIndicacao;
 import br.com.cerimonial.repository.TipoIndicacaoRepository;
-import br.com.cerimonial.exceptions.GenericException;
-import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,7 +47,7 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
     @Override
     public TipoIndicacao save(TipoIndicacao entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(TipoIndicacao.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -67,11 +65,11 @@ public class TipoIndicacaoService extends BasicService<TipoIndicacao> {
         return new ArrayList<>();
     }
 
-    public void delete(TipoIndicacao categoria) throws Exception {
+    public void delete(TipoIndicacao entity) throws Exception {
 
-        validateObject(categoria);
+        validateObjectAndIdNull(TipoIndicacao.class, entity);
 
-        repository.delete(categoria.getId());
+        repository.delete(entity.getId());
     }
 
     public int countAll() {

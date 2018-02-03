@@ -9,8 +9,6 @@ import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloEmail;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.repository.ArquivoRepository;
-import br.com.cerimonial.exceptions.GenericException;
-import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,7 +54,7 @@ public class ArquivoService extends BasicService<Arquivo> {
     @Override
     public Arquivo save(Arquivo entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Arquivo.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -66,34 +64,34 @@ public class ArquivoService extends BasicService<Arquivo> {
 
     }
 
-    public void delete(Arquivo categoria) throws Exception {
+    public void delete(Arquivo arquivo) throws Exception {
 
-        validateObject(categoria);
+        validateObjectAndIdNull(Arquivo.class, arquivo);
 
-        repository.delete(categoria.getId());
+        repository.delete(arquivo.getId());
     }
 
-    public List<Arquivo> getArquivosByModeloProposta(ModeloProposta entity) {
+    public List<Arquivo> getArquivosByModeloProposta(ModeloProposta modeloProposta) {
 
-        modeloPropostaService.validateObject(entity);
+        modeloPropostaService.validateObjectAndIdNull(ModeloProposta.class, modeloProposta);
 
         try {
-            if (entity.getId() != null) {
-                return repository.getArquivosByModeloProposta(entity);
-            }
+           
+            return repository.getArquivosByModeloProposta(modeloProposta);
+           
         } catch (Exception ex) {
             Logger.getLogger(ArquivoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    public List<Arquivo> getArquivosByModeloEmail(ModeloEmail entity) {
+    public List<Arquivo> getArquivosByModeloEmail(ModeloEmail modeloEmail) {
 
-        modeloEmailService.validateObjectAndId(entity);
+        modeloEmailService.validateObjectAndIdNull(ModeloEmail.class, modeloEmail);
 
         try {
 
-            return repository.getArquivosByModeloProposta(entity);
+            return repository.getArquivosByModeloProposta(modeloEmail);
             
         } catch (Exception ex) {
             Logger.getLogger(ArquivoService.class.getName()).log(Level.SEVERE, null, ex);

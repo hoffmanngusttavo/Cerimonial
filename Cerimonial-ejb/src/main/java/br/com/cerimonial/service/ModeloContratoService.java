@@ -49,7 +49,7 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
     @Override
     public ModeloContrato save(ModeloContrato entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(ModeloContrato.class, entity);
 
         //salvar ModeloContrato
         if (entity.getId() == null) {
@@ -68,11 +68,11 @@ public class ModeloContratoService extends BasicService<ModeloContrato> {
         return new ArrayList<>();
     }
 
-    public void delete(ModeloContrato categoria) throws Exception {
+    public void delete(ModeloContrato entity) throws Exception {
 
-        validateObject(categoria);
+        validateObjectAndIdNull(ModeloContrato.class, entity);
 
-        repository.delete(categoria.getId());
+        repository.delete(entity.getId());
     }
 
     public int countAll() {

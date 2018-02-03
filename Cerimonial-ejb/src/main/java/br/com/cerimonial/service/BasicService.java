@@ -26,20 +26,30 @@ abstract class BasicService<T> implements Serializable {
 
     public abstract T save(T entity) throws Exception;
 
-    public void validateObject(T entity) {
+    public void validateObjectNull(Class classe, T entity) {
 
         if (entity == null) {
-            throw new GenericException(entity +"Objeto nulo.", ErrorCode.BAD_REQUEST.getCode());
+            throw new GenericException(classe +" Objeto nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 
     }
     
-    public void validateObjectAndId(T entity) {
+    public void validateObjectAndIdNull(Class classe, T entity) {
 
-        validateObject(entity);
+        validateObjectNull(classe, entity);
         
-        if (((ModelInterface)entity).getId()  == null) {
-            throw new GenericException(entity +"Id nulo.", ErrorCode.BAD_REQUEST.getCode());
+        validateId(((ModelInterface)entity).getId());
+
+    }
+    
+    public void validateId(Long idEntity) {
+
+        if (idEntity == null) {
+            throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (idEntity <= 0) {
+            throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
         }
 
     }

@@ -7,8 +7,6 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Login;
 import br.com.cerimonial.repository.LoginRepository;
-import br.com.cerimonial.exceptions.GenericException;
-import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,7 +47,7 @@ public class LoginService extends BasicService<Login> {
     @Override
     public Login save(Login entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Login.class, entity);
 
         return repository.create(entity);
     }

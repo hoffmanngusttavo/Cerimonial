@@ -6,8 +6,6 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.ContatoEnvolvido;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContatoEnvolvidoRepository;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.List;
@@ -46,7 +44,7 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
     @Override
     public ContatoEnvolvido save(ContatoEnvolvido entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(ContatoEnvolvido.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -69,9 +67,7 @@ public class ContatoEnvolvidoService extends BasicService<ContatoEnvolvido> {
             
             for (ContatoEnvolvido contato : contatosRemover) {
                 
-                if (contato.getId() == null) {
-                    throw new GenericException("Não pode remover um contato sem id", ErrorCode.BAD_REQUEST.getCode());
-                }
+                validateObjectAndIdNull(ContatoEnvolvido.class, contato);
                 
                 repository.delete(contato.getId());
                 

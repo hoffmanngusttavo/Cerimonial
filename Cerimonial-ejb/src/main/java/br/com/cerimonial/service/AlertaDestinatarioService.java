@@ -7,8 +7,6 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.AlertaDestinatario;
 import br.com.cerimonial.entity.Usuario;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.AlertaDestinatarioRepository;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,7 +52,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
     @Override
     public AlertaDestinatario save(AlertaDestinatario entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(AlertaDestinatario.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -73,11 +71,11 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
         return new ArrayList<>();
     }
 
-    public void delete(AlertaDestinatario categoria) throws Exception {
+    public void delete(AlertaDestinatario alertaDestinatario) throws Exception {
         
-        validateObject(categoria);
+        validateObjectAndIdNull(AlertaDestinatario.class, alertaDestinatario);
         
-        repository.delete(categoria.getId());
+        repository.delete(alertaDestinatario.getId());
         
     }
 
@@ -111,7 +109,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      */
     public List<AlertaDestinatario> findAlertasUsuarioNaoVisualizados(int limit, Usuario usuario) throws Exception {
 
-        usuarioService.validateObject(usuario);
+        usuarioService.validateObjectNull(Usuario.class, usuario);
         
         return repository.findAlertasUsuarioNaoVisualizados(limit, usuario, new Date());
 
@@ -127,7 +125,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      */
     public Integer countAlertasUsuarioNaoVisualizados(Usuario usuario) throws Exception {
 
-        usuarioService.validateObject(usuario);
+        usuarioService.validateObjectNull(Usuario.class, usuario);
 
         return repository.countAlertasUsuarioNaoVisualizados(usuario, new Date());
 
@@ -142,7 +140,7 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
      */
     public AlertaDestinatario alterarAlertaVisualizado(AlertaDestinatario entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(AlertaDestinatario.class, entity);
 
         if (!entity.isVisualizado()) {
 

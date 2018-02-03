@@ -6,6 +6,7 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
+import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
@@ -66,6 +67,10 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     protected EventoPessoaService eventoPessoaService;
     @EJB
     protected CustoEventoService custoEventoService;
+    @EJB
+    protected ContatoEventoService contatoEventoService;
+    @EJB
+    protected ModeloPropostaService modeloPropostaService;
 
     @PostConstruct
     @PostActivate
@@ -88,22 +93,16 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      */
     public OrcamentoEvento getOrcamentoByEvento(Long idEvento) throws Exception {
 
-        if (idEvento == null) {
-            throw new GenericException("Id nulo do evento ", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (idEvento < 0) {
-            throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
-        }
+        validateId(idEvento);
 
         OrcamentoEvento orcamento = repository.getOrcamentoByEvento(idEvento);
-        
+
         if (orcamento != null) {
 
             if (orcamento.getEvento() != null) {
                 orcamento.getEvento().getId();
             }
-            
+
             if (orcamento.getAnexos() != null) {
                 orcamento.getAnexos().size();
             }
@@ -113,12 +112,11 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
             }
 
         }
-        
+
         return orcamento;
-        
+
     }
-    
-    
+
     /**
      * Método vai buscar o orçamento de um evento de um contratante;
      *
@@ -129,30 +127,18 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      */
     public OrcamentoEvento getOrcamentoContratante(Long idEvento, Pessoa contratante) throws Exception {
 
-        if (idEvento == null) {
-            throw new GenericException("Id nulo do evento ", ErrorCode.BAD_REQUEST.getCode());
-        }
+        validateId(idEvento);
 
-        if (idEvento < 0) {
-            throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        if (contratante == null) {
-            throw new GenericException("Contratante nulo ", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        if (contratante.getId() == null) {
-            throw new GenericException("Id Contratante nulo ", ErrorCode.BAD_REQUEST.getCode());
-        }
+        pessoaService.validateObjectAndIdNull(Pessoa.class, contratante);
 
         OrcamentoEvento orcamento = repository.getOrcamentoContratante(idEvento, contratante);
-        
+
         if (orcamento != null) {
 
             if (orcamento.getEvento() != null) {
                 orcamento.getEvento().getId();
             }
-            
+
             if (orcamento.getAnexos() != null) {
                 orcamento.getAnexos().size();
             }
@@ -162,15 +148,17 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
             }
 
         }
-        
+
         return orcamento;
-        
+
     }
 
     @Override
     public OrcamentoEvento save(OrcamentoEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(OrcamentoEvento.class, entity);
+        
+        contatoEventoService.validateObjectNull(ContatoEvento.class, entity.getContatoEvento());
 
         //salvar arquivo
         if (entity.getArquivo() != null) {
@@ -196,7 +184,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
     public void delete(OrcamentoEvento proposta) throws Exception {
 
-        validateObject(proposta);
+        validateObjectAndIdNull(OrcamentoEvento.class, proposta);
 
         if (proposta.isPropostaAceita()) {
             throw new GenericException("Não pode remover um orçamento aprovado", ErrorCode.BAD_REQUEST.getCode());
@@ -251,16 +239,19 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
     /**
      *
-     * @param id do ContatoEvento
+     * @param idContato do ContatoEvento
      * @return Uma lista de orçamentos/propostas de um contato
      */
-    public List<OrcamentoEvento> findAllByContatoId(Long id) {
-        if (id != null) {
-            try {
-                return repository.findAllByContatoId(id);
-            } catch (Exception ex) {
-                Logger.getLogger(OrcamentoEventoService.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public List<OrcamentoEvento> findAllByContatoId(Long idContato) {
+
+        validateId(idContato);
+
+        try {
+            
+            return repository.findAllByContatoId(idContato);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(OrcamentoEventoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new ArrayList<>();
     }
@@ -273,7 +264,11 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      */
     public void enviarOrcamentoEmail(OrcamentoEvento proposta) throws Exception {
 
-        validateObject(proposta);
+        validateObjectNull(OrcamentoEvento.class, proposta);
+
+        contatoEventoService.validateObjectNull(ContatoEvento.class, proposta.getContatoEvento());
+
+        modeloPropostaService.validateObjectNull(ModeloProposta.class, proposta.getModeloProposta());
 
         //carregar invoice padrao
         String body = InvoiceUtils.readFileToString("proposta-orcamento.html");
@@ -343,16 +338,17 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
     }
 
     /**
-     * Vai criar um evento a partir de uma proposta aceita.
-     * Vai Criar um cliente.
-     * Vai criar o evento do cliente 
+     * Vai criar um evento a partir de uma proposta aceita. Vai Criar um
+     * cliente. Vai criar o evento do cliente
      *
      * @param entity
      * @throws java.lang.Exception
      */
     public void criarEvento(OrcamentoEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(OrcamentoEvento.class, entity);
+
+        contatoEventoService.validateObjectNull(ContatoEvento.class, entity.getContatoEvento());
 
         if (!entity.isPropostaAceita()) {
             throw new GenericException("Proposta não aceita", ErrorCode.BAD_REQUEST.getCode());
@@ -362,25 +358,13 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         Evento evento = eventoService.criarEventoFromOrcamento(entity);
         CustoEvento custoEvento = custoEventoService.criarCustoEvento(entity, evento);
         EventoPessoa eventoPessoa = eventoPessoaService.criarContratanteEvento(evento, cliente);
-        
+
         //salvar em cascata
         pessoaService.saveCliente(cliente);
         eventoService.save(evento);
         eventoPessoaService.save(eventoPessoa);
         custoEventoService.save(custoEvento);
-        
-    }
 
-    @Override
-    public void validateObject(OrcamentoEvento entity) {
-        if (entity == null) {
-            throw new GenericException("Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (entity.getContatoEvento() == null) {
-            throw new GenericException("Orçamento possui um contato nulo", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
     }
 
 }

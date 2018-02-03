@@ -10,8 +10,6 @@ import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.repository.EmpresaRepository;
-import br.com.cerimonial.exceptions.GenericException;
-import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -61,7 +59,7 @@ public class EmpresaService extends BasicService<Empresa> {
     @Override
     public Empresa save(Empresa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Empresa.class, entity);
         
         Pessoa pessoa = atualizarDadosPessoa(entity);
         

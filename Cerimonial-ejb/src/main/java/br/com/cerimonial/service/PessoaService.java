@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -40,6 +42,13 @@ import org.apache.commons.lang.StringUtils;
 public class PessoaService extends BasicService<Pessoa> {
 
     private PessoaRepository repository;
+    
+    @EJB
+    private UsuarioService usuarioService;
+    @EJB
+    private OrcamentoEventoService orcamentoEventoService;
+    @EJB
+    private ContatoEventoService contatoEventoService;
 
     @PostConstruct
     @PostActivate
@@ -66,7 +75,7 @@ public class PessoaService extends BasicService<Pessoa> {
     @Override
     public synchronized Pessoa save(Pessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Pessoa.class, entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -81,7 +90,7 @@ public class PessoaService extends BasicService<Pessoa> {
 
     public void delete(Pessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectAndIdNull(Pessoa.class, entity);
 
         repository.delete(entity.getId());
     }
@@ -126,7 +135,7 @@ public class PessoaService extends BasicService<Pessoa> {
     //-----------Clientes----------------------
     public Pessoa saveCliente(Pessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Pessoa.class, entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -150,7 +159,7 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public Pessoa editCliente(Pessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Pessoa.class, entity);
         
         isValidCliente(entity);
 
@@ -170,9 +179,10 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public Pessoa createCliente(Pessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Pessoa.class, entity);
 
         entity.setId(null);
+        
         return saveCliente(entity);
     }
 
@@ -185,10 +195,8 @@ public class PessoaService extends BasicService<Pessoa> {
       */
      public Pessoa getClienteByUsuario(Usuario usuarioLogado) {
         
-         if(usuarioLogado == null || usuarioLogado.getId() == null){
-             throw new GenericException("Não foi possível carregar cliente, usuário nulo", ErrorCode.BAD_REQUEST.getCode());
-         }
-        
+         usuarioService.validateObjectAndIdNull(Usuario.class, usuarioLogado);
+         
         return repository.getClienteByUsuario(usuarioLogado);
     }
     
@@ -196,7 +204,7 @@ public class PessoaService extends BasicService<Pessoa> {
     //-----------Fornecedores----------------------
     public Pessoa saveFornecedor(Pessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Pessoa.class, entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -214,7 +222,7 @@ public class PessoaService extends BasicService<Pessoa> {
     //--------------------COLABORADOR----------------------------
     public Pessoa saveColaborador(Pessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Pessoa.class, entity);
 
         if (entity.getEndereco() != null && !entity.getEndereco().isValid()) {
             entity.setEndereco(null);
@@ -239,6 +247,10 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public Pessoa criarClienteFromContato(OrcamentoEvento entity) throws Exception {
 
+        orcamentoEventoService.validateObjectAndIdNull(OrcamentoEvento.class, entity);
+        
+        contatoEventoService.validateObjectNull(ContatoEvento.class, entity.getContatoEvento());
+        
         Pessoa cliente = this.getPessoaByEmail(entity.getContatoEvento().getEmailContato());
 
         try {
@@ -339,10 +351,8 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public List<Pessoa> getContratantesEvento(Long idEvento) {
 
-        if (idEvento == null) {
-            throw new GenericException("Id evento nulo", ErrorCode.BAD_REQUEST.getCode());
-        }
-
+        validateId(idEvento);
+        
         List<Pessoa> contratantes = repository.getContratantesEvento(idEvento);
 
         if (CollectionUtils.isNotBlank(contratantes)) {
@@ -368,7 +378,7 @@ public class PessoaService extends BasicService<Pessoa> {
      */
     public void inativarPessoa(Pessoa contratante) {
         
-        validateObject(contratante);
+        validateObjectNull(Pessoa.class, contratante);
         
         contratante.setAtivo(false);
         

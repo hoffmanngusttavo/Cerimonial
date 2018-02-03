@@ -5,15 +5,15 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Lancamento;
 import br.com.cerimonial.entity.Parcela;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ParcelaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -33,6 +33,9 @@ import javax.ejb.TransactionManagementType;
 public class ParcelaService extends BasicService<Parcela>{
     
     private ParcelaRepository repository;
+    
+    @EJB
+    private LancamentoService lancamentoService;
 
     @PostConstruct
     @PostActivate
@@ -48,7 +51,9 @@ public class ParcelaService extends BasicService<Parcela>{
     @Override
     public Parcela save(Parcela entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Parcela.class, entity);
+        
+        lancamentoService.validateObjectNull(Lancamento.class, entity.getLancamento());
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -66,11 +71,11 @@ public class ParcelaService extends BasicService<Parcela>{
         return new ArrayList<>();
     }
 
-    public void delete(Parcela categoria) throws Exception {
+    public void delete(Parcela entity) throws Exception {
 
-        validateObject(categoria);
+        validateObjectAndIdNull(Parcela.class, entity);
 
-        repository.delete(categoria.getId());
+        repository.delete(entity.getId());
     }
 
     public int countAll() {
@@ -91,17 +96,7 @@ public class ParcelaService extends BasicService<Parcela>{
         return null;
     }
 
-    @Override
-    public void validateObject(Parcela entity) {
-        if (entity == null) {
-            throw new GenericException("Parcela nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        if (entity.getLancamento() == null) {
-            throw new GenericException("Lançamento da Parcela nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-       
-    }
+    
     
     
 }

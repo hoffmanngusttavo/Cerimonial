@@ -114,7 +114,11 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
     @Override
     public EventoPessoa save(EventoPessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(EventoPessoa.class, entity);
+        
+        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+
+        pessoaService.validateObjectNull(Pessoa.class, entity.getPessoa());
 
         preenchimentoService.validarPorcentagemPreenchimento(entity);
 
@@ -137,7 +141,11 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      */
     public EventoPessoa saveNoivo(EventoPessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(EventoPessoa.class, entity);
+        
+        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+
+        pessoaService.validateObjectNull(Pessoa.class, entity.getPessoa());
 
         int porcentagemConcluidaAntesSalvar = entity.getPorcentagemPreenchimentoConcluida();
 
@@ -169,7 +177,11 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      */
     public EventoPessoa saveContratanteCliente(EventoPessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(EventoPessoa.class, entity);
+        
+        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+
+        pessoaService.validateObjectNull(Pessoa.class, entity.getPessoa());
 
         int porcentagemConcluidaAntesSalvar = entity.getPorcentagemPreenchimentoConcluida();
 
@@ -202,7 +214,11 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      */
     public EventoPessoa saveContratante(EventoPessoa entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(EventoPessoa.class, entity);
+        
+        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+
+        pessoaService.validateObjectNull(Pessoa.class, entity.getPessoa());
 
         preenchimentoService.validarPorcentagemPreenchimentoContratante(entity);
 
@@ -215,19 +231,6 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
         }
 
         return entity;
-    }
-
-    @Override
-    public void validateObject(EventoPessoa entity) {
-
-        if (entity == null) {
-            throw new GenericException("Evento Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        eventoService.validateObject(entity.getEvento());
-
-        pessoaService.validateObject(entity.getPessoa());
-        
     }
 
     /**

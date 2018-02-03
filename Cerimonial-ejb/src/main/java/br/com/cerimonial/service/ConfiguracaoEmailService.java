@@ -61,7 +61,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
     @Override
     public ConfiguracaoEmail save(ConfiguracaoEmail entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(ConfiguracaoEmail.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -81,7 +81,7 @@ public class ConfiguracaoEmailService extends BasicService<ConfiguracaoEmail> {
 
     public void delete(ConfiguracaoEmail contato) throws Exception {
 
-        validateObject(contato);
+        validateObjectAndIdNull(ConfiguracaoEmail.class, contato);
 
         repository.delete(contato.getId());
     }

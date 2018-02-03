@@ -9,14 +9,13 @@ import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
 import br.com.cerimonial.entity.OrcamentoEvento;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.CustoEventoRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -36,6 +35,12 @@ import javax.ejb.TransactionManagementType;
 public class CustoEventoService extends BasicService<CustoEvento> {
 
     private CustoEventoRepository repository;
+    
+    @EJB
+    protected EventoService eventoService;
+    
+    @EJB
+    protected OrcamentoEventoService orcamentoEventoService;
 
     @PostConstruct
     @PostActivate
@@ -52,7 +57,9 @@ public class CustoEventoService extends BasicService<CustoEvento> {
     @Override
     public CustoEvento save(CustoEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(CustoEvento.class, entity);
+        
+        eventoService.validateObjectNull(Evento.class, entity.getEvento());
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -95,9 +102,7 @@ public class CustoEventoService extends BasicService<CustoEvento> {
      */
     public CustoEvento findCustoEventoByIdEvento(Long idEvento) {
 
-        if (idEvento == null) {
-            throw new GenericException("Id Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        validateId(idEvento);
 
         CustoEvento custo = repository.findCustoEventoByIdEvento(idEvento);
 
@@ -116,6 +121,7 @@ public class CustoEventoService extends BasicService<CustoEvento> {
                 }
             }
         }
+        
         return custo;
     }
 
@@ -127,14 +133,10 @@ public class CustoEventoService extends BasicService<CustoEvento> {
      */
     public CustoEvento criarCustoEvento(OrcamentoEvento orcamento, Evento evento) {
         
-        if (orcamento == null) {
-            throw new GenericException("Orçamento Nulo", ErrorCode.BAD_REQUEST.getCode());
-        }
+        orcamentoEventoService.validateObjectNull(OrcamentoEvento.class, orcamento);
         
-        if (evento == null) {
-            throw new GenericException("Evento Nulo", ErrorCode.BAD_REQUEST.getCode());
-        }
-
+        eventoService.validateObjectNull(Evento.class, evento);
+        
         CustoEvento custoEvento = evento.getCustoEvento();
         
         if(custoEvento == null){

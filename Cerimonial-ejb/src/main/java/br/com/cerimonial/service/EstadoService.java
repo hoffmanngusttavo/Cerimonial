@@ -58,7 +58,7 @@ public class EstadoService extends BasicService<Estado> {
     @Override
     public Estado save(Estado entity) {
 
-        validateObject(entity);
+        validateObjectNull(Estado.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);

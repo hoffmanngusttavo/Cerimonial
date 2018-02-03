@@ -8,8 +8,6 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.EmailContatoEvento;
 import br.com.cerimonial.entity.ModeloEmail;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EmailContatoEventoRepository;
 import br.com.cerimonial.utils.EmailHelper;
 import java.util.Date;
@@ -64,7 +62,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
     @Override
     public EmailContatoEvento save(EmailContatoEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(EmailContatoEvento.class, entity);
 
         if (entity.getId() == null) {
 
@@ -80,7 +78,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     public void delete(EmailContatoEvento contato) throws Exception {
 
-        validateObject(contato);
+        validateObjectAndIdNull(EmailContatoEvento.class, contato);
 
         repository.delete(contato.getId());
     }
@@ -103,31 +101,14 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
         return null;
     }
 
-    @Override
-    public void validateObject(EmailContatoEvento entity) {
-        if (entity == null) {
-            throw new GenericException("Objeto nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-        if (StringUtils.isBlank(entity.getDestinatarios())) {
-            throw new GenericException("Destinatários do email vazio.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (StringUtils.isBlank(entity.getCorpoEmail())) {
-            throw new GenericException("Corpo do email vazio.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-    }
-
     public EmailContatoEvento carregarDadosModeloEmail(EmailContatoEvento entity, ModeloEmail modeloEmail) throws Exception {
 
+        modeloEmailService.validateObjectAndIdNull(ModeloEmail.class, modeloEmail);
+        
         if (entity != null) {
             entity.setArquivo(null);
             entity.setCorpoEmail(null);
             entity.setTituloEmail(null);
-        }
-
-        if (modeloEmail == null) {
-            throw new GenericException("Modelo de Email nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
 
         // carregar em lazy os anexoss
@@ -154,7 +135,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     private void enviarEmail(EmailContatoEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(EmailContatoEvento.class, entity);
 
         EmailHelper emailUtil = new EmailHelper();
 

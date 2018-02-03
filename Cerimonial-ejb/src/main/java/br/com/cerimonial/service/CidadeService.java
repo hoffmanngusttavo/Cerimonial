@@ -75,13 +75,16 @@ public class CidadeService extends BasicService<Cidade> {
 
     public List<Cidade> findByEstado(Estado estado) {
 
-       estadoService.validateObjectAndId(estado);
+       estadoService.validateObjectAndIdNull(Estado.class, estado);
 
         try {
+            
             return repository.findByIdEstado(estado.getId());
+            
         } catch (Exception ex) {
             Logger.getLogger(CidadeService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         return new ArrayList<>();
     }
 
@@ -93,7 +96,7 @@ public class CidadeService extends BasicService<Cidade> {
     @Override
     public Cidade save(Cidade entity) {
 
-        validateObject(entity);
+        validateObjectNull(Cidade.class, entity);
 
         if (entity.getId() == null) {
 

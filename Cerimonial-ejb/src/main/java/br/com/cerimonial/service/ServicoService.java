@@ -6,8 +6,6 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Servico;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ServicoRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +47,7 @@ public class ServicoService extends BasicService<Servico>{
     @Override
     public Servico save(Servico entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Servico.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -67,11 +65,11 @@ public class ServicoService extends BasicService<Servico>{
         return new ArrayList<>();
     }
 
-    public void delete(Servico categoria) throws Exception {
+    public void delete(Servico entity) throws Exception {
 
-        validateObject(categoria);
+        validateObjectAndIdNull(Servico.class, entity);
 
-        repository.delete(categoria.getId());
+        repository.delete(entity.getId());
     }
 
     public int countAll() {

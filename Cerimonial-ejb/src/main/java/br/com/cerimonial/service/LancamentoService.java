@@ -44,6 +44,9 @@ public class LancamentoService extends BasicService<Lancamento> {
 
     private LancamentoRepository repository;
 
+    @EJB
+    private OrcamentoEventoService orcamentoEventoService;
+
     @PostConstruct
     @PostActivate
     private void postConstruct() {
@@ -58,7 +61,7 @@ public class LancamentoService extends BasicService<Lancamento> {
     @Override
     public Lancamento save(Lancamento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Lancamento.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -76,11 +79,11 @@ public class LancamentoService extends BasicService<Lancamento> {
         return new ArrayList<>();
     }
 
-    public void delete(Lancamento categoria) throws Exception {
+    public void delete(Lancamento entity) throws Exception {
 
-        validateObject(categoria);
+        validateObjectAndIdNull(Lancamento.class, entity);
 
-        repository.delete(categoria.getId());
+        repository.delete(entity.getId());
     }
 
     public int countAll() {
@@ -101,7 +104,6 @@ public class LancamentoService extends BasicService<Lancamento> {
         return null;
     }
 
-   
     /**
      * Vai buscar um lançamento que foi gerado a partir de um orçamento
      * carregando em lazy as parcelas
@@ -111,9 +113,7 @@ public class LancamentoService extends BasicService<Lancamento> {
      */
     public Lancamento findLancamentoOrcamento(Long idOrcamento) {
 
-        if (idOrcamento == null) {
-            throw new GenericException("Id Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
+        validateId(idOrcamento);
 
         Lancamento lancamento = repository.findLancamentoOrcamento(idOrcamento);
 
@@ -138,19 +138,18 @@ public class LancamentoService extends BasicService<Lancamento> {
      */
     public Lancamento atualizarNumeroParcelas(int numeroParcelas, Lancamento entity) {
 
-        validateObject(entity);
+        validateObjectNull(Lancamento.class, entity);
 
         if (numeroParcelas <= 0) {
             throw new GenericException("O número de parcelas deve ser maior que zero", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        if(entity.getParcelas() == null){
+        if (entity.getParcelas() == null) {
             entity.setParcelas(new ArrayList<Parcela>());
         }
-        
 
         //INICIO calibragem
-        int criarRemoverParcelas =  numeroParcelas - entity.getParcelas().size();
+        int criarRemoverParcelas = numeroParcelas - entity.getParcelas().size();
 
         if (criarRemoverParcelas > 0) {//adicionar
 
@@ -169,7 +168,7 @@ public class LancamentoService extends BasicService<Lancamento> {
             }
         }
         //FIM calibragem
-        
+
         double valorBase = entity.getValorBase() != null ? entity.getValorBase() : 0;
         double valorPago = entity.getValorTotalPago() != null ? entity.getValorTotalPago() : 0;
         //
@@ -202,54 +201,53 @@ public class LancamentoService extends BasicService<Lancamento> {
     }
 
     /**
-     * Vai instanciar um lançamento a partir dos dados do orçamento aprovado do evento
+     * Vai instanciar um lançamento a partir dos dados do orçamento aprovado do
+     * evento
+     *
      * @param orcamentoEvento relacionamento 1 to 1 lançamento
      * @param contratantes
-     * @return 
-     * @throws java.lang.Exception 
+     * @return
+     * @throws java.lang.Exception
      */
     public Lancamento criarNovoLancamentoSaidaOrcamento(OrcamentoEvento orcamentoEvento, List<Pessoa> contratantes) throws Exception {
 
-        if (orcamentoEvento == null) {
-            throw new GenericException("Orçamento é nulo para o lançamento", ErrorCode.BAD_REQUEST.getCode());
-        }
-        
-        if(CollectionUtils.isBlank(contratantes)){
+        orcamentoEventoService.validateObjectAndIdNull(OrcamentoEvento.class, orcamentoEvento);
+
+        if (CollectionUtils.isBlank(contratantes)) {
             throw new GenericException("Para o lançamento deve ter pelo menos 1 contratante responsável pelo pagamento", ErrorCode.BAD_REQUEST.getCode());
         }
 
         Lancamento entity = new Lancamento(TipoLancamento.DESPESA);
-        
+
         entity.setOrcamentoEvento(orcamentoEvento);
 
         entity.setValorBase(orcamentoEvento.getValorFinal());
-        
+
         //rita
         entity.setEnvolvidoOrigem(EmpresaCache.getEmpresa().getPessoa());
-        
+
         // responsavel pelo pagamento
         entity.setEnvolvidoDestino(contratantes.get(0));
-        
+
         entity.adicionarParcela(new Parcela(entity, orcamentoEvento.getValorFinal(), new Date()));
-        
+
         return entity;
     }
 
     public Lancamento saveLancamentoOrcamento(Lancamento entity) throws Exception {
-        
-        validateObject(entity);
-        
-        if(entity.getId() == null){
-            
+
+        validateObjectNull(Lancamento.class, entity);
+
+        if (entity.getId() == null) {
+
             // criar vinculo com lancamento de saida do evento com lancamento de entrada da empresa
-            
             return save(entity);
-            
-        }else{
-        
+
+        } else {
+
             return save(entity);
         }
-        
+
     }
 
 }

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -43,6 +44,9 @@ public class UsuarioService extends BasicService<Usuario> {
 
     private UsuarioRepository repository;
 
+    @EJB
+    private PessoaService pessoaService;
+    
     @PostConstruct
     @PostActivate
     private void postConstruct() {
@@ -59,7 +63,7 @@ public class UsuarioService extends BasicService<Usuario> {
     @Override
     public synchronized Usuario save(Usuario entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(Usuario.class, entity);
         
         if (StringUtils.isNotBlank(entity.getLogin())) {
             
@@ -92,7 +96,7 @@ public class UsuarioService extends BasicService<Usuario> {
 
     public void delete(Usuario user) throws Exception {
 
-        validateObject(user);
+        validateObjectAndIdNull(Usuario.class, user);
 
         if (user.isMaster()) {
             throw new Exception("Usuário master não pode ser removido");
@@ -184,10 +188,9 @@ public class UsuarioService extends BasicService<Usuario> {
      * @throws java.lang.Exception
      */
     public Usuario criarUsuarioCliente(Pessoa cliente) throws Exception {
-        if (cliente == null) {
-            throw new Exception("Cliente Null");
-        }
-
+        
+        pessoaService.validateObjectNull(Pessoa.class, cliente);
+        
         Usuario usuario = this.getUsuarioByLogin(cliente.getEmail());
 
         if (usuario == null) {
@@ -242,7 +245,7 @@ public class UsuarioService extends BasicService<Usuario> {
      */
     public void enviarEmailBoasVindas(Usuario user, String senha) throws Exception {
 
-        validateObject(user);
+        validateObjectNull(Usuario.class, user);
 
         CerimonialUtils.validarEmail(user.getEmail());
 
@@ -273,7 +276,7 @@ public class UsuarioService extends BasicService<Usuario> {
      */
     public void enviarEmailEsqueciMinhaSenha(Usuario user, String senha) throws Exception {
         
-        validateObject(user);
+        validateObjectNull(Usuario.class, user);
 
         //carregar invoice padrao
         String body = InvoiceUtils.readFileToString("esqueci-minha-senha.html");
@@ -298,7 +301,9 @@ public class UsuarioService extends BasicService<Usuario> {
         CerimonialUtils.validarEmail(email);
 
         Usuario usuario = getUsuarioByEmail(email);
-        validateObject(usuario);
+        
+        validateObjectNull(Usuario.class, usuario);
+        
         if (!usuario.isAtivo()) {
             throw new Exception("Seu usuário está inativo, entre em contato com seu cerimonial");
         }
@@ -316,7 +321,7 @@ public class UsuarioService extends BasicService<Usuario> {
      */
     public void inativarUsuario(Usuario usuario) {
 
-        validateObject(usuario);
+        validateObjectNull(Usuario.class, usuario);
 
         usuario.setAtivo(false);
 

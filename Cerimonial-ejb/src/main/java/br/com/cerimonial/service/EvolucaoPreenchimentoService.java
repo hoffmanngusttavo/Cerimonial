@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -41,6 +42,13 @@ import org.apache.commons.lang.StringUtils;
 public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchimento> {
 
     private EvolucaoPreenchimentoRepository repository;
+    
+    @EJB
+    private EventoPessoaService eventoPessoaService;
+    @EJB
+    private EventoService eventoService;
+    @EJB
+    private PessoaService pessoaService;
 
     @PostConstruct
     @PostActivate
@@ -57,7 +65,7 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
     @Override
     public EvolucaoPreenchimento save(EvolucaoPreenchimento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(EvolucaoPreenchimento.class, entity);
 
         return repository.create(entity);
     }
@@ -224,14 +232,10 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
      */
     public void validarPorcentagemPreenchimentoNoivo(EventoPessoa eventoPessoa) {
 
-        if (eventoPessoa == null) {
-            throw new GenericException("Evolucao Preenchimento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (eventoPessoa.getPessoa() == null) {
-            throw new GenericException("Evolucao Preenchimento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
+        eventoPessoaService.validateObjectAndIdNull(EventoPessoa.class, eventoPessoa);
+        
+        pessoaService.validateObjectAndIdNull(Pessoa.class, eventoPessoa.getPessoa());
+        
         EvolucaoPreenchimento evolucaoPreenchimento = eventoPessoa.getEvolucaoPreenchimento();
 
         if (evolucaoPreenchimento == null) {
@@ -341,10 +345,8 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
 
     public void validarPorcentagemPreenchimentoEvento(Evento evento) {
 
-        if (evento == null) {
-            throw new GenericException("Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
-        }
-
+        eventoService.validateObjectAndIdNull(Evento.class, evento);
+        
         EvolucaoPreenchimento evolucaoPreenchimento = evento.getEvolucaoPreenchimento();
 
         if (evolucaoPreenchimento == null) {

@@ -7,8 +7,6 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloEmail;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ModeloEmailRepository;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
@@ -62,7 +60,7 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
     @Override
     public ModeloEmail save(ModeloEmail entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(ModeloEmail.class, entity);
 
         //salvar arquivo
         if (entity.getArquivo() != null) {
@@ -105,11 +103,11 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
     }
     
    
-    public void delete(ModeloEmail categoria) throws Exception {
+    public void delete(ModeloEmail entity) throws Exception {
 
-        validateObject(categoria);
+        validateObjectAndIdNull(ModeloEmail.class, entity);
 
-        repository.delete(categoria.getId());
+        repository.delete(entity.getId());
     }
 
     public int countAll() {

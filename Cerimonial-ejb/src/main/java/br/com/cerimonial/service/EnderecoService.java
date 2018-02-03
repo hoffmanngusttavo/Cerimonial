@@ -9,8 +9,6 @@ import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.repository.EnderecoRepository;
-import br.com.cerimonial.exceptions.GenericException;
-import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -46,7 +44,27 @@ public class EnderecoService extends BasicService<Endereco> {
         repository = new EnderecoRepository(em);
     }
 
+     @Override
+    public Endereco findEntityById(Long id) throws Exception {
+        return repository.getEntity(id);
+    }
+
+    @Override
+    public Endereco save(Endereco entity) throws Exception {
+
+        validateObjectNull(Endereco.class, entity);
+
+        if (entity.getId() == null) {
+            return repository.create(entity);
+        } else {
+            return repository.edit(entity);
+        }
+    }
+    
+    
     public Endereco buscaCep(Endereco endereco) throws Exception {
+        
+        validateObjectNull(Endereco.class, endereco);
 
         String cep = endereco.getCep();
         String strCep = CerimonialUtils.removerNaoDigitos(cep);
@@ -94,22 +112,7 @@ public class EnderecoService extends BasicService<Endereco> {
         return buscaCep(endereco);
     }
 
-    @Override
-    public Endereco findEntityById(Long id) throws Exception {
-        return repository.getEntity(id);
-    }
-
-    @Override
-    public Endereco save(Endereco entity) throws Exception {
-
-        validateObject(entity);
-
-        if (entity.getId() == null) {
-            return repository.create(entity);
-        } else {
-            return repository.edit(entity);
-        }
-    }
+   
 
    
 }

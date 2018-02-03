@@ -8,9 +8,8 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
+import br.com.cerimonial.entity.ModeloContrato;
 import br.com.cerimonial.entity.Pessoa;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContratoEventoRepository;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
@@ -48,6 +47,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
     
     @EJB
     protected AlertaService alertaService;
+    
+    @EJB
+    protected PessoaService pessoaService;
 
     @PostConstruct
     @PostActivate
@@ -63,9 +65,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      */
     @Override
     public ContratoEvento findEntityById(Long id) throws Exception {
-        ContratoEvento entity = repository.getEntity(id);
+        
+        return repository.getEntity(id);
 
-        return entity;
     }
 
     /**
@@ -76,15 +78,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      * @return
      * @throws java.lang.Exception
      */
-    public ContratoEvento getContratoByEvento(Long idEvento) throws Exception {
+    public ContratoEvento getContratoByEventoId(Long idEvento) throws Exception {
 
-        if (idEvento == null) {
-            throw new GenericException("Id nulo do evento ", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (idEvento < 0) {
-            throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
-        }
+        super.validateId(idEvento);
 
         List<ContratoEvento> contratos = repository.getContratosByEvento(idEvento);
 
@@ -107,17 +103,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      */
     public ContratoEvento getContratoByEventoContratante(Long idEvento, Pessoa contratante) throws Exception {
 
-        if (idEvento == null) {
-            throw new GenericException("Id nulo do evento ", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (idEvento < 0) {
-            throw new GenericException("Id menor que zero ", ErrorCode.BAD_REQUEST.getCode());
-        }
-
-        if (contratante == null || contratante.getId() == null) {
-            throw new GenericException("Contratante nulo ", ErrorCode.BAD_REQUEST.getCode());
-        }
+        validateId(idEvento);
+        
+        pessoaService.validateObjectAndIdNull(Pessoa.class, contratante);
 
         List<ContratoEvento> contratos = repository.getContratoByEventoContratante(idEvento, contratante);
 
@@ -131,7 +119,11 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
     @Override
     public ContratoEvento save(ContratoEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(ContratoEvento.class, entity);
+        
+        eventoService.validateObjectNull(Evento.class, entity.getEvento());
+        
+        modeloContratoService.validateObjectNull(ModeloContrato.class, entity.getModeloContrato());
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -147,7 +139,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      */
     public void liberarContrato(ContratoEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectAndIdNull(ContratoEvento.class, entity);
 
         entity = this.findEntityById(entity.getId());
         
@@ -170,7 +162,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
 
     public void delete(ContratoEvento contato) throws Exception {
 
-        validateObject(contato);
+        validateObjectAndIdNull(ContratoEvento.class, contato);
 
         repository.delete(contato.getId());
     }
@@ -193,19 +185,6 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
         return null;
     }
 
-//    @Override
-//    public boolean validateObject(ContratoEvento entity) {
-//        
-//        if (entity == null) {
-//            throw new GenericException("Arquivo nulo.", ErrorCode.BAD_REQUEST.getCode());
-//        }
-//
-//        eventoService.validateObject(entity.getEvento());
-//        
-//        modeloContratoService.validateObject(entity.getModeloContrato());
-//        
-//        return true;
-//    }
 
     /**
      * Vai preencher o conteudo do contrato do evento de acordo com o modelo
@@ -216,7 +195,11 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      */
     public void carregarContratoDeModelo(ContratoEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(ContratoEvento.class, entity);
+        
+        eventoService.validateObjectAndIdNull(Evento.class, entity.getEvento());
+        
+        modeloContratoService.validateObjectNull(ModeloContrato.class, entity.getModeloContrato());
 
         String conteudo = entity.getModeloContrato().getConteudo();
         

@@ -6,8 +6,6 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.CerimoniaEvento;
-import br.com.cerimonial.exceptions.ErrorCode;
-import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.CerimoniaEventoRepository;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
@@ -44,7 +42,7 @@ public class CerimoniaEventoService extends BasicService<CerimoniaEvento> {
     @Override
     public CerimoniaEvento save(CerimoniaEvento entity) throws Exception {
 
-        validateObject(entity);
+        validateObjectNull(CerimoniaEvento.class, entity);
 
         if (entity.getId() == null) {
             return repository.create(entity);
