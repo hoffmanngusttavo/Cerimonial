@@ -7,6 +7,7 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +17,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -34,6 +36,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Servico implements Serializable, ModelInterface {
+    
 
     @Id
     @GeneratedValue(generator = "GENERATE_Servico", strategy = GenerationType.AUTO)
@@ -44,6 +47,9 @@ public class Servico implements Serializable, ModelInterface {
     @NotNull
     @Size(min = 2, max = 255)
     private String nome;
+    
+    @ManyToMany(mappedBy = "servicosPrestados")
+    private List<Pessoa> fornecedores;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
@@ -86,8 +92,18 @@ public class Servico implements Serializable, ModelInterface {
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.nome = nome != null ? nome.toUpperCase().trim() : nome;
     }
+
+    public List<Pessoa> getFornecedores() {
+        return fornecedores;
+    }
+
+    public void setFornecedores(List<Pessoa> fornecedores) {
+        this.fornecedores = fornecedores;
+    }
+    
+    
 
     @Override
     public int hashCode() {

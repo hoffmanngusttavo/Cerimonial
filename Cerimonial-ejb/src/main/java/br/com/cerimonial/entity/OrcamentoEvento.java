@@ -84,7 +84,7 @@ public class OrcamentoEvento implements Serializable, ModelInterface {
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Arquivo> anexos;
     
-    @OneToOne(cascade = {CascadeType.REMOVE})
+    @OneToOne(mappedBy = "orcamentoEvento", cascade = {CascadeType.REMOVE})
     public Lancamento lancamento;
     
 

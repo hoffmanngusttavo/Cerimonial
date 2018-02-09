@@ -134,38 +134,44 @@ public class PreEventoMB extends BasicControl {
 
     /**
      * Evento invocado pela tela para liberar acesso um evento
+     * @return 
      */
-    public void liberarAcessoContratante() {
+    public String liberarAcessoContratante() {
         try {
 
             eventoService.liberarAcessoSistemaContratanteEvento(evento);
 
-            evento = eventoService.findEntityById(evento.getId());
-
             createFacesInfoMessage("Liberado acesso com sucesso");
+            
+            return "/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=" + evento.getId() + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível liberar o acesso: " + ex.getCause().getMessage());
         }
+        
+        return null;
     }
 
     /**
      * Evento invocado pela tela para liberar acesso um evento
+     * @return 
      */
-    public void cancelarAcessoContratante() {
+    public String cancelarAcessoContratante() {
         try {
 
             eventoService.cancelarAcessoSistemaContratanteEvento(evento);
 
-            evento = eventoService.findEntityById(evento.getId());
-
             createFacesInfoMessage("Cancelado acesso com sucesso");
+            
+            return "/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=" + evento.getId() + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível cancelar o evento: " + ex.getCause().getMessage());
         }
+        
+        return null;
     }
 
     public void adicionarNovoEmailContato() {

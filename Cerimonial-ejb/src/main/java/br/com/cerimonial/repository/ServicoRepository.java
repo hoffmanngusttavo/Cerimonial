@@ -29,4 +29,16 @@ public class ServicoRepository extends AbstractRepository<Servico>{
         sb.append(" LIKE TRANSLATE('%").append(nome).append("%', 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ', 'aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC')");
         return getPureListNative(Servico.class, sb.toString());
     }
+
+    public List<Servico> findAllByFornecedorId(Long idFornecedor) {
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(" select serv from Servico serv");
+        sb.append(" INNER JOIN serv.fornecedores forne");
+        sb.append(" WHERE 1=1 ");
+        sb.append(" AND forne.id = ?1 ");
+        
+        return getPureList(Servico.class, sb.toString(), idFornecedor);
+        
+    }
 }

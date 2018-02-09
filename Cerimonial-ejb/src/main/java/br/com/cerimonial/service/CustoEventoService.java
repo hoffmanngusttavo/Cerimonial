@@ -131,6 +131,8 @@ public class CustoEventoService extends BasicService<CustoEvento> {
         if(custoEvento == null){
             custoEvento = new CustoEvento(evento);
         }
+
+        evento.setCustoEvento(custoEvento);
         
         return custoEvento;
     }

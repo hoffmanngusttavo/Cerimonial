@@ -89,7 +89,7 @@ public class Lancamento implements Serializable, ModelInterface {
     @ManyToOne
     private CustoEvento custoEvento;
 
-    @OneToOne(mappedBy = "lancamento")
+    @OneToOne
     private OrcamentoEvento orcamentoEvento;
 
     @ManyToOne(fetch = FetchType.LAZY)

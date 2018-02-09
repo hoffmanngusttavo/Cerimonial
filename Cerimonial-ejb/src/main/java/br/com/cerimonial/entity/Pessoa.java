@@ -5,7 +5,6 @@
  */
 package br.com.cerimonial.entity;
 
-import br.com.cerimonial.entity.validators.CPF;
 import br.com.cerimonial.enums.TipoEnvolvido;
 import br.com.cerimonial.enums.TipoPessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
@@ -30,6 +29,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -43,7 +43,6 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.br.CNPJ;
 
 /**
  *
@@ -74,8 +73,8 @@ public class Pessoa implements Serializable, ModelInterface {
     @Column
     private String cnpj;
 
-    @Column
     @NotNull
+    @Column(unique = true)
     private String email;
 
     @Column
@@ -143,7 +142,9 @@ public class Pessoa implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "envolvidoDestino")
     private List<Lancamento> lancamentos;
 
-    
+    //Particularidades FORNECEDOR
+    @ManyToMany
+    private List<Servico> servicosPrestados;
     
     
 
@@ -391,6 +392,14 @@ public class Pessoa implements Serializable, ModelInterface {
 
     public void setLancamentos(List<Lancamento> lancamentos) {
         this.lancamentos = lancamentos;
+    }
+
+    public List<Servico> getServicosPrestados() {
+        return servicosPrestados;
+    }
+
+    public void setServicosPrestados(List<Servico> servicosPrestados) {
+        this.servicosPrestados = servicosPrestados;
     }
 
    

@@ -201,7 +201,8 @@
                         </div>
                     </div>
 
-                    <h:panelGroup rendered="#{!PreEventoMB.evento.eventoProprioContratante}">
+                    <h:panelGroup rendered="#{PreEventoMB.evento != null and 
+                                              !PreEventoMB.evento.eventoProprioContratante}">
                         <div class="form-group col-md-4 text-center">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">

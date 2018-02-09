@@ -5,10 +5,12 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
 import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Parcela;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Servico;
 import br.com.cerimonial.enums.TipoLancamento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
@@ -18,7 +20,6 @@ import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.DateUtils;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,6 +47,12 @@ public class LancamentoService extends BasicService<Lancamento> {
 
     @EJB
     private OrcamentoEventoService orcamentoEventoService;
+    @EJB
+    private ServicoService servicoService;
+    @EJB
+    private EventoService eventoService;
+    @EJB
+    private CustoEventoService custoEventoService;
 
     @PostConstruct
     @PostActivate
@@ -214,12 +221,17 @@ public class LancamentoService extends BasicService<Lancamento> {
      *
      * @param orcamentoEvento relacionamento 1 to 1 lançamento
      * @param contratantes
+     * @param evento
      * @return
      * @throws java.lang.Exception
      */
-    public Lancamento criarNovoLancamentoSaidaOrcamento(OrcamentoEvento orcamentoEvento, List<Pessoa> contratantes) throws Exception {
+    public Lancamento criarNovoLancamentoSaidaOrcamento(OrcamentoEvento orcamentoEvento, List<Pessoa> contratantes, Evento evento) throws Exception {
 
         orcamentoEventoService.validateObjectAndIdNull(orcamentoEvento);
+        
+        eventoService.validateObjectAndIdNull(evento);
+        
+        custoEventoService.validateObjectAndIdNull(evento.getCustoEvento());
 
         if (CollectionUtils.isBlank(contratantes)) {
             throw new GenericException("Para o lançamento deve ter pelo menos 1 contratante responsável pelo pagamento", ErrorCode.BAD_REQUEST.getCode());
@@ -228,11 +240,23 @@ public class LancamentoService extends BasicService<Lancamento> {
         Lancamento entity = new Lancamento(TipoLancamento.DESPESA);
 
         entity.setOrcamentoEvento(orcamentoEvento);
+        
+        entity.setCustoEvento(evento.getCustoEvento());
 
         entity.setValorBase(orcamentoEvento.getValorFinal());
 
         //rita
         entity.setEnvolvidoOrigem(EmpresaCache.getEmpresa().getPessoa());
+
+        if (entity.getEnvolvidoOrigem() != null) {
+            
+            List<Servico> servicos = servicoService.findAllByFornecedorId(entity.getEnvolvidoOrigem().getId());
+            
+            if(CollectionUtils.isNotBlank(servicos)){
+                entity.setServico(servicos.get(0));
+            }
+
+        }
 
         // responsavel pelo pagamento
         entity.setEnvolvidoDestino(contratantes.get(0));

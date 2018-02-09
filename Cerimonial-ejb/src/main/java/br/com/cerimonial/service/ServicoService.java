@@ -103,6 +103,20 @@ public class ServicoService extends BasicService<Servico>{
         return new ArrayList<>();
     }
     
+    public List<Servico> findAllByFornecedorId(Long idFornecedor) {
+        
+        try {
+            
+            validateId(idFornecedor);
+            
+            return repository.findAllByFornecedorId(idFornecedor);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
+    }
+    
     @Override
     public void validateId(Long idEntity) {
         

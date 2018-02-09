@@ -243,11 +243,15 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
      */
     public EventoPessoa criarContratanteEvento(Evento evento, Pessoa cliente) throws Exception {
 
-        eventoService.validateObjectAndIdNull(evento);
+        eventoService.validateObjectNull(evento);
         
         pessoaService.validateObjectNull(cliente);
         
-        EventoPessoa eventoPessoa = this.getEntityByEvento(evento);
+        EventoPessoa eventoPessoa = null;
+        
+        if (evento.getId() != null) {
+            eventoPessoa = this.getEntityByEvento(evento);
+        }
 
         if (eventoPessoa == null) {
             eventoPessoa = new EventoPessoa(evento, cliente, evento.getOrcamentoEvento().getContatoEvento().getTipoEnvolvidoEvento(), true);
