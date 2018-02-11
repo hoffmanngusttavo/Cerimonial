@@ -62,7 +62,7 @@
                                                 oncomplete="PF('statusDialog').hide();"
                                                 listener="#{DashBoardMB.carregarEventosDoDia()}"
                                                 update="groupEvento"/>
-                                        
+
                                         <p:ajax event="change"
                                                 process="@this"
                                                 onstart="PF('statusDialog').show();"
@@ -132,7 +132,8 @@
                                     </tbody>
                                 </table>
 
-                                <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" >
+                                <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
+                                        rendered="#{DashBoardMB.contatosAtivos.size() > 10}">
                                     <span>Visualizar Todos</span>
                                 </p:link>
 
@@ -160,88 +161,312 @@
                                     </tbody>
                                 </table>
 
-                                <p:link href="/intranet/admin/operacional/evento/index.xhtml" >
+                                <p:link href="/intranet/admin/operacional/evento/index.xhtml" 
+                                        rendered="#{DashBoardMB.eventosAtivos.size() > 10}">
                                     <span>Visualizar Todos</span>
                                 </p:link>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-4 text-center">
+
+
+
+                    <!--FINANCEIRO EVENTOS-->
+                    <div class="col-md-12 text-center">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Alertas / Avisos</h3>
+                                <h3 class="panel-title">Financeiro Eventos</h3>
                             </div>
+
                             <div class="panel-body" style="min-height: 104px;">
-                                <table class="table table-hover table-sm table-responsive table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th>Mensagem</th>
-                                            <th>Ação</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <p:repeat value="#{DashBoardMB.alertasDestinatario}" var="alerta">
-                                            <tr>
-                                                <td>
-                                                    <h:outputText value="#{alerta.alerta.mensagem}" class="reticencias"/>
-                                                </td>
-                                                <td>
 
-                                                </td>
+                                <div class="col-md-6 text-center">
+                                    <div class="panel panel-warning">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Contas à Pagar</h3>
+                                        </div>
 
-                                            </tr>
-                                        </p:repeat>
-                                    </tbody>
-                                </table>
-                                <p:link href="/intranet/admin/operacional/alerta/index.xhtml" >
-                                    <span>Visualizar Todos</span>
-                                </p:link>
+                                        <div class="panel-body" style="min-height: 104px;">
+
+                                            <table class="table table-hover table-sm table-responsive table-condensed">
+                                                <tbody>
+                                                    <p:repeat value="#{DashBoardMB.contasPagarEvento}" var="pagarEve">
+                                                        <tr>
+                                                            <td>
+                                                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{pagarEve.id}" >
+                                                                    <h:outputText value="#{pagarEve.dataVencimento}">
+                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
+                                                                                           locale="pt_BR"
+                                                                                           timeZone="GMT-3"/>
+                                                                    </h:outputText>
+                                                                </p:link>
+                                                            </td>
+                                                            <td>
+                                                                <h:outputText value="#{pagarEve.valorCobrado}">
+                                                                    <f:convertNumber maxFractionDigits="2"
+                                                                                     minFractionDigits="2"
+                                                                                     locale="pt_BR"/>
+                                                                </h:outputText>
+                                                            </td>
+                                                        </tr>
+                                                    </p:repeat>
+                                                </tbody>
+                                            </table>
+
+                                            <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
+                                                    rendered="#{DashBoardMB.contasPagarEvento.size() > 10}">
+                                                <span>Visualizar Todos</span>
+                                            </p:link>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 text-center">
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Contas Vencidas</h3>
+                                        </div>
+
+                                        <div class="panel-body" style="min-height: 104px;">
+
+
+                                            <table class="table table-hover table-sm table-responsive table-condensed">
+                                                <tbody>
+                                                    <p:repeat value="#{DashBoardMB.contasVencidasEvento}" var="vencEve">
+                                                        <tr>
+                                                            <td>
+                                                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{vencEve.id}" >
+                                                                    <h:outputText value="#{vencEve.dataVencimento}">
+                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
+                                                                                           locale="pt_BR"
+                                                                                           timeZone="GMT-3"/>
+                                                                    </h:outputText>
+                                                                </p:link>
+                                                            </td>
+                                                            <td>
+                                                                <h:outputText value="#{vencEve.valorCobrado}">
+                                                                    <f:convertNumber maxFractionDigits="2"
+                                                                                     minFractionDigits="2"
+                                                                                     locale="pt_BR"/>
+                                                                </h:outputText>
+
+                                                            </td>
+                                                        </tr>
+                                                    </p:repeat>
+                                                </tbody>
+                                            </table>
+
+                                            <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
+                                                    rendered="#{DashBoardMB.contasVencidasEvento.size() > 10}">
+                                                <span>Visualizar Todos</span>
+                                            </p:link>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-4 text-center">
+
+                    <!--FINANCEIRO EMPRESA-->
+                    <div class="col-md-12 text-center">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Últimos acessos</h3>
+                                <h3 class="panel-title">Financeiro Empresa</h3>
                             </div>
-                            <div class="panel-body" style="min-height: 104px;">
-                                <table class="table table-hover table-sm table-responsive table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th>Usuário</th>
-                                            <th>Data</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <p:repeat value="#{DashBoardMB.ultimosLogins}" var="login">
-                                            <tr>
-                                                <td>
-                                                    #{login.usuario.nome}
-                                                </td>
-                                                <td>
-                                                    <h:outputText value="#{login.dataLogin}">
-                                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                           locale="pt_BR"
-                                                                           timeZone="GMT-3"/>
-                                                    </h:outputText>
-                                                    <p:spacer width="10"/>
-                                                    <h:outputText value="#{login.hora}">
-                                                        <f:convertDateTime pattern="HH:mm"
-                                                                           locale="pt_BR"
-                                                                           timeZone="GMT-3"/>
-                                                    </h:outputText>
-                                                </td>
 
-                                            </tr>
-                                        </p:repeat>
-                                    </tbody>
-                                </table>
+                            <div class="panel-body" style="min-height: 104px;">
+
+                                <div class="col-md-4 text-center">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Contas à Receber</h3>
+                                        </div>
+
+                                        <div class="panel-body" style="min-height: 104px;">
+
+                                            <table class="table table-hover table-sm table-responsive table-condensed">
+                                                <tbody>
+                                                    <p:repeat value="#{DashBoardMB.contasReceberEmpresa}" var="receberEmp">
+                                                        <tr>
+                                                            <td>
+                                                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{receberEmp.id}" >
+                                                                    <h:outputText value="#{receberEmp.dataVencimento}">
+                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
+                                                                                           locale="pt_BR"
+                                                                                           timeZone="GMT-3"/>
+                                                                    </h:outputText>
+                                                                </p:link>
+                                                            </td>
+                                                            <td>
+                                                                <h:outputText value="#{receberEmp.valorCobrado}">
+                                                                    <f:convertNumber maxFractionDigits="2"
+                                                                                     minFractionDigits="2"
+                                                                                     locale="pt_BR"/>
+                                                                </h:outputText>
+                                                            </td>
+                                                        </tr>
+                                                    </p:repeat>
+                                                </tbody>
+                                            </table>
+
+                                            <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
+                                                    rendered="#{DashBoardMB.contasReceberEmpresa.size() > 10}">
+                                                <span>Visualizar Todos</span>
+                                            </p:link>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 text-center">
+                                    <div class="panel panel-warning">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Contas à Pagar</h3>
+                                        </div>
+
+                                        <div class="panel-body" style="min-height: 104px;">
+
+                                            <table class="table table-hover table-sm table-responsive table-condensed">
+                                                <tbody>
+                                                    <p:repeat value="#{DashBoardMB.contasPagarEmpresa}" var="pagarEmp">
+                                                        <tr>
+                                                            <td>
+                                                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{pagarEmp.id}" >
+                                                                    <h:outputText value="#{pagarEmp.dataVencimento}">
+                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
+                                                                                           locale="pt_BR"
+                                                                                           timeZone="GMT-3"/>
+                                                                    </h:outputText>
+                                                                </p:link>
+                                                            </td>
+                                                            <td>
+                                                                <h:outputText value="#{pagarEmp.valorCobrado}">
+                                                                    <f:convertNumber maxFractionDigits="2"
+                                                                                     minFractionDigits="2"
+                                                                                     locale="pt_BR"/>
+                                                                </h:outputText>
+                                                            </td>
+                                                        </tr>
+                                                    </p:repeat>
+                                                </tbody>
+                                            </table>
+
+                                            <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
+                                                    rendered="#{DashBoardMB.contasPagarEmpresa.size() > 10}">
+                                                <span>Visualizar Todos</span>
+                                            </p:link>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-4 text-center">
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Contas Vencidas</h3>
+                                        </div>
+
+                                        <div class="panel-body" style="min-height: 104px;">
+
+
+                                            <table class="table table-hover table-sm table-responsive table-condensed">
+                                                <tbody>
+                                                    <p:repeat value="#{DashBoardMB.contasVencidasEmpresa}" var="vencEmp">
+                                                        <tr>
+                                                            
+                                                            <td>
+                                                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{vencEmp.id}" >
+                                                                    <h:outputText value="#{vencEmp.dataVencimento}">
+                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
+                                                                                           locale="pt_BR"
+                                                                                           timeZone="GMT-3"/>
+                                                                    </h:outputText>
+                                                                </p:link>
+                                                            </td>
+                                                            
+                                                            <td>
+                                                                <h:outputText value="#{vencEmp.lancamento.tipoLancamento.label}"/>
+                                                            </td>
+                                                            
+                                                            <td>
+                                                                <h:outputText value="#{vencEmp.valorCobrado}">
+                                                                    <f:convertNumber maxFractionDigits="2"
+                                                                                     minFractionDigits="2"
+                                                                                     locale="pt_BR"/>
+                                                                </h:outputText>
+                                                            </td>
+                                                        </tr>
+                                                    </p:repeat>
+                                                </tbody>
+                                            </table>
+
+                                            <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
+                                                    rendered="#{DashBoardMB.contasVencidasEmpresa.size() > 10}">
+                                                <span>Visualizar Todos</span>
+                                            </p:link>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
 
+
+                    <h:panelGroup rendered="false">
+
+
+                        <div class="col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Últimos acessos</h3>
+                                </div>
+                                <div class="panel-body" style="min-height: 104px;">
+                                    <table class="table table-hover table-sm table-responsive table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>Usuário</th>
+                                                <th>Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <p:repeat value="#{DashBoardMB.ultimosLogins}" var="login">
+                                                <tr>
+                                                    <td>
+                                                        #{login.usuario.nome}
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{login.dataLogin}">
+                                                            <f:convertDateTime pattern="dd/MM/yyyy"
+                                                                               locale="pt_BR"
+                                                                               timeZone="GMT-3"/>
+                                                        </h:outputText>
+                                                        <p:spacer width="10"/>
+                                                        <h:outputText value="#{login.hora}">
+                                                            <f:convertDateTime pattern="HH:mm"
+                                                                               locale="pt_BR"
+                                                                               timeZone="GMT-3"/>
+                                                        </h:outputText>
+                                                    </td>
+
+                                                </tr>
+                                            </p:repeat>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
 
 
                 </div>

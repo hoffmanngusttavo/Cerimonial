@@ -184,7 +184,7 @@ public class LancamentoService extends BasicService<Lancamento> {
         double valorCadaParcelaBruto = ((int) ((valorRestanteBruto / numeroParcelas) * 100d)) / 100d;
         double compensarArredondamentoBruto = valorRestanteBruto - (valorCadaParcelaBruto * (double) numeroParcelas);
 
-        Date dataVencimento = entity.getDataVencimento();
+        Date dataVencimento = new Date(entity.getDataVencimento().getTime());
 
         for (int i = 0; i < entity.getParcelas().size(); i++) {
 

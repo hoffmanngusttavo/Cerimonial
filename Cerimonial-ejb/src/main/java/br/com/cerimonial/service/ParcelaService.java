@@ -9,7 +9,9 @@ import br.com.cerimonial.entity.Parcela;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ParcelaRepository;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.xml.crypto.Data;
 
 /**
  *
@@ -31,10 +34,10 @@ import javax.ejb.TransactionManagementType;
 @LocalBean
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ParcelaService extends BasicService<Parcela>{
-    
+public class ParcelaService extends BasicService<Parcela> {
+
     private ParcelaRepository repository;
-    
+
     @EJB
     private LancamentoService lancamentoService;
 
@@ -53,7 +56,7 @@ public class ParcelaService extends BasicService<Parcela>{
     public Parcela save(Parcela entity) throws Exception {
 
         validateObjectNull(entity);
-        
+
         lancamentoService.validateObjectNull(entity.getLancamento());
 
         if (entity.getId() == null) {
@@ -97,9 +100,87 @@ public class ParcelaService extends BasicService<Parcela>{
         return null;
     }
 
+    public List<Parcela> findParcelasAPagarEvento(int max) {
+
+        try {
+
+            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
+
+            return repository.findParcelasAPagarEvento(max, sdfPi.format(new Date()));
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
+
+    public List<Parcela> findParcelasVencidasEvento(int max) {
+        try {
+
+            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
+
+            return repository.findParcelasVencidasEvento(max, sdfPi.format(new Date()));
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+     public List<Parcela> findParcelasAPagarEmpresa(int max) {
+        
+         try {
+
+            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
+
+            return repository.findParcelasAPagarEmpresa(max, sdfPi.format(new Date()));
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+         
+    }
+
+    public List<Parcela> findParcelasAReceberEmpresa(int max) {
+        
+        try {
+
+            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
+
+            return repository.findParcelasAReceberEmpresa(max, sdfPi.format(new Date()));
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+        
+    }
+
+    public List<Parcela> findParcelasVencidasEmpresa(int max) {
+        
+        try {
+
+            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
+
+            return repository.findParcelasVencidasEmpresa(max, sdfPi.format(new Date()));
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+        
+    }
+    
+    
+    
     @Override
     public void validateId(Long idEntity) {
-        
+
         if (idEntity == null) {
             throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -107,26 +188,27 @@ public class ParcelaService extends BasicService<Parcela>{
         if (idEntity <= 0) {
             throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectNull(Parcela entity) {
-        
-         if (entity == null) {
+
+        if (entity == null) {
             throw new GenericException(" Parcela nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectAndIdNull(Parcela entity) {
-        
+
         validateObjectNull(entity);
-        
+
         validateId(entity.getId());
-        
+
     }
-    
-    
+
+   
+
 }

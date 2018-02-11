@@ -90,11 +90,11 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      * @return
      * @throws java.lang.Exception
      */
-    public OrcamentoEvento getOrcamentoByEvento(Long idEvento) throws Exception {
+    public OrcamentoEvento findOrcamentoByEventoId(Long idEvento) throws Exception {
 
         validateId(idEvento);
 
-        OrcamentoEvento orcamento = repository.getOrcamentoByEvento(idEvento);
+        OrcamentoEvento orcamento = repository.findOrcamentoByEventoId(idEvento);
 
         if (orcamento != null) {
 

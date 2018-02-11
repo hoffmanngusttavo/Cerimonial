@@ -63,8 +63,8 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Serviços</th>
-                                    <th>Valor</th>
                                     <th>Fornecedor</th>
+                                    <th>Valor</th>
                                     <th>Parcelas</th>
                                 </tr>
                             </thead>
@@ -80,6 +80,10 @@
                                         </td>
 
                                         <td>
+                                            <h:outputText value="#{lancamento.envolvidoOrigem.nome}"/>
+                                        </td>
+                                        
+                                         <td>
                                             <h:outputText value="#{lancamento.valorBase}">
                                                 <f:convertNumber maxFractionDigits="2"
                                                                  minFractionDigits="2"
@@ -88,12 +92,8 @@
                                         </td>
 
                                         <td>
-                                            <h:outputText value="#{lancamento.envolvidoOrigem.nome}"/>
-                                        </td>
-
-                                        <td>
                                             
-                                            
+                                            <h:outputText value="#{lancamento.parcelas.size()}"/>
                                         </td>
                                     </tr>
                                 </p:repeat>

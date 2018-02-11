@@ -183,8 +183,11 @@
                                         <i class="fa fa-dollar"></i>
                                         <span></span>
                                     </p:link>
-
-
+                                    
+                                    <h:outputText rendered="#{PreEventoMB.evento.orcamentoEvento.lancamento != null}"
+                                                  value="Lançamento Gerado"
+                                                  style="font-size: 12px;float: right;"/>
+                                    
                                     <p:commandButton process="@this"
                                                      rendered="#{PreEventoMB.evento != null 
                                                                  and PreEventoMB.evento.orcamentoEvento.lancamento == null}"
@@ -194,12 +197,69 @@
                                                      value="Gerar Lançamento"
                                                      onstart="PF('statusDialog').show();"
                                                      oncomplete="PF('statusDialog').hide();"
-                                                     onclick="window.location='#{facesContext.externalContext.requestContextPath}/intranet/admin/operacional/pre-evento/partials/lancamento-orcamento.xhtml?idOrcamento=#{PreEventoMB.evento.orcamentoEvento.id}'"/>
+                                                     onclick="window.location = '#{facesContext.externalContext.requestContextPath}/intranet/admin/operacional/pre-evento/partials/lancamento-orcamento.xhtml?idOrcamento=#{PreEventoMB.evento.orcamentoEvento.id}'"/>
 
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <h:panelGroup rendered="#{PreEventoMB.evento != null}">
+                        <div class="form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Planilha de Custos
+                                    </h3>
+                                </div>
+                                <div class="panel-body" style="min-height: 66px;">
+                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/planilha-custos.xhtml?idEvento=#{PreEventoMB.evento.id}">
+                                        <i class="fa fa-money"></i>
+                                        <span style="margin-left: 20px;">
+
+                                        </span>
+                                    </p:link>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Fornecedores Contratados
+                                    </h3>
+                                </div>
+                                <div class="panel-body" style="min-height: 66px;">
+                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/planilha-custos.xhtml?idEvento=#{PreEventoMB.evento.id}">
+                                        <i class="fa fa-money"></i>
+                                        <span style="margin-left: 20px;">
+
+                                        </span>
+                                    </p:link>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Lista de Convidados
+                                    </h3>
+                                </div>
+                                <div class="panel-body" style="min-height: 66px;">
+                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/planilha-custos.xhtml?idEvento=#{PreEventoMB.evento.id}">
+                                        <i class="fa fa-money"></i>
+                                        <span style="margin-left: 20px;">
+
+                                        </span>
+                                    </p:link>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+
 
                     <h:panelGroup rendered="#{PreEventoMB.evento != null and 
                                               !PreEventoMB.evento.eventoProprioContratante}">
@@ -315,23 +375,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group col-md-4 text-center">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">
-                                        Planilha de Custos
-                                    </h3>
-                                </div>
-                                <div class="panel-body" style="min-height: 66px;">
-                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/planilha-custos.xhtml?idEvento=#{PreEventoMB.evento.id}">
-                                        <i class="fa fa-money"></i>
-                                        <span style="margin-left: 20px;">
 
-                                        </span>
-                                    </p:link>
-                                </div>
-                            </div>
-                        </div>
                     </h:panelGroup>
 
                 </div>

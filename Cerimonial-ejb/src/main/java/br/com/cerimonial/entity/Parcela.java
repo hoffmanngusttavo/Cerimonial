@@ -6,8 +6,11 @@
 package br.com.cerimonial.entity;
 
 import br.com.cerimonial.enums.FormaPagamento;
+import br.com.cerimonial.utils.DateUtils;
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
@@ -242,6 +245,40 @@ public class Parcela implements Serializable, ModelInterface {
     @Override
     public String toString() {
         return "br.com.cerimonial.entity.Parcela[ id=" + id + " ]";
+    }
+
+    public String toStringDadosCobranca() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("<td>");
+        if (this.dataVencimento != null) {
+            sb.append(" ").append(DateUtils.formatDate(this.dataVencimento, DateUtils.ddMMyyyy));
+        } else {
+            sb.append(" Não definido ");
+        }
+        sb.append("</td>");
+        
+        sb.append("<td>");
+        if (this.valorCobrado != null) {
+            sb.append(" ").append(valorCobrado);
+        } else {
+            sb.append(" Não definido ");
+        }
+        sb.append("</td>");
+        
+        sb.append("<td>");
+        if (this.formaPagamento != null) {
+            sb.append(" ").append(formaPagamento.getLabel());
+        } else {
+            sb.append(" Não definido ");
+        }
+        sb.append("</td>");
+
+       sb.append("<td>");
+       sb.append("</td>");
+
+        return sb.toString();
     }
 
 }

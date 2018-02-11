@@ -8,13 +8,19 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
+import br.com.cerimonial.entity.Lancamento;
+import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.entity.Parcela;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContratoEventoRepository;
 import br.com.cerimonial.utils.CollectionUtils;
+import br.com.cerimonial.utils.ValorPorExtensoUtils;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -39,18 +45,23 @@ import org.apache.commons.lang.StringUtils;
 public class ContratoEventoService extends BasicService<ContratoEvento> {
 
     private ContratoEventoRepository repository;
-    
+
     @EJB
     protected EventoService eventoService;
-    
+
     @EJB
     protected ModeloContratoService modeloContratoService;
-    
+
     @EJB
     protected AlertaService alertaService;
-    
+
     @EJB
     protected PessoaService pessoaService;
+
+    @EJB
+    protected LancamentoService lancamentoService;
+    @EJB
+    protected OrcamentoEventoService orcamentoEventoService;
 
     @PostConstruct
     @PostActivate
@@ -66,7 +77,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      */
     @Override
     public ContratoEvento findEntityById(Long id) throws Exception {
-        
+
         return repository.getEntity(id);
 
     }
@@ -81,7 +92,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
      */
     public ContratoEvento getContratoByEventoId(Long idEvento) throws Exception {
 
-       eventoService.validateId(idEvento);
+        eventoService.validateId(idEvento);
 
         List<ContratoEvento> contratos = repository.getContratosByEvento(idEvento);
 
@@ -105,7 +116,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
     public ContratoEvento getContratoByEventoContratante(Long idEvento, Pessoa contratante) throws Exception {
 
         validateId(idEvento);
-        
+
         pessoaService.validateObjectAndIdNull(contratante);
 
         List<ContratoEvento> contratos = repository.getContratoByEventoContratante(idEvento, contratante);
@@ -121,9 +132,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
     public ContratoEvento save(ContratoEvento entity) throws Exception {
 
         validateObjectNull(entity);
-        
+
         eventoService.validateObjectNull(entity.getEvento());
-        
+
         modeloContratoService.validateObjectNull(entity.getModeloContrato());
 
         if (entity.getId() == null) {
@@ -134,7 +145,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
     }
 
     /**
-     * Vai liberar contrato para o contratante e vai criar um alerta para ele visualizar ao logar
+     * Vai liberar contrato para o contratante e vai criar um alerta para ele
+     * visualizar ao logar
+     *
      * @param entity
      * @throws java.lang.Exception
      */
@@ -143,13 +156,13 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
         validateObjectAndIdNull(entity);
 
         entity = this.findEntityById(entity.getId());
-        
+
         entity.setLiberadoCliente(true);
 
         save(entity);
 
         alertaService.enviarAlertaContratoLiberado(entity);
-        
+
     }
 
     public List<ContratoEvento> findAll() {
@@ -186,10 +199,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
         return null;
     }
 
-
     /**
      * Vai preencher o conteudo do contrato do evento de acordo com o modelo
-     * específico 
+     * específico
      *
      * @param entity
      * @throws java.lang.Exception
@@ -197,70 +209,137 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
     public void carregarContratoDeModelo(ContratoEvento entity) throws Exception {
 
         validateObjectNull(entity);
-        
+
         eventoService.validateObjectAndIdNull(entity.getEvento());
-        
+
         modeloContratoService.validateObjectNull(entity.getModeloContrato());
 
         String conteudo = entity.getModeloContrato().getConteudo();
-        
+
         if (StringUtils.isNotBlank(conteudo)) {
-            
+
             Evento evento = eventoService.findEntityById(entity.getEvento().getId());
 
             conteudo = conteudo.replaceAll("#dadosContratante#", substituirDadosContratante(evento));
+
             conteudo = conteudo.replaceAll("#dadosEvento#", substituirDadosEvento(evento));
-//            conteudo = conteudo.replaceAll("#formaPagamento#", substituirDadosPagamentoEvento(entity.getEvento()));
+
+            conteudo = conteudo.replaceAll("#formaPagamento#", substituirDadosPagamentoEvento(entity.getEvento()));
         }
 
         entity.setConteudo(conteudo);
 
     }
 
-    public String substituirDadosContratante(Evento evento) {
+    private String substituirDadosContratante(Evento evento) {
 
         StringBuilder sb = new StringBuilder("");
 
-        if (evento != null  && CollectionUtils.isNotBlank(evento.getContratantes())) {
+        try {
 
-            for (EventoPessoa eventoPessoa : evento.getContratantes()) {
+            if (evento != null && CollectionUtils.isNotBlank(evento.getContratantes())) {
 
-                if (eventoPessoa.isContratante()) {
+                for (EventoPessoa eventoPessoa : evento.getContratantes()) {
 
-                    sb.append(eventoPessoa.toStringPessoa());
+                    if (eventoPessoa.isContratante()) {
 
+                        sb.append(eventoPessoa.toStringPessoa());
+
+                    }
                 }
             }
+
+        } catch (Exception e) {
+            Logger.getLogger(e.getMessage());
         }
 
         return sb.toString();
     }
 
-    public String substituirDadosEvento(Evento evento) {
+    private String substituirDadosEvento(Evento evento) {
         StringBuilder sb = new StringBuilder("");
 
-        if (evento != null) {
+        try {
 
-            sb.append(evento.toStringDadosCompleto());
+            if (evento != null) {
 
+                sb.append(evento.toStringDadosCompleto());
+
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(e.getMessage());
         }
 
         return sb.toString();
     }
 
-    public String substituirDadosPagamentoEvento(ContratoEvento contratoEvento) {
+    private String substituirDadosPagamentoEvento(Evento evento) {
+
         StringBuilder sb = new StringBuilder("");
 
-        if (contratoEvento != null) {
+        try {
 
+            if (evento != null && evento.getOrcamentoEvento() != null) {
+
+                OrcamentoEvento orcamento = orcamentoEventoService.findOrcamentoByEventoId(evento.getId());
+
+                Lancamento lancamento = lancamentoService.findLancamentoByOrcamentoId(orcamento.getId());
+
+                if (lancamento != null && CollectionUtils.isNotBlank(lancamento.getParcelas())) {
+
+                    sb.append("Valor: ").append(lancamento.getValorBase());
+
+                    sb.append(" - ").append(ValorPorExtensoUtils.converteValorParaExtenso(lancamento.getValorBase())).append(" ");
+
+                    sb.append("\n");
+
+                    sb.append("<table>");
+
+                    sb.append("<tr>");
+
+                    sb.append("<td>");
+                    sb.append("Data Pagamento");
+                    sb.append("</td>");
+
+                    sb.append("<td>");
+                    sb.append("Valor Pagamento");
+                    sb.append("</td>");
+
+                    sb.append("<td>");
+                    sb.append("Forma de Pagamento");
+                    sb.append("</td>");
+                    
+                    sb.append("<td>");
+                    sb.append("Dados Bancários");
+                    sb.append("</td>");
+
+                    sb.append("</tr>");
+
+                    for (Parcela parcela : lancamento.getParcelas()) {
+
+                        sb.append("<tr>");
+                        sb.append(parcela.toStringDadosCobranca());
+                        sb.append("</tr>");
+                        
+                    }
+
+                    sb.append("</table>");
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(e.getMessage());
         }
 
         return sb.toString();
     }
-    
+
     @Override
     public void validateId(Long idEntity) {
-        
+
         if (idEntity == null) {
             throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -268,25 +347,25 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
         if (idEntity <= 0) {
             throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectNull(ContratoEvento entity) {
-        
-         if (entity == null) {
+
+        if (entity == null) {
             throw new GenericException(" Contrato Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectAndIdNull(ContratoEvento entity) {
-        
+
         validateObjectNull(entity);
-        
+
         validateId(entity.getId());
-        
+
     }
 
 }

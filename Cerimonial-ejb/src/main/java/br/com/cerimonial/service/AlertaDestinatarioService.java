@@ -10,6 +10,7 @@ import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.AlertaDestinatarioRepository;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -113,7 +114,9 @@ public class AlertaDestinatarioService extends BasicService<AlertaDestinatario> 
 
         usuarioService.validateObjectNull(usuario);
         
-        return repository.findAlertasUsuarioNaoVisualizados(limit, usuario, new Date());
+        SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
+        
+        return repository.findAlertasUsuarioNaoVisualizados(limit, usuario, sdfPi.format(new Date()));
 
     }
 

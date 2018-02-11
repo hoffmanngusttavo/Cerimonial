@@ -57,7 +57,7 @@ public class OrcamentoEventoRepository extends AbstractRepository<OrcamentoEvent
      * @param idEvento do Evento
      * @return
      */
-    public OrcamentoEvento getOrcamentoByEvento(Long idEvento) {
+    public OrcamentoEvento findOrcamentoByEventoId(Long idEvento) {
 
         StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
         sql.append(" INNER JOIN orc.eventos evento");
