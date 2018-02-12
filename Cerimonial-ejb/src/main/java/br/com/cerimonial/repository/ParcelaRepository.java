@@ -24,8 +24,8 @@ public class ParcelaRepository extends AbstractRepository<Parcela> {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT par FROM Parcela par ");
         sb.append(" INNER JOIN par.lancamento lan ");
-        sb.append(" INNER JOIN lan.orcamentoEvento orc ");
-        sb.append(" WHERE orc.id IS NOT NULL ");
+        sb.append(" INNER JOIN lan.custoEvento custo ");
+        sb.append(" WHERE custo.id IS NOT NULL ");
         sb.append(" AND lan.tipoLancamento = 'DESPESA' ");
         sb.append(" AND par.pago = false ");
         sb.append(" AND par.dataVencimento > '").append(data).append("'");
@@ -39,8 +39,8 @@ public class ParcelaRepository extends AbstractRepository<Parcela> {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT par FROM Parcela par ");
         sb.append(" INNER JOIN par.lancamento lan ");
-        sb.append(" INNER JOIN lan.orcamentoEvento orc ");
-        sb.append(" WHERE orc.id IS NOT NULL ");
+        sb.append(" INNER JOIN lan.custoEvento custo ");
+        sb.append(" WHERE custo.id IS NOT NULL ");
         sb.append(" AND par.pago = false ");
         sb.append(" AND lan.tipoLancamento = 'DESPESA' ");
         sb.append(" AND par.dataVencimento <= '").append(dataFormatada).append("'");
@@ -54,8 +54,8 @@ public class ParcelaRepository extends AbstractRepository<Parcela> {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT par FROM Parcela par ");
         sb.append(" INNER JOIN par.lancamento lan ");
-        sb.append(" INNER JOIN lan.orcamentoEvento orc ");
-        sb.append(" WHERE orc.id IS NULL ");
+        sb.append(" INNER JOIN lan.custoEvento custo ");
+        sb.append(" WHERE custo.id IS NULL ");
         sb.append(" AND par.pago = false ");
         sb.append(" AND par.dataVencimento <= '").append(dataFormatada).append("'");
         sb.append(" ORDER BY par.dataVencimento ASC ");
@@ -69,8 +69,8 @@ public class ParcelaRepository extends AbstractRepository<Parcela> {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT par FROM Parcela par ");
         sb.append(" INNER JOIN par.lancamento lan ");
-        sb.append(" INNER JOIN lan.orcamentoEvento orc ");
-        sb.append(" WHERE orc.id IS NULL ");
+        sb.append(" INNER JOIN lan.custoEvento custo ");
+        sb.append(" WHERE custo.id IS NULL ");
         sb.append(" AND par.pago = false ");
         sb.append(" AND lan.tipoLancamento = 'ENTRADA' ");
         sb.append(" AND par.dataVencimento <= '").append(dataFormatada).append("'");
@@ -85,8 +85,8 @@ public class ParcelaRepository extends AbstractRepository<Parcela> {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT par FROM Parcela par ");
         sb.append(" INNER JOIN par.lancamento lan ");
-        sb.append(" INNER JOIN lan.orcamentoEvento orc ");
-        sb.append(" WHERE orc.id IS NULL ");
+        sb.append(" INNER JOIN lan.custoEvento custo ");
+        sb.append(" WHERE custo.id IS NULL ");
         sb.append(" AND par.pago = false ");
         sb.append(" AND lan.tipoLancamento = 'DESPESA' ");
         sb.append(" AND par.dataVencimento <= '").append(dataFormatada).append("'");

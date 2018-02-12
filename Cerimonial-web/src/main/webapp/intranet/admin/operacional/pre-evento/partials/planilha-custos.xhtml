@@ -45,38 +45,55 @@
                 </div>
             </div>
 
+            <div class="fixed-rounded-button">
+                <span class="glyphicon"
+                      style="margin-top: -9px;margin-left: -10px;">
+                    <p:commandButton action="/intranet/admin/operacional/pre-evento/partials/contato-inicial.xhtml?faces-redirect=true" 
+                                     ajax="false"
+                                     title="Criar Novo Lançamento"
+                                     process="@this"
+                                     immediate="true"
+                                     icon="fa fa-plus"
+                                     styleClass="bt-acoes-add"
+                                     onstart="PF('statusDialog').show();"
+                                     oncomplete="PF('statusDialog').hide();"/>
+                </span>
+            </div>
+            
             
             <h:panelGroup id="groupOrcamento">
                 <h:panelGroup id="groupPropostas">
                     
                     <div class="row">
-                        <p:commandButton process="@this"
-                                         style="float: right;"
-                                         id="btn-criar-lancamento"
-                                         update="groupOrcamento"
-                                         class="btn btn-info"
-                                         icon="fa fa-plus"
-                                         value="Criar Novo Lançamento"/>
 
                         <table class="table table-hover table-inverse table-striped table-responsive">
                             <thead class="thead-inverse">
                                 <tr>
                                     <th>#</th>
                                     <th>Serviços</th>
+                                    <th>Estimativa</th>
                                     <th>Fornecedor</th>
                                     <th>Valor</th>
                                     <th>Parcelas</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <p:repeat value="#{PlanilhaCustosMB.entity.lancamentos}" var="lancamento">
+                                <p:repeat value="#{PlanilhaCustosMB.entity.lancamentos}" var="lancamento" varStatus="indexVar">
                                     <tr>
                                         <th scope="row">
-                                            <h:outputText value="#{lancamento.id}"/>
+                                            <h:outputText value="#{indexVar.index +1}"/>
                                         </th>
 
                                         <td>
                                             <h:outputText value="#{lancamento.servico.nome}"/>
+                                        </td>
+                                        
+                                        <td>
+                                            <h:outputText value="#{lancamento.valorEstimado}">
+                                                <f:convertNumber maxFractionDigits="2"
+                                                                 minFractionDigits="2"
+                                                                 locale="pt_BR"/>
+                                            </h:outputText>
                                         </td>
 
                                         <td>

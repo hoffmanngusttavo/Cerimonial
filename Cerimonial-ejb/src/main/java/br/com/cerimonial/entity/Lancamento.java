@@ -64,6 +64,10 @@ public class Lancamento implements Serializable, ModelInterface {
     @DecimalMin("0.0")
     @Column(precision = 16, scale = 2)
     private Double valorBase;
+    
+    @DecimalMin("0.0")
+    @Column(precision = 16, scale = 2)
+    private Double valorEstimado;
 
     @DecimalMin("0.0")
     @Column(precision = 16, scale = 2)
@@ -97,6 +101,9 @@ public class Lancamento implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    
+    @OneToOne(mappedBy = "lancamento")
+    private AtividadeEvento atividadeEvento;
 
     public Lancamento() {
         this.dataCadastro = new Date();
@@ -233,6 +240,22 @@ public class Lancamento implements Serializable, ModelInterface {
 
     public void setDataVencimento(Date dataVencimento) {
         this.dataVencimento = dataVencimento;
+    }
+
+    public AtividadeEvento getAtividadeEvento() {
+        return atividadeEvento;
+    }
+
+    public void setAtividadeEvento(AtividadeEvento atividadeEvento) {
+        this.atividadeEvento = atividadeEvento;
+    }
+
+    public Double getValorEstimado() {
+        return valorEstimado;
+    }
+
+    public void setValorEstimado(Double valorEstimado) {
+        this.valorEstimado = valorEstimado;
     }
 
     

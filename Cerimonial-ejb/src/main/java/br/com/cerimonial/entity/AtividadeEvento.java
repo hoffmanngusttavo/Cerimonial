@@ -7,8 +7,6 @@ package br.com.cerimonial.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.CascadeType;
@@ -19,14 +17,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
-import javax.validation.constraints.DecimalMin;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -36,53 +32,39 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class CustoEvento implements Serializable, ModelInterface{
+public class AtividadeEvento implements Serializable, ModelInterface {
     
-    
+
     @Id
-    @GeneratedValue(generator = "GENERATE_CustoEvento", strategy = GenerationType.AUTO)
-    @SequenceGenerator(name = "GENERATE_CustoEvento", sequenceName = "CustoEvento_pk_seq", allocationSize = 1)
+    @GeneratedValue(generator = "GENERATE_AtividadeEvento", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "GENERATE_AtividadeEvento", sequenceName = "AtividadeEvento_pk_seq", allocationSize = 1)
     private Long id;
     
-    @DecimalMin("0.0")
-    @Column(precision = 16, scale = 2)
-    private Double valorOrcamento;
     
-    @DecimalMin("0.0")
-    @Column(precision = 16, scale = 2)
-    private Double valorCustoReal;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Servico servico;
     
-    @DecimalMin("0.0")
-    @Column(precision = 16, scale = 2)
-    private Double valorCustoEstimado;
-    
-    @DecimalMin("0.0")
-    @Column(precision = 16, scale = 2)
-    private Double valorTotalPago;
-    
-    @OneToOne(mappedBy = "custoEvento")
-    private Evento evento;
-    
-    @OneToMany(mappedBy = "custoEvento", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<Lancamento> lancamentos;
+    @Column(columnDefinition = "TEXT")
+    private String descricao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Usuario modificadoPor;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date prazoInicial;
+
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date prazoFinal;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Usuario modificadoPor;
     
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private Lancamento lancamento;
     
+    @ManyToOne
+    private Evento evento;
 
-    public CustoEvento(Evento evento) {
-        this.evento = evento;
-    }
-
-    public CustoEvento() {
-    }
-
-    
     @Override
     public Long getId() {
         return id;
@@ -113,28 +95,44 @@ public class CustoEvento implements Serializable, ModelInterface{
         this.modificadoPor = modificadoPor;
     }
 
-    public Double getValorOrcamento() {
-        return valorOrcamento;
+    public Servico getServico() {
+        return servico;
     }
 
-    public void setValorOrcamento(Double valorOrcamento) {
-        this.valorOrcamento = valorOrcamento;
+    public void setServico(Servico servico) {
+        this.servico = servico;
     }
 
-    public Double getValorCustoReal() {
-        return valorCustoReal;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setValorCustoReal(Double valorCustoReal) {
-        this.valorCustoReal = valorCustoReal;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
-    public Double getValorTotalPago() {
-        return valorTotalPago;
+    public Date getPrazoInicial() {
+        return prazoInicial;
     }
 
-    public void setValorTotalPago(Double valorTotalPago) {
-        this.valorTotalPago = valorTotalPago;
+    public void setPrazoInicial(Date prazoInicial) {
+        this.prazoInicial = prazoInicial;
+    }
+
+    public Date getPrazoFinal() {
+        return prazoFinal;
+    }
+
+    public void setPrazoFinal(Date prazoFinal) {
+        this.prazoFinal = prazoFinal;
+    }
+
+    public Lancamento getLancamento() {
+        return lancamento;
+    }
+
+    public void setLancamento(Lancamento lancamento) {
+        this.lancamento = lancamento;
     }
 
     public Evento getEvento() {
@@ -144,26 +142,34 @@ public class CustoEvento implements Serializable, ModelInterface{
     public void setEvento(Evento evento) {
         this.evento = evento;
     }
-
-    public List<Lancamento> getLancamentos() {
-        return lancamentos;
-    }
-
-    public void setLancamentos(List<Lancamento> lancamentos) {
-        this.lancamentos = lancamentos;
-    }
-
-    public Double getValorCustoEstimado() {
-        return valorCustoEstimado;
-    }
-
-    public void setValorCustoEstimado(Double valorCustoEstimado) {
-        this.valorCustoEstimado = valorCustoEstimado;
-    }
-
     
     
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof AtividadeEvento)) {
+            return false;
+        }
+        AtividadeEvento other = (AtividadeEvento) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "br.com.cerimonial.entity.AtividadeEvento[ id=" + id + " ]";
+    }
+
     @PrePersist
     @Override
     public void prePersistEntity() {
@@ -197,34 +203,4 @@ public class CustoEvento implements Serializable, ModelInterface{
         }
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final CustoEvento other = (CustoEvento) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "CustoEvento{" + "id=" + id + '}';
-    }
-    
-    
-    
-    
 }

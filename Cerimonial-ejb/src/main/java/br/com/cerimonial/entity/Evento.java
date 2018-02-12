@@ -134,6 +134,10 @@ public class Evento implements Serializable, ModelInterface {
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private CustoEvento custoEvento;
     
+    
+    @OneToMany(mappedBy = "evento", cascade = {CascadeType.REMOVE})
+    private List<AtividadeEvento> atividades;
+    
 
     @Override
     public Long getId() {
@@ -391,6 +395,14 @@ public class Evento implements Serializable, ModelInterface {
 
     public void setCustoEvento(CustoEvento custoEvento) {
         this.custoEvento = custoEvento;
+    }
+
+    public List<AtividadeEvento> getAtividades() {
+        return atividades;
+    }
+
+    public void setAtividades(List<AtividadeEvento> atividades) {
+        this.atividades = atividades;
     }
     
     
