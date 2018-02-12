@@ -170,7 +170,7 @@ public class OrcamentoEventoMB extends BasicControl {
             entity = null;
             abrirFormOrcamento = false;
             createFacesInfoMessage("Orçamento gravado com sucesso!");
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
@@ -251,7 +251,6 @@ public class OrcamentoEventoMB extends BasicControl {
         try {
             service.enviarOrcamentoEmail(proposta);
             createFacesInfoMessage("Proposta enviada com sucesso!");
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível enviar o email com a proposta: " + ex.getCause().getMessage());
@@ -273,7 +272,7 @@ public class OrcamentoEventoMB extends BasicControl {
             entity = null;
 
             createFacesInfoMessage("Orçamento removido com sucesso!");
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível remover o orçamento: " + ex.getCause().getMessage());

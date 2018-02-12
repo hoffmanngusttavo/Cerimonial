@@ -12,6 +12,8 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 
 /**
  *
@@ -90,30 +92,42 @@ public class DateUtils {
         return c.get(Calendar.YEAR);
     }
 
-    public static Date addDays(Date currentDate, int qtdDias){
-    
+    public static Date addDays(Date currentDate, int qtdDias) {
+
         // convert date to localdatetime
         LocalDateTime localDateTime = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         // plus one
         localDateTime = localDateTime.plusDays(qtdDias);
-        
+
         // convert LocalDateTime to date
-        return  Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
-    
-    public static Date addMonths(Date currentDate, int qtdMeses){
-    
+
+    public static Date addMonths(Date currentDate, int qtdMeses) {
+
+        if(currentDate == null){
+            return null;
+        }
+        
         // convert date to localdatetime
         LocalDateTime localDateTime = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         // plus one
         localDateTime = localDateTime.plusMonths(qtdMeses);
-        
+
         // convert LocalDateTime to date
-        return  Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
-    
-    
+
+    public static int getDaysOfInterval(Date currentDate, Date endDate) {
+
+        if (currentDate != null && endDate != null) {
+
+            return Days.daysBetween(new LocalDate(currentDate), new LocalDate(endDate)).getDays();
+        }
+
+        return 0;
+    }
 
 }

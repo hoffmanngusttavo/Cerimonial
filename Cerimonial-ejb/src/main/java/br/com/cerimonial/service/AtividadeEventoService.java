@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -34,6 +35,11 @@ public class AtividadeEventoService extends BasicService<AtividadeEvento>{
     
     private AtividadeEventoRepository repository;
     
+    @EJB
+    private LancamentoService lancamentoService;
+    @EJB
+    private EventoService eventoService;
+    
     @PostConstruct
     @PostActivate
     private void postConstruct() {
@@ -50,6 +56,10 @@ public class AtividadeEventoService extends BasicService<AtividadeEvento>{
     public AtividadeEvento save(AtividadeEvento entity) throws Exception {
 
         validateObjectNull(entity);
+        
+        eventoService.validateObjectNull(entity.getEvento());
+        
+        entity.calcularQuatidadeDias();
         
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -107,6 +117,18 @@ public class AtividadeEventoService extends BasicService<AtividadeEvento>{
         
         return repository.findAtividadesByIdEvento(idEvento);
         
+    }
+
+   
+    public void delete(AtividadeEvento entity) throws Exception{
+        
+        validateObjectAndIdNull(entity);
+        
+        if(entity.getLancamento() != null){
+            lancamentoService.delete(entity.getLancamento());
+        }
+        
+        repository.delete(entity.getId());
     }
     
     

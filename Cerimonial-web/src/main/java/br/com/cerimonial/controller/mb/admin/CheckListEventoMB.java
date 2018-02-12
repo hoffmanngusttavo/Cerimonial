@@ -26,13 +26,16 @@ import javax.faces.bean.ViewScoped;
 public class CheckListEventoMB extends BasicControl {
 
     private Long idEvento;
-    
+
     private Evento evento;
+
+    private AtividadeEvento entity;
 
     private List<AtividadeEvento> atividades;
 
     @EJB
     protected AtividadeEventoService service;
+
     @EJB
     protected EventoService eventoService;
 
@@ -46,7 +49,7 @@ public class CheckListEventoMB extends BasicControl {
             if (idEvento != null) {
 
                 evento = eventoService.findEntityById(idEvento);
-                
+
                 atividades = service.findAtividadesByIdEvento(idEvento);
 
             }
@@ -58,6 +61,58 @@ public class CheckListEventoMB extends BasicControl {
         }
 
     }
+
+    public void setEntity(AtividadeEvento entity) {
+        this.entity = entity;
+    }
+
+    public String removerAtividade() {
+        
+        try {
+            
+            service.delete(entity);
+            
+            createFacesInfoMessage("Atividade removida com sucesso!");
+            
+            return "/intranet/admin/operacional/pre-evento/partials/atividades.xhtml?idEvento=" + evento.getId() + "&faces-redirect=true";
+
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getCause().getMessage());
+            scrollTopMessage();
+        }
+        
+        return null;
+
+    }
+    
+    public String salvarAtividade(){
+        
+        try {
+            
+            service.save(entity);
+            
+            createFacesInfoMessage("Atividade gravado com sucesso!");
+            
+            return "/intranet/admin/operacional/pre-evento/partials/atividades.xhtml?idEvento=" + evento.getId() + "&faces-redirect=true";
+
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+            createFacesErrorMessage(e.getCause().getMessage());
+            scrollTopMessage();
+        }
+        
+        return null;
+    
+    }
+    
+    
+    public void instanciarNovaAtividade(){
+    
+        entity = new AtividadeEvento(evento);
+    
+    }
+    
 
     public Long getIdEvento() {
         return idEvento;
@@ -82,9 +137,9 @@ public class CheckListEventoMB extends BasicControl {
     public void setEvento(Evento evento) {
         this.evento = evento;
     }
-    
-    
-    
-    
+
+    public AtividadeEvento getEntity() {
+        return entity;
+    }
 
 }

@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.utils.DateUtils;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
@@ -52,6 +53,9 @@ public class AtividadeEvento implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date prazoFinal;
+    
+    @Column
+    private Integer quantidadeDiasPrazo;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
@@ -64,6 +68,16 @@ public class AtividadeEvento implements Serializable, ModelInterface {
     
     @ManyToOne
     private Evento evento;
+
+    public AtividadeEvento() {
+    }
+
+    public AtividadeEvento(Evento evento) {
+        this.evento = evento;
+    }
+    
+    
+    
 
     @Override
     public Long getId() {
@@ -142,8 +156,24 @@ public class AtividadeEvento implements Serializable, ModelInterface {
     public void setEvento(Evento evento) {
         this.evento = evento;
     }
+
+    public Integer getQuantidadeDiasPrazo() {
+        return quantidadeDiasPrazo;
+    }
+
+    public void setQuantidadeDiasPrazo(Integer quantidadeDiasPrazo) {
+        this.quantidadeDiasPrazo = quantidadeDiasPrazo;
+    }
     
+    public void calcularQuatidadeDias(){
+        
+        if(prazoInicial != null && prazoFinal != null){
+           
+            this.quantidadeDiasPrazo = DateUtils.getDaysOfInterval(prazoInicial, prazoFinal);
+            
+        }
     
+    }
 
     @Override
     public int hashCode() {
