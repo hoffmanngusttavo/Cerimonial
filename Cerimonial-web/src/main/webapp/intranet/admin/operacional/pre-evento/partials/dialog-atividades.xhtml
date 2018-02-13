@@ -56,28 +56,17 @@
         </div>
     </div>
 
-    <div class="modal fade" 
-         id="editDialogVar"
-         tabindex="-1" 
-         role="dialog" 
-         aria-labelledby="edit"
-         aria-hidden="true"
-         data-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <h:panelGroup id="groupEdit">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                        <h4 class="modal-title custom_align">
-                            Cadastro de Atividade para o Evento dia 
-                            <h:outputText value="#{CheckListEventoMB.evento.dataInicio}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"
-                                                   locale="pt_BR"
-                                                   timeZone="GMT-3"/>
-                            </h:outputText>
-                        </h4>
-                    </div>
+    <p:dialog modal="true"
+              header="Cadastro de Atividade para o Evento"
+              widgetVar="dialogAtividadesVar"
+              resizable="false"
+              dynamic="true" 
+              draggable="true"
+              closable="true">
 
+        <div class="modal-dialog-prime">
+            <div class="modal-contents">
+                <h:panelGroup id="groupEdit">
                     <div class="modal-body col-lg-12 col-md-12">
 
                         <div class="form-group col-md-12">
@@ -94,7 +83,13 @@
                                             converterMessage="Erro ao selecionar serviço"
                                             placeholder="Pesquise um serviço"
                                             completeMethod="#{CheckListEventoMB.completeServico}"
-                                            label="Serviço"/>
+                                            label="Serviço">
+
+                                <p:column style="padding: 10px; border: none" headerText="Nome">
+                                    #{servico.nome}
+                                </p:column>
+
+                            </p:autoComplete>
                         </div>
 
                         <div class="form-group col-md-12"
@@ -112,35 +107,38 @@
 
                             <p:inputMask mask="99/99/9999"
                                          value="#{CheckListEventoMB.entity.prazoInicial}"
+                                         id="inptPrazoInicial"
                                          converterMessage="Prazo inicial inválido"
-                                         placeholder="Prazo Inicial">
+                                         placeholder="Prazo inicial">
                                 <f:convertDateTime pattern="dd/MM/yyyy"
                                                    locale="pt_BR"
                                                    timeZone="GMT-3"/>
+
                                 <p:ajax event="change"
                                         process="@this"
                                         listener="#{CheckListEventoMB.entity.calcularQuantidadeDias()}"
                                         update="inptQtdDias"/>
                             </p:inputMask>
-                            
+
                         </div>
 
                         <div class="form-group col-md-5">
 
                             <p:inputMask mask="99/99/9999"
                                          value="#{CheckListEventoMB.entity.prazoFinal}"
+                                         id="inptPrazoFinal"
                                          converterMessage="Prazo final inválido"
                                          placeholder="Prazo Final">
                                 <f:convertDateTime pattern="dd/MM/yyyy"
                                                    locale="pt_BR"
                                                    timeZone="GMT-3"/>
-                                
+
                                 <p:ajax event="change"
                                         process="@this"
                                         listener="#{CheckListEventoMB.entity.calcularQuantidadeDias()}"
                                         update="inptQtdDias"/>
                             </p:inputMask>
-                            
+
                         </div>
 
                         <div class="form-group col-md-2">
@@ -161,7 +159,7 @@
                                        styleClass="btn btn-warning" 
                                        process="@this"
                                        actionListener="#{CheckListEventoMB.setEntity(null)}"
-                                       oncomplete="$('#editDialogVar').modal('hide');" />
+                                       oncomplete="PF('dialogAtividadesVar').hide();" />
 
                         <p:commandLink value="Confirmar" 
                                        action="#{CheckListEventoMB.salvarAtividade()}" 
@@ -171,11 +169,23 @@
                                        onstart="PF('statusDialog').show();"
                                        oncomplete="PF('statusDialog').hide();"/>
                     </div>
+
+
+
                 </h:panelGroup>
             </div>
-            <!-- /.modal-content --> 
         </div>
-        <!-- /.modal-dialog --> 
+
+    </p:dialog>
+
+    <div class="modal fade" 
+         id="editDialogVar"
+         tabindex="-1" 
+         role="dialog" 
+         aria-labelledby="edit"
+         aria-hidden="true"
+         data-backdrop="static">
+
     </div>
 
 </ui:composition>

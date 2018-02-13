@@ -48,15 +48,15 @@
             <div class="fixed-rounded-button">
                 <span class="glyphicon"
                       style="margin-top: -9px;margin-left: -10px;">
+
                     <p:commandButton icon="fa fa-plus" 
                                      styleClass="bt-acoes-add"
                                      actionListener="#{CheckListEventoMB.instanciarNovaAtividade()}"
                                      process="@this"
                                      title="Criar Nova Atividade"
-                                     update=":form:groupEdit"
                                      immediate="true"
                                      onstart="PF('statusDialog').show();"
-                                     oncomplete="PF('statusDialog').hide();$('#editDialogVar').modal('show');"/>
+                                     oncomplete="PF('statusDialog').hide();PF('dialogAtividadesVar').show();"/>
                 </span>
             </div>
 
@@ -113,7 +113,20 @@
                                     </td>
 
                                     <td>
-
+                                        <p:splitButton styleClass="splitButton icon-fa" value="t">
+                                            
+                                            <p:menuitem value="Adicionar Custo"   
+                                                        icon="ui-icon-plus" 
+                                                        rendered="#{atividade.lancamento == null}"/>
+                                            
+                                            <p:menuitem value="Remover"  
+                                                        icon="ui-icon-trash" 
+                                                        actionListener="#{CheckListEventoMB.setEntity(atividade)}"
+                                                        process="@this"
+                                                        update="groupRemove"
+                                                        oncomplete="$('#removeDialogVar').modal('show');"/>
+                                            
+                                        </p:splitButton>
                                     </td>
 
                                 </tr>
@@ -124,8 +137,8 @@
             </h:panelGroup>
 
             <ui:include src="./dialog-atividades.xhtml" />
-            
-            
+
+
         </h:form>
 
 

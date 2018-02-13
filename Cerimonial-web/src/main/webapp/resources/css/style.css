@@ -185,11 +185,14 @@
 }
 
 .ui-dialog.ui-widget-content .ui-dialog-titlebar{
-    background-color: #337ab7;
+    /*background-color: #337ab7;*/
+}
+.ui-dialog.ui-widget-content a{
+        color: #fff;
 }
 
 .ui-dialog.ui-widget-content .ui-dialog-title{
-    color: #fff;
+    color: black;
     display: inline-block;
     font-size: 16px;
 }
@@ -304,3 +307,36 @@
     top: 28px; 
     left: 65px;
 }
+
+.modal-dialog-prime{
+    width: 600px;
+    margin-top: 0;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+
+}
+
+.splitButton
+{ }
+
+.splitButton .ui-button-text-only
+{ visibility:hidden;
+  width:0; }
+
+.splitButton .ui-splitbutton-menubutton
+{ border:0;
+  box-shadow:0 0 0;
+  background:transparent;
+  width:25px;
+  margin:0; }
+
+.splitButton .ui-splitbutton-menubutton .ui-icon-triangle-1-s
+{ font-size:34px;
+  line-height:17px;
+  width:22px;
+  left:0;
+  margin-left:2px; }
+
+.splitButton .ui-splitbutton-menubutton .ui-icon-triangle-1-s:before
+{ content:"\f107"; }
