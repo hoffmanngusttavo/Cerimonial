@@ -48,20 +48,20 @@
             <div class="fixed-rounded-button">
                 <span class="glyphicon"
                       style="margin-top: -9px;margin-left: -10px;">
-                    <p:commandButton action="/intranet/admin/operacional/pre-evento/partials/contato-inicial.xhtml?faces-redirect=true" 
-                                     ajax="false"
-                                     title="Criar Nova Atividade"
-                                     process="@this"
-                                     immediate="true"
-                                     icon="fa fa-plus"
+                    <p:commandButton icon="fa fa-plus" 
                                      styleClass="bt-acoes-add"
+                                     actionListener="#{CheckListEventoMB.instanciarNovaAtividade()}"
+                                     process="@this"
+                                     title="Criar Nova Atividade"
+                                     update=":form:groupEdit"
+                                     immediate="true"
                                      onstart="PF('statusDialog').show();"
-                                     oncomplete="PF('statusDialog').hide();"/>
+                                     oncomplete="PF('statusDialog').hide();$('#editDialogVar').modal('show');"/>
                 </span>
             </div>
 
 
-            <h:panelGroup id="groupPropostas">
+            <h:panelGroup id="groupAtividades">
 
                 <div class="row">
 
@@ -81,13 +81,13 @@
                             <p:repeat value="#{CheckListEventoMB.atividades}" var="atividade" varStatus="indexVar">
                                 <tr>
                                     <th scope="row">
-                                        <h:outputText value="#{indexVar.index}"/>
+                                        <h:outputText value="#{indexVar.index +1}"/>
                                     </th>
 
                                     <td>
                                         <h:outputText value="#{atividade.descricao}"/>
                                     </td>
-                                    
+
                                     <td>
                                         <h:outputText value="#{atividade.lancamento.valorEstimado}"/>
                                     </td>
@@ -123,6 +123,9 @@
                 </div>
             </h:panelGroup>
 
+            <ui:include src="./dialog-atividades.xhtml" />
+            
+            
         </h:form>
 
 

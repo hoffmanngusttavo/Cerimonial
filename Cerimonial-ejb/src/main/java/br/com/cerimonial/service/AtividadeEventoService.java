@@ -59,7 +59,7 @@ public class AtividadeEventoService extends BasicService<AtividadeEvento>{
         
         eventoService.validateObjectNull(entity.getEvento());
         
-        entity.calcularQuatidadeDias();
+        entity.calcularQuantidadeDias();
         
         if (entity.getId() == null) {
             return repository.create(entity);

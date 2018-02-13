@@ -165,7 +165,7 @@ public class AtividadeEvento implements Serializable, ModelInterface {
         this.quantidadeDiasPrazo = quantidadeDiasPrazo;
     }
     
-    public void calcularQuatidadeDias(){
+    public void calcularQuantidadeDias(){
         
         if(prazoInicial != null && prazoFinal != null){
            

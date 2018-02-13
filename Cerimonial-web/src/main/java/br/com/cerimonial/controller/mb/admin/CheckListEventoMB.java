@@ -8,8 +8,12 @@ package br.com.cerimonial.controller.mb.admin;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.AtividadeEvento;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.Servico;
 import br.com.cerimonial.service.AtividadeEventoService;
 import br.com.cerimonial.service.EventoService;
+import br.com.cerimonial.service.ServicoService;
+import br.com.cerimonial.utils.CollectionUtils;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +42,9 @@ public class CheckListEventoMB extends BasicControl {
 
     @EJB
     protected EventoService eventoService;
+    
+    @EJB
+    protected ServicoService servicoService;
 
     /**
      * Evento invocado ao abrir o xhtml carregar os dados do contrato do evento
@@ -92,7 +99,7 @@ public class CheckListEventoMB extends BasicControl {
             
             service.save(entity);
             
-            createFacesInfoMessage("Atividade gravado com sucesso!");
+            createFacesInfoMessage("Atividade gravada com sucesso!");
             
             return "/intranet/admin/operacional/pre-evento/partials/atividades.xhtml?idEvento=" + evento.getId() + "&faces-redirect=true";
 
@@ -111,6 +118,33 @@ public class CheckListEventoMB extends BasicControl {
     
         entity = new AtividadeEvento(evento);
     
+    }
+    
+    public List<Servico> completeServico(String query){
+        
+        List<Servico> servicos = null;
+        
+        try {
+            
+          servicos = servicoService.findAllByNome(query);
+            
+          if(CollectionUtils.isBlank(servicos)){
+              
+              Servico servico = new Servico();
+              servico.setNome(query);
+              
+              servicos = new ArrayList<>();
+              servicos.add(servico);
+              
+          }
+          
+        } catch (Exception e) {
+            
+            Logger.getLogger(e.getMessage());
+        }
+
+        return servicos;
+        
     }
     
 

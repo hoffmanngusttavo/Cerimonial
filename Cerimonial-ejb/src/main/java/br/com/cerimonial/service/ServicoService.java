@@ -94,8 +94,8 @@ public class ServicoService extends BasicService<Servico>{
     
     public List<Servico> findAllByNome(String nome) {
         try {
-            if (StringUtils.isNotEmpty(nome)) {
-                return repository.findAllByNome(nome.toUpperCase());
+            if (StringUtils.isNotBlank(nome)) {
+                return repository.findAllByNome(nome.toUpperCase().trim());
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
