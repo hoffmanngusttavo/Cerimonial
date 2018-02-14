@@ -57,14 +57,14 @@ public class Lancamento implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataCadastro;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVencimento;
-    
+
     @DecimalMin("0.0")
     @Column(precision = 16, scale = 2)
     private Double valorBase;
-    
+
     @DecimalMin("0.0")
     @Column(precision = 16, scale = 2)
     private Double valorEstimado;
@@ -76,11 +76,9 @@ public class Lancamento implements Serializable, ModelInterface {
     @Column
     private int numeroParcelas = 1;
 
-    
     @ManyToOne
     private Pessoa envolvidoOrigem;
-    
-   
+
     @ManyToOne
     private Pessoa envolvidoDestino;
 
@@ -89,6 +87,9 @@ public class Lancamento implements Serializable, ModelInterface {
 
     @OneToMany(mappedBy = "lancamento", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Parcela> parcelas;
+
+    @OneToMany(mappedBy = "lancamento", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<OrcamentoLancamento> orcamentos;
 
     @ManyToOne
     private CustoEvento custoEvento;
@@ -101,7 +102,7 @@ public class Lancamento implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    
+
     @OneToOne(mappedBy = "lancamento")
     private AtividadeEvento atividadeEvento;
 
@@ -114,6 +115,15 @@ public class Lancamento implements Serializable, ModelInterface {
         this.tipoLancamento = tipoLancamento;
         this.dataCadastro = new Date();
         this.dataVencimento = new Date();
+    }
+
+    public Lancamento(AtividadeEvento atividadeEvento) {
+        this.tipoLancamento = TipoLancamento.DESPESA;
+        this.dataCadastro = new Date();
+        this.dataVencimento = new Date();
+        this.atividadeEvento = atividadeEvento;
+        this.servico = atividadeEvento.getServico();
+
     }
 
     @Override
@@ -258,8 +268,10 @@ public class Lancamento implements Serializable, ModelInterface {
         this.valorEstimado = valorEstimado;
     }
 
-    
-    
+    public List<OrcamentoLancamento> getOrcamentos() {
+        return orcamentos;
+    }
+
     public void calcularParcelas() {
 
         this.valorTotalPago = 0D;
@@ -288,6 +300,26 @@ public class Lancamento implements Serializable, ModelInterface {
         parcela.setLancamento(this);
 
         parcelas.add(parcela);
+
+    }
+
+    public void adicionarOrcamento(OrcamentoLancamento orcamento) {
+
+        if (orcamento == null) {
+            throw new GenericException("Orçamento nulo.", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        if (orcamentos == null) {
+            orcamentos = new ArrayList<>();
+        }
+
+        if (this.possuiFornecedorContratado()) {
+            throw new GenericException("Não pode adicionar Orçamento, pois já existe um fornecedor contratado", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        orcamento.setLancamento(this);
+
+        orcamentos.add(orcamento);
 
     }
 
@@ -376,6 +408,20 @@ public class Lancamento implements Serializable, ModelInterface {
     @Override
     public String toString() {
         return "br.com.cerimonial.entity.Lancamento[ id=" + id + " ]";
+    }
+
+    public boolean possuiFornecedorContratado() {
+
+        if (CollectionUtils.isNotBlank(orcamentos)) {
+
+            if (orcamentos.stream().anyMatch((orcamento) -> (orcamento.isContratado()))) {
+                return true;
+            }
+
+        }
+
+        return false;
+
     }
 
 }

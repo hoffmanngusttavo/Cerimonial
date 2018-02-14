@@ -62,12 +62,18 @@ public class Arquivo implements Serializable, ModelInterface {
 
     @ManyToMany(mappedBy = "anexos")
     private List<ModeloProposta> modelosPropostas;
+    
     @ManyToMany(mappedBy = "anexos")
     private List<OrcamentoEvento> orcamentos;
+    
     @ManyToMany(mappedBy = "anexos")
     private List<ModeloEmail> modeloEmails;
+    
     @ManyToMany(mappedBy = "anexos")
     private List<EmailContatoEvento> emailContatoEventos;
+    
+    @ManyToMany(mappedBy = "anexos")
+    private List<OrcamentoLancamento> orcamentoLancamentos;
 
     public Arquivo() {
 
@@ -163,6 +169,14 @@ public class Arquivo implements Serializable, ModelInterface {
 
     public void setEmailContatoEventos(List<EmailContatoEvento> emailContatoEventos) {
         this.emailContatoEventos = emailContatoEventos;
+    }
+
+    public List<OrcamentoLancamento> getOrcamentoLancamentos() {
+        return orcamentoLancamentos;
+    }
+
+    public void setOrcamentoLancamentos(List<OrcamentoLancamento> orcamentoLancamentos) {
+        this.orcamentoLancamentos = orcamentoLancamentos;
     }
     
     
