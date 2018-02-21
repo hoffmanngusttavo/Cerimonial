@@ -5,10 +5,12 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.Lancamento;
 import br.com.cerimonial.entity.Parcela;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ParcelaRepository;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +26,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.xml.crypto.Data;
 
 /**
  *
@@ -40,6 +41,7 @@ public class ParcelaService extends BasicService<Parcela> {
 
     @EJB
     private LancamentoService lancamentoService;
+    
 
     @PostConstruct
     @PostActivate
@@ -207,6 +209,25 @@ public class ParcelaService extends BasicService<Parcela> {
 
         validateId(entity.getId());
 
+    }
+
+    public List<Parcela> criarParcelasDeParcelas(List<Parcela> parcelas, Lancamento lancamento) throws Exception {
+       
+        List<Parcela> lista = null;
+        
+        if(CollectionUtils.isNotBlank(parcelas)){
+            
+            lista = new ArrayList<>();
+            
+            for (Parcela parcela : parcelas) {
+                
+                lista.add(parcela.clonar(lancamento));
+                
+            }
+            
+        }
+        
+        return lista;
     }
 
    

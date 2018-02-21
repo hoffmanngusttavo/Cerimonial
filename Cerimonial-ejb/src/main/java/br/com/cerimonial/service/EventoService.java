@@ -260,6 +260,10 @@ public class EventoService extends BasicService<Evento> {
                 if (evento.getEvolucaoPreenchimento() != null) {
                     evento.getEvolucaoPreenchimento().getId();
                 }
+                
+                if (evento.getContrato() != null) {
+                    evento.getContrato().getId();
+                }
 
                 if (evento.getOrcamentoEvento() != null) {
                     evento.getOrcamentoEvento().getId();
@@ -464,6 +468,10 @@ public class EventoService extends BasicService<Evento> {
 
         if (evento.getEvolucaoPreenchimento() != null) {
             evento.getEvolucaoPreenchimento().getId();
+        }
+        
+        if (evento.getContrato() != null) {
+            evento.getContrato().getId();
         }
 
         if (evento.getOrcamentoEvento() != null) {

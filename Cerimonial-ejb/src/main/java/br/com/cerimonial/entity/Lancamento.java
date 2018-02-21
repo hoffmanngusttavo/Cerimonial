@@ -280,12 +280,14 @@ public class Lancamento implements Serializable, ModelInterface {
 
             for (Parcela parcela : parcelas) {
 
-                this.valorTotalPago += parcela.getValorPago();
+                this.valorTotalPago += parcela.getValorPago() != null ? parcela.getValorPago() : 0D;
 
             }
         }
 
     }
+    
+   
 
     public void adicionarParcela(Parcela parcela) {
 

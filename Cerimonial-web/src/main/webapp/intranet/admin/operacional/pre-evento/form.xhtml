@@ -183,17 +183,17 @@
                                         <i class="fa fa-dollar"></i>
                                         <span></span>
                                     </p:link>
-                                    
+
                                     <h:outputText rendered="#{PreEventoMB.evento.orcamentoEvento.lancamento != null}"
                                                   value="Lançamento Gerado"
                                                   style="font-size: 12px;float: right;"/>
-                                    
+
                                     <p:commandButton process="@this"
                                                      rendered="#{PreEventoMB.evento != null 
                                                                  and PreEventoMB.evento.orcamentoEvento.lancamento == null}"
                                                      styleClass="btn btn-warning"
                                                      title="Gerar Lançamento"
-                                                     style="margin-left: 20px;"
+                                                     style="margin-left: 20px;max-height: 36px;"
                                                      value="Gerar Lançamento"
                                                      onstart="PF('statusDialog').show();"
                                                      oncomplete="PF('statusDialog').hide();"
@@ -215,10 +215,26 @@
                                         <i class="fa fa-list"></i>
                                         <span></span>
                                     </p:link>
+
+                                    <h:outputText rendered="#{PreEventoMB.evento.contrato != null}"
+                                                  value="Contrato Gerado"
+                                                  style="font-size: 12px;float: right;"/>
+                                    
+                                    <p:commandButton process="@this"
+                                                     rendered="#{PreEventoMB.evento.contrato == null}"
+                                                     styleClass="btn btn-warning"
+                                                     title="Gerar Contrato"
+                                                     style="margin-left: 20px;max-height: 36px;"
+                                                     value="Gerar Contrato"
+                                                     onstart="PF('statusDialog').show();"
+                                                     oncomplete="PF('statusDialog').hide();"
+                                                     onclick="window.location = '#{facesContext.externalContext.requestContextPath}/intranet/admin/operacional/pre-evento/partials/contrato.xhtml?idEvento=#{PreEventoMB.evento.id}'"/>
+
+
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-4 text-center">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
@@ -250,7 +266,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group col-md-4 text-center">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
@@ -268,7 +284,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group col-md-4 text-center">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
@@ -388,7 +404,7 @@
 
                     </h:panelGroup>
 
-                    
+
 
                 </div>
             </div>

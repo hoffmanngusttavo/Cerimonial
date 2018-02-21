@@ -12,6 +12,7 @@ import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.CustoEventoRepository;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -166,6 +167,41 @@ public class CustoEventoService extends BasicService<CustoEvento> {
         validateObjectNull(entity);
         
         validateId(entity.getId());
+        
+    }
+    
+    public CustoEvento atualizarSalvarValoresCusto(CustoEvento custoEvento) throws Exception {
+    
+        atualizarValoresCusto(custoEvento);
+        
+        return save(custoEvento);
+    }
+
+    public void atualizarValoresCusto(CustoEvento custoEvento) throws Exception {
+        
+        validateObjectNull(custoEvento);
+        
+        Double valorEstimado = 0D;
+        Double valorCustoReal = 0D;
+        Double valorTotalPago = 0D;
+        
+        if(CollectionUtils.isNotBlank(custoEvento.getLancamentos())){
+            
+            for (Lancamento lancamento : custoEvento.getLancamentos()) {
+                
+                valorEstimado += lancamento.getValorEstimado() != null ? lancamento.getValorEstimado() : 0D;
+                
+                valorCustoReal += lancamento.getValorBase() != null ? lancamento.getValorBase() : 0D;
+                
+                valorTotalPago += lancamento.getValorTotalPago() != null ? lancamento.getValorTotalPago() : 0D;
+                
+            }
+            
+        }
+        
+        custoEvento.setValorCustoEstimado(valorEstimado);
+        custoEvento.setValorCustoReal(valorCustoReal);
+        custoEvento.setValorTotalPago(valorTotalPago);
         
     }
     

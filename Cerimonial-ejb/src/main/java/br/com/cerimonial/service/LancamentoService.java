@@ -53,6 +53,10 @@ public class LancamentoService extends BasicService<Lancamento> {
     private EventoService eventoService;
     @EJB
     private CustoEventoService custoEventoService;
+    @EJB
+    private ParcelaService parcelaService;
+    @EJB
+    private ParcelaVinculadaService parcelaVinculadaService;
 
     @PostConstruct
     @PostActivate
@@ -269,18 +273,54 @@ public class LancamentoService extends BasicService<Lancamento> {
     public Lancamento saveLancamentoOrcamento(Lancamento entity) throws Exception {
 
         validateObjectNull(entity);
+        
+        entity.calcularParcelas();
 
         if (entity.getId() == null) {
 
-            // criar vinculo com lancamento de saida do evento com lancamento de entrada da empresa
-            return save(entity);
+            Lancamento lancamentoEntradaEvento = criarLancamentoEntrada(entity);
+            
+            entity = save(entity);
+            
+            save(lancamentoEntradaEvento);
+            
+            parcelaVinculadaService.vincularSalvarParcelas(entity, lancamentoEntradaEvento);
+//            custoEventoService.atualizarSalvarValoresCusto(entity.getCustoEvento());
 
         } else {
 
-            return save(entity);
+            entity =  save(entity);
         }
+        
+        return entity;
 
     }
+    
+    
+    public Lancamento criarLancamentoEntrada(Lancamento entity) throws Exception {
+
+        validateObjectNull(entity);
+
+        Lancamento lancamento = new Lancamento(TipoLancamento.RECEITA);
+        
+        lancamento.setDataVencimento(entity.getDataVencimento());
+        lancamento.setEnvolvidoDestino(entity.getEnvolvidoOrigem());
+        lancamento.setEnvolvidoOrigem(entity.getEnvolvidoDestino());
+        lancamento.setNumeroParcelas(entity.getNumeroParcelas());
+        lancamento.setParcelas(parcelaService.criarParcelasDeParcelas(entity.getParcelas(), lancamento));
+        lancamento.setServico(entity.getServico());
+        lancamento.setValorBase(entity.getValorBase());
+        lancamento.setValorEstimado(entity.getValorEstimado());
+        lancamento.setValorTotalPago(entity.getValorTotalPago());
+        lancamento.calcularParcelas();
+        
+        return lancamento;
+
+    }
+    
+    
+    
+    
 
     @Override
     public void validateId(Long idEntity) {

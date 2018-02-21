@@ -22,6 +22,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -79,6 +80,12 @@ public class Parcela implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    
+    @OneToOne(mappedBy = "parcelaPai")
+    private ParcelaVinculada parcelaVinculadaPai;
+    
+    @OneToOne(mappedBy = "parcelaFilha")
+    private ParcelaVinculada parcelaVinculadaFilha;
 
     public Parcela() {
     }
@@ -187,6 +194,22 @@ public class Parcela implements Serializable, ModelInterface {
         this.numeroParcela = numeroParcela;
     }
 
+    public ParcelaVinculada getParcelaVinculadaPai() {
+        return parcelaVinculadaPai;
+    }
+
+    public void setParcelaVinculadaPai(ParcelaVinculada parcelaVinculadaPai) {
+        this.parcelaVinculadaPai = parcelaVinculadaPai;
+    }
+
+    public ParcelaVinculada getParcelaVinculadaFilha() {
+        return parcelaVinculadaFilha;
+    }
+
+    public void setParcelaVinculadaFilha(ParcelaVinculada parcelaVinculadaFilha) {
+        this.parcelaVinculadaFilha = parcelaVinculadaFilha;
+    }
+
     
     
     @PrePersist
@@ -279,6 +302,21 @@ public class Parcela implements Serializable, ModelInterface {
        sb.append("</td>");
 
         return sb.toString();
+    }
+
+    public Parcela clonar(Lancamento lancamento) {
+        
+        Parcela parcela = new Parcela(lancamento);
+        
+        parcela.setDataPagamento(dataPagamento);
+        parcela.setDataVencimento(dataVencimento);
+        parcela.setFormaPagamento(formaPagamento);
+        parcela.setNumeroParcela(numeroParcela);
+        parcela.setPago(pago);
+        parcela.setValorCobrado(valorCobrado);
+        parcela.setValorPago(valorPago);
+        
+        return parcela;
     }
 
 }
