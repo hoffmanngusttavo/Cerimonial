@@ -286,6 +286,7 @@ public class LancamentoService extends BasicService<Lancamento> {
             
             parcelaVinculadaService.vincularSalvarParcelas(entity, lancamentoEntradaEvento);
 //            custoEventoService.atualizarSalvarValoresCusto(entity.getCustoEvento());
+            
 
         } else {
 
