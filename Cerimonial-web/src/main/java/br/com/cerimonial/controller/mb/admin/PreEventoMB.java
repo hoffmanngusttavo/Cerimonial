@@ -18,6 +18,7 @@ import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.EvolucaoPreenchimentoService;
 import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,7 +73,7 @@ public class PreEventoMB extends BasicControl {
         try {
             if (id != null) {
 
-                entity = service.findEntityById(id);
+                entity = service.findEntityById(id, Arrays.asList("emailsContato"));
 
                 evento = eventoService.getEventoByContatoInicial(entity);
                 

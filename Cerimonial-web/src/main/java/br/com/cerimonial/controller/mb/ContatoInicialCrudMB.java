@@ -13,6 +13,7 @@ import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.OrcamentoEventoService;
 import br.com.cerimonial.service.TipoIndicacaoService;
 import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -55,7 +56,9 @@ public class ContatoInicialCrudMB extends BasicControl {
 
         if (id != null) {
             try {
-                entity = service.findEntityById(id);
+                
+                entity = service.findEntityById(id, Arrays.asList("tipoIndicacao","emailsContato"));
+                
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }

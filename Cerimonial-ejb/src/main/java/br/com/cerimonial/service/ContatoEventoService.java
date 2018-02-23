@@ -11,6 +11,7 @@ import br.com.cerimonial.repository.ContatoEventoRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,21 +58,20 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     @Override
     public ContatoEvento findEntityById(Long id) throws Exception {
 
+        return repository.getEntity(id);
+    }
+    
+    public ContatoEvento findEntityById(Long id, List<String> pathLazy) throws Exception {
+
         ContatoEvento entity = repository.getEntity(id);
 
         validateObjectNull(entity);
 
-        if (entity.getTipoIndicacao() != null) {
-            entity.getTipoIndicacao().getId();
-        }
-
-        if (entity.getEmailsContato() != null) {
-            entity.getEmailsContato().size();
-        }
-
+        smartLazy(entity, pathLazy);
+        
         return entity;
     }
-
+    
     @Override
     public ContatoEvento save(ContatoEvento entity) throws Exception {
 
@@ -146,17 +146,11 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
 
         eventoService.validateObjectAndIdNull(evento);
         
-        if (evento.getId() == null) {
-            throw new GenericException("Evento nulo", ErrorCode.BAD_REQUEST.getCode());
-        }
-
         ContatoEvento entity = repository.getContatoInicialByEvento(evento);
 
         validateObjectNull(entity);
-
-        if (entity.getEmailsContato() != null) {
-            entity.getEmailsContato().size();
-        }
+        
+        smartLazy(entity, Arrays.asList("emailsContato"));
 
         return entity;
 
