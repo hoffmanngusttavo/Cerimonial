@@ -109,10 +109,8 @@
                                          value="#{CheckListEventoMB.entity.prazoInicial}"
                                          id="inptPrazoInicial"
                                          converterMessage="Prazo inicial inválido"
-                                         placeholder="Prazo inicial">
-                                <f:convertDateTime pattern="dd/MM/yyyy"
-                                                   locale="pt_BR"
-                                                   timeZone="GMT-3"/>
+                                         placeholder="Prazo inicial"
+                                         converter="DateConverter">
 
                                 <p:ajax event="change"
                                         process="@this"
@@ -128,10 +126,8 @@
                                          value="#{CheckListEventoMB.entity.prazoFinal}"
                                          id="inptPrazoFinal"
                                          converterMessage="Prazo final inválido"
-                                         placeholder="Prazo Final">
-                                <f:convertDateTime pattern="dd/MM/yyyy"
-                                                   locale="pt_BR"
-                                                   timeZone="GMT-3"/>
+                                         placeholder="Prazo Final"
+                                         converter="DateConverter">
 
                                 <p:ajax event="change"
                                         process="@this"
@@ -177,16 +173,6 @@
         </div>
 
     </p:dialog>
-
-    <div class="modal fade" 
-         id="editDialogVar"
-         tabindex="-1" 
-         role="dialog" 
-         aria-labelledby="edit"
-         aria-hidden="true"
-         data-backdrop="static">
-
-    </div>
 
 </ui:composition>
 

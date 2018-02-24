@@ -147,11 +147,8 @@
                                         label="Data Nascimento" 
                                         showOn="button"
                                         navigator="true"
-                                        locale="pt"
-                                        timeZone="GMT-3">
-                                <f:convertDateTime pattern="dd/MM/yyyy"
-                                                   locale="pt_BR"
-                                                   timeZone="GMT-3"/>
+                                        converter="DateConverter">
+                                
                             </p:calendar>
                         </div>
 

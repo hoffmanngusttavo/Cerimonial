@@ -73,11 +73,8 @@
                                           width="110"
                                           sortBy="#{item.dataInicio}"
                                           headerText="Data">
-                                    <h:outputText value="#{item.dataInicio}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                           locale="pt_BR"
-                                                           timeZone="GMT-3"/>
-                                    </h:outputText>
+                                    <h:outputText value="#{item.dataInicio}"
+                                                  converter="DateConverter"/>
                                 </p:column>
                                 
                                 <p:column id="hora" 
@@ -85,11 +82,8 @@
                                           width="90"
                                           sortBy="#{item.horaInicio}"
                                           headerText="Hora">
-                                    <h:outputText value="#{item.horaInicio}">
-                                        <f:convertDateTime pattern="HH:mm"
-                                                           locale="pt_BR"
-                                                           timeZone="GMT-3"/>
-                                    </h:outputText>
+                                    <h:outputText value="#{item.horaInicio}"
+                                                  converter="TimeConverter"/>
                                 </p:column>
 
                                 <p:column id="nomeContato" 

@@ -108,11 +108,8 @@
                                                 <tr>
                                                     <td>#{indice.index + 1}</td>
                                                     <td>
-                                                        <h:outputText value="#{email.dataCadastro}">
-                                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"
-                                                                               locale="pt_BR"
-                                                                               timeZone="#{initParam.timezone}"/>
-                                                        </h:outputText>
+                                                        <h:outputText value="#{email.dataCadastro}"
+                                                                      converter="TimeConverter"/>
                                                     </td>
 
                                                     <td>

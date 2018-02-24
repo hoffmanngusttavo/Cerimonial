@@ -161,11 +161,8 @@
                                             label="#{bundle.dataNascimento}" 
                                             navigator="true"
                                             showOn="button"
-                                            locale="pt"
-                                            timeZone="#{initParam.timezone}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"
-                                                       locale="pt_BR"
-                                                       timeZone="#{initParam.timezone}"/>
+                                            converter="DateConverter">
+                                    
                                 </p:calendar>
 
                             </div>

@@ -10,6 +10,7 @@ import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Login;
 import br.com.cerimonial.entity.Parcela;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.service.AlertaDestinatarioService;
 import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.EventoService;
@@ -28,8 +29,8 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "DashBoardMB")
 @ViewScoped
-public class DashBoardMB extends BasicControl{
-    
+public class DashBoardMB extends BasicControl {
+
     @EJB
     protected LoginService loginService;
     @EJB
@@ -40,7 +41,7 @@ public class DashBoardMB extends BasicControl{
     protected AlertaDestinatarioService alertaDestinatarioService;
     @EJB
     protected ParcelaService parcelaService;
-    
+
     private List<Login> ultimosLogins;
     private List<Evento> eventosDia;
     private List<Evento> eventosAtivos;
@@ -52,17 +53,15 @@ public class DashBoardMB extends BasicControl{
     private List<Parcela> contasPagarEmpresa;
     private List<Parcela> contasReceberEmpresa;
     private List<Parcela> contasVencidasEmpresa;
-    
+
     private Date dataSelecionada;
-    
-    
 
     public DashBoardMB() {
         dataSelecionada = new Date();
     }
-    
+
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         carregarEventosDoDia();
         carregarEventosAtivos();
         carregarContatosAtivos();
@@ -70,48 +69,48 @@ public class DashBoardMB extends BasicControl{
         carregarFinanceiroEmpresa();
 //        carregarLogins();
     }
-    
-    public void carregarFinanceiroEventos(){
-        
+
+    public void carregarFinanceiroEventos() {
+
         contasPagarEvento = parcelaService.findParcelasAPagarEvento(10);
-        
+
         contasVencidasEvento = parcelaService.findParcelasVencidasEvento(10);
-        
+
     }
-    
-    public void carregarFinanceiroEmpresa(){
-        
+
+    public void carregarFinanceiroEmpresa() {
+
         contasPagarEmpresa = parcelaService.findParcelasAPagarEmpresa(10);
-        
+
         contasReceberEmpresa = parcelaService.findParcelasAReceberEmpresa(10);
-        
+
         contasVencidasEmpresa = parcelaService.findParcelasVencidasEmpresa(10);
-        
+
     }
-    
-    public void carregarEventosDoDia(){
-        eventosDia = eventoService.findEventosDia(dataSelecionada);
+
+    public void carregarEventosDoDia() {
+        try {
+
+            eventosDia = eventoService.findEventosDia(dataSelecionada);
+            
+        } catch (GenericException e) {
+            createFacesErrorMessage(e.getCause().getMessage());
+        }
     }
-    
-    public void carregarEventosAtivos(){
+
+    public void carregarEventosAtivos() {
         eventosAtivos = eventoService.findEventosAtivos(10);
     }
-    
-    public void carregarContatosAtivos(){
+
+    public void carregarContatosAtivos() {
         contatosAtivos = contatoEventoService.findContatosAtivos(10);
     }
-    
-    public void carregarLogins(){
+
+    public void carregarLogins() {
         ultimosLogins = loginService.findRangeListagem(null, 4, 0, null, null);
     }
-    
-   
-    
-    
-    
+
     //----------GETTERS AND SETTERS--------------------------------
-    
-    
     public List<Login> getUltimosLogins() {
         return ultimosLogins;
     }
@@ -192,9 +191,4 @@ public class DashBoardMB extends BasicControl{
         this.contasVencidasEmpresa = contasVencidasEmpresa;
     }
 
-   
-    
-    
-    
-    
 }

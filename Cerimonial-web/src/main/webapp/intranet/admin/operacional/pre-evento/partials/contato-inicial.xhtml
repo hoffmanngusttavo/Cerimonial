@@ -176,12 +176,8 @@
                                             label="Data Evento" 
                                             showOn="button"
                                             navigator="true"
-                                            locale="pt"
-                                            timeZone="GMT-3">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"
-                                                       locale="pt_BR"
-                                                       timeZone="GMT-3"/>
-                                </p:calendar>
+                                            converter="DateConverter"
+                                            converterMessage="Data do evento inválida"/>
                             </div>
 
                             <div class="form-group col-md-3">
@@ -192,11 +188,10 @@
 
                                 <p:inputMask mask="99:99"
                                              id="inptHoraEvento"
-                                             value="#{ContatoInicialCrudMB.entity.horaEvento}">
-                                    <f:convertDateTime pattern="HH:mm"
-                                                       locale="pt_BR"
-                                                       timeZone="GMT-3"/>
-                                </p:inputMask>
+                                             value="#{ContatoInicialCrudMB.entity.horaEvento}"
+                                             converter="TimeConverter"
+                                             converterMessage="Hora do evento inválida"/>
+                                    
                             </div>
 
                             <div class="form-group col-md-3">
@@ -216,12 +211,9 @@
                                             requiredMessage="Preencha uma data de contato válido"
                                             showOn="button"
                                             navigator="true"
-                                            locale="pt"
-                                            timeZone="GMT-3">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"
-                                                       locale="pt_BR"
-                                                       timeZone="GMT-3"/>
-                                </p:calendar>
+                                            converter="DateConverter"
+                                            converterMessage="Data do contato inválida"/>
+                                   
                             </div>
 
 
@@ -296,6 +288,8 @@
                                 <h:selectOneMenu id="inptStatus" 
                                                  value="#{ContatoInicialCrudMB.entity.status}"
                                                  required="true"
+                                                 converter="EntityConverter"
+                                                 converterMessage="Erro ao converter Status"
                                                  requiredMessage="Preencha um status válido"
                                                  class="form-control"
                                                  label="Status">

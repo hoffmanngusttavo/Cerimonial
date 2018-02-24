@@ -48,13 +48,9 @@
                                                 style="width: 100px !important;"
                                                 value="#{DashBoardMB.dataSelecionada}"
                                                 label="Data Evento" 
+                                                converter="DateConverter"
                                                 showOn="button"
-                                                navigator="true"
-                                                locale="pt"
-                                                timeZone="GMT-3">
-                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                           locale="pt_BR"
-                                                           timeZone="GMT-3"/>
+                                                navigator="true">
 
                                         <p:ajax event="dateSelect"
                                                 process="@this"
@@ -89,11 +85,8 @@
                                                             <h:outputText value="#{evento.nome}"/>
                                                         </td>
                                                         <td>
-                                                            <h:outputText value="#{evento.horaInicio}">
-                                                                <f:convertDateTime pattern="HH:mm"
-                                                                                   locale="pt_BR"
-                                                                                   timeZone="GMT-3"/>
-                                                            </h:outputText>
+                                                            <h:outputText value="#{evento.horaInicio}"
+                                                                          converter="TimeConverter"/>
                                                         </td>
                                                     </tr>
                                                 </p:repeat>
@@ -195,11 +188,8 @@
                                                         <tr>
                                                             <td>
                                                                 <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{pagarEve.id}" >
-                                                                    <h:outputText value="#{pagarEve.dataVencimento}">
-                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                                           locale="pt_BR"
-                                                                                           timeZone="GMT-3"/>
-                                                                    </h:outputText>
+                                                                    <h:outputText value="#{pagarEve.dataVencimento}"
+                                                                                  converter="DateConverter"/>
                                                                 </p:link>
                                                             </td>
                                                             <td>
@@ -238,11 +228,8 @@
                                                         <tr>
                                                             <td>
                                                                 <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{vencEve.id}" >
-                                                                    <h:outputText value="#{vencEve.dataVencimento}">
-                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                                           locale="pt_BR"
-                                                                                           timeZone="GMT-3"/>
-                                                                    </h:outputText>
+                                                                    <h:outputText value="#{vencEve.dataVencimento}"
+                                                                                  converter="DateConverter"/>
                                                                 </p:link>
                                                             </td>
                                                             <td>
@@ -262,9 +249,6 @@
                                                     rendered="#{DashBoardMB.contasVencidasEvento.size() > 10}">
                                                 <span>Visualizar Todos</span>
                                             </p:link>
-
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -297,11 +281,8 @@
                                                         <tr>
                                                             <td>
                                                                 <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{receberEmp.id}" >
-                                                                    <h:outputText value="#{receberEmp.dataVencimento}">
-                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                                           locale="pt_BR"
-                                                                                           timeZone="GMT-3"/>
-                                                                    </h:outputText>
+                                                                    <h:outputText value="#{receberEmp.dataVencimento}"
+                                                                                  converter="DateConverter"/>
                                                                 </p:link>
                                                             </td>
                                                             <td>
@@ -339,11 +320,8 @@
                                                         <tr>
                                                             <td>
                                                                 <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{pagarEmp.id}" >
-                                                                    <h:outputText value="#{pagarEmp.dataVencimento}">
-                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                                           locale="pt_BR"
-                                                                                           timeZone="GMT-3"/>
-                                                                    </h:outputText>
+                                                                    <h:outputText value="#{pagarEmp.dataVencimento}"
+                                                                                  converter="DateConverter"/>
                                                                 </p:link>
                                                             </td>
                                                             <td>
@@ -385,11 +363,8 @@
                                                             
                                                             <td>
                                                                 <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{vencEmp.id}" >
-                                                                    <h:outputText value="#{vencEmp.dataVencimento}">
-                                                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                                           locale="pt_BR"
-                                                                                           timeZone="GMT-3"/>
-                                                                    </h:outputText>
+                                                                    <h:outputText value="#{vencEmp.dataVencimento}"
+                                                                                  converter="DateConverter"/>
                                                                 </p:link>
                                                             </td>
                                                             
@@ -446,17 +421,13 @@
                                                         #{login.usuario.nome}
                                                     </td>
                                                     <td>
-                                                        <h:outputText value="#{login.dataLogin}">
-                                                            <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                               locale="pt_BR"
-                                                                               timeZone="GMT-3"/>
-                                                        </h:outputText>
+                                                        <h:outputText value="#{login.dataLogin}"
+                                                                      converter="DateConverter"/>
+                                                            
                                                         <p:spacer width="10"/>
-                                                        <h:outputText value="#{login.hora}">
-                                                            <f:convertDateTime pattern="HH:mm"
-                                                                               locale="pt_BR"
-                                                                               timeZone="GMT-3"/>
-                                                        </h:outputText>
+                                                        
+                                                        <h:outputText value="#{login.hora}"
+                                                                      converter="TimeConverter"/>
                                                     </td>
 
                                                 </tr>

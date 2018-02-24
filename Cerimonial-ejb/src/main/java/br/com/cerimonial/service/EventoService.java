@@ -150,16 +150,14 @@ public class EventoService extends BasicService<Evento> {
         return new ArrayList<Evento>();
     }
 
-    public List<Evento> findEventosDia(Date dataSelecionada) {
-        try {
-            if (dataSelecionada == null) {
-                return new ArrayList<Evento>();
+    public List<Evento> findEventosDia(Date dataSelecionada) throws GenericException{
+       
+            if(dataSelecionada == null){
+                throw new GenericException("Data não pode ser nula", ErrorCode.BAD_REQUEST.getCode());
             }
+            
             return repository.findEventosDia(dataSelecionada);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        return new ArrayList<Evento>();
+        
     }
 
     /**

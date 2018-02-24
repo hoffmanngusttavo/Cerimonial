@@ -135,14 +135,7 @@
                                             label="Data Vencimento" 
                                             showOn="button"
                                             navigator="true"
-                                            locale="pt"
-                                            timeZone="GMT-3">
-
-                                    <f:convertDateTime pattern="dd/MM/yyyy"
-                                                       locale="pt_BR"
-                                                       timeZone="GMT-3"/>
-
-                                    
+                                            converter="DateConverter">
 
                                     <p:ajax event="dateSelect"
                                             process="@this"
@@ -267,11 +260,8 @@
                                                                                     value="#{parcela.dataVencimento}"
                                                                                     label="Vencimento" 
                                                                                     navigator="true"
-                                                                                    locale="pt"
-                                                                                    timeZone="GMT-3">
-                                                                            <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                                               locale="pt_BR"
-                                                                                               timeZone="GMT-3"/>
+                                                                                    converter="DateConverter">
+                                                                            
                                                                         </p:calendar>
                                                                     </td>
 
@@ -333,12 +323,9 @@
                                                                                     id="inptDataPagamento"
                                                                                     value="#{parcela.dataPagamento}"
                                                                                     label="Vencimento" 
-                                                                                    navigator="true"
-                                                                                    locale="pt"
-                                                                                    timeZone="GMT-3">
-                                                                            <f:convertDateTime pattern="dd/MM/yyyy"
-                                                                                               locale="pt_BR"
-                                                                                               timeZone="GMT-3"/>
+                                                                                    navigator="true"[
+                                                                                    converter="DateConverter">
+                                                                           
                                                                         </p:calendar>
                                                                     </td>
 

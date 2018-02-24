@@ -89,10 +89,9 @@
                                           width="150"
                                           sortBy="#{item.dataEvento}"
                                           headerText="Data Evento">
-                                    <h:outputText value="#{item.dataEvento}" >
-                                        <f:convertDateTime locale="pt_BR"
-                                                           pattern="dd/MM/yyyy"/>
-                                    </h:outputText>
+                                    <h:outputText value="#{item.dataEvento}" 
+                                                  converter="DateConverter"/>
+                                        
                                 </p:column>
 
                                 <p:column id="nomeContato" 

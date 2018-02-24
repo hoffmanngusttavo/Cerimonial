@@ -127,11 +127,8 @@
                                                 label="Data Evento" 
                                                 showOn="button"
                                                 navigator="true"
-                                                locale="pt"
-                                                timeZone="GMT-3">
-                                        <f:convertDateTime pattern="dd/MM/yyyy"
-                                                           locale="pt_BR"
-                                                           timeZone="GMT-3"/>
+                                                converter="DateConverter">
+                                       
                                     </p:calendar>
 
                                     <p:inputMask mask="99:99"
@@ -139,10 +136,9 @@
                                                  value="#{FichaCadastralEventoMB.evento.horaInicio}"
                                                  label="Hora Inicial Evento" 
                                                  placeholder="hora inicial"
-                                                 id="inptHoraInicialEvento">
-                                        <f:convertDateTime pattern="HH:mm"
-                                                           locale="pt_BR"
-                                                           timeZone="GMT-3"/>
+                                                 id="inptHoraInicialEvento"
+                                                 converter="TimeConverter">
+                                        
                                     </p:inputMask>
                                 </h:panelGroup>
                             </div>
@@ -163,11 +159,8 @@
                                             showOn="button"
                                             label="Data Evento" 
                                             navigator="true"
-                                            locale="pt"
-                                            timeZone="GMT-3">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"
-                                                       locale="pt_BR"
-                                                       timeZone="GMT-3"/>
+                                            converter="DateConverter">
+                                    
                                 </p:calendar>
 
                                 <p:inputMask mask="99:99"
@@ -175,10 +168,8 @@
                                              value="#{FichaCadastralEventoMB.evento.horaTermino}"
                                              placeholder="hora final"
                                              label="Data Evento" 
-                                             id="inptHoraTerminoEvento">
-                                    <f:convertDateTime pattern="HH:mm"
-                                                       locale="pt_BR"
-                                                       timeZone="GMT-3"/>
+                                             id="inptHoraTerminoEvento"
+                                             converter="TimeConverter">
                                 </p:inputMask>
                             </div>
 

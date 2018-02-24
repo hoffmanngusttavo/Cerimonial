@@ -93,18 +93,14 @@
                                     </td>
 
                                     <td>
-                                        <h:outputText value="#{atividade.prazoInicial}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy"
-                                                               locale="pt_BR"
-                                                               timeZone="GMT-3"/>
+                                        <h:outputText value="#{atividade.prazoInicial}"
+                                                      converter="DateConverter">
                                         </h:outputText>
                                     </td>
 
                                     <td>
-                                        <h:outputText value="#{atividade.prazoFinal}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy"
-                                                               locale="pt_BR"
-                                                               timeZone="GMT-3"/>
+                                        <h:outputText value="#{atividade.prazoFinal}"
+                                                      converter="DateConverter">
                                         </h:outputText>
                                     </td>
 
