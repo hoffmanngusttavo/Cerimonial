@@ -21,6 +21,7 @@ import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -72,6 +73,12 @@ public class EventoService extends BasicService<Evento> {
     @Override
     public Evento findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
+    }
+
+    public Evento findEntityById(Long id, List<String> pathLazy) throws Exception {
+        Evento entity = repository.getEntity(id);
+        smartLazy(entity, pathLazy);
+        return entity;
     }
 
     @Override
@@ -150,14 +157,14 @@ public class EventoService extends BasicService<Evento> {
         return new ArrayList<Evento>();
     }
 
-    public List<Evento> findEventosDia(Date dataSelecionada) throws GenericException{
-       
-            if(dataSelecionada == null){
-                throw new GenericException("Data não pode ser nula", ErrorCode.BAD_REQUEST.getCode());
-            }
-            
-            return repository.findEventosDia(dataSelecionada);
-        
+    public List<Evento> findEventosDia(Date dataSelecionada) throws GenericException {
+
+        if (dataSelecionada == null) {
+            throw new GenericException("Data não pode ser nula", ErrorCode.BAD_REQUEST.getCode());
+        }
+
+        return repository.findEventosDia(dataSelecionada);
+
     }
 
     /**
@@ -241,35 +248,32 @@ public class EventoService extends BasicService<Evento> {
 
         if (CollectionUtils.isNotBlank(eventos)) {
 
+            return eventos.get(0);
+        }
+
+        return null;
+
+    }
+
+    /**
+     * Encontrar evento a partir de um contato inicial
+     *
+     * @param contatoEvento
+     * @param pathsLazy
+     * @return
+     * @throws java.lang.Exception
+     */
+    public Evento getEventoByContatoInicial(ContatoEvento contatoEvento, List<String> pathsLazy) throws Exception {
+
+        contatoEventoService.validateObjectAndIdNull(contatoEvento);
+
+        List<Evento> eventos = repository.getEventosByContatoEvento(contatoEvento);
+
+        if (CollectionUtils.isNotBlank(eventos)) {
+
             for (Evento evento : eventos) {
 
-                if (evento.getContratantes() != null) {
-
-                    evento.getContratantes().size();
-
-                    for (EventoPessoa eventoPessoa : evento.getContratantes()) {
-
-                        if (eventoPessoa.getEvolucaoPreenchimento() != null) {
-                            eventoPessoa.getEvolucaoPreenchimento().getId();
-                        }
-                    }
-                }
-
-                if (evento.getEvolucaoPreenchimento() != null) {
-                    evento.getEvolucaoPreenchimento().getId();
-                }
-                
-                if (evento.getContrato() != null) {
-                    evento.getContrato().getId();
-                }
-
-                if (evento.getOrcamentoEvento() != null) {
-                    evento.getOrcamentoEvento().getId();
-
-                    if (evento.getOrcamentoEvento().getLancamento() != null) {
-                        evento.getOrcamentoEvento().getLancamento().getId();
-                    }
-                }
+                smartLazy(evento, pathsLazy);
 
                 return evento;
             }
@@ -279,49 +283,31 @@ public class EventoService extends BasicService<Evento> {
 
     }
 
-    /**
-     * Vai retornar o evento que pertence a somente esse cliente Carregar em
-     * lazy o contrato
-     *
-     * @param idEvento
-     * @param contratante
-     * @return
-     */
-    public Evento getEventoByIdEventoContratante(Long idEvento, Pessoa contratante) {
+    public Evento findEventoByIdAndContratante(Long idEvento, Pessoa contratante){
+        
+        validateId(idEvento);
 
+        pessoaService.validateObjectAndIdNull(contratante);
+
+        return repository.getEventoByIdEventoContratante(idEvento, contratante);
+        
+    }
+    
+    public Evento findEventoByIdAndContratante(Long idEvento, Pessoa contratante, List<String> pathsLazy){
+        
         validateId(idEvento);
 
         pessoaService.validateObjectAndIdNull(contratante);
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
-
-        if (evento != null) {
-
-            if (evento.getContrato() != null) {
-                evento.getContrato().getId();
-            }
-
-            if (evento.getEvolucaoPreenchimento() != null) {
-                evento.getEvolucaoPreenchimento().getId();
-            }
-
-            if (evento.getContratantes() != null) {
-
-                evento.getContratantes().size();
-
-                for (EventoPessoa eventoPessoa : evento.getContratantes()) {
-
-                    if (eventoPessoa.getEvolucaoPreenchimento() != null) {
-                        eventoPessoa.getEvolucaoPreenchimento().getId();
-                    }
-                }
-            }
-
-        }
-
+        
+        smartLazy(evento, pathsLazy);
+    
         return evento;
-
     }
+    
+    
+   
 
     /**
      * Vai retornar o evento que pertence a somente esse cliente Carregar em
@@ -338,22 +324,8 @@ public class EventoService extends BasicService<Evento> {
         pessoaService.validateObjectAndIdNull(contratante);
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
-
-        if (evento != null) {
-
-            if (evento.getCerimoniaEvento() != null) {
-                evento.getCerimoniaEvento().getId();
-            }
-
-            if (evento.getFestaCerimonia() != null) {
-                evento.getFestaCerimonia().getId();
-            }
-
-            if (evento.getEvolucaoPreenchimento() != null) {
-                evento.getEvolucaoPreenchimento().getId();
-            }
-
-        }
+        
+        smartLazy(evento, Arrays.asList("cerimoniaEvento", "festaCerimonia", "evolucoesPreenchimento"));
 
         return evento;
 
@@ -372,22 +344,8 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = repository.getEntity(idEvento);
 
-        if (evento != null) {
-
-            if (evento.getCerimoniaEvento() != null) {
-                evento.getCerimoniaEvento().getId();
-            }
-
-            if (evento.getFestaCerimonia() != null) {
-                evento.getFestaCerimonia().getId();
-            }
-
-            if (evento.getEvolucaoPreenchimento() != null) {
-                evento.getEvolucaoPreenchimento().getId();
-            }
-
-        }
-
+        smartLazy(evento, Arrays.asList("cerimoniaEvento", "festaCerimonia", "evolucoesPreenchimento"));
+        
         return evento;
 
     }
@@ -408,77 +366,7 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
 
-        if (evento != null) {
-            if (evento.getContratantes() != null) {
-                evento.getContratantes().size();
-            }
-        }
-
-        return evento;
-
-    }
-
-    /**
-     * Vai retornar o evento Carregar em lazy os noivos
-     *
-     * @param idEvento
-     * @return
-     */
-    public Evento findEventoLazyContratante(Long idEvento) {
-
-        validateId(idEvento);
-
-        Evento evento = repository.getEntity(idEvento);
-
-        if (evento != null) {
-            if (evento.getContratantes() != null) {
-                evento.getContratantes().size();
-            }
-        }
-
-        return evento;
-
-    }
-
-    /**
-     * Vai retornar o evento Carregar em lazy os noivos
-     *
-     * @param idEvento
-     * @return
-     */
-    public Evento findEventoLazyContratanteEvolucao(Long idEvento) {
-
-        validateId(idEvento);
-
-        Evento evento = repository.getEntity(idEvento);
-
-        if (evento.getContratantes() != null) {
-
-            evento.getContratantes().size();
-
-            for (EventoPessoa eventoPessoa : evento.getContratantes()) {
-
-                if (eventoPessoa.getEvolucaoPreenchimento() != null) {
-                    eventoPessoa.getEvolucaoPreenchimento().getId();
-                }
-            }
-        }
-
-        if (evento.getEvolucaoPreenchimento() != null) {
-            evento.getEvolucaoPreenchimento().getId();
-        }
-        
-        if (evento.getContrato() != null) {
-            evento.getContrato().getId();
-        }
-
-        if (evento.getOrcamentoEvento() != null) {
-            evento.getOrcamentoEvento().getId();
-
-            if (evento.getOrcamentoEvento().getLancamento() != null) {
-                evento.getOrcamentoEvento().getLancamento().getId();
-            }
-        }
+        smartLazy(evento, Arrays.asList("contratantes"));
 
         return evento;
 
@@ -499,12 +387,8 @@ public class EventoService extends BasicService<Evento> {
         pessoaService.validateObjectAndIdNull(contratante);
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
-
-        if (evento != null) {
-            if (evento.getContratantes() != null) {
-                evento.getContratantes().size();
-            }
-        }
+        
+        smartLazy(evento, Arrays.asList("contratantes"));
 
         return evento;
 
@@ -632,10 +516,10 @@ public class EventoService extends BasicService<Evento> {
         this.repository.edit(evento);
 
     }
-    
+
     @Override
     public void validateId(Long idEntity) {
-        
+
         if (idEntity == null) {
             throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -643,26 +527,25 @@ public class EventoService extends BasicService<Evento> {
         if (idEntity <= 0) {
             throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectNull(Evento entity) {
-        
-         if (entity == null) {
+
+        if (entity == null) {
             throw new GenericException(" Evento nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectAndIdNull(Evento entity) {
-        
+
         validateObjectNull(entity);
-        
+
         validateId(entity.getId());
-        
+
     }
-    
 
 }

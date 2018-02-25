@@ -14,6 +14,7 @@ import br.com.cerimonial.service.EventoPessoaService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,7 +56,7 @@ public class ContratanteEventoMB extends ClienteControl {
 
         try {
 
-            evento = eventoService.findEventoLazyContratante(idEvento);
+            evento = eventoService.findEntityById(idEvento, Arrays.asList("contratantes"));
 
             if (evento != null) {
 
@@ -65,7 +66,7 @@ public class ContratanteEventoMB extends ClienteControl {
 
                     if (contratante != null && contratante.getId() != null) {
                         
-                        contratante = service.findEntityLazy(contratante.getId());
+                        contratante = service.findEntityById(contratante.getId(), Arrays.asList("pessoa", "pessoa.contatosFamiliares","pessoa.endereco", "evolucaoPreenchimento"));
 
                         if (contratante.getPessoa().getEndereco() == null) {
                             contratante.getPessoa().setEndereco(new Endereco());

@@ -13,6 +13,7 @@ import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.CustoEventoRepository;
 import br.com.cerimonial.utils.CollectionUtils;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -97,19 +98,21 @@ public class CustoEventoService extends BasicService<CustoEvento> {
         CustoEvento custo = repository.findCustoEventoByIdEvento(idEvento);
 
         if (custo != null) {
+            
+            smartLazy(custo, Arrays.asList("lancamentos", "lancamentos.parcelas"));
 
-            if (custo.getLancamentos() != null) {
-                
-                custo.getLancamentos().size();
-                
-                for (Lancamento lancamento : custo.getLancamentos()) {
-                    
-                    if (lancamento.getParcelas() != null) {
-                        
-                        lancamento.getParcelas().size();
-                    }
-                }
-            }
+//            if (custo.getLancamentos() != null) {
+//                
+//                custo.getLancamentos().size();
+//                
+//                for (Lancamento lancamento : custo.getLancamentos()) {
+//                    
+//                    if (lancamento.getParcelas() != null) {
+//                        
+//                        lancamento.getParcelas().size();
+//                    }
+//                }
+//            }
         }
         
         return custo;

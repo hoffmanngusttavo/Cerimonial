@@ -50,11 +50,14 @@ public class ModeloEmailService extends BasicService<ModeloEmail>{
     @Override
     public ModeloEmail findEntityById(Long id) throws Exception {
         
+        return repository.getEntity(id);
+    }
+    
+    public ModeloEmail findEntityById(Long id, List<String> paths) throws Exception {
+        
         ModeloEmail entity = repository.getEntity(id);
         
-        if (entity != null && entity.getAnexos() != null) {
-            entity.getAnexos().size();
-        }
+        smartLazy(entity, paths);
         
         return entity;
     }

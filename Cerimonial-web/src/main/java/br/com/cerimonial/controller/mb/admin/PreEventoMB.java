@@ -19,6 +19,7 @@ import br.com.cerimonial.service.EvolucaoPreenchimentoService;
 import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,7 +76,15 @@ public class PreEventoMB extends BasicControl {
 
                 entity = service.findEntityById(id, Arrays.asList("emailsContato"));
 
-                evento = eventoService.getEventoByContatoInicial(entity);
+                List<String> camposLazy = new LinkedList<String>();
+                camposLazy.add("contratantes");
+                camposLazy.add("contratantes.evolucaoPreenchimento");
+                camposLazy.add("evolucoesPreenchimento");
+                camposLazy.add("contrato");
+                camposLazy.add("orcamentoEvento");
+                camposLazy.add("orcamentoEvento.lancamento");
+                
+                evento = eventoService.getEventoByContatoInicial(entity, camposLazy);
                 
                 preencherPorcentagemConcluida(evento);
                 
@@ -93,7 +102,7 @@ public class PreEventoMB extends BasicControl {
         try {
             if (idEvento != null) {
 
-                evento = eventoService.findEventoLazyContratanteEvolucao(idEvento);
+                evento = eventoService.findEntityById(idEvento, Arrays.asList("contratantes"));
 
                 entity = service.getContatoInicialByEvento(evento);
                 

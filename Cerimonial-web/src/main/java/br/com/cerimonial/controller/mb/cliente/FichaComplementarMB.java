@@ -35,7 +35,7 @@ public class FichaComplementarMB extends ClienteControl{
     public void initEvento() {
         try {
             
-            evento = eventoService.getEventoByIdEventoContratante(idEvento, cliente);
+            evento = eventoService.findEventoByIdAndContratante(idEvento, cliente);
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

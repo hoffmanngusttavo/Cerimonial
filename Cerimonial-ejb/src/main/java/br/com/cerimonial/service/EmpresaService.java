@@ -13,6 +13,7 @@ import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EmpresaRepository;
 import br.com.cerimonial.utils.CollectionUtils;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -51,18 +52,22 @@ public class EmpresaService extends BasicService<Empresa> {
     }
 
     public Empresa getEmpresa() throws Exception {
+        
         List<Empresa> empresas = repository.findRangeListagem(1, 0, null, null);
+        
         if (CollectionUtils.isNotBlank(empresas)) {
             
             for (Empresa empresa : empresas) {
                 
-                if(empresa.getPessoa() != null){
-                    empresa.getPessoa().getId();
-                    
-                    if(empresa.getPessoa().getEndereco() != null){
-                        empresa.getPessoa().getEndereco().getId();
-                    }
-                }
+                smartLazy(empresa, Arrays.asList("pessoa", "pessoa.endereco"));
+                
+//                if(empresa.getPessoa() != null){
+//                    empresa.getPessoa().getId();
+//                    
+//                    if(empresa.getPessoa().getEndereco() != null){
+//                        empresa.getPessoa().getEndereco().getId();
+//                    }
+//                }
                 
                 return empresa;
             }

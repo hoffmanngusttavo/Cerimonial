@@ -9,6 +9,8 @@ import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EvolucaoPreenchimento;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.EvolucaoPreenchimentoService;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -42,7 +44,14 @@ public class EventoClienteMB extends ClienteControl {
     public void initEvento() {
         try {
 
-            evento = eventoService.getEventoByIdEventoContratante(idEvento, cliente);
+            List<String> camposLazy = new LinkedList<String>();
+            camposLazy.add("contratos");
+            camposLazy.add("evolucoesPreenchimento");
+            camposLazy.add("contratantes");
+            camposLazy.add("contratantes.evolucaoPreenchimento");
+            
+            evento = eventoService.findEventoByIdAndContratante(idEvento, cliente, camposLazy);
+            
             
             preencherPorcentagemConcluida(evento);
 

@@ -10,13 +10,12 @@ import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Estado;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
-import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.EventoPessoaService;
 import br.com.cerimonial.service.EventoService;
-import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,7 +58,7 @@ public class DadosContratanteEventoMB  extends BasicControl{
 
         try {
 
-           evento = eventoService.findEventoLazyContratante(idEvento);
+           evento = eventoService.findEntityById(idEvento, Arrays.asList("contratantes"));
 
             if (evento != null) {
 
@@ -69,7 +68,7 @@ public class DadosContratanteEventoMB  extends BasicControl{
 
                     if (contratante != null && contratante.getId() != null) {
                         
-                        contratante = service.findEntityLazy(contratante.getId());
+                        contratante = service.findEntityById(contratante.getId(), Arrays.asList("pessoa", "pessoa.contatosFamiliares","pessoa.endereco", "evolucaoPreenchimento"));
 
                         if (contratante.getPessoa().getEndereco() == null) {
                             contratante.getPessoa().setEndereco(new Endereco());

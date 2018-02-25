@@ -11,6 +11,8 @@ import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EventoPessoaRepository;
+import java.util.Arrays;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -58,48 +60,15 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
     @Override
     public EventoPessoa findEntityById(Long id) throws Exception {
 
-        EventoPessoa entity = repository.getEntity(id);
-
-        if (entity != null && entity.getPessoa() != null) {
-
-            if (entity.getPessoa().getContatosFamiliares() != null) {
-                entity.getPessoa().getContatosFamiliares().size();
-            }
-
-            if (entity.getPessoa().getEndereco() != null) {
-                entity.getPessoa().getEndereco().getId();
-            }
-        }
-
-        return entity;
+        return repository.getEntity(id);
+        
     }
+    
+    public EventoPessoa findEntityById(Long id, List<String> pathsLazy) throws Exception {
 
-    /**
-     * Vai carregar objeto em lazy
-     *
-     * @param id
-     * @return
-     * @throws java.lang.Exception
-     */
-    public EventoPessoa findEntityLazy(Long id) throws Exception {
         EventoPessoa entity = repository.getEntity(id);
-
-        if (entity != null) {
-
-            if (entity.getPessoa() != null) {
-                if (entity.getPessoa().getContatosFamiliares() != null) {
-                    entity.getPessoa().getContatosFamiliares().size();
-                }
-
-                if (entity.getPessoa().getEndereco() != null) {
-                    entity.getPessoa().getEndereco().getId();
-                }
-            }
-
-            if (entity.getEvolucaoPreenchimento() != null) {
-                entity.getEvolucaoPreenchimento().getId();
-            }
-        }
+        
+        smartLazy(entity, pathsLazy);
 
         return entity;
     }

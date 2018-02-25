@@ -37,8 +37,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Servico implements Serializable, ModelInterface {
-    @OneToMany(mappedBy = "servico")
-    private List<AtividadeEvento> atividadesEvento;
+    
     
 
     @Id
@@ -59,6 +58,9 @@ public class Servico implements Serializable, ModelInterface {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
+    
+    @OneToMany(mappedBy = "servico")
+    private List<AtividadeEvento> atividadesEvento;
 
     @Override
     public Long getId() {
@@ -104,6 +106,14 @@ public class Servico implements Serializable, ModelInterface {
 
     public void setFornecedores(List<Pessoa> fornecedores) {
         this.fornecedores = fornecedores;
+    }
+
+    public List<AtividadeEvento> getAtividadesEvento() {
+        return atividadesEvento;
+    }
+
+    public void setAtividadesEvento(List<AtividadeEvento> atividadesEvento) {
+        this.atividadesEvento = atividadesEvento;
     }
     
     

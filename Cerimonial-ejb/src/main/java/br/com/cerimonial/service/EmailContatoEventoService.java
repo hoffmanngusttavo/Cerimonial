@@ -12,6 +12,7 @@ import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.EmailContatoEventoRepository;
 import br.com.cerimonial.utils.EmailHelper;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -114,7 +115,7 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
         }
 
         // carregar em lazy os anexoss
-        modeloEmail = modeloEmailService.findEntityById(modeloEmail.getId());
+        modeloEmail = modeloEmailService.findEntityById(modeloEmail.getId(), Arrays.asList("anexos"));
 
         if (entity != null) {
 

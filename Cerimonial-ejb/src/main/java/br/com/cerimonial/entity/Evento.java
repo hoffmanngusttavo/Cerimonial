@@ -286,6 +286,16 @@ public class Evento implements Serializable, ModelInterface {
         return null;
     }
 
+    public List<ContratoEvento> getContratos() {
+        return contratos;
+    }
+
+    public List<EvolucaoPreenchimento> getEvolucoesPreenchimento() {
+        return evolucoesPreenchimento;
+    }
+
+    
+    
     public void setContratos(ContratoEvento contrato) {
 
         if (contrato == null) {

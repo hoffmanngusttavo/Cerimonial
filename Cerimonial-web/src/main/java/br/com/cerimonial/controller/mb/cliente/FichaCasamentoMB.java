@@ -22,6 +22,7 @@ import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,7 +88,7 @@ public class FichaCasamentoMB extends ClienteControl {
                     envolvido = evento.getTipoEnvolvidoEvento(TipoEnvolvidoEvento.getTipoByCode(tipoEnvolvido));
                     
                     if(envolvido != null && envolvido.getId() != null){
-                        envolvido = eventoPessoaService.findEntityLazy(envolvido.getId());
+                        envolvido = eventoPessoaService.findEntityById(envolvido.getId(), Arrays.asList("pessoa", "pessoa.contatosFamiliares","pessoa.endereco", "evolucaoPreenchimento"));
                     }
 
                 }
