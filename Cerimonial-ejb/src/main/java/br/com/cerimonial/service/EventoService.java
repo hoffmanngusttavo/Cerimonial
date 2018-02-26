@@ -76,8 +76,11 @@ public class EventoService extends BasicService<Evento> {
     }
 
     public Evento findEntityById(Long id, List<String> pathLazy) throws Exception {
+        
         Evento entity = repository.getEntity(id);
+        
         smartLazy(entity, pathLazy);
+        
         return entity;
     }
 
@@ -308,29 +311,6 @@ public class EventoService extends BasicService<Evento> {
     
     
    
-
-    /**
-     * Vai retornar o evento que pertence a somente esse cliente Carregar em
-     * lazy o cerimonia, festa, tipo evento
-     *
-     * @param idEvento
-     * @param contratante
-     * @return
-     */
-    public Evento getEventoLocalizacao(Long idEvento, Pessoa contratante) {
-
-        validateId(idEvento);
-
-        pessoaService.validateObjectAndIdNull(contratante);
-
-        Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
-        
-        smartLazy(evento, Arrays.asList("cerimoniaEvento", "festaCerimonia", "evolucoesPreenchimento"));
-
-        return evento;
-
-    }
-
     /**
      * Vai retornar o evento que pertence a somente esse cliente Carregar em
      * lazy o cerimonia, festa, tipo evento
@@ -346,50 +326,6 @@ public class EventoService extends BasicService<Evento> {
 
         smartLazy(evento, Arrays.asList("cerimoniaEvento", "festaCerimonia", "evolucoesPreenchimento"));
         
-        return evento;
-
-    }
-
-    /**
-     * Vai retornar o evento que pertence a somente esse cliente Carregar em
-     * lazy os noivos
-     *
-     * @param idEvento
-     * @param contratante
-     * @return
-     */
-    public Evento getEventoCasamento(Long idEvento, Pessoa contratante) {
-
-        validateId(idEvento);
-
-        pessoaService.validateObjectAndIdNull(contratante);
-
-        Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
-
-        smartLazy(evento, Arrays.asList("contratantes"));
-
-        return evento;
-
-    }
-
-    /**
-     * Vai retornar o evento que pertence a somente esse cliente Carregar em
-     * lazy os noivos
-     *
-     * @param idEvento
-     * @param contratante
-     * @return
-     */
-    public Evento getEventoAniversario(Long idEvento, Pessoa contratante) {
-
-        validateId(idEvento);
-
-        pessoaService.validateObjectAndIdNull(contratante);
-
-        Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
-        
-        smartLazy(evento, Arrays.asList("contratantes"));
-
         return evento;
 
     }
@@ -433,7 +369,7 @@ public class EventoService extends BasicService<Evento> {
             throw new GenericException("Motivo de cancelamento não deve ser vazio", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        Evento evento = findEntityById(idEvento);
+        Evento evento = findEntityById(idEvento, Arrays.asList("contratantes", "contratantes.usuariosClientes"));
 
         List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratanteUsuario());
 //        
@@ -463,7 +399,7 @@ public class EventoService extends BasicService<Evento> {
 
         validateObjectAndIdNull(evento);
 
-        evento = findEntityById(evento.getId());
+        evento = findEntityById(evento.getId(), Arrays.asList("orcamentoEvento", "orcamentoEvento.contatoEvento"));
 
         Pessoa cliente = pessoaService.criarClienteFromContato(evento.getOrcamentoEvento());
         pessoaService.saveCliente(cliente);
@@ -499,7 +435,7 @@ public class EventoService extends BasicService<Evento> {
 
         validateObjectAndIdNull(evento);
 
-        evento = findEntityById(evento.getId());
+        evento = findEntityById(evento.getId(), Arrays.asList("contratantes", "contratantes.usuariosClientes"));
 
         List<Evento> eventosAtivos = findEventosAtivosCliente(evento.getContratanteUsuario());
 //        

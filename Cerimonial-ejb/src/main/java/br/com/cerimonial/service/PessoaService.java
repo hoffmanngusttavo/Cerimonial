@@ -15,6 +15,7 @@ import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CerimonialUtils;
 import br.com.cerimonial.utils.CollectionUtils;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,7 +42,7 @@ import org.apache.commons.lang.StringUtils;
 public class PessoaService extends BasicService<Pessoa> {
 
     private PessoaRepository repository;
-    
+
     @EJB
     private UsuarioService usuarioService;
     @EJB
@@ -57,19 +58,19 @@ public class PessoaService extends BasicService<Pessoa> {
 
     @Override
     public Pessoa findEntityById(Long id) throws Exception {
-        
+
+        return repository.getEntity(id);
+
+    }
+
+    public Pessoa findEntityById(Long id, List<String> pathsLazy) throws Exception {
+
         Pessoa entity = repository.getEntity(id);
 
-        if (entity != null) {
-            
-            if (entity.getEndereco() != null) {
-                entity.getEndereco().getId();
-            }
-        }
+        smartLazy(entity, pathsLazy);
 
         return entity;
     }
-
 
     @Override
     public synchronized Pessoa save(Pessoa entity) throws Exception {
@@ -102,9 +103,8 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         return 0;
     }
-    
-    
-     public int countListagem(HashMap<String, Object> filter) {
+
+    public int countListagem(HashMap<String, Object> filter) {
         try {
             if (filter == null) {
                 filter = new HashMap<>();
@@ -128,8 +128,6 @@ public class PessoaService extends BasicService<Pessoa> {
         }
         return null;
     }
-    
-    
 
     //-----------Clientes----------------------
     public Pessoa saveCliente(Pessoa entity) throws Exception {
@@ -141,7 +139,7 @@ public class PessoaService extends BasicService<Pessoa> {
         }
 
         entity.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
-        
+
         if (entity.getId() == null) {
             return repository.create(entity);
         } else {
@@ -159,7 +157,7 @@ public class PessoaService extends BasicService<Pessoa> {
     public Pessoa editCliente(Pessoa entity) throws Exception {
 
         validateObjectNull(entity);
-        
+
         isValidCliente(entity);
 
         if (entity.getId() == null) {
@@ -181,24 +179,22 @@ public class PessoaService extends BasicService<Pessoa> {
         validateObjectNull(entity);
 
         entity.setId(null);
-        
+
         return saveCliente(entity);
     }
 
-   
-    
-     /**
-      * Retorna o cliente de acordo com o usuario logado
+    /**
+     * Retorna o cliente de acordo com o usuario logado
+     *
      * @param usuarioLogado
-     * @return 
-      */
-     public Pessoa getClienteByUsuario(Usuario usuarioLogado) {
-        
-         usuarioService.validateObjectAndIdNull(usuarioLogado);
-         
+     * @return
+     */
+    public Pessoa getClienteByUsuario(Usuario usuarioLogado) {
+
+        usuarioService.validateObjectAndIdNull(usuarioLogado);
+
         return repository.getClienteByUsuario(usuarioLogado);
     }
-    
 
     //-----------Fornecedores----------------------
     public Pessoa saveFornecedor(Pessoa entity) throws Exception {
@@ -247,17 +243,17 @@ public class PessoaService extends BasicService<Pessoa> {
     public Pessoa criarClienteFromContato(OrcamentoEvento entity) throws Exception {
 
         orcamentoEventoService.validateObjectAndIdNull(entity);
-        
+
         contatoEventoService.validateObjectNull(entity.getContatoEvento());
-        
+
         Pessoa cliente = this.getPessoaByEmail(entity.getContatoEvento().getEmailContato());
 
         try {
-            
+
             if (cliente == null) {
                 cliente = new Pessoa(TipoEnvolvido.CLIENTE, TipoPessoa.FISICA);
             }
-            
+
             cliente.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
             cliente.setEmail(entity.getContatoEvento().getEmailContato());
             cliente.setNome(entity.getContatoEvento().getNomeContato());
@@ -266,63 +262,51 @@ public class PessoaService extends BasicService<Pessoa> {
             cliente.setAtivo(true);
 
         } catch (Exception e) {
-            
+
             throw new GenericException("Não Foi possivel criar um cliente a partir de um contato", ErrorCode.BAD_REQUEST.getCode());
         }
         return cliente;
     }
 
-    
-    /** 
-     * Vai validar se o email é válido
-     * Vai buscar uma pessoa pelo email
+    /**
+     * Vai validar se o email é válido Vai buscar uma pessoa pelo email
+     *
      * @param email
-     * @return 
+     * @return
      */
     private Pessoa getPessoaByEmail(String emailContato) throws Exception {
-        
+
         CerimonialUtils.validarEmail(emailContato);
-        
+
         return repository.getPessoaByEmail(emailContato);
     }
-    
-    
-      /**
-     * Vai buscar uma pessoa pelo cpf
-     * carregando em lazy os dados de contatos e endereço
+
+    /**
+     * Vai buscar uma pessoa pelo cpf carregando em lazy os dados de contatos e
+     * endereço
+     *
      * @param cpf
-     * @return 
+     * @return
      */
     public Pessoa findPessoaByCpf(String cpf) {
-        
+
         if (StringUtils.isBlank(cpf)) {
             throw new GenericException("Preencha um cpf válido", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         Pessoa pessoa = repository.findPessoaByCpf(cpf);
         
-        if(pessoa != null){
-            if(pessoa.getContatosFamiliares() != null){
-                pessoa.getContatosFamiliares().size();
-            }
-            if(pessoa.getEndereco()!= null){
-                pessoa.getEndereco().getId();
-            }
-        }
-        
+        smartLazy(pessoa, Arrays.asList("contatosFamiliares", "endereco"));
+
         return pessoa;
     }
-    
-   
 
-
-    
     public boolean isValidCliente(Pessoa entity) throws Exception {
 
         if (entity == null) {
             throw new GenericException("Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         if (StringUtils.isBlank(entity.getNome())) {
             throw new GenericException("Preencha o nome corretamente.", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -335,35 +319,30 @@ public class PessoaService extends BasicService<Pessoa> {
         if (StringUtils.isBlank(entity.getTelefoneResidencial()) && StringUtils.isBlank(entity.getTelefoneCelular())) {
             throw new GenericException("Preencha pelo menos um telefone.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         CerimonialUtils.validarEmail(entity.getEmail());
-        
+
         return true;
 
     }
 
     /**
-     * Vai retornar o Contratante do evento
-     * carregar em lazy o endereço
+     * Vai retornar o Contratante do evento carregar em lazy o endereço
+     *
      * @param idEvento
-     * @return 
+     * @return
      */
     public List<Pessoa> findContratantesByEventoId(Long idEvento) {
 
         validateId(idEvento);
-        
+
         List<Pessoa> contratantes = repository.findContratantesByEventoId(idEvento);
 
         if (CollectionUtils.isNotBlank(contratantes)) {
 
             for (Pessoa contratante : contratantes) {
-                if (contratante.getEndereco() != null) {
-                    contratante.getEndereco().getId();
-                }
                 
-                if (contratante.getContatosFamiliares() != null) {
-                    contratante.getContatosFamiliares().size();
-                }
+                smartLazy(contratante, Arrays.asList("contatosFamiliares", "endereco"));
             }
 
         }
@@ -373,23 +352,22 @@ public class PessoaService extends BasicService<Pessoa> {
 
     /**
      * Método responsavel por inativar Pessoa
+     *
      * @param contratante
      */
     public void inativarPessoa(Pessoa contratante) {
-        
-        validateObjectNull(contratante);
-        
-        contratante.setAtivo(false);
-        
-        repository.edit(contratante);
-        
-    }
 
-    
+        validateObjectNull(contratante);
+
+        contratante.setAtivo(false);
+
+        repository.edit(contratante);
+
+    }
 
     @Override
     public void validateId(Long idEntity) {
-        
+
         if (idEntity == null) {
             throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -397,25 +375,25 @@ public class PessoaService extends BasicService<Pessoa> {
         if (idEntity <= 0) {
             throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectNull(Pessoa entity) {
-        
-         if (entity == null) {
+
+        if (entity == null) {
             throw new GenericException(" Pessoa nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectAndIdNull(Pessoa entity) {
-        
+
         validateObjectNull(entity);
-        
+
         validateId(entity.getId());
-        
+
     }
 
 }

@@ -5,7 +5,6 @@
  */
 package br.com.cerimonial.service;
 
-import br.com.cerimonial.entity.Cidade;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.repository.UsuarioRepository;

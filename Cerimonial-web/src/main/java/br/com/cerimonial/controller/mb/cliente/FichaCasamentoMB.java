@@ -79,7 +79,7 @@ public class FichaCasamentoMB extends ClienteControl {
     public void initEvento() {
         try {
 
-            evento = eventoService.getEventoCasamento(idEvento, cliente);
+            evento = eventoService.findEventoByIdAndContratante(idEvento, cliente, Arrays.asList("contratantes"));
 
             if (evento != null) {
 

@@ -20,6 +20,7 @@ import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,7 +76,7 @@ public class FichaAniversarianteMB extends ClienteControl {
     public void initEvento() {
         try {
 
-            evento = eventoService.getEventoAniversario(idEvento, cliente);
+            evento = eventoService.findEventoByIdAndContratante(idEvento, cliente, Arrays.asList("contratantes"));
 
             if (evento != null) {
 

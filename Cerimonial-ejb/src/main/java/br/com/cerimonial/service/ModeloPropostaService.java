@@ -13,6 +13,7 @@ import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,9 +53,7 @@ public class ModeloPropostaService extends BasicService<ModeloProposta> {
         
         ModeloProposta modeloProposta = repository.getEntity(id);
         
-        if (modeloProposta != null && modeloProposta.getAnexos() != null) {
-            modeloProposta.getAnexos().size();
-        }
+        smartLazy(modeloProposta, Arrays.asList("anexos"));
         
         return modeloProposta;
     }

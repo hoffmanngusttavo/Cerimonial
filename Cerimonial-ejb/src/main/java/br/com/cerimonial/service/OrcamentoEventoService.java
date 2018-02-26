@@ -23,6 +23,7 @@ import br.com.cerimonial.utils.EmailHelper;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,22 +96,8 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
         validateId(idEvento);
 
         OrcamentoEvento orcamento = repository.findOrcamentoByEventoId(idEvento);
-
-        if (orcamento != null) {
-
-            if (orcamento.getEvento() != null) {
-                orcamento.getEvento().getId();
-            }
-
-            if (orcamento.getAnexos() != null) {
-                orcamento.getAnexos().size();
-            }
-
-            if (orcamento.getModeloProposta() != null) {
-                orcamento.getModeloProposta().getId();
-            }
-
-        }
+        
+        smartLazy(orcamento, Arrays.asList("evento", "anexos", "modeloProposta"));
 
         return orcamento;
 
@@ -124,7 +111,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
      * @return
      * @throws java.lang.Exception
      */
-    public OrcamentoEvento getOrcamentoContratante(Long idEvento, Pessoa contratante) throws Exception {
+    public OrcamentoEvento findOrcamentoByIdEventoAndContratante(Long idEvento, Pessoa contratante) throws Exception {
 
         validateId(idEvento);
 
@@ -132,21 +119,7 @@ public class OrcamentoEventoService extends BasicService<OrcamentoEvento> {
 
         OrcamentoEvento orcamento = repository.getOrcamentoContratante(idEvento, contratante);
 
-        if (orcamento != null) {
-
-            if (orcamento.getEvento() != null) {
-                orcamento.getEvento().getId();
-            }
-
-            if (orcamento.getAnexos() != null) {
-                orcamento.getAnexos().size();
-            }
-
-            if (orcamento.getModeloProposta() != null) {
-                orcamento.getModeloProposta().getId();
-            }
-
-        }
+        smartLazy(orcamento, Arrays.asList("evento", "anexos", "modeloProposta"));
 
         return orcamento;
 

@@ -41,7 +41,7 @@ public class OrcamentoEventoClienteMB extends ClienteControl{
 
         try {
             
-            orcamento = service.getOrcamentoContratante(idEvento, cliente);
+            orcamento = service.findOrcamentoByIdEventoAndContratante(idEvento, cliente);
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

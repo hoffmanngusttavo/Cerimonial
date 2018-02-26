@@ -11,6 +11,7 @@ import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ParcelaRepository;
 import br.com.cerimonial.utils.CollectionUtils;
+import br.com.cerimonial.utils.DateUtils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,12 +104,10 @@ public class ParcelaService extends BasicService<Parcela> {
     }
 
     public List<Parcela> findParcelasAPagarEvento(int max) {
-
         try {
-
-            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
-
-            return repository.findParcelasAPagarEvento(max, sdfPi.format(new Date()));
+            
+            return repository.findParcelasAPagarEvento(max, DateUtils.formatDate(new Date(), DateUtils.format_dd_MM_yyyy_ptBR));
+        
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
@@ -119,9 +118,7 @@ public class ParcelaService extends BasicService<Parcela> {
     public List<Parcela> findParcelasVencidasEvento(int max) {
         try {
 
-            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
-
-            return repository.findParcelasVencidasEvento(max, sdfPi.format(new Date()));
+            return repository.findParcelasVencidasEvento(max, DateUtils.formatDate(new Date(), DateUtils.format_dd_MM_yyyy_ptBR));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -134,9 +131,7 @@ public class ParcelaService extends BasicService<Parcela> {
         
          try {
 
-            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
-
-            return repository.findParcelasAPagarEmpresa(max, sdfPi.format(new Date()));
+            return repository.findParcelasAPagarEmpresa(max, DateUtils.formatDate(new Date(), DateUtils.format_dd_MM_yyyy_ptBR));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -150,9 +145,7 @@ public class ParcelaService extends BasicService<Parcela> {
         
         try {
 
-            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
-
-            return repository.findParcelasAReceberEmpresa(max, sdfPi.format(new Date()));
+            return repository.findParcelasAReceberEmpresa(max, DateUtils.formatDate(new Date(), DateUtils.format_dd_MM_yyyy_ptBR));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -166,9 +159,7 @@ public class ParcelaService extends BasicService<Parcela> {
         
         try {
 
-            SimpleDateFormat sdfPi = new SimpleDateFormat("dd/MM/yyyy");
-
-            return repository.findParcelasVencidasEmpresa(max, sdfPi.format(new Date()));
+            return repository.findParcelasVencidasEmpresa(max, DateUtils.formatDate(new Date(), DateUtils.format_dd_MM_yyyy_ptBR));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

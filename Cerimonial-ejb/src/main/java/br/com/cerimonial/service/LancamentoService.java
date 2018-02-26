@@ -19,6 +19,7 @@ import br.com.cerimonial.service.utils.EmpresaCache;
 import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.DateUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -128,14 +129,8 @@ public class LancamentoService extends BasicService<Lancamento> {
 
         Lancamento lancamento = repository.findLancamentoByOrcamentoId(idOrcamento);
 
-        if (lancamento != null) {
-
-            if (lancamento.getParcelas() != null) {
-                lancamento.getParcelas().size();
-            }
-
-        }
-
+        smartLazy(lancamento, Arrays.asList("parcelas"));
+        
         return lancamento;
     }
 

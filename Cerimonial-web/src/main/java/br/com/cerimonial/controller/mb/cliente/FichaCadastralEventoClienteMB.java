@@ -12,6 +12,7 @@ import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.service.EnderecoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +52,7 @@ public class FichaCadastralEventoClienteMB extends ClienteControl{
     public void initEvento() {
         try {
             
-            evento = eventoService.getEventoLocalizacao(idEvento, cliente);
+            evento = eventoService.findEventoByIdAndContratante(idEvento, cliente, Arrays.asList("cerimoniaEvento", "festaCerimonia", "evolucoesPreenchimento"));
            
             if(evento.isCategoriaCasamento() && evento.getCerimoniaEvento() == null){
                 evento.setCerimoniaEvento(new CerimoniaEvento());
