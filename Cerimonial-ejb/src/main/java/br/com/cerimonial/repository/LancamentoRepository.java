@@ -20,7 +20,7 @@ public class LancamentoRepository extends AbstractRepository<Lancamento> {
         super(entityManager, Lancamento.class);
     }
 
-    public Lancamento findLancamentoByOrcamentoId(Long idOrcamento) {
+    public Lancamento findLancamentoByServicoPrestadoId(Long idOrcamento) {
 
         StringBuilder sb = new StringBuilder();
 

@@ -8,60 +8,6 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 
-    <h:form id="formDialog"
-            prependId="false">
-        <div class="modal fade" 
-             id="removeDialogVar" tabindex="-1" 
-             role="dialog" aria-labelledby="myModal" 
-             aria-hidden="true" data-keyboard="false" 
-             data-backdrop="static">
-            <div class="modal-dialog">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">Deseja cancelar esse evento ?</h4>
-                    </div>
-                    <div class="modal-body col-lg-12 col-md-12">
-
-                        <div class="form-group col-md-12">
-                            <p:inputTextarea id="inptMotivoCancelamento" 
-                                             value="#{PreEventoMB.evento.motivoCancelamento}" 
-                                             placeholder="Motivo de cancelamento"
-                                             required="true"
-                                             class="form-control"
-                                             label="Insta"/>
-                        </div>
-                    </div>
-                    <h:panelGroup layout="block" styleClass="modal-footer">
-                        <p:commandLink value="Fechar"
-                                       immediate="true" 
-                                       styleClass="btn btn-default" 
-                                       oncomplete="$('#removeDialogVar').modal('hide');" />
-
-                        <p:commandLink value="Confirmar" 
-                                       actionListener="#{PreEventoMB.cancelarEvento()}"
-                                       styleClass="btn btn-primary"
-                                       update=":form:gridSituacao"
-                                       process="@this,formDialog:inptMotivoCancelamento" 
-                                       onstart="PF('statusDialog').show();"
-                                       oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
-                    </h:panelGroup>
-                </div>
-            </div>
-        </div>
-    </h:form>
-
-
-
-
-
-
-
-
-
 
     <h:form prependId="false"
             enctype="multipart/form-data"
@@ -100,7 +46,7 @@
 
                                         <tbody>
 
-                                            <ui:repeat value="#{PreEventoMB.entity.emailsContato}"
+                                            <ui:repeat value="#{PreEventoMB.preEvento.emailsContatoEvento}"
                                                        var="email"
                                                        id="listaEmails"
                                                        varStatus="indice">

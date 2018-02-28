@@ -5,7 +5,7 @@
  */
 package br.com.cerimonial.service;
 
-import br.com.cerimonial.entity.OrcamentoEvento;
+import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.enums.TipoEnvolvido;
@@ -45,8 +45,7 @@ public class PessoaService extends BasicService<Pessoa> {
 
     @EJB
     private UsuarioService usuarioService;
-    @EJB
-    private OrcamentoEventoService orcamentoEventoService;
+    
     @EJB
     private ContatoEventoService contatoEventoService;
 
@@ -240,13 +239,11 @@ public class PessoaService extends BasicService<Pessoa> {
      * @return
      * @throws java.lang.Exception
      */
-    public Pessoa criarClienteFromContato(OrcamentoEvento entity) throws Exception {
+    public Pessoa criarClienteFromContato(ContatoEvento entity) throws Exception {
 
-        orcamentoEventoService.validateObjectAndIdNull(entity);
+        contatoEventoService.validateObjectNull(entity);
 
-        contatoEventoService.validateObjectNull(entity.getContatoEvento());
-
-        Pessoa cliente = this.getPessoaByEmail(entity.getContatoEvento().getEmailContato());
+        Pessoa cliente = this.getPessoaByEmail(entity.getEmailContato());
 
         try {
 
@@ -255,10 +252,10 @@ public class PessoaService extends BasicService<Pessoa> {
             }
 
             cliente.setTipoEnvolvido(TipoEnvolvido.CLIENTE);
-            cliente.setEmail(entity.getContatoEvento().getEmailContato());
-            cliente.setNome(entity.getContatoEvento().getNomeContato());
-            cliente.setTelefoneResidencial(entity.getContatoEvento().getTelefonePrincipal());
-            cliente.setTelefoneCelular(entity.getContatoEvento().getTelefoneSecundario());
+            cliente.setEmail(entity.getEmailContato());
+            cliente.setNome(entity.getNomeContato());
+            cliente.setTelefoneResidencial(entity.getTelefonePrincipal());
+            cliente.setTelefoneCelular(entity.getTelefoneSecundario());
             cliente.setAtivo(true);
 
         } catch (Exception e) {

@@ -21,13 +21,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.DecimalMin;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.envers.Audited;
 
@@ -37,56 +37,47 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-public class EmailContatoEvento implements Serializable, ModelInterface {
+public class ServicoPrestadoEvento implements Serializable, ModelInterface {
     
     
-     @Id
-    @GeneratedValue(generator = "GENERATE_EmailContatoEvento", strategy = GenerationType.AUTO)
-    @SequenceGenerator(name = "GENERATE_EmailContatoEvento", sequenceName = "EmailContatoEvento_pk_seq", allocationSize = 1)
+
+    @Id
+    @GeneratedValue(generator = "GENERATE_ServicoPrestadoEvento", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "GENERATE_ServicoPrestadoEvento", sequenceName = "ServicoPrestadoEvento_pk_seq", allocationSize = 1)
     private Long id;
-    
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 2, max = 255, message = "Nome deve estar entre 2 a 255 caracteres")
-    private String tituloEmail;
-    
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 10, message = "Destinatários deve ter no mínimo 10 caracteres")
-    private String destinatarios;
+
+    @DecimalMin("0.0")
+    @Column(precision = 16, scale = 2)
+    private Double valorProposta;
+
+    @Column(precision = 16, scale = 2)
+    private double valorAlterado = -1;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ModeloProposta modeloProposta;
+
+    @Column(columnDefinition = "TEXT")
+    private String proposta;
     
     @Column(columnDefinition = "TEXT")
-    private String corpoEmail;
-    
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Arquivo> anexos;
-    
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dataCadastro;
-    
+    private String descricao;
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<Arquivo> anexos;
+
+    @OneToOne(mappedBy = "servicoPrestadoEvento")
+    private Lancamento lancamento;
     
-    @ManyToOne
-    private ContatoEvento contatoEvento;
-    
-    @ManyToOne
-    private ModeloEmail modeloEmail;
-    
-    @ManyToOne
+    @OneToOne(mappedBy = "servicoPrestadoEvento")
     private PreEvento preEvento;
-
-    public EmailContatoEvento(PreEvento preEvento) {
-        this.preEvento = preEvento;
-    }
-
-    public EmailContatoEvento() {
-    }
-
-      @Override
+    
+    @Override
     public Long getId() {
         return id;
     }
@@ -116,71 +107,62 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
         this.modificadoPor = modificadoPor;
     }
 
-    public String getTituloEmail() {
-        return tituloEmail;
+    public Double getValorProposta() {
+        return valorProposta;
     }
 
-    public void setTituloEmail(String tituloEmail) {
-        this.tituloEmail = tituloEmail;
+    public void setValorProposta(Double valorProposta) {
+        this.valorProposta = valorProposta;
     }
 
-    public String getDestinatarios() {
-        return destinatarios;
+    public double getValorAlterado() {
+        return valorAlterado;
     }
 
-    public void setDestinatarios(String destinatarios) {
-        this.destinatarios = destinatarios;
+    public void setValorAlterado(double valorAlterado) {
+        this.valorAlterado = valorAlterado;
     }
 
-    public String getCorpoEmail() {
-        return corpoEmail;
+    public ModeloProposta getModeloProposta() {
+        return modeloProposta;
     }
 
-    public void setCorpoEmail(String corpoEmail) {
-        this.corpoEmail = corpoEmail;
+    public void setModeloProposta(ModeloProposta modeloProposta) {
+        this.modeloProposta = modeloProposta;
     }
 
-    public ContatoEvento getContatoEvento() {
-        return contatoEvento;
+    public String getProposta() {
+        return proposta;
     }
 
-    public void setContatoEvento(ContatoEvento contatoEvento) {
-        this.contatoEvento = contatoEvento;
+    public void setProposta(String proposta) {
+        this.proposta = proposta;
     }
 
-    public ModeloEmail getModeloEmail() {
-        return modeloEmail;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setModeloEmail(ModeloEmail modeloEmail) {
-        this.modeloEmail = modeloEmail;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public List<Arquivo> getAnexos() {
         return anexos;
     }
 
-    public Date getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(Date dataCadastro) {
-        this.dataCadastro = dataCadastro;
+    public void setAnexos(List<Arquivo> anexos) {
+        this.anexos = anexos;
     }
     
-    public void setArquivo(Arquivo file) {
-       anexos =  anexos = new ArrayList<>();
-       adicionarAnexo(file);
-    }
-
-    public Arquivo getArquivo() {
+     public Arquivo getArquivo() {
         if (CollectionUtils.isNotBlank(anexos)) {
             return anexos.get(0);
         }
         return null;
     }
-    
-     public void adicionarAnexo(Arquivo arquivo) {
+
+    public void adicionarAnexo(Arquivo arquivo) {
         if (arquivo != null) {
 
             if (anexos == null) {
@@ -189,6 +171,37 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
             anexos.add(arquivo);
         }
     }
+    
+    public void setArquivo(Arquivo file) {
+        anexos = anexos = new ArrayList<>();
+        adicionarAnexo(file);
+    }
+
+    public double getValorFinal(){
+        if(valorAlterado > -1){
+            return valorAlterado;
+        }else{
+            return valorProposta;
+        }
+    }
+
+    public Lancamento getLancamento() {
+        return lancamento;
+    }
+
+    public void setLancamento(Lancamento lancamento) {
+        this.lancamento = lancamento;
+    }
+
+    public PreEvento getPreEvento() {
+        return preEvento;
+    }
+
+    public void setPreEvento(PreEvento preEvento) {
+        this.preEvento = preEvento;
+    }
+    
+    
 
     @PrePersist
     @Override
@@ -234,10 +247,10 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EmailContatoEvento)) {
+        if (!(object instanceof ServicoPrestadoEvento)) {
             return false;
         }
-        EmailContatoEvento other = (EmailContatoEvento) object;
+        ServicoPrestadoEvento other = (ServicoPrestadoEvento) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -246,7 +259,7 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
 
     @Override
     public String toString() {
-        return "br.com.cerimonial.entity.EmailContatoEvento[ id=" + id + " ]";
+        return "br.com.cerimonial.entity.ServicoPrestadoEvento[ id=" + id + " ]";
     }
-    
+
 }

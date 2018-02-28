@@ -8,13 +8,11 @@ package br.com.cerimonial.controller.mb.admin;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
-import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Servico;
 import br.com.cerimonial.enums.FormaPagamento;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.LancamentoService;
-import br.com.cerimonial.service.OrcamentoEventoService;
 import br.com.cerimonial.service.PessoaService;
 import br.com.cerimonial.service.ServicoService;
 import java.util.List;
@@ -29,22 +27,19 @@ import javax.faces.context.FacesContext;
  *
  * @author hoffmann
  */
-@ManagedBean(name = "LancamentoOrcamentoMB")
+@ManagedBean(name = "LancamentoServicoPrestadoMB")
 @ViewScoped
-public class LancamentoOrcamentoMB extends BasicControl {
-
-    protected Long idOrcamento;
-    protected OrcamentoEvento orcamentoEvento;
-    protected Evento evento;
-    protected Lancamento entity;
-
-    protected List<Pessoa> contratantes;
-    protected List<Servico> servicos;
-    protected List<FormaPagamento> formasPagamentos;
-
-    @EJB
-    protected OrcamentoEventoService orcamentoService;
-
+public class LancamentoServicoPrestadoMB extends BasicControl{
+    
+    
+    private Long idServicoPrestado;
+    private Evento evento;
+    private Lancamento entity;
+    
+    private List<Pessoa> contratantes;
+    private List<Servico> servicos;
+    private List<FormaPagamento> formasPagamentos;
+    
     @EJB
     protected EventoService eventoService;
 
@@ -56,8 +51,9 @@ public class LancamentoOrcamentoMB extends BasicControl {
 
     @EJB
     protected ServicoService servicoService;
-
-    public LancamentoOrcamentoMB() {
+    
+    
+    public LancamentoServicoPrestadoMB() {
 
     }
 
@@ -66,24 +62,19 @@ public class LancamentoOrcamentoMB extends BasicControl {
      */
     public void init() {
 
-        if (idOrcamento != null) {
+        if (idServicoPrestado != null) {
             try {
 
-                entity = service.findLancamentoByOrcamentoId(idOrcamento);
+                entity = service.findLancamentoByServicoPrestadoId(idServicoPrestado);
 
-                evento = eventoService.findEventoByIdOrcamento(idOrcamento);
+                evento = eventoService.findEventoByServicoPrestadoId(idServicoPrestado);
 
                 contratantes = pessoaService.findContratantesByEventoId(evento.getId());
 
                 if (entity == null) {
 
-                    orcamentoEvento = orcamentoService.findEntityById(idOrcamento);
+                    entity = service.criarNovoLancamentoSaidaOrcamento(contratantes, evento);
 
-                    entity = service.criarNovoLancamentoSaidaOrcamento(orcamentoEvento, contratantes, evento);
-
-                }else{
-                    
-                    orcamentoEvento = entity.getOrcamentoEvento();
                 }
 
                 servicos = servicoService.findAll();
@@ -98,7 +89,8 @@ public class LancamentoOrcamentoMB extends BasicControl {
         }
 
     }
-
+    
+    
     public void atualizarNumeroParcelas() {
 
         entity = service.atualizarNumeroParcelas(entity.getNumeroParcelas(), entity);
@@ -108,15 +100,15 @@ public class LancamentoOrcamentoMB extends BasicControl {
     public String save() {
         try {
             
-            service.saveLancamentoOrcamento(entity);
+            service.saveLancamentoServicoPrestado(entity);
 
             createFacesInfoMessage("Dados gravados com sucesso!");
 
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-            return "/intranet/admin/operacional/pre-evento/partials/lancamento-orcamento.xhtml?idOrcamento=" + orcamentoEvento.getId() + "&faces-redirect=true";
+            return "/intranet/admin/operacional/pre-evento/index.xhtml?idPreEvento=" + evento.getPreEvento().getId() + "&faces-redirect=true";
         } catch (Exception ex) {
-            Logger.getLogger(LancamentoOrcamentoMB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());
         } finally {
             scrollTopMessage();
@@ -124,20 +116,12 @@ public class LancamentoOrcamentoMB extends BasicControl {
         return null;
     }
 
-    public Long getIdOrcamento() {
-        return idOrcamento;
+    public Long getIdServicoPrestado() {
+        return idServicoPrestado;
     }
 
-    public void setIdOrcamento(Long idOrcamento) {
-        this.idOrcamento = idOrcamento;
-    }
-
-    public Lancamento getEntity() {
-        return entity;
-    }
-
-    public void setEntity(Lancamento entity) {
-        this.entity = entity;
+    public void setIdServicoPrestado(Long idServicoPrestado) {
+        this.idServicoPrestado = idServicoPrestado;
     }
 
     public Evento getEvento() {
@@ -148,16 +132,39 @@ public class LancamentoOrcamentoMB extends BasicControl {
         this.evento = evento;
     }
 
+    public Lancamento getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Lancamento entity) {
+        this.entity = entity;
+    }
+
     public List<Pessoa> getContratantes() {
         return contratantes;
+    }
+
+    public void setContratantes(List<Pessoa> contratantes) {
+        this.contratantes = contratantes;
     }
 
     public List<Servico> getServicos() {
         return servicos;
     }
 
+    public void setServicos(List<Servico> servicos) {
+        this.servicos = servicos;
+    }
+
     public List<FormaPagamento> getFormasPagamentos() {
         return formasPagamentos;
     }
 
+    public void setFormasPagamentos(List<FormaPagamento> formasPagamentos) {
+        this.formasPagamentos = formasPagamentos;
+    }
+    
+    
+    
+    
 }

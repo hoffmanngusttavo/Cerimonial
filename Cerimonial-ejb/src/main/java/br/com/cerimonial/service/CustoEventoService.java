@@ -8,7 +8,6 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
-import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.CustoEventoRepository;
@@ -43,9 +42,6 @@ public class CustoEventoService extends BasicService<CustoEvento> {
     @EJB
     protected EventoService eventoService;
     
-    @EJB
-    protected OrcamentoEventoService orcamentoEventoService;
-
     @PostConstruct
     @PostActivate
     private void postConstruct() {
@@ -120,13 +116,10 @@ public class CustoEventoService extends BasicService<CustoEvento> {
 
     /**
      * Só vai instanciar um novo custo de evento
-     * @param orcamento
      * @param evento
      * @return 
      */
-    public CustoEvento criarCustoEvento(OrcamentoEvento orcamento, Evento evento) {
-        
-        orcamentoEventoService.validateObjectNull(orcamento);
+    public CustoEvento criarCustoEvento(Evento evento) {
         
         eventoService.validateObjectNull(evento);
         

@@ -45,6 +45,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class ModeloProposta implements Serializable, ModelInterface {
+    
 
     @Id
     @GeneratedValue(generator = "GENERATE_ModeloProposta", strategy = GenerationType.AUTO)
@@ -80,8 +81,8 @@ public class ModeloProposta implements Serializable, ModelInterface {
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Arquivo> anexos;
 
-    @OneToMany(mappedBy = "modeloProposta", fetch = FetchType.LAZY)
-    private List<OrcamentoEvento> orcamentos;
+    @OneToMany(mappedBy = "modeloProposta")
+    private List<ServicoPrestadoEvento> servicosPrestadoEvento;
 
     @Override
     public Long getId() {
@@ -155,14 +156,6 @@ public class ModeloProposta implements Serializable, ModelInterface {
         this.valorProposta = valorProposta;
     }
 
-    public List<OrcamentoEvento> getOrcamentos() {
-        return orcamentos;
-    }
-
-    public void setOrcamentos(List<OrcamentoEvento> orcamentos) {
-        this.orcamentos = orcamentos;
-    }
-    
     public void setArquivo(Arquivo file) {
        anexos =  anexos = new ArrayList<>();
        adicionarAnexo(file);
@@ -188,6 +181,16 @@ public class ModeloProposta implements Serializable, ModelInterface {
     public List<Arquivo> getAnexos() {
         return anexos;
     }
+
+    public List<ServicoPrestadoEvento> getServicosPrestadoEvento() {
+        return servicosPrestadoEvento;
+    }
+
+    public void setServicosPrestadoEvento(List<ServicoPrestadoEvento> servicosPrestadoEvento) {
+        this.servicosPrestadoEvento = servicosPrestadoEvento;
+    }
+    
+    
 
     @PrePersist
     @Override

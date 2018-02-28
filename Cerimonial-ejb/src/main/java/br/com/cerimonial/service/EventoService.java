@@ -9,10 +9,9 @@ import br.com.cerimonial.entity.CerimoniaEvento;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Evento;
-import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.FestaCerimonia;
-import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.PreEvento;
 import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.enums.AcessoSistema;
 import br.com.cerimonial.enums.SituacaoEvento;
@@ -60,9 +59,9 @@ public class EventoService extends BasicService<Evento> {
     @EJB
     protected AlertaService alertaService;
     @EJB
-    protected OrcamentoEventoService orcamentoEventoService;
-    @EJB
     protected ContatoEventoService contatoEventoService;
+    @EJB
+    protected PreEventoService preEventoService;
 
     @PostConstruct
     @PostActivate
@@ -208,39 +207,40 @@ public class EventoService extends BasicService<Evento> {
 
     }
 
-    public Evento criarEventoFromOrcamento(OrcamentoEvento orcamento) throws Exception {
+    public Evento criarEventoFromPreEvento(PreEvento preEvento) throws Exception {
 
-        orcamentoEventoService.validateObjectNull(orcamento);
+        preEventoService.validateObjectAndIdNull(preEvento);
 
-        Evento evento = this.findEventoByIdOrcamento(orcamento.getId());
+        Evento evento = this.findEventoByPreEventoId(preEvento.getId());
 
         if (evento == null) {
             evento = new Evento();
-            evento.setDataInicio(orcamento.getContatoEvento().getDataEvento());
-            evento.setDataTermino(orcamento.getContatoEvento().getDataEvento());
-            evento.setHoraInicio(orcamento.getContatoEvento().getHoraEvento());
-            evento.setQuantidadeConvidados(orcamento.getContatoEvento().getQuantidadeConvidados());
+            evento.setDataInicio(preEvento.getContatoEvento().getDataEvento());
+            evento.setDataTermino(preEvento.getContatoEvento().getDataEvento());
+            evento.setHoraInicio(preEvento.getContatoEvento().getHoraEvento());
+            evento.setQuantidadeConvidados(preEvento.getContatoEvento().getQuantidadeConvidados());
         }
 
-        evento.setNome(orcamento.getContatoEvento().getNomeEvento());
-        evento.setOrcamentoEvento(orcamento);
-        evento.setTipoEvento(orcamento.getContatoEvento().getTipoEvento());
+        evento.setNome(preEvento.getContatoEvento().getNomeEvento());
+        evento.setTipoEvento(preEvento.getContatoEvento().getTipoEvento());
+        evento.setPreEvento(preEvento);
 
         return evento;
     }
 
-    public Evento findEventoByIdOrcamento(Long idOrcamento) throws Exception {
+    public Evento findEventoByServicoPrestadoId(Long idServicoPrestado) throws Exception {
 
-        validateId(idOrcamento);
+        validateId(idServicoPrestado);
 
-        List<Evento> eventos = repository.getEventosByOrcamento(idOrcamento);
+       return repository.findEventoByServicoPrestadoId(idServicoPrestado);
+    }
+    
+    
+    public Evento findEventoByPreEventoId(Long idPreEvento) throws Exception {
 
-        if (CollectionUtils.isNotBlank(eventos)) {
-            return eventos.get(0);
-        }
+        validateId(idPreEvento);
 
-        return null;
-
+       return repository.findEventoByPreEventoId(idPreEvento);
     }
 
     public Evento getEventoByContatoInicial(ContatoEvento contatoEvento) throws Exception {
@@ -401,7 +401,7 @@ public class EventoService extends BasicService<Evento> {
 
         evento = findEntityById(evento.getId(), Arrays.asList("orcamentoEvento", "orcamentoEvento.contatoEvento"));
 
-        Pessoa cliente = pessoaService.criarClienteFromContato(evento.getOrcamentoEvento());
+        Pessoa cliente = pessoaService.criarClienteFromContato(evento.getPreEvento().getContatoEvento());
         pessoaService.saveCliente(cliente);
 
         Usuario usuarioCliente = usuarioService.criarUsuarioCliente(cliente);

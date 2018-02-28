@@ -6,8 +6,8 @@
 package br.com.cerimonial.controller.mb.cliente;
 
 import br.com.cerimonial.controller.mb.ContatoInicialCrudMB;
-import br.com.cerimonial.entity.OrcamentoEvento;
-import br.com.cerimonial.service.OrcamentoEventoService;
+import br.com.cerimonial.entity.ServicoPrestadoEvento;
+import br.com.cerimonial.service.ServicoPrestadoEventoService;
 import br.com.cerimonial.utils.ArquivoUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,19 +19,17 @@ import javax.faces.bean.ViewScoped;
  *
  * @author hoffmann
  */
-@ManagedBean(name = "OrcamentoEventoClienteMB")
+@ManagedBean(name = "ServicoContratadoEventoClienteMB")
 @ViewScoped
-public class OrcamentoEventoClienteMB extends ClienteControl{
+public class ServicoContratadoEventoClienteMB extends ClienteControl{
     
     
-    /**
-     * Id do Evento
-     */
-    protected Long idEvento;
-    protected OrcamentoEvento orcamento;
+    private Long idPreEvento;
+    
+    private ServicoPrestadoEvento entity;
     
     @EJB
-    protected OrcamentoEventoService service;
+    protected ServicoPrestadoEventoService service;
     
     
     /**
@@ -41,7 +39,7 @@ public class OrcamentoEventoClienteMB extends ClienteControl{
 
         try {
             
-            orcamento = service.findOrcamentoByIdEventoAndContratante(idEvento, cliente);
+            entity = service.findEntityByIdEventoAndContratante(idPreEvento, cliente);
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -57,30 +55,29 @@ public class OrcamentoEventoClienteMB extends ClienteControl{
      */
     public void baixarArquivoOrcamento() {
        try {
-            ArquivoUtils.carregarArquivo(orcamento.getArquivo());
+            ArquivoUtils.carregarArquivo(entity.getArquivo());
         } catch (Exception e) {
             Logger.getLogger(ContatoInicialCrudMB.class.getName()).log(Level.SEVERE, null, e);
             createFacesErrorMessage(e.getCause().getMessage());
         }
     }
 
-
-    public Long getIdEvento() {
-        return idEvento;
+    public Long getIdPreEvento() {
+        return idPreEvento;
     }
 
-    public void setIdEvento(Long idEvento) {
-        this.idEvento = idEvento;
+    public void setIdPreEvento(Long idPreEvento) {
+        this.idPreEvento = idPreEvento;
     }
 
-    public OrcamentoEvento getOrcamento() {
-        return orcamento;
+    public ServicoPrestadoEvento getEntity() {
+        return entity;
     }
 
-    public void setOrcamento(OrcamentoEvento orcamento) {
-        this.orcamento = orcamento;
+    public void setEntity(ServicoPrestadoEvento entity) {
+        this.entity = entity;
     }
-    
-    
-    
+
+
+   
 }

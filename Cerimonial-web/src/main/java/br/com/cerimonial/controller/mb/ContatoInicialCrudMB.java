@@ -10,7 +10,6 @@ import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.TipoIndicacao;
 import br.com.cerimonial.service.ContatoEventoService;
-import br.com.cerimonial.service.OrcamentoEventoService;
 import br.com.cerimonial.service.TipoIndicacaoService;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.Arrays;
@@ -44,8 +43,6 @@ public class ContatoInicialCrudMB extends BasicControl {
     @EJB
     protected ContatoEventoService service;
     @EJB
-    protected OrcamentoEventoService orcamentoService;
-    @EJB
     protected TipoIndicacaoService tipoIndicacaoService;
 
     /**
@@ -57,7 +54,7 @@ public class ContatoInicialCrudMB extends BasicControl {
         if (id != null) {
             try {
                 
-                entity = service.findEntityById(id, Arrays.asList("tipoIndicacao","emailsContato"));
+                entity = service.findEntityById(id, Arrays.asList("tipoIndicacao"));
                 
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

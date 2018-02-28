@@ -64,9 +64,6 @@ public class Arquivo implements Serializable, ModelInterface {
     private List<ModeloProposta> modelosPropostas;
     
     @ManyToMany(mappedBy = "anexos")
-    private List<OrcamentoEvento> orcamentos;
-    
-    @ManyToMany(mappedBy = "anexos")
     private List<ModeloEmail> modeloEmails;
     
     @ManyToMany(mappedBy = "anexos")
@@ -145,14 +142,6 @@ public class Arquivo implements Serializable, ModelInterface {
 
     public void setExtensao(String extensao) {
         this.extensao = extensao;
-    }
-
-    public List<OrcamentoEvento> getOrcamentos() {
-        return orcamentos;
-    }
-
-    public void setOrcamentos(List<OrcamentoEvento> orcamentos) {
-        this.orcamentos = orcamentos;
     }
 
     public List<ModeloEmail> getModeloEmails() {

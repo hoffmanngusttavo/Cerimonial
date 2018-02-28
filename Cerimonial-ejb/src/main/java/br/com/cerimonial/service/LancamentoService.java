@@ -7,7 +7,6 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
-import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Parcela;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.Servico;
@@ -47,11 +46,11 @@ public class LancamentoService extends BasicService<Lancamento> {
     private LancamentoRepository repository;
 
     @EJB
-    private OrcamentoEventoService orcamentoEventoService;
-    @EJB
     private ServicoService servicoService;
     @EJB
     private EventoService eventoService;
+    @EJB
+    private ServicoPrestadoEventoService servicoPrestadoEventoService;
     @EJB
     private CustoEventoService custoEventoService;
     @EJB
@@ -120,14 +119,14 @@ public class LancamentoService extends BasicService<Lancamento> {
      * Vai buscar um lançamento que foi gerado a partir de um orçamento
      * carregando em lazy as parcelas
      *
-     * @param idOrcamento
+     * @param idServicoPrestado
      * @return
      */
-    public Lancamento findLancamentoByOrcamentoId(Long idOrcamento) {
+    public Lancamento findLancamentoByServicoPrestadoId(Long idServicoPrestado) {
 
-        validateId(idOrcamento);
+        validateId(idServicoPrestado);
 
-        Lancamento lancamento = repository.findLancamentoByOrcamentoId(idOrcamento);
+        Lancamento lancamento = repository.findLancamentoByServicoPrestadoId(idServicoPrestado);
 
         smartLazy(lancamento, Arrays.asList("parcelas"));
         
@@ -218,19 +217,19 @@ public class LancamentoService extends BasicService<Lancamento> {
      * Vai instanciar um lançamento a partir dos dados do orçamento aprovado do
      * evento
      *
-     * @param orcamentoEvento relacionamento 1 to 1 lançamento
+     * @param servicoPrestadoEvento
      * @param contratantes
      * @param evento
      * @return
      * @throws java.lang.Exception
      */
-    public Lancamento criarNovoLancamentoSaidaOrcamento(OrcamentoEvento orcamentoEvento, List<Pessoa> contratantes, Evento evento) throws Exception {
+    public Lancamento criarNovoLancamentoSaidaOrcamento(List<Pessoa> contratantes, Evento evento) throws Exception {
 
-        orcamentoEventoService.validateObjectAndIdNull(orcamentoEvento);
-        
         eventoService.validateObjectAndIdNull(evento);
         
         custoEventoService.validateObjectAndIdNull(evento.getCustoEvento());
+        
+        servicoPrestadoEventoService.validateObjectNull(evento.getPreEvento().getServicoPrestadoEvento());
 
         if (CollectionUtils.isBlank(contratantes)) {
             throw new GenericException("Para o lançamento deve ter pelo menos 1 contratante responsável pelo pagamento", ErrorCode.BAD_REQUEST.getCode());
@@ -238,11 +237,11 @@ public class LancamentoService extends BasicService<Lancamento> {
 
         Lancamento entity = new Lancamento(TipoLancamento.DESPESA);
 
-        entity.setOrcamentoEvento(orcamentoEvento);
+        entity.setServicoPrestadoEvento(evento.getPreEvento().getServicoPrestadoEvento());
         
         entity.setCustoEvento(evento.getCustoEvento());
 
-        entity.setValorBase(orcamentoEvento.getValorFinal());
+        entity.setValorBase(evento.getPreEvento().getServicoPrestadoEvento().getValorFinal());
 
         //rita
         entity.setEnvolvidoOrigem(EmpresaCache.getEmpresa().getPessoa());
@@ -260,12 +259,12 @@ public class LancamentoService extends BasicService<Lancamento> {
         // responsavel pelo pagamento
         entity.setEnvolvidoDestino(contratantes.get(0));
 
-        entity.adicionarParcela(new Parcela(entity, orcamentoEvento.getValorFinal(), new Date()));
+        entity.adicionarParcela(new Parcela(entity, evento.getPreEvento().getServicoPrestadoEvento().getValorFinal(), new Date()));
 
         return entity;
     }
 
-    public Lancamento saveLancamentoOrcamento(Lancamento entity) throws Exception {
+    public Lancamento saveLancamentoServicoPrestado(Lancamento entity) throws Exception {
 
         validateObjectNull(entity);
         

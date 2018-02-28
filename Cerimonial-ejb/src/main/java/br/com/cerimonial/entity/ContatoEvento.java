@@ -8,10 +8,8 @@ package br.com.cerimonial.entity;
 import br.com.cerimonial.enums.ClassificacaoContato;
 import br.com.cerimonial.enums.TipoEnvolvidoEvento;
 import br.com.cerimonial.enums.TipoEvento;
-import br.com.cerimonial.utils.CollectionUtils;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +23,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -45,6 +42,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class ContatoEvento implements Serializable, ModelInterface{
+    
     
     @Id
     @GeneratedValue(generator = "GENERATE_ContatoEvento", strategy = GenerationType.AUTO)
@@ -108,12 +106,6 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @Column(nullable = false)
     private TipoEvento tipoEvento;
     
-    @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<OrcamentoEvento> propostas;
-    
-    @OneToMany(mappedBy = "contatoEvento", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<EmailContatoEvento> emailsContato;
- 
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoIndicacao tipoIndicacao;
 
@@ -132,6 +124,25 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @Enumerated(EnumType.STRING)
     private TipoEnvolvidoEvento tipoEnvolvidoEvento;
     
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private PreEvento preEvento;
+
+    public ContatoEvento() {
+    }
+
+    public ContatoEvento(PreEvento preEvento) {
+        this.preEvento = preEvento;
+    }
+    
+    
+
+    public PreEvento getPreEvento() {
+        return preEvento;
+    }
+
+    public void setPreEvento(PreEvento preEvento) {
+        this.preEvento = preEvento;
+    }
     
      @Override
     public Long getId() {
@@ -261,16 +272,6 @@ public class ContatoEvento implements Serializable, ModelInterface{
         this.tipoEvento = tipoEvento;
     }
 
-   
-
-    public List<OrcamentoEvento> getPropostas() {
-        return propostas;
-    }
-
-    public void setPropostas(List<OrcamentoEvento> propostas) {
-        this.propostas = propostas;
-    }
-
     public TipoIndicacao getTipoIndicacao() {
         return tipoIndicacao;
     }
@@ -287,31 +288,12 @@ public class ContatoEvento implements Serializable, ModelInterface{
         this.status = status;
     }
 
-    
-    
-    public boolean isPropostaAceita(){
-        if(CollectionUtils.isNotBlank(propostas)){
-            if (propostas.stream().anyMatch((proposta) -> (proposta.isPropostaAceita()))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public String getNomeEvento() {
         return nomeEvento;
     }
 
     public void setNomeEvento(String nomeEvento) {
         this.nomeEvento = nomeEvento != null ? nomeEvento.toUpperCase().trim() : nomeEvento;
-    }
-
-    public List<EmailContatoEvento> getEmailsContato() {
-        return emailsContato;
-    }
-
-    public void setEmailsContato(List<EmailContatoEvento> emailsContato) {
-        this.emailsContato = emailsContato;
     }
 
     public boolean isEventoProprioContratante() {

@@ -12,10 +12,12 @@ import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.EmailContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EvolucaoPreenchimento;
+import br.com.cerimonial.entity.PreEvento;
 import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.EmailContatoEventoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.EvolucaoPreenchimentoService;
+import br.com.cerimonial.service.PreEventoService;
 import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
 import java.util.Arrays;
@@ -37,13 +39,13 @@ import org.primefaces.model.UploadedFile;
 @ViewScoped
 public class PreEventoMB extends BasicControl {
 
-    protected ContatoEvento entity;
+    protected PreEvento preEvento;
     protected Evento evento;
     protected EmailContatoEvento emailContato;
+    
     protected UploadedFile file;
 
-    protected Long id;
-    protected Long idEvento;
+    protected Long idPreEvento;
 
     private EvolucaoPreenchimento evolucaoEvento;
     private EvolucaoPreenchimento evolucaoContratante;
@@ -51,7 +53,7 @@ public class PreEventoMB extends BasicControl {
     private EvolucaoPreenchimento evolucaoNoiva;
 
     @EJB
-    protected ContatoEventoService service;
+    protected PreEventoService preEventoService;
     @EJB
     protected EventoService eventoService;
     @EJB
@@ -67,24 +69,19 @@ public class PreEventoMB extends BasicControl {
 
     }
 
-    /**
-     * Evento invocado ao abrir o xhtml de um contato inicial de pre evento
-     */
-    public void init() {
+    
+    
+    
+    public void initPreEvento() {
         try {
-            if (id != null) {
-
-                entity = service.findEntityById(id, Arrays.asList("emailsContato"));
+            if (idPreEvento != null) {
 
                 List<String> camposLazy = new LinkedList<String>();
-                camposLazy.add("contratantes");
-                camposLazy.add("contratantes.evolucaoPreenchimento");
-                camposLazy.add("evolucoesPreenchimento");
-                camposLazy.add("contrato");
-                camposLazy.add("orcamentoEvento");
-                camposLazy.add("orcamentoEvento.lancamento");
+                camposLazy.add("emailsContato");
                 
-                evento = eventoService.getEventoByContatoInicial(entity, camposLazy);
+                preEvento = preEventoService.findEntityById(idPreEvento, camposLazy);
+
+                evento = preEvento.getEvento();
                 
                 preencherPorcentagemConcluida(evento);
                 
@@ -95,25 +92,7 @@ public class PreEventoMB extends BasicControl {
         }
     }
 
-    /**
-     * Evento invocado ao abrir o xhtml de um contato inicial de pre evento
-     */
-    public void initEvento() {
-        try {
-            if (idEvento != null) {
-
-                evento = eventoService.findEntityById(idEvento, Arrays.asList("contratantes"));
-
-                entity = service.getContatoInicialByEvento(evento);
-                
-                preencherPorcentagemConcluida(evento);
-
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível carregar o evento: " + ex.getCause().getMessage());
-        }
-    }
+   
 
     public void preencherPorcentagemConcluida(Evento evento) {
 
@@ -122,24 +101,6 @@ public class PreEventoMB extends BasicControl {
         evolucaoNoiva = evolucaoPreenchimentoService.getEvolucaoDadosNoiva(evento);
         evolucaoEvento = evolucaoPreenchimentoService.getEvolucaoDadosEvento(evento);
     
-    }
-
-    /**
-     * Evento invocado pela tela para cancelar um evento
-     */
-    public void cancelarEvento() {
-        try {
-
-            eventoService.cancelarEvento(evento.getId(), evento.getMotivoCancelamento());
-
-            evento = eventoService.findEntityById(evento.getId());
-
-            createFacesInfoMessage("Evento cancelado com sucesso");
-
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível cancelar o evento: " + ex.getCause().getMessage());
-        }
     }
 
     /**
@@ -153,7 +114,7 @@ public class PreEventoMB extends BasicControl {
 
             createFacesInfoMessage("Liberado acesso com sucesso");
             
-            return "/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=" + evento.getId() + "&faces-redirect=true";
+            return "/intranet/admin/operacional/pre-evento/index.xhtml?idPreEvento=" + preEvento.getId() + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -174,7 +135,7 @@ public class PreEventoMB extends BasicControl {
 
             createFacesInfoMessage("Cancelado acesso com sucesso");
             
-            return "/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=" + evento.getId() + "&faces-redirect=true";
+            return "/intranet/admin/operacional/pre-evento/index.xhtml?idPreEvento=" + preEvento.getId() + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -186,7 +147,7 @@ public class PreEventoMB extends BasicControl {
 
     public void adicionarNovoEmailContato() {
 
-        emailContato = new EmailContatoEvento(entity);
+        emailContato = new EmailContatoEvento(preEvento);
 
     }
 
@@ -204,7 +165,7 @@ public class PreEventoMB extends BasicControl {
         } finally {
 
             if (emailContato == null) {
-                emailContato = new EmailContatoEvento(entity);
+                emailContato = new EmailContatoEvento(preEvento);
             }
 
         }
@@ -222,7 +183,7 @@ public class PreEventoMB extends BasicControl {
 
             emailContatoEventoService.save(emailContato);
 
-            init();
+            initPreEvento();
 
             createFacesInfoMessage("Email enviado com sucesso");
 
@@ -274,20 +235,12 @@ public class PreEventoMB extends BasicControl {
         return selectItemUtils.getComboModeloEmail();
     }
 
-    public ContatoEvento getEntity() {
-        return entity;
+    public PreEvento getPreEvento() {
+        return preEvento;
     }
 
-    public void setEntity(ContatoEvento entity) {
-        this.entity = entity;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setPreEvento(PreEvento preEvento) {
+        this.preEvento = preEvento;
     }
 
     public Evento getEvento() {
@@ -296,14 +249,6 @@ public class PreEventoMB extends BasicControl {
 
     public void setEvento(Evento evento) {
         this.evento = evento;
-    }
-
-    public Long getIdEvento() {
-        return idEvento;
-    }
-
-    public void setIdEvento(Long idEvento) {
-        this.idEvento = idEvento;
     }
 
     public EmailContatoEvento getEmailContato() {
@@ -353,9 +298,17 @@ public class PreEventoMB extends BasicControl {
     public void setEvolucaoContratante(EvolucaoPreenchimento evolucaoContratante) {
         this.evolucaoContratante = evolucaoContratante;
     }
+
+    public Long getIdPreEvento() {
+        return idPreEvento;
+    }
+
+    public void setIdPreEvento(Long idPreEvento) {
+        this.idPreEvento = idPreEvento;
+    }
  
     
-
+    
     
 
     

@@ -223,7 +223,7 @@ public class EventoPessoaService extends BasicService<EventoPessoa> {
         }
 
         if (eventoPessoa == null) {
-            eventoPessoa = new EventoPessoa(evento, cliente, evento.getOrcamentoEvento().getContatoEvento().getTipoEnvolvidoEvento(), true);
+            eventoPessoa = new EventoPessoa(evento, cliente, evento.getPreEvento().getContatoEvento().getTipoEnvolvidoEvento(), true);
         }
 
         preenchimentoService.validarPorcentagemPreenchimento(eventoPessoa);

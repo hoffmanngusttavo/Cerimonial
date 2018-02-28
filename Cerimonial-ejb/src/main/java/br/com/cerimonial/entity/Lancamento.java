@@ -95,7 +95,7 @@ public class Lancamento implements Serializable, ModelInterface {
     private CustoEvento custoEvento;
 
     @OneToOne
-    private OrcamentoEvento orcamentoEvento;
+    private ServicoPrestadoEvento servicoPrestadoEvento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
@@ -124,6 +124,18 @@ public class Lancamento implements Serializable, ModelInterface {
         this.atividadeEvento = atividadeEvento;
         this.servico = atividadeEvento.getServico();
 
+    }
+
+    
+    
+    
+    
+    public ServicoPrestadoEvento getServicoPrestadoEvento() {
+        return servicoPrestadoEvento;
+    }
+
+    public void setServicoPrestadoEvento(ServicoPrestadoEvento servicoPrestadoEvento) {
+        this.servicoPrestadoEvento = servicoPrestadoEvento;
     }
 
     @Override
@@ -218,14 +230,6 @@ public class Lancamento implements Serializable, ModelInterface {
 
     public void setCustoEvento(CustoEvento custoEvento) {
         this.custoEvento = custoEvento;
-    }
-
-    public OrcamentoEvento getOrcamentoEvento() {
-        return orcamentoEvento;
-    }
-
-    public void setOrcamentoEvento(OrcamentoEvento orcamentoEvento) {
-        this.orcamentoEvento = orcamentoEvento;
     }
 
     public int getNumeroParcelas() {

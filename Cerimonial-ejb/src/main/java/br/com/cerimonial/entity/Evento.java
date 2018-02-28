@@ -85,9 +85,6 @@ public class Evento implements Serializable, ModelInterface {
     @Min(1)
     private Integer quantidadeConvidados;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private OrcamentoEvento orcamentoEvento;
-
     @NotNull(message = "A categoria não pode ser nula")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -126,18 +123,18 @@ public class Evento implements Serializable, ModelInterface {
      */
     @Column(columnDefinition = "boolean default false")
     private boolean eventoProprioContratante = false;
-    
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<EvolucaoPreenchimento> evolucoesPreenchimento;
-    
-    
+
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private CustoEvento custoEvento;
-    
-    
+
     @OneToMany(mappedBy = "evento", cascade = {CascadeType.REMOVE})
     private List<AtividadeEvento> atividades;
-    
+
+    @OneToOne(mappedBy = "evento")
+    private PreEvento preEvento;
 
     @Override
     public Long getId() {
@@ -175,14 +172,6 @@ public class Evento implements Serializable, ModelInterface {
 
     public void setNome(String nome) {
         this.nome = nome != null ? nome.toUpperCase().trim() : nome;
-    }
-
-    public OrcamentoEvento getOrcamentoEvento() {
-        return orcamentoEvento;
-    }
-
-    public void setOrcamentoEvento(OrcamentoEvento orcamentoEvento) {
-        this.orcamentoEvento = orcamentoEvento;
     }
 
     public boolean isAtivo() {
@@ -294,8 +283,6 @@ public class Evento implements Serializable, ModelInterface {
         return evolucoesPreenchimento;
     }
 
-    
-    
     public void setContratos(ContratoEvento contrato) {
 
         if (contrato == null) {
@@ -369,34 +356,34 @@ public class Evento implements Serializable, ModelInterface {
     public void setAcessoSistema(AcessoSistema acessoSistema) {
         this.acessoSistema = acessoSistema;
     }
-    
-    public EvolucaoPreenchimento getEvolucaoPreenchimento(){
-        
-        if(CollectionUtils.isNotBlank(evolucoesPreenchimento)){
+
+    public EvolucaoPreenchimento getEvolucaoPreenchimento() {
+
+        if (CollectionUtils.isNotBlank(evolucoesPreenchimento)) {
             return evolucoesPreenchimento.get(0);
         }
-        
+
         return null;
     }
-    
+
     public void setEvolucaoPreenchimento(EvolucaoPreenchimento evolucaoPreenchimento) {
-         
-        if(evolucaoPreenchimento == null){
+
+        if (evolucaoPreenchimento == null) {
             evolucoesPreenchimento = null;
-        }else{
-            
-            if(evolucoesPreenchimento == null){
+        } else {
+
+            if (evolucoesPreenchimento == null) {
                 evolucoesPreenchimento = new ArrayList<>();
             }
-            
-            if(CollectionUtils.isNotBlank(evolucoesPreenchimento)){
-              evolucoesPreenchimento.set(0, evolucaoPreenchimento);
-            }else{
+
+            if (CollectionUtils.isNotBlank(evolucoesPreenchimento)) {
+                evolucoesPreenchimento.set(0, evolucaoPreenchimento);
+            } else {
                 evolucoesPreenchimento.add(evolucaoPreenchimento);
             }
-            
+
         }
-        
+
     }
 
     public CustoEvento getCustoEvento() {
@@ -414,8 +401,14 @@ public class Evento implements Serializable, ModelInterface {
     public void setAtividades(List<AtividadeEvento> atividades) {
         this.atividades = atividades;
     }
-    
-    
+
+    public PreEvento getPreEvento() {
+        return preEvento;
+    }
+
+    public void setPreEvento(PreEvento preEvento) {
+        this.preEvento = preEvento;
+    }
     
     
 
@@ -479,17 +472,15 @@ public class Evento implements Serializable, ModelInterface {
         return "Evento{" + "id=" + id + '}';
     }
 
-    public int getPorcentagemPreenchimentoConcluida(){
-        
-        if(getEvolucaoPreenchimento() != null){
+    public int getPorcentagemPreenchimentoConcluida() {
+
+        if (getEvolucaoPreenchimento() != null) {
             return getEvolucaoPreenchimento().getPorcentagemConcluida();
         }
-    
+
         return 0;
     }
-    
-    
-    
+
     public EventoPessoa getTipoEnvolvidoEvento(TipoEnvolvidoEvento tipo) {
 
         if (tipo != null) {
@@ -556,7 +547,7 @@ public class Evento implements Serializable, ModelInterface {
         return null;
 
     }
-    
+
     public EventoPessoa getContratante() {
 
         for (EventoPessoa env : contratantes) {
@@ -680,7 +671,5 @@ public class Evento implements Serializable, ModelInterface {
 
         return sb.toString();
     }
-
-   
 
 }

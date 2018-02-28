@@ -9,9 +9,9 @@ import br.com.cerimonial.entity.ContratoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.Lancamento;
-import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Parcela;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.ServicoPrestadoEvento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ContratoEventoRepository;
@@ -58,8 +58,9 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
 
     @EJB
     protected LancamentoService lancamentoService;
+    
     @EJB
-    protected OrcamentoEventoService orcamentoEventoService;
+    protected ServicoPrestadoEventoService servicoPrestadoEventoService;
 
     @PostConstruct
     @PostActivate
@@ -278,11 +279,11 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
 
         try {
 
-            if (evento != null && evento.getOrcamentoEvento() != null) {
+            if (evento != null && evento.getPreEvento().getServicoPrestadoEvento() != null) {
+                
+                ServicoPrestadoEvento servicoPrestadoEvento = servicoPrestadoEventoService.findEntityByEventoId(evento.getId());
 
-                OrcamentoEvento orcamento = orcamentoEventoService.findOrcamentoByEventoId(evento.getId());
-
-                Lancamento lancamento = lancamentoService.findLancamentoByOrcamentoId(orcamento.getId());
+                Lancamento lancamento = lancamentoService.findLancamentoByServicoPrestadoId(servicoPrestadoEvento.getId());
 
                 if (lancamento != null && CollectionUtils.isNotBlank(lancamento.getParcelas())) {
 

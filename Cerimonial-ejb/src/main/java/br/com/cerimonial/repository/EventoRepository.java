@@ -7,7 +7,6 @@ package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
-import br.com.cerimonial.entity.OrcamentoEvento;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.enums.SituacaoEvento;
 import java.util.ArrayList;
@@ -81,23 +80,7 @@ public class EventoRepository extends AbstractRepository<Evento> {
         return getPureList(Evento.class, sb.toString(), SituacaoEvento.ATIVO, cliente.getId());
     }
 
-    /**
-     * Recuperar um evento a partir de um orçamento
-     *
-     * @param idOrcamento
-     * @return
-     */
-    public List<Evento> getEventosByOrcamento(Long idOrcamento) {
-
-        try {
-            return getPureList(Evento.class, "select eve from Evento eve where eve.orcamentoEvento.id = ?1", idOrcamento);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
-
-    }
+    
 
     /**
      * Recuperar um evento a partir de um contato
@@ -145,6 +128,38 @@ public class EventoRepository extends AbstractRepository<Evento> {
         sb.append("AND eve.situacaoEvento =?3");
 
         return getPurePojo(Evento.class, sb.toString(), idEvento, contratante.getId(), SituacaoEvento.ATIVO);
+    }
+
+    public Evento findEventoByServicoPrestadoId(Long idServicoPrestado) {
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT eve FROM Evento eve ");
+        sb.append("INNER JOIN eve.contratantes ep ");
+        sb.append("INNER JOIN ep.pessoa con ");
+        sb.append("WHERE 1=1 ");
+        sb.append("AND eve.id =?1 ");
+        sb.append("AND con.id =?2 ");
+        sb.append("AND eve.situacaoEvento =?3");
+
+        return getPurePojo(Evento.class, sb.toString());
+        
+    }
+    
+    public Evento findEventoByPreEventoId(Long idServicoPrestado) {
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT eve FROM Evento eve ");
+        sb.append("INNER JOIN eve.contratantes ep ");
+        sb.append("INNER JOIN ep.pessoa con ");
+        sb.append("WHERE 1=1 ");
+        sb.append("AND eve.id =?1 ");
+        sb.append("AND con.id =?2 ");
+        sb.append("AND eve.situacaoEvento =?3");
+
+        return getPurePojo(Evento.class, sb.toString());
+        
     }
 
 }
