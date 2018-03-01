@@ -109,7 +109,7 @@ public class UsuarioService extends BasicService<Usuario> {
     public Usuario getUsuarioByLogin(String login) throws Exception {
 
         loginService.validateLogin(login);
-
+        
         return repository.getUsuarioByLogin(login);
     }
 
@@ -132,17 +132,17 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     public void alterarSaltSenha(Usuario entity) {
-        
+
         validateObjectNull(entity);
-        
-        if(StringUtils.isBlank(entity.getSenha())){
+
+        if (StringUtils.isBlank(entity.getSenha())) {
             throw new GenericException(" Senha Inválida.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
         ByteSource salt = new SecureRandomNumberGenerator().nextBytes();
-        
+
         entity.setSenha(Criptografia.md5(entity.getSenha() + salt.toString()));
-        
+
         entity.setSalt(salt.toString());
     }
 
@@ -152,11 +152,11 @@ public class UsuarioService extends BasicService<Usuario> {
     }
 
     public Usuario criarUsuarioMaster() throws Exception {
-
+        
         Usuario usuario = this.getUsuarioByLogin("master");
-
+        
         if (usuario == null) {
-            
+
             usuario = new Usuario();
             usuario.setNome("Master");
             usuario.setLogin("master");

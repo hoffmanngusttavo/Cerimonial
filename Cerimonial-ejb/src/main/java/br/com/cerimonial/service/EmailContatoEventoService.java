@@ -6,6 +6,7 @@
 package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.Arquivo;
+import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.EmailContatoEvento;
 import br.com.cerimonial.entity.ModeloEmail;
 import br.com.cerimonial.exceptions.ErrorCode;
@@ -43,6 +44,8 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
 
     @EJB
     protected ModeloEmailService modeloEmailService;
+    @EJB
+    protected ContatoEventoService contatoEventoService;
 
     @PostConstruct
     @PostActivate
@@ -118,9 +121,11 @@ public class EmailContatoEventoService extends BasicService<EmailContatoEvento> 
         modeloEmail = modeloEmailService.findEntityById(modeloEmail.getId(), Arrays.asList("anexos"));
 
         if (entity != null) {
+            
+            ContatoEvento contatoEvento = contatoEventoService.findEntityByPreEventoId(entity.getPreEvento().getId());
 
             if (StringUtils.isBlank(entity.getDestinatarios())) {
-                entity.setDestinatarios(entity.getContatoEvento().getEmailContato());
+                entity.setDestinatarios(contatoEvento.getEmailContato());
             }
 
             entity.setModeloEmail(modeloEmail);

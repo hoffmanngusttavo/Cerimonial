@@ -11,6 +11,7 @@ import br.com.cerimonial.utils.ModelFilter;
 import java.util.HashMap;
 import java.util.List;
 import javax.persistence.EntityManager;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -89,7 +90,7 @@ public class AbstractRepository<T> extends BasicRepository {
         }
         modelFilter.setLimit(max);
         modelFilter.setOffSet(offset);
-        if (sortField != null) {
+        if (StringUtils.isNotBlank(sortField)) {
             modelFilter.addOrderBy(sortField, sortAscDesc);
         }
 

@@ -8,19 +8,16 @@ package br.com.cerimonial.controller.mb.admin;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.controller.mb.ContatoInicialCrudMB;
 import br.com.cerimonial.entity.Arquivo;
-import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.EmailContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.EvolucaoPreenchimento;
 import br.com.cerimonial.entity.PreEvento;
-import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.EmailContatoEventoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.EvolucaoPreenchimentoService;
 import br.com.cerimonial.service.PreEventoService;
 import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -69,15 +66,13 @@ public class PreEventoMB extends BasicControl {
 
     }
 
-    
-    
-    
     public void initPreEvento() {
         try {
             if (idPreEvento != null) {
 
                 List<String> camposLazy = new LinkedList<String>();
-                camposLazy.add("emailsContato");
+                camposLazy.add("emailsContatoEvento");
+                camposLazy.add("contatosEvento");
                 
                 preEvento = preEventoService.findEntityById(idPreEvento, camposLazy);
 
@@ -189,7 +184,8 @@ public class PreEventoMB extends BasicControl {
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            createFacesErrorMessage("Não foi possível salvar o registro do email: " + ex.getCause().getMessage());
+            String msg = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
+            createFacesErrorMessage("Não foi possível salvar o registro do email: " + msg);
         }
     }
 

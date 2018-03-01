@@ -98,6 +98,7 @@ public class EmailHelper {
      * @param destinatarios
      * @param assunto
      * @param mensagem
+     * @param anexos
      * @throws java.lang.Exception
      */
     public void enviarEmail(String[] destinatarios, String assunto, String mensagem, HashMap<String, Object> anexos) throws Exception {

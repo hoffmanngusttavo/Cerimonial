@@ -124,17 +124,13 @@ public class ContatoEvento implements Serializable, ModelInterface{
     @Enumerated(EnumType.STRING)
     private TipoEnvolvidoEvento tipoEnvolvidoEvento;
     
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private PreEvento preEvento;
 
     public ContatoEvento() {
+        preEvento = new PreEvento();
     }
 
-    public ContatoEvento(PreEvento preEvento) {
-        this.preEvento = preEvento;
-    }
-    
-    
 
     public PreEvento getPreEvento() {
         return preEvento;

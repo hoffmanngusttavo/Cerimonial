@@ -54,7 +54,7 @@ public class ContatoInicialCrudMB extends BasicControl {
         if (id != null) {
             try {
                 
-                entity = service.findEntityById(id, Arrays.asList("tipoIndicacao"));
+                entity = service.findEntityById(id, Arrays.asList("tipoIndicacao", "preEvento"));
                 
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -90,7 +90,7 @@ public class ContatoInicialCrudMB extends BasicControl {
             service.save(entity);
             createFacesInfoMessage("Dados gravados com sucesso!");
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            return "/intranet/admin/operacional/pre-evento/form.xhtml?id=" + entity.getId() + "&faces-redirect=true";
+            return "/intranet/admin/operacional/pre-evento/index.xhtml?id=" + entity.getPreEvento().getId() + "&faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());

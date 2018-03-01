@@ -10,6 +10,7 @@ import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.repository.ContatoEventoRepository;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +41,8 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     
     @EJB
     private EventoService eventoService;
+    @EJB
+    private PreEventoService preEventoService;
 
     @PostConstruct
     @PostActivate
@@ -76,6 +79,8 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
     public ContatoEvento save(ContatoEvento entity) throws Exception {
 
         validateObjectNull(entity);
+        
+        preEventoService.validateObjectNull(entity.getPreEvento());
 
         if (entity.getId() == null) {
             return repository.create(entity);
@@ -165,7 +170,13 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
      */
     public List<ContatoEvento> findContatosAtivos(int limit) {
         try {
-            return repository.findContatosAtivos(limit);
+            List<ContatoEvento> contatos = repository.findContatosAtivos(limit);
+            if(CollectionUtils.isNotBlank(contatos)){
+                for (ContatoEvento contato : contatos) {
+                    smartLazy(contato, Arrays.asList("preEvento"));
+                }
+            }
+            return contatos;
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
@@ -200,6 +211,14 @@ public class ContatoEventoService extends BasicService<ContatoEvento> {
         validateObjectNull(entity);
         
         validateId(entity.getId());
+        
+    }
+
+    public ContatoEvento findEntityByPreEventoId(Long idPreEvento) {
+        
+        validateId(idPreEvento);
+        
+        return repository.findEntityByPreEventoId(idPreEvento);
         
     }
     

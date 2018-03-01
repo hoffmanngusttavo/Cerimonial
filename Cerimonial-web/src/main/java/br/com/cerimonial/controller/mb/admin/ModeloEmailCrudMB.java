@@ -11,6 +11,7 @@ import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloEmail;
 import br.com.cerimonial.service.ModeloEmailService;
 import br.com.cerimonial.utils.ArquivoUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -47,7 +48,7 @@ public class ModeloEmailCrudMB extends BasicControl {
 
         if (id != null) {
             try {
-                entity = service.findEntityById(id);
+                entity = service.findEntityById(id, Arrays.asList("anexos"));
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }

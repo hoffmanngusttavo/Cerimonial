@@ -75,16 +75,17 @@ public class CidadeService extends BasicService<Cidade> {
 
     public List<Cidade> findByEstado(Estado estado) {
 
-       estadoService.validateObjectAndIdNull(estado);
-
         try {
-            
-            return repository.findByIdEstado(estado.getId());
-            
+
+            if (estado != null && estado.getId() != null) {
+
+                return repository.findByIdEstado(estado.getId());
+            }
+
         } catch (Exception ex) {
             Logger.getLogger(CidadeService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return new ArrayList<>();
     }
 
@@ -108,9 +109,9 @@ public class CidadeService extends BasicService<Cidade> {
         }
     }
 
-   @Override
+    @Override
     public void validateId(Long idEntity) {
-        
+
         if (idEntity == null) {
             throw new GenericException("Id nulo ", ErrorCode.BAD_REQUEST.getCode());
         }
@@ -118,25 +119,25 @@ public class CidadeService extends BasicService<Cidade> {
         if (idEntity <= 0) {
             throw new GenericException("Id não pode ser menor ou igual a zero ", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectNull(Cidade entity) {
-        
-         if (entity == null) {
+
+        if (entity == null) {
             throw new GenericException(" Cidade nulo.", ErrorCode.BAD_REQUEST.getCode());
         }
-        
+
     }
 
     @Override
     public void validateObjectAndIdNull(Cidade entity) {
-        
+
         validateObjectNull(entity);
-        
+
         validateId(entity.getId());
-        
+
     }
 
 }

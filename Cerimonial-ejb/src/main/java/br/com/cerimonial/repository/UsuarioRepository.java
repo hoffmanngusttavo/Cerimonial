@@ -6,12 +6,15 @@
 package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Usuario;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -30,16 +33,40 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
     public Usuario getUsuarioByLoginAtivo(String login, boolean ativo) throws Exception {
         return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1 and usr.ativo = ?2", login, ativo);
     }
-    
-    public Usuario getUsuarioByLogin(String login) throws Exception{
-        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1", login);
+
+    public Usuario getUsuarioByLogin(String login) throws Exception {
+
+        try {
+
+            return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.login = ?1", login);
+
+        } catch (GenericException e) {
+
+            if (e.getCode() != ErrorCode.NOT_FOUND.getCode()) {
+                throw new Exception(e);
+            }
+
+        }
+
+        return null;
     }
-    
-   public Usuario getUsuarioByEmail(String email) throws Exception{
-        return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.email = ?1", email);
+
+    public Usuario getUsuarioByEmail(String email) throws Exception {
+
+        try {
+
+            return getPurePojo(Usuario.class, "select usr from Usuario usr where usr.email = ?1", email);
+
+        } catch (GenericException e) {
+
+            if (e.getCode() != ErrorCode.NOT_FOUND.getCode()) {
+                throw new Exception(e);
+            }
+        }
+
+        return null;
+
     }
-    
-   
 
     @Override
     public int countListagem(HashMap<String, Object> filter) {
@@ -70,10 +97,9 @@ public class UsuarioRepository extends AbstractRepository<Usuario> {
     }
 
     public List<Usuario> findUsuariosAdminAtivos() {
-        
+
         return getPureList(Usuario.class, "select usr from Usuario usr where usr.admin = true and usr.ativo = true");
-        
+
     }
 
-    
 }

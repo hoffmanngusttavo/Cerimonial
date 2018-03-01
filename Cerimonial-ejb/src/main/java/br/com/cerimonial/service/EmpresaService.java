@@ -61,14 +61,6 @@ public class EmpresaService extends BasicService<Empresa> {
                 
                 smartLazy(empresa, Arrays.asList("pessoa", "pessoa.endereco"));
                 
-//                if(empresa.getPessoa() != null){
-//                    empresa.getPessoa().getId();
-//                    
-//                    if(empresa.getPessoa().getEndereco() != null){
-//                        empresa.getPessoa().getEndereco().getId();
-//                    }
-//                }
-                
                 return empresa;
             }
         }

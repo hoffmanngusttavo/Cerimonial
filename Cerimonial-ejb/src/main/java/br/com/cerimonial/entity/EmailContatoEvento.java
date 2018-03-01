@@ -71,9 +71,6 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
     private Usuario modificadoPor;
     
     @ManyToOne
-    private ContatoEvento contatoEvento;
-    
-    @ManyToOne
     private ModeloEmail modeloEmail;
     
     @ManyToOne
@@ -140,14 +137,6 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
         this.corpoEmail = corpoEmail;
     }
 
-    public ContatoEvento getContatoEvento() {
-        return contatoEvento;
-    }
-
-    public void setContatoEvento(ContatoEvento contatoEvento) {
-        this.contatoEvento = contatoEvento;
-    }
-
     public ModeloEmail getModeloEmail() {
         return modeloEmail;
     }
@@ -190,6 +179,16 @@ public class EmailContatoEvento implements Serializable, ModelInterface {
         }
     }
 
+    public PreEvento getPreEvento() {
+        return preEvento;
+    }
+
+    public void setPreEvento(PreEvento preEvento) {
+        this.preEvento = preEvento;
+    }
+
+     
+     
     @PrePersist
     @Override
     public void prePersistEntity() {

@@ -159,7 +159,7 @@ public class ModelFilter implements Serializable {
                     sb.append(campo).append(" DESC ,  ");
                 }
             }
-            sb.append(" o.id ");
+            sb.append(" o.id DESC");
         }
         return sb.toString();
     }

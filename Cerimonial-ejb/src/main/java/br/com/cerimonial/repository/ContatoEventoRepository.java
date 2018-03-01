@@ -74,9 +74,9 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
     public List<ContatoEvento> findContatosAtivos(int limit) {
         try {
             StringBuilder sb = new StringBuilder();
-            sb.append("SELECT contato FROM ContatoEvento contato ");
-            sb.append("LEFT JOIN contato.propostas orcamento ");
-            sb.append("LEFT JOIN orcamento.eventos evento ");
+            sb.append(" SELECT contato FROM ContatoEvento contato ");
+            sb.append(" INNER JOIN contato.preEvento preevento ");
+            sb.append(" LEFT JOIN preevento.evento evento ");
             sb.append("WHERE contato.status IN(");
             sb.append("'").append(ClassificacaoContato.NEGOCIANDO).append("',");
             sb.append("'").append(ClassificacaoContato.AGUARDANDO_RETORNO).append("',");
@@ -90,6 +90,18 @@ public class ContatoEventoRepository extends AbstractRepository<ContatoEvento> {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return new ArrayList<ContatoEvento>();
+    }
+
+    public ContatoEvento findEntityByPreEventoId(Long idPreEvento) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT con FROM ContatoEvento con ");
+        sb.append("INNER JOIN con.preEvento preevento ");
+        sb.append("WHERE 1=1 ");
+        sb.append("AND preevento.id =?1");
+
+        return getPurePojo(ContatoEvento.class, sb.toString(), idPreEvento);
+
     }
 
 }
