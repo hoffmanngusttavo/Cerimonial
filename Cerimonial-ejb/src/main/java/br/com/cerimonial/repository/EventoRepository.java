@@ -8,7 +8,10 @@ package br.com.cerimonial.repository;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.Usuario;
 import br.com.cerimonial.enums.SituacaoEvento;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -146,20 +149,28 @@ public class EventoRepository extends AbstractRepository<Evento> {
         
     }
     
-    public Evento findEventoByPreEventoId(Long idServicoPrestado) {
-        
-        StringBuilder sb = new StringBuilder();
+    public Evento findEventoByPreEventoId(Long idPreEvento) throws Exception{
 
-        sb.append("SELECT eve FROM Evento eve ");
-        sb.append("INNER JOIN eve.contratantes ep ");
-        sb.append("INNER JOIN ep.pessoa con ");
-        sb.append("WHERE 1=1 ");
-        sb.append("AND eve.id =?1 ");
-        sb.append("AND con.id =?2 ");
-        sb.append("AND eve.situacaoEvento =?3");
+        try {
 
-        return getPurePojo(Evento.class, sb.toString());
-        
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("SELECT eve FROM Evento eve ");
+            sb.append("INNER JOIN eve.preEvento preevento ");
+            sb.append("WHERE 1=1 ");
+            sb.append("AND preevento.id =?1 ");
+
+            return getPurePojo(Evento.class, sb.toString(), idPreEvento);
+
+        } catch (GenericException e) {
+
+            if (e.getCode() != ErrorCode.NOT_FOUND.getCode()) {
+                throw new Exception(e);
+            }
+        }
+
+        return null;
+
     }
 
 }

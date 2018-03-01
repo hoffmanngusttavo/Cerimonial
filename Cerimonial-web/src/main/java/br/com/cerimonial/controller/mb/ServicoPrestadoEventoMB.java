@@ -11,6 +11,7 @@ import br.com.cerimonial.entity.ServicoPrestadoEvento;
 import br.com.cerimonial.service.ServicoPrestadoEventoService;
 import br.com.cerimonial.utils.ArquivoUtils;
 import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +47,7 @@ public class ServicoPrestadoEventoMB extends BasicControl {
         if (idPreEvento != null) {
             try {
 
-                entity = service.findEntityByPreEventoId(idPreEvento);
+                entity = service.findEntityByPreEventoId(idPreEvento, Arrays.asList("anexos", "preEvento", "preEvento.contatosEvento"));
 
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -118,9 +119,10 @@ public class ServicoPrestadoEventoMB extends BasicControl {
      */
     public synchronized void salvar() {
         try {
+            
             service.save(entity);
 
-            createFacesInfoMessage("Orçamento gravado com sucesso!");
+            createFacesInfoMessage("Dados gravados com sucesso!");
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -148,4 +150,22 @@ public class ServicoPrestadoEventoMB extends BasicControl {
         return selectItemUtils.getComboModelosPropostaTipoEvento(entity.getPreEvento().getContatoEvento().getTipoEvento());
     }
 
+    public Long getIdPreEvento() {
+        return idPreEvento;
+    }
+
+    public void setIdPreEvento(Long idPreEvento) {
+        this.idPreEvento = idPreEvento;
+    }
+
+    public ServicoPrestadoEvento getEntity() {
+        return entity;
+    }
+
+    public void setEntity(ServicoPrestadoEvento entity) {
+        this.entity = entity;
+    }
+
+    
+    
 }

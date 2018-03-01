@@ -73,6 +73,7 @@ public class PreEventoMB extends BasicControl {
                 List<String> camposLazy = new LinkedList<String>();
                 camposLazy.add("emailsContatoEvento");
                 camposLazy.add("contatosEvento");
+                camposLazy.add("servicoPrestadoEvento");
                 
                 preEvento = preEventoService.findEntityById(idPreEvento, camposLazy);
 
@@ -109,7 +110,29 @@ public class PreEventoMB extends BasicControl {
 
             createFacesInfoMessage("Liberado acesso com sucesso");
             
-            return "/intranet/admin/operacional/pre-evento/index.xhtml?idPreEvento=" + preEvento.getId() + "&faces-redirect=true";
+            return "/intranet/admin/operacional/pre-evento/index.xhtml?id=" + preEvento.getId() + "&faces-redirect=true";
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage("Não foi possível liberar o acesso: " + ex.getCause().getMessage());
+        }
+        
+        return null;
+    }
+    
+    
+    /**
+     * Evento invocado pela tela para liberar acesso um evento
+     * @return 
+     */
+    public String criarEvento() {
+        try {
+
+            eventoService.criarEventoFromPreEvento(preEvento);
+
+            createFacesInfoMessage("Evento criado com sucesso");
+            
+            return "/intranet/admin/operacional/pre-evento/index.xhtml?id=" + preEvento.getId() + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -130,7 +153,7 @@ public class PreEventoMB extends BasicControl {
 
             createFacesInfoMessage("Cancelado acesso com sucesso");
             
-            return "/intranet/admin/operacional/pre-evento/index.xhtml?idPreEvento=" + preEvento.getId() + "&faces-redirect=true";
+            return "/intranet/admin/operacional/pre-evento/index.xhtml?id=" + preEvento.getId() + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

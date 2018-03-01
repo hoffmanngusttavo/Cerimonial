@@ -11,10 +11,7 @@ import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.utils.ModelFilter;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 
 /**
  *

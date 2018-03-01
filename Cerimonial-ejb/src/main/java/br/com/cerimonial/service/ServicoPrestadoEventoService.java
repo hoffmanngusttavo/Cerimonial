@@ -105,6 +105,17 @@ public class ServicoPrestadoEventoService extends BasicService<ServicoPrestadoEv
         
     }
     
+    public ServicoPrestadoEvento findEntityByPreEventoId(Long idPreEvento, List<String> pathsLazy) {
+        
+        validateId(idPreEvento);
+        
+        ServicoPrestadoEvento entity = repository.findServicoPrestadoByPreEventoId(idPreEvento);
+        
+        smartLazy(entity, pathsLazy);
+        
+        return entity;
+    }
+    
     public ServicoPrestadoEvento findEntityByEventoId(Long idEvento) {
         
         validateId(idEvento);

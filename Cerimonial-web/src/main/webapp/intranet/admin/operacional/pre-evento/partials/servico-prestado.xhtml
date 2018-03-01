@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="#{LayoutMB.layout}"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titleOfPage">
+        Serviço Prestado
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <f:metadata>
+            <f:viewParam name="idPreEvento" value="#{ServicoPrestadoEventoMB.idPreEvento}" converter="javax.faces.Long"/>
+            <f:viewAction action="#{ServicoPrestadoEventoMB.init()}"/>
+        </f:metadata>
+
+
+        <h:form prependId="false"
+                enctype="multipart/form-data"
+                id="form">
+
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{ServicoPrestadoEventoMB.entity.preEvento.id}">
+                                    <i class="fa fa-list"></i>
+                                    <span>#{ServicoPrestadoEventoMB.entity.preEvento.contatoEvento.nomeContato} - Serviço Contratado</span>
+                                </p:link>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div style="margin-left: 28px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <h:panelGroup id="groupOrcamento">
+                <h:panelGroup >
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Tipo de Evento
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+                            <p:inputText value="#{ServicoPrestadoEventoMB.entity.preEvento.contatoEvento.tipoEvento.label}" 
+                                         class="form-control"
+                                         disabled="true"/>
+
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label class="control-label ">Modelo de Propostas
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                            </label>
+                            <h:selectOneMenu id="inptModeloProposta" 
+                                             value="#{ServicoPrestadoEventoMB.entity.modeloProposta}"
+                                             disabled="#{ServicoPrestadoEventoMB.entity.id != null}"
+                                             converter="EntityConverter"
+                                             required="true"
+                                             requiredMessage="Preencha um modelo de proposta válido"
+                                             class="form-control"
+                                             label="Tipo de Evento">
+                                <f:selectItem itemValue="" 
+                                              itemLabel="Selecione" /> 
+                                <f:selectItems value="#{ServicoPrestadoEventoMB.comboModelosProposta}" />
+                                <p:ajax process="@this"
+                                        update="groupOrcamento"
+                                        listener="#{ServicoPrestadoEventoMB.carregarDadosProposta}"
+                                        global="false"
+                                        event="change"
+                                        onstart="PF('statusDialog').show();"
+                                        oncomplete="PF('statusDialog').hide();"/>
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label>Valor
+                                <span class="asteriskField">
+                                    *
+                                </span>
+                                <p:commandButton icon="fa fa-pencil" 
+                                                 styleClass="bt-acoes"
+                                                 process="@this"
+                                                 rendered="#{ServicoPrestadoEventoMB.entity.id == null}"
+                                                 title="Alterar Valor"
+                                                 actionListener="#{ServicoPrestadoEventoMB.alterarValorProposta()}"
+                                                 update=":form:groupValorAlterado"
+                                                 immediate="true"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+                            </label>
+                            <h:panelGroup>
+                                <p:inputText value="#{ServicoPrestadoEventoMB.entity.valorProposta}" 
+                                             disabled="true"
+                                             class="form-control">
+                                    <f:convertNumber maxFractionDigits="2"
+                                                     minFractionDigits="2"
+                                                     locale="pt_BR"/>
+                                    <p:ajax process="@this"
+                                            update="@this"
+                                            global="false"/>
+                                </p:inputText>
+
+
+                            </h:panelGroup>
+                        </div>
+
+                        <h:panelGroup id="groupValorAlterado">
+                            <h:panelGroup rendered="#{ServicoPrestadoEventoMB.entity.valorAlterado gt -1}">
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label>Valor Alterado
+                                            <span class="asteriskField">
+                                                *
+                                            </span>
+                                            <p:commandButton icon="fa fa-times" 
+                                                             styleClass="bt-acoes"
+                                                             process="@this"
+                                                             rendered="#{ServicoPrestadoEventoMB.entity.id == null}"
+                                                             title="Alterar Valor"
+                                                             actionListener="#{ServicoPrestadoEventoMB.cancelarAlterarValorProposta()}"
+                                                             update=":form:groupValorAlterado"
+                                                             immediate="true"
+                                                             onstart="PF('statusDialog').show();"
+                                                             oncomplete="PF('statusDialog').hide();"/>
+                                        </label>
+                                        <p:inputText value="#{ServicoPrestadoEventoMB.entity.valorAlterado}" 
+                                                     disabled="#{ServicoPrestadoEventoMB.entity.id != null}"
+                                                     class="form-control">
+                                            <f:convertNumber maxFractionDigits="2"
+                                                             minFractionDigits="2"
+                                                             locale="pt_BR"/>
+                                            <p:ajax process="@this"
+                                                    update="@this"
+                                                    global="false"/>
+                                        </p:inputText>
+
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label ">Observação</label>
+
+                            <p:editor value="#{ServicoPrestadoEventoMB.entity.proposta}"
+                                      disabled="#{ServicoPrestadoEventoMB.entity.id != null}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p:commandButton value="Salvar Orçamento"
+                                         action="#{ServicoPrestadoEventoMB.salvar()}"
+                                         update=":form:groupOrcamento"
+                                         style="margin-right: 10px; float: right;"
+                                         icon="fa fa-check" 
+                                         class="btn btn-success"
+                                         onstart="PF('statusDialog').show();"
+                                         oncomplete="PF('statusDialog').hide();"/>
+
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
