@@ -74,8 +74,17 @@ public class ServicoPrestadoEvento implements Serializable, ModelInterface {
     @OneToOne(mappedBy = "servicoPrestadoEvento")
     private Lancamento lancamento;
     
-    @OneToOne(mappedBy = "servicoPrestadoEvento")
+    @OneToOne
     private PreEvento preEvento;
+
+    public ServicoPrestadoEvento() {
+    }
+
+    public ServicoPrestadoEvento(PreEvento preEvento) {
+        this.preEvento = preEvento;
+    }
+    
+    
     
     @Override
     public Long getId() {

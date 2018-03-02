@@ -52,7 +52,7 @@ public class PreEvento implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "preEvento", fetch = FetchType.LAZY)
     private List<EmailContatoEvento> emailsContatoEvento;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "preEvento", fetch = FetchType.LAZY)
     private ServicoPrestadoEvento servicoPrestadoEvento;
     
     @OneToOne(fetch = FetchType.LAZY)

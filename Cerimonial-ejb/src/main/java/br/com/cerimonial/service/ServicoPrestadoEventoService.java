@@ -8,11 +8,13 @@ package br.com.cerimonial.service;
 import br.com.cerimonial.entity.Arquivo;
 import br.com.cerimonial.entity.ModeloProposta;
 import br.com.cerimonial.entity.Pessoa;
+import br.com.cerimonial.entity.PreEvento;
 import br.com.cerimonial.entity.ServicoPrestadoEvento;
 import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ServicoPrestadoEventoRepository;
 import br.com.cerimonial.utils.CollectionUtils;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -41,6 +43,9 @@ public class ServicoPrestadoEventoService extends BasicService<ServicoPrestadoEv
     
     @EJB
     protected PessoaService pessoaService;
+    
+    @EJB
+    protected PreEventoService preEventoService;
 
     @PostConstruct
     @PostActivate
@@ -105,11 +110,18 @@ public class ServicoPrestadoEventoService extends BasicService<ServicoPrestadoEv
         
     }
     
-    public ServicoPrestadoEvento findEntityByPreEventoId(Long idPreEvento, List<String> pathsLazy) {
+    public ServicoPrestadoEvento findEntityByPreEventoId(Long idPreEvento, List<String> pathsLazy) throws Exception {
         
         validateId(idPreEvento);
         
         ServicoPrestadoEvento entity = repository.findServicoPrestadoByPreEventoId(idPreEvento);
+        
+        if(entity == null){
+            
+            PreEvento preEvento = preEventoService.findEntityById(idPreEvento, Arrays.asList("contatosEvento"));
+            
+            entity = new ServicoPrestadoEvento(preEvento);
+        }
         
         smartLazy(entity, pathsLazy);
         

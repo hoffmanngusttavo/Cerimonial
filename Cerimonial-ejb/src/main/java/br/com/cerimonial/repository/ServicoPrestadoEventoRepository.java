@@ -7,66 +7,59 @@ package br.com.cerimonial.repository;
 
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.ServicoPrestadoEvento;
+import br.com.cerimonial.entity.Usuario;
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author hoffmann
  */
-public class ServicoPrestadoEventoRepository extends AbstractRepository<ServicoPrestadoEvento>{
+public class ServicoPrestadoEventoRepository extends AbstractRepository<ServicoPrestadoEvento> {
 
     public ServicoPrestadoEventoRepository(EntityManager entityManager) {
         super(entityManager, ServicoPrestadoEvento.class);
     }
-    
-    
-      /**
-     * Método vai buscar o orçamento de um evento;
-     *
-     * @param idEvento do Evento
-     * @return
-     */
-    public ServicoPrestadoEvento findServicoPrestadoByEventoId(Long idEvento) {
 
-        StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
-        sql.append(" INNER JOIN orc.eventos evento");
-        sql.append(" LEFT JOIN orc.modeloProposta mp");
-        sql.append(" LEFT JOIN orc.anexos arq");
+    public ServicoPrestadoEvento findEntityByEventoId(Long idEvento) {
+
+        StringBuilder sql = new StringBuilder("SELECT sp FROM ServicoPrestadoEvento sp  ");
+        sql.append(" INNER JOIN sp.preEvento preevento");
+        sql.append(" INNER JOIN sp.evento evento");
+        sql.append(" LEFT JOIN sp.modeloProposta mp");
+        sql.append(" LEFT JOIN sp.anexos arq");
         sql.append(" WHERE 1=1");
         sql.append(" AND evento.id = ?1");
 
         return getPurePojo(ServicoPrestadoEvento.class, sql.toString(), idEvento);
     }
-    
-    
+
     public ServicoPrestadoEvento findServicoPrestadoByPreEventoId(Long idPreEvento) {
 
-        StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
-        sql.append(" INNER JOIN orc.eventos evento");
-        sql.append(" LEFT JOIN orc.modeloProposta mp");
-        sql.append(" LEFT JOIN orc.anexos arq");
-        sql.append(" WHERE 1=1");
-        sql.append(" AND evento.id = ?1");
+        try {
 
-        return getPurePojo(ServicoPrestadoEvento.class, sql.toString(), idPreEvento);
+            StringBuilder sql = new StringBuilder("SELECT sp FROM ServicoPrestadoEvento sp  ");
+            sql.append(" INNER JOIN sp.preEvento preevento");
+            sql.append(" LEFT JOIN sp.modeloProposta mp");
+            sql.append(" LEFT JOIN sp.anexos arq");
+            sql.append(" WHERE 1=1");
+            sql.append(" AND preevento.id = ?1");
+
+            return getPurePojo(ServicoPrestadoEvento.class, sql.toString(), idPreEvento);
+
+        } catch (GenericException e) {
+
+            if (e.getCode() != ErrorCode.NOT_FOUND.getCode()) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        
+        return null;
+
     }
-    
-    
-    public ServicoPrestadoEvento findEntityByEventoId(Long idPreEvento) {
 
-        StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
-        sql.append(" INNER JOIN orc.eventos evento");
-        sql.append(" LEFT JOIN orc.modeloProposta mp");
-        sql.append(" LEFT JOIN orc.anexos arq");
-        sql.append(" WHERE 1=1");
-        sql.append(" AND evento.id = ?1");
-
-        return getPurePojo(ServicoPrestadoEvento.class, sql.toString(), idPreEvento);
-    }
-    
-    
-    
-    
     /**
      * Método vai buscar o orçamento de um evento de um contratante;
      *
@@ -76,8 +69,9 @@ public class ServicoPrestadoEventoRepository extends AbstractRepository<ServicoP
      */
     public ServicoPrestadoEvento findServicoPrestadoByEventoIdAndContratante(Long idEvento, Pessoa contratante) {
 
-        StringBuilder sql = new StringBuilder("SELECT orc FROM OrcamentoEvento orc  ");
-        sql.append(" INNER JOIN orc.eventos evento");
+        StringBuilder sql = new StringBuilder("SELECT orc FROM ServicoPrestadoEvento orc  ");
+        sql.append(" INNER JOIN orc.preEvento preevento");
+        sql.append(" INNER JOIN preevento.evento evento");
         sql.append(" INNER JOIN evento.contratantes cli");
         sql.append(" INNER JOIN cli.pessoa con");
         sql.append(" LEFT JOIN orc.modeloProposta mp");
@@ -89,5 +83,5 @@ public class ServicoPrestadoEventoRepository extends AbstractRepository<ServicoP
         return getPurePojo(ServicoPrestadoEvento.class, sql.toString(), idEvento, contratante.getId());
 
     }
-    
+
 }

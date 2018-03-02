@@ -47,7 +47,7 @@ public class ServicoPrestadoEventoMB extends BasicControl {
         if (idPreEvento != null) {
             try {
 
-                entity = service.findEntityByPreEventoId(idPreEvento, Arrays.asList("anexos", "preEvento", "preEvento.contatosEvento"));
+                entity = service.findEntityByPreEventoId(idPreEvento, Arrays.asList("anexos", "preEvento", "preEvento.contatosEvento", "modeloProposta"));
 
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -147,7 +147,14 @@ public class ServicoPrestadoEventoMB extends BasicControl {
     }
 
     public List<SelectItem> getComboModelosProposta() {
-        return selectItemUtils.getComboModelosPropostaTipoEvento(entity.getPreEvento().getContatoEvento().getTipoEvento());
+        
+        if(entity != null && entity.getPreEvento() != null && entity.getPreEvento().getContatoEvento() != null){
+        
+            return selectItemUtils.getComboModelosPropostaTipoEvento(entity.getPreEvento().getContatoEvento().getTipoEvento());
+        }else{
+            return null;
+        }
+        
     }
 
     public Long getIdPreEvento() {

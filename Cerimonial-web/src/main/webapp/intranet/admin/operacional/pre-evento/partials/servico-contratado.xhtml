@@ -32,7 +32,7 @@
                             <h3 class="panel-title">
                                 <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{ServicoPrestadoEventoMB.entity.preEvento.id}">
                                     <i class="fa fa-list"></i>
-                                    <span>#{ServicoPrestadoEventoMB.entity.preEvento.contatoEvento.nomeContato} - Serviço Contratado</span>
+                                    <span>#{ServicoPrestadoEventoMB.entity.preEvento.contatoEvento.nomeEvento} - Serviço Contratado</span>
                                 </p:link>
                             </h3>
                         </div>
@@ -69,7 +69,7 @@
                             </label>
                             <h:selectOneMenu id="inptModeloProposta" 
                                              value="#{ServicoPrestadoEventoMB.entity.modeloProposta}"
-                                             disabled="#{ServicoPrestadoEventoMB.entity.id != null}"
+                                             disabled="#{ServicoPrestadoEventoMB.entity.preEvento.evento != null}"
                                              converter="EntityConverter"
                                              required="true"
                                              requiredMessage="Preencha um modelo de proposta válido"
@@ -97,8 +97,8 @@
                                 <p:commandButton icon="fa fa-pencil" 
                                                  styleClass="bt-acoes"
                                                  process="@this"
-                                                 rendered="#{ServicoPrestadoEventoMB.entity.id == null}"
                                                  title="Alterar Valor"
+                                                 rendered="#{ServicoPrestadoEventoMB.entity.preEvento.evento == null}"
                                                  actionListener="#{ServicoPrestadoEventoMB.alterarValorProposta()}"
                                                  update=":form:groupValorAlterado"
                                                  immediate="true"
@@ -132,7 +132,7 @@
                                             <p:commandButton icon="fa fa-times" 
                                                              styleClass="bt-acoes"
                                                              process="@this"
-                                                             rendered="#{ServicoPrestadoEventoMB.entity.id == null}"
+                                                             rendered="#{ServicoPrestadoEventoMB.entity.preEvento.evento == null}"
                                                              title="Alterar Valor"
                                                              actionListener="#{ServicoPrestadoEventoMB.cancelarAlterarValorProposta()}"
                                                              update=":form:groupValorAlterado"
@@ -141,7 +141,7 @@
                                                              oncomplete="PF('statusDialog').hide();"/>
                                         </label>
                                         <p:inputText value="#{ServicoPrestadoEventoMB.entity.valorAlterado}" 
-                                                     disabled="#{ServicoPrestadoEventoMB.entity.id != null}"
+                                                     disabled="#{ServicoPrestadoEventoMB.entity.preEvento.evento != null}"
                                                      class="form-control">
                                             <f:convertNumber maxFractionDigits="2"
                                                              minFractionDigits="2"
@@ -162,7 +162,7 @@
                             <label class="control-label ">Observação</label>
 
                             <p:editor value="#{ServicoPrestadoEventoMB.entity.proposta}"
-                                      disabled="#{ServicoPrestadoEventoMB.entity.id != null}"/>
+                                      disabled="#{ServicoPrestadoEventoMB.entity.preEvento.evento != null}"/>
                         </div>
                     </div>
                     <div class="row">
