@@ -11,6 +11,7 @@ import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.service.ContratoEventoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.utils.SelectItemUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +58,7 @@ public class ContratoEventoMB extends BasicControl {
                 entity = service.getContratoByEventoId(id);
 
                 if (entity == null) {
-                    Evento evento = eventoService.findEntityById(id);
+                    Evento evento = eventoService.findEntityById(id, Arrays.asList("preEvento"));
                     entity = new ContratoEvento(evento);
                 }
 

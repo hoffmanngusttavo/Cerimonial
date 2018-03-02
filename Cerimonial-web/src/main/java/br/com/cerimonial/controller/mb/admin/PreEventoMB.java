@@ -39,7 +39,7 @@ public class PreEventoMB extends BasicControl {
     protected PreEvento preEvento;
     protected Evento evento;
     protected EmailContatoEvento emailContato;
-    
+
     protected UploadedFile file;
 
     protected Long idPreEvento;
@@ -74,13 +74,10 @@ public class PreEventoMB extends BasicControl {
                 camposLazy.add("emailsContatoEvento");
                 camposLazy.add("contatosEvento");
                 camposLazy.add("servicoPrestadoEvento");
-                
+
                 preEvento = preEventoService.findEntityById(idPreEvento, camposLazy);
 
-                evento = preEvento.getEvento();
-                
-                preencherPorcentagemConcluida(evento);
-                
+                initEvento(preEvento);
             }
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -88,7 +85,19 @@ public class PreEventoMB extends BasicControl {
         }
     }
 
-   
+    private void initEvento(PreEvento preEvento) throws Exception {
+
+        List<String> camposLazy = new LinkedList<String>();
+        camposLazy.add("contratos");
+        camposLazy.add("contratantes");
+        camposLazy.add("contratantes.evolucaoPreenchimento");
+        camposLazy.add("evolucoesPreenchimento");
+        
+        evento = eventoService.findEntityById(preEvento.getEvento().getId(), camposLazy);
+
+        preencherPorcentagemConcluida(evento);
+
+    }
 
     public void preencherPorcentagemConcluida(Evento evento) {
 
@@ -96,12 +105,13 @@ public class PreEventoMB extends BasicControl {
         evolucaoNoivo = evolucaoPreenchimentoService.getEvolucaoDadosNoivo(evento);
         evolucaoNoiva = evolucaoPreenchimentoService.getEvolucaoDadosNoiva(evento);
         evolucaoEvento = evolucaoPreenchimentoService.getEvolucaoDadosEvento(evento);
-    
+
     }
 
     /**
      * Evento invocado pela tela para liberar acesso um evento
-     * @return 
+     *
+     * @return
      */
     public String liberarAcessoContratante() {
         try {
@@ -109,21 +119,21 @@ public class PreEventoMB extends BasicControl {
             eventoService.liberarAcessoSistemaContratanteEvento(evento);
 
             createFacesInfoMessage("Liberado acesso com sucesso");
-            
+
             return "/intranet/admin/operacional/pre-evento/index.xhtml?id=" + preEvento.getId() + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível liberar o acesso: " + ex.getCause().getMessage());
         }
-        
+
         return null;
     }
-    
-    
+
     /**
      * Evento invocado pela tela para liberar acesso um evento
-     * @return 
+     *
+     * @return
      */
     public String criarEvento() {
         try {
@@ -131,20 +141,21 @@ public class PreEventoMB extends BasicControl {
             eventoService.criarNovoEvento(preEvento);
 
             createFacesInfoMessage("Evento criado com sucesso");
-            
+
             return "/intranet/admin/operacional/pre-evento/index.xhtml?id=" + preEvento.getId() + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível liberar o acesso: " + ex.getCause().getMessage());
         }
-        
+
         return null;
     }
 
     /**
      * Evento invocado pela tela para liberar acesso um evento
-     * @return 
+     *
+     * @return
      */
     public String cancelarAcessoContratante() {
         try {
@@ -152,14 +163,14 @@ public class PreEventoMB extends BasicControl {
             eventoService.cancelarAcessoSistemaContratanteEvento(evento);
 
             createFacesInfoMessage("Cancelado acesso com sucesso");
-            
+
             return "/intranet/admin/operacional/pre-evento/index.xhtml?id=" + preEvento.getId() + "&faces-redirect=true";
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage("Não foi possível cancelar o evento: " + ex.getCause().getMessage());
         }
-        
+
         return null;
     }
 
@@ -325,11 +336,5 @@ public class PreEventoMB extends BasicControl {
     public void setIdPreEvento(Long idPreEvento) {
         this.idPreEvento = idPreEvento;
     }
- 
-    
-    
-    
-
-    
 
 }

@@ -15,8 +15,8 @@
 
 
         <f:metadata>
-            <f:viewParam name="idOrcamento" value="#{LancamentoOrcamentoMB.idOrcamento}" converter="javax.faces.Long"/>
-            <f:viewAction action="#{LancamentoOrcamentoMB.init()}"/>
+            <f:viewParam name="idServicoPrestado" value="#{LancamentoServicoPrestadoMB.idServicoPrestado}" converter="javax.faces.Long"/>
+            <f:viewAction action="#{LancamentoServicoPrestadoMB.init()}"/>
         </f:metadata>
 
 
@@ -30,9 +30,9 @@
                     <div class="panel panel-danger">
                         <div class="panel-heading">
                             <h3 class="panel-title">
-                                <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=#{LancamentoOrcamentoMB.evento.id}">
+                                <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{LancamentoServicoPrestadoMB.evento.preEvento.id}">
                                     <i class="fa fa-list"></i>
-                                    <span>#{LancamentoOrcamentoMB.evento.nome} - Lançamento do Evento</span>
+                                    <span>#{LancamentoServicoPrestadoMB.evento.nome} - Lançamento do Evento</span>
                                 </p:link>
                             </h3>
                         </div>
@@ -61,7 +61,7 @@
                                     </span>
                                 </label>
                                 <p:inputText id="inptTipoLancamento" 
-                                             value="#{LancamentoOrcamentoMB.entity.tipoLancamento.label}" 
+                                             value="#{LancamentoServicoPrestadoMB.entity.tipoLancamento.label}" 
                                              disabled="true"
                                              class="form-control"
                                              label="Tipo de Lançamento"/>
@@ -76,7 +76,7 @@
                                     </span>
                                 </label>
 
-                                <p:inputText value="#{LancamentoOrcamentoMB.entity.valorBase}"
+                                <p:inputText value="#{LancamentoServicoPrestadoMB.entity.valorBase}"
                                              required="true"
                                              disabled="true"
                                              class="form-control"
@@ -97,7 +97,7 @@
                                     </span>
                                 </label>
                                 <h:selectOneMenu id="inptResponsavel" 
-                                                 value="#{LancamentoOrcamentoMB.entity.envolvidoDestino}"
+                                                 value="#{LancamentoServicoPrestadoMB.entity.envolvidoDestino}"
                                                  required="true"
                                                  requiredMessage="Preencha um responsável válido"
                                                  class="form-control"
@@ -107,7 +107,7 @@
                                     <f:selectItem itemValue="" 
                                                   itemLabel="Selecione" /> 
 
-                                    <f:selectItems value="#{LancamentoOrcamentoMB.contratantes}" 
+                                    <f:selectItems value="#{LancamentoServicoPrestadoMB.contratantes}" 
                                                    var="contratante"
                                                    itemValue="#{contratante}"
                                                    itemLabel="#{contratante.nome}"/>
@@ -131,7 +131,7 @@
                                             mask="true" 
                                             id="inptDataVencimento"
                                             style="display: block;"
-                                            value="#{LancamentoOrcamentoMB.entity.dataVencimento}"
+                                            value="#{LancamentoServicoPrestadoMB.entity.dataVencimento}"
                                             label="Data Vencimento" 
                                             showOn="button"
                                             navigator="true"
@@ -140,7 +140,7 @@
                                     <p:ajax event="dateSelect"
                                             process="@this"
                                             update="parcelas"
-                                            listener="#{LancamentoOrcamentoMB.atualizarNumeroParcelas()}"
+                                            listener="#{LancamentoServicoPrestadoMB.atualizarNumeroParcelas()}"
                                             onstart="PF('statusDialog').show();"
                                             oncomplete="PF('statusDialog').hide();"/>
 
@@ -155,7 +155,7 @@
                                     </span>
                                 </label>
 
-                                <p:inputText value="#{LancamentoOrcamentoMB.entity.envolvidoOrigem.nome}"
+                                <p:inputText value="#{LancamentoServicoPrestadoMB.entity.envolvidoOrigem.nome}"
                                              required="true"
                                              disabled="true"
                                              class="form-control"
@@ -173,7 +173,7 @@
                                 </label>
 
                                 <h:selectOneMenu id="inptServico" 
-                                                 value="#{LancamentoOrcamentoMB.entity.servico}"
+                                                 value="#{LancamentoServicoPrestadoMB.entity.servico}"
                                                  required="true"
                                                  requiredMessage="Preencha um serviço válido"
                                                  class="form-control"
@@ -184,7 +184,7 @@
                                     <f:selectItem itemValue="" 
                                                   itemLabel="Selecione" /> 
 
-                                    <f:selectItems value="#{LancamentoOrcamentoMB.servicos}" 
+                                    <f:selectItems value="#{LancamentoServicoPrestadoMB.servicos}" 
                                                    var="servico"
                                                    itemValue="#{servico}"
                                                    itemLabel="#{servico.nome}"/>
@@ -210,14 +210,14 @@
                                             <div class="panel-heading" style="height: 44px;">
                                                 <h3 class="panel-title">Parcelas</h3>
                                                 <div class="pull-right" style="margin-top: -22px;">
-                                                    <p:spinner value="#{LancamentoOrcamentoMB.entity.numeroParcelas}"
+                                                    <p:spinner value="#{LancamentoServicoPrestadoMB.entity.numeroParcelas}"
                                                                required="true"
                                                                min="1"
                                                                requiredMessage="Preencha número de parcelas">
 
                                                         <p:ajax event="change"
                                                                 process="@this"
-                                                                listener="#{LancamentoOrcamentoMB.atualizarNumeroParcelas()}"
+                                                                listener="#{LancamentoServicoPrestadoMB.atualizarNumeroParcelas()}"
                                                                 onstart="PF('statusDialog').show();"
                                                                 oncomplete="PF('statusDialog').hide();"
                                                                 update="parcelas"/>
@@ -244,7 +244,7 @@
 
                                                         <tbody>
 
-                                                            <ui:repeat value="#{LancamentoOrcamentoMB.entity.parcelas}"
+                                                            <ui:repeat value="#{LancamentoServicoPrestadoMB.entity.parcelas}"
                                                                        var="parcela"
                                                                        varStatus="indice">
 
@@ -274,7 +274,7 @@
                                                                             <f:selectItem itemValue="" 
                                                                                           itemLabel="Selecione" /> 
 
-                                                                            <f:selectItems value="#{LancamentoOrcamentoMB.formasPagamentos}" 
+                                                                            <f:selectItems value="#{LancamentoServicoPrestadoMB.formasPagamentos}" 
                                                                                            var="forma"
                                                                                            itemValue="#{forma}"
                                                                                            itemLabel="#{forma.label}"/>
@@ -354,7 +354,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <p:commandButton value="Salvar"
-                                                 action="#{LancamentoOrcamentoMB.save()}"
+                                                 action="#{LancamentoServicoPrestadoMB.save()}"
                                                  update="@form"
                                                  style="margin-right: 10px;"
                                                  icon="fa fa-check" 

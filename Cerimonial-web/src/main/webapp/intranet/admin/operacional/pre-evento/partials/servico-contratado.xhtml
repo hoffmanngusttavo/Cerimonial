@@ -168,6 +168,7 @@
                     <div class="row">
                         <p:commandButton value="Salvar Orçamento"
                                          action="#{ServicoPrestadoEventoMB.salvar()}"
+                                         rendered="#{ServicoPrestadoEventoMB.entity.preEvento.evento == null}"
                                          update=":form:groupOrcamento"
                                          style="margin-right: 10px; float: right;"
                                          icon="fa fa-check" 

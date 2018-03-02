@@ -145,7 +145,7 @@
                                         <p:repeat value="#{DashBoardMB.eventosAtivos}" var="eve">
                                             <tr>
                                                 <td>
-                                                    <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?idEvento=#{eve.id}" >
+                                                    <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{eve.preEvento.id}" >
                                                         <span>#{eve.nome}</span>
                                                     </p:link>
                                                 </td>

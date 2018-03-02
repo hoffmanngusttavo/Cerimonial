@@ -183,7 +183,15 @@ public class EventoService extends BasicService<Evento> {
      */
     public List<Evento> findEventosAtivos(int limit) {
         try {
-            return repository.findEventosAtivos(limit);
+            List<Evento> eventos = repository.findEventosAtivos(limit);
+            
+            if(CollectionUtils.isNotBlank(eventos)){
+                for (Evento evento : eventos) {
+                    smartLazy(evento, Arrays.asList("preEvento"));
+                }
+            }
+            
+            return eventos;
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }

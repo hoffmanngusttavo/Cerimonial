@@ -26,7 +26,7 @@ public class ServicoPrestadoEventoRepository extends AbstractRepository<ServicoP
 
         StringBuilder sql = new StringBuilder("SELECT sp FROM ServicoPrestadoEvento sp  ");
         sql.append(" INNER JOIN sp.preEvento preevento");
-        sql.append(" INNER JOIN sp.evento evento");
+        sql.append(" INNER JOIN preevento.evento evento");
         sql.append(" LEFT JOIN sp.modeloProposta mp");
         sql.append(" LEFT JOIN sp.anexos arq");
         sql.append(" WHERE 1=1");

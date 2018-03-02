@@ -25,7 +25,7 @@ public class LancamentoRepository extends AbstractRepository<Lancamento> {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT lan FROM Lancamento lan ");
-        sb.append("INNER JOIN lan.orcamentoEvento orc ");
+        sb.append("INNER JOIN lan.servicoPrestadoEvento orc ");
         sb.append("WHERE 1=1 ");
         sb.append("AND orc.id =?1 ");
 

@@ -18,6 +18,7 @@ import br.com.cerimonial.repository.ContratoEventoRepository;
 import br.com.cerimonial.utils.CollectionUtils;
 import br.com.cerimonial.utils.ValorPorExtensoUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,7 +97,10 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
         List<ContratoEvento> contratos = repository.getContratosByEvento(idEvento);
 
         if (CollectionUtils.isNotBlank(contratos)) {
-            return contratos.get(0);
+            for (ContratoEvento contrato : contratos) {
+                smartLazy(contrato, Arrays.asList("preEvento"));
+                return contrato;
+            }
         }
 
         return null;
@@ -223,7 +227,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
 
             conteudo = conteudo.replaceAll("#dadosEvento#", substituirDadosEvento(evento));
 
-            conteudo = conteudo.replaceAll("#formaPagamento#", substituirDadosPagamentoEvento(entity.getEvento()));
+            conteudo = conteudo.replaceAll("#formaPagamento#", substituirDadosPagamentoEvento(evento));
         }
 
         entity.setConteudo(conteudo);
