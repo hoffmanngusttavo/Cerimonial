@@ -7,8 +7,10 @@ package br.com.cerimonial.service;
 
 import br.com.cerimonial.entity.CerimoniaEvento;
 import br.com.cerimonial.entity.ContatoEvento;
+import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Endereco;
 import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.EventoPessoa;
 import br.com.cerimonial.entity.FestaCerimonia;
 import br.com.cerimonial.entity.Pessoa;
 import br.com.cerimonial.entity.PreEvento;
@@ -53,6 +55,8 @@ public class EventoService extends BasicService<Evento> {
     @EJB
     protected PessoaService pessoaService;
     @EJB
+    protected EventoPessoaService eventoPessoaService;
+    @EJB
     protected UsuarioService usuarioService;
     @EJB
     protected EvolucaoPreenchimentoService preenchimentoService;
@@ -62,6 +66,8 @@ public class EventoService extends BasicService<Evento> {
     protected ContatoEventoService contatoEventoService;
     @EJB
     protected PreEventoService preEventoService;
+    @EJB
+    protected CustoEventoService custoEventoService;
 
     @PostConstruct
     @PostActivate
@@ -75,11 +81,11 @@ public class EventoService extends BasicService<Evento> {
     }
 
     public Evento findEntityById(Long id, List<String> pathLazy) throws Exception {
-        
+
         Evento entity = repository.getEntity(id);
-        
+
         smartLazy(entity, pathLazy);
-        
+
         return entity;
     }
 
@@ -207,6 +213,37 @@ public class EventoService extends BasicService<Evento> {
 
     }
 
+    /**
+     * Vai criar um evento a partir de uma proposta aceita. Vai Criar um
+     * cliente. Vai criar o evento do cliente
+     *
+     * @param preEvento
+     * @return
+     * @throws java.lang.Exception
+     */
+    public Evento criarNovoEvento(PreEvento preEvento) throws Exception {
+
+        preEventoService.validateObjectAndIdNull(preEvento);
+
+        contatoEventoService.validateObjectNull(preEvento.getContatoEvento());
+
+        Pessoa cliente = pessoaService.criarClienteFromContato(preEvento.getContatoEvento());
+
+        Evento evento = this.criarEventoFromPreEvento(preEvento);
+
+        CustoEvento custoEvento = custoEventoService.criarCustoEvento(evento);
+
+        EventoPessoa eventoPessoa = eventoPessoaService.criarContratanteEvento(evento, cliente);
+
+        //salvar em cascata
+        pessoaService.saveCliente(cliente);
+        this.save(evento);
+        eventoPessoaService.save(eventoPessoa);
+        custoEventoService.save(custoEvento);
+
+        return evento;
+    }
+
     public Evento criarEventoFromPreEvento(PreEvento preEvento) throws Exception {
 
         preEventoService.validateObjectAndIdNull(preEvento);
@@ -232,15 +269,14 @@ public class EventoService extends BasicService<Evento> {
 
         validateId(idServicoPrestado);
 
-       return repository.findEventoByServicoPrestadoId(idServicoPrestado);
+        return repository.findEventoByServicoPrestadoId(idServicoPrestado);
     }
-    
-    
+
     public Evento findEventoByPreEventoId(Long idPreEvento) throws Exception {
 
         validateId(idPreEvento);
 
-       return repository.findEventoByPreEventoId(idPreEvento);
+        return repository.findEventoByPreEventoId(idPreEvento);
     }
 
     public Evento getEventoByContatoInicial(ContatoEvento contatoEvento) throws Exception {
@@ -286,31 +322,29 @@ public class EventoService extends BasicService<Evento> {
 
     }
 
-    public Evento findEventoByIdAndContratante(Long idEvento, Pessoa contratante){
-        
+    public Evento findEventoByIdAndContratante(Long idEvento, Pessoa contratante) {
+
         validateId(idEvento);
 
         pessoaService.validateObjectAndIdNull(contratante);
 
         return repository.getEventoByIdEventoContratante(idEvento, contratante);
-        
+
     }
-    
-    public Evento findEventoByIdAndContratante(Long idEvento, Pessoa contratante, List<String> pathsLazy){
-        
+
+    public Evento findEventoByIdAndContratante(Long idEvento, Pessoa contratante, List<String> pathsLazy) {
+
         validateId(idEvento);
 
         pessoaService.validateObjectAndIdNull(contratante);
 
         Evento evento = repository.getEventoByIdEventoContratante(idEvento, contratante);
-        
+
         smartLazy(evento, pathsLazy);
-    
+
         return evento;
     }
-    
-    
-   
+
     /**
      * Vai retornar o evento que pertence a somente esse cliente Carregar em
      * lazy o cerimonia, festa, tipo evento
@@ -325,7 +359,7 @@ public class EventoService extends BasicService<Evento> {
         Evento evento = repository.getEntity(idEvento);
 
         smartLazy(evento, Arrays.asList("cerimoniaEvento", "festaCerimonia", "evolucoesPreenchimento"));
-        
+
         return evento;
 
     }

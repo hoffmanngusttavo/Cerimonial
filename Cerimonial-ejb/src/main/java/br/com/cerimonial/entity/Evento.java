@@ -133,7 +133,7 @@ public class Evento implements Serializable, ModelInterface {
     @OneToMany(mappedBy = "evento", cascade = {CascadeType.REMOVE})
     private List<AtividadeEvento> atividades;
 
-    @OneToOne(mappedBy = "evento")
+    @OneToOne(fetch = FetchType.LAZY)
     private PreEvento preEvento;
 
     @Override

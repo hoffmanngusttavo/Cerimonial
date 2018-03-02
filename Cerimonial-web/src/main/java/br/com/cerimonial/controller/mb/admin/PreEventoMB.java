@@ -128,7 +128,7 @@ public class PreEventoMB extends BasicControl {
     public String criarEvento() {
         try {
 
-            eventoService.criarEventoFromPreEvento(preEvento);
+            eventoService.criarNovoEvento(preEvento);
 
             createFacesInfoMessage("Evento criado com sucesso");
             
