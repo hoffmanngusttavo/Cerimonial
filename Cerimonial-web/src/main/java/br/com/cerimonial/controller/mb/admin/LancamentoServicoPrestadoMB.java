@@ -106,7 +106,7 @@ public class LancamentoServicoPrestadoMB extends BasicControl{
 
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-            return "/intranet/admin/operacional/pre-evento/index.xhtml?idPreEvento=" + evento.getPreEvento().getId() + "&faces-redirect=true";
+            return "/intranet/admin/operacional/pre-evento/index.xhtml?id=" + evento.getPreEvento().getId() + "&faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getMessage());

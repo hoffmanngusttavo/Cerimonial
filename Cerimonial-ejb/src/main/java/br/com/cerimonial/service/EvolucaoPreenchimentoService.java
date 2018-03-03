@@ -100,9 +100,33 @@ public class EvolucaoPreenchimentoService extends BasicService<EvolucaoPreenchim
 
         } else {
 
-            //TODO: VALIDAR DE ACORDO COM O TIPO DO ENVOLVIDO
+            
+            switch(eventoPessoa.getTipoEnvolvidoEvento()){
+            
+                case NOIVO:
+                    
+                    validarPorcentagemPreenchimentoNoivo(eventoPessoa);
+                    
+                    break;
+                case NOIVA:
+                    
+                    validarPorcentagemPreenchimentoNoivo(eventoPessoa);
+                    
+                    break;
+                case ANIVERSARIANTE:
+                    
+                    
+                    break;
+                case FESTEIRO:
+                    
+                    
+                    break;
+                case FORMANDO:
+                    
+                    
+                    break;
+            }
         }
-
     }
 
     /**

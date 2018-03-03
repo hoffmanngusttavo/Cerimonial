@@ -138,14 +138,12 @@ public class EventoRepository extends AbstractRepository<Evento> {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT eve FROM Evento eve ");
-        sb.append("INNER JOIN eve.contratantes ep ");
-        sb.append("INNER JOIN ep.pessoa con ");
+        sb.append("INNER JOIN eve.preEvento pre ");
+        sb.append("INNER JOIN pre.servicoPrestadoEvento ser ");
         sb.append("WHERE 1=1 ");
-        sb.append("AND eve.id =?1 ");
-        sb.append("AND con.id =?2 ");
-        sb.append("AND eve.situacaoEvento =?3");
+        sb.append("AND ser.id =?1 ");
 
-        return getPurePojo(Evento.class, sb.toString());
+        return getPurePojo(Evento.class, sb.toString(), idServicoPrestado);
         
     }
     

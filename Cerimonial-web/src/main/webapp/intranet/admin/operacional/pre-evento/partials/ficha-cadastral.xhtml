@@ -28,7 +28,7 @@
                     <div class="panel panel-danger">
                         <div class="panel-heading">
                             <h3 class="panel-title">
-                                <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?idEvento=#{FichaCadastralEventoMB.evento.preEvento.id}">
+                                <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{FichaCadastralEventoMB.evento.preEvento.id}">
                                     <i class="fa fa-list"></i>
                                     <span>#{FichaCadastralEventoMB.evento.nome} - Ficha Cadastral Evento</span>
                                 </p:link>
@@ -355,6 +355,7 @@
                                            rendered="#{FichaCadastralEventoMB.evento.cerimoniaEvento.id == null
                                                        and FichaCadastralEventoMB.evento.categoriaCasamento}"
                                            value="Copiar local da cerimonia"
+                                           immediate="true"
                                            process="@this, inptLocalCerimonia, enderecoGroup"
                                            onstart="PF('statusDialog').show();"
                                            oncomplete="PF('statusDialog').hide();"

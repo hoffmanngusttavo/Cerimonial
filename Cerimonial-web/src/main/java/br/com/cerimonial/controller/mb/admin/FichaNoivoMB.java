@@ -84,7 +84,7 @@ public class FichaNoivoMB extends BasicControl {
     public void initEvento() {
         try {
 
-            evento = eventoService.findEntityById(idEvento, Arrays.asList("contratantes"));
+            evento = eventoService.findEntityById(idEvento, Arrays.asList("contratantes", "preEvento"));
 
             if (evento != null) {
 

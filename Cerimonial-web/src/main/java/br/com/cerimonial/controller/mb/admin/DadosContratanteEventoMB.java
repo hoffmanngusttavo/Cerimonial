@@ -58,7 +58,7 @@ public class DadosContratanteEventoMB  extends BasicControl{
 
         try {
 
-           evento = eventoService.findEntityById(idEvento, Arrays.asList("contratantes"));
+           evento = eventoService.findEntityById(idEvento, Arrays.asList("contratantes", "preEvento"));
 
             if (evento != null) {
 

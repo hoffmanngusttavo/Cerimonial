@@ -14,6 +14,7 @@ import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.ServicoService;
 import br.com.cerimonial.utils.CollectionUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,8 +36,6 @@ public class CheckListEventoMB extends BasicControl {
 
     private AtividadeEvento entity;
 
-    private List<AtividadeEvento> atividades;
-
     @EJB
     protected AtividadeEventoService service;
 
@@ -55,9 +54,7 @@ public class CheckListEventoMB extends BasicControl {
 
             if (idEvento != null) {
 
-                evento = eventoService.findEntityById(idEvento);
-
-                atividades = service.findAtividadesByIdEvento(idEvento);
+                evento = eventoService.findEntityById(idEvento, Arrays.asList("preEvento", "atividades"));
 
             }
 
@@ -154,14 +151,6 @@ public class CheckListEventoMB extends BasicControl {
 
     public void setIdEvento(Long idEvento) {
         this.idEvento = idEvento;
-    }
-
-    public List<AtividadeEvento> getAtividades() {
-        return atividades;
-    }
-
-    public void setAtividades(List<AtividadeEvento> atividades) {
-        this.atividades = atividades;
     }
 
     public Evento getEvento() {

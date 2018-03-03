@@ -98,7 +98,7 @@ public class ContratoEventoService extends BasicService<ContratoEvento> {
 
         if (CollectionUtils.isNotBlank(contratos)) {
             for (ContratoEvento contrato : contratos) {
-                smartLazy(contrato, Arrays.asList("preEvento"));
+                smartLazy(contrato, Arrays.asList("evento","evento.preEvento"));
                 return contrato;
             }
         }

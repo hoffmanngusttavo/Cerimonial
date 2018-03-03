@@ -95,20 +95,8 @@ public class CustoEventoService extends BasicService<CustoEvento> {
 
         if (custo != null) {
             
-            smartLazy(custo, Arrays.asList("lancamentos", "lancamentos.parcelas"));
+            smartLazy(custo, Arrays.asList("evento","evento.preEvento", "lancamentos", "lancamentos.parcelas"));
 
-//            if (custo.getLancamentos() != null) {
-//                
-//                custo.getLancamentos().size();
-//                
-//                for (Lancamento lancamento : custo.getLancamentos()) {
-//                    
-//                    if (lancamento.getParcelas() != null) {
-//                        
-//                        lancamento.getParcelas().size();
-//                    }
-//                }
-//            }
         }
         
         return custo;

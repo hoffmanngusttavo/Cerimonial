@@ -277,7 +277,11 @@ public class EventoService extends BasicService<Evento> {
 
         validateId(idServicoPrestado);
 
-        return repository.findEventoByServicoPrestadoId(idServicoPrestado);
+        Evento evento = repository.findEventoByServicoPrestadoId(idServicoPrestado);
+        
+        smartLazy(evento, Arrays.asList("preEvento", "preEvento.servicoPrestado"));
+        
+        return evento;
     }
 
     public Evento findEventoByPreEventoId(Long idPreEvento) throws Exception {
@@ -366,7 +370,7 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = repository.getEntity(idEvento);
 
-        smartLazy(evento, Arrays.asList("cerimoniaEvento", "festaCerimonia", "evolucoesPreenchimento"));
+        smartLazy(evento, Arrays.asList("preEvento", "cerimoniaEvento", "festaCerimonia", "evolucoesPreenchimento"));
 
         return evento;
 

@@ -8,6 +8,7 @@ package br.com.cerimonial.controller.mb.admin;
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.service.EventoService;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -36,7 +37,7 @@ public class FichaComplementarCasalMB extends BasicControl{
     public void initEvento() {
         try {
             
-            evento = eventoService.findEntityById(idEvento);
+            evento = eventoService.findEntityById(idEvento, Arrays.asList("preEvento"));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

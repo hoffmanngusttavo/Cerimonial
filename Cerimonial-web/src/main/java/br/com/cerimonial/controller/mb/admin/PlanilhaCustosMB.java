@@ -10,6 +10,7 @@ import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.service.CustoEventoService;
 import br.com.cerimonial.service.EventoService;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -46,7 +47,7 @@ public class PlanilhaCustosMB extends BasicControl {
             
             if(entity == null){
                 
-                Evento evento = eventoService.findEntityById(idEvento);
+                Evento evento = eventoService.findEntityById(idEvento, Arrays.asList("preEvento"));
                 
                 entity = new CustoEvento(evento);
             }
