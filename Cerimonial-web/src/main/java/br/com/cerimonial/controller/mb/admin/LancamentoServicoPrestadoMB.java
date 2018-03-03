@@ -106,6 +106,26 @@ public class LancamentoServicoPrestadoMB extends BasicControl{
 
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
+            return "/intranet/admin/operacional/pre-evento/partials/lancamento-orcamento.xhtml?idServicoPrestado=" + idServicoPrestado + "&faces-redirect=true";
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getMessage());
+        } finally {
+            scrollTopMessage();
+        }
+        return null;
+    }
+    
+    
+    public String criarLancamentoReceita() {
+        try {
+            
+            service.criarSalvarLancamentoReceita(entity);
+
+            createFacesInfoMessage("Dados gravados com sucesso!");
+
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
             return "/intranet/admin/operacional/pre-evento/index.xhtml?id=" + evento.getPreEvento().getId() + "&faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

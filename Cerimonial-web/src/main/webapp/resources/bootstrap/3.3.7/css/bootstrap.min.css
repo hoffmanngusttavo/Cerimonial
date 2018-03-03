@@ -84,3 +84,8 @@ input.currency {
     text-overflow: ellipsis;
     direction: ltr;
 }
+
+.tab-pane-scroll{
+    max-height: 200px;
+    overflow-y: scroll;
+}

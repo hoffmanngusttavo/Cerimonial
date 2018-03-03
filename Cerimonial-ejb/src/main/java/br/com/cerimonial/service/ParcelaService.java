@@ -155,11 +155,16 @@ public class ParcelaService extends BasicService<Parcela> {
         
     }
 
-    public List<Parcela> findParcelasVencidasEmpresa(int max) {
+    /**
+     * Somente lancamentos de despesas
+     * @param max
+     * @return 
+     */
+    public List<Parcela> findDespesasVencidasEmpresa(int max) {
         
         try {
 
-            return repository.findParcelasVencidasEmpresa(max, DateUtils.formatDate(new Date(), DateUtils.format_dd_MM_yyyy_ptBR));
+            return repository.findDespesasVencidasEmpresa(max, DateUtils.formatDate(new Date(), DateUtils.format_dd_MM_yyyy_ptBR));
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

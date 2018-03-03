@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
 import br.com.cerimonial.entity.Parcela;
@@ -129,7 +130,7 @@ public class LancamentoService extends BasicService<Lancamento> {
         Lancamento lancamento = repository.findLancamentoByServicoPrestadoId(idServicoPrestado);
 
         smartLazy(lancamento, Arrays.asList("parcelas"));
-        
+
         return lancamento;
     }
 
@@ -226,9 +227,9 @@ public class LancamentoService extends BasicService<Lancamento> {
     public Lancamento criarNovoLancamentoSaidaOrcamento(List<Pessoa> contratantes, Evento evento) throws Exception {
 
         eventoService.validateObjectAndIdNull(evento);
-        
+
         custoEventoService.validateObjectAndIdNull(evento.getCustoEvento());
-        
+
         servicoPrestadoEventoService.validateObjectNull(evento.getPreEvento().getServicoPrestadoEvento());
 
         if (CollectionUtils.isBlank(contratantes)) {
@@ -238,7 +239,7 @@ public class LancamentoService extends BasicService<Lancamento> {
         Lancamento entity = new Lancamento(TipoLancamento.DESPESA);
 
         entity.setServicoPrestadoEvento(evento.getPreEvento().getServicoPrestadoEvento());
-        
+
         entity.setCustoEvento(evento.getCustoEvento());
 
         entity.setValorBase(evento.getPreEvento().getServicoPrestadoEvento().getValorFinal());
@@ -247,10 +248,10 @@ public class LancamentoService extends BasicService<Lancamento> {
         entity.setEnvolvidoOrigem(EmpresaCache.getEmpresa().getPessoa());
 
         if (entity.getEnvolvidoOrigem() != null) {
-            
+
             List<Servico> servicos = servicoService.findAllByFornecedorId(entity.getEnvolvidoOrigem().getId());
-            
-            if(CollectionUtils.isNotBlank(servicos)){
+
+            if (CollectionUtils.isNotBlank(servicos)) {
                 entity.setServico(servicos.get(0));
             }
 
@@ -264,40 +265,48 @@ public class LancamentoService extends BasicService<Lancamento> {
         return entity;
     }
 
-    public Lancamento saveLancamentoServicoPrestado(Lancamento entity) throws Exception {
+    /**
+     * Vai salvar o lancamento de despesa do evento
+     *
+     * @param lancamentoDespesa
+     * @return
+     * @throws java.lang.Exception
+     */
+    public Lancamento saveLancamentoServicoPrestado(Lancamento lancamentoDespesa) throws Exception {
 
-        validateObjectNull(entity);
+        validateObjectNull(lancamentoDespesa);
         
-        entity.calcularParcelas();
+        custoEventoService.validateObjectAndIdNull(lancamentoDespesa.getCustoEvento());
 
-        if (entity.getId() == null) {
+        lancamentoDespesa.calcularParcelas();
 
-            Lancamento lancamentoEntradaEvento = criarLancamentoEntrada(entity);
-            
-            entity = save(entity);
-            
-            save(lancamentoEntradaEvento);
-            
-            parcelaVinculadaService.vincularSalvarParcelas(entity, lancamentoEntradaEvento);
-//            custoEventoService.atualizarSalvarValoresCusto(entity.getCustoEvento());
-            
-
-        } else {
-
-            entity =  save(entity);
-        }
+        lancamentoDespesa = save(lancamentoDespesa);
         
-        return entity;
-
+        CustoEvento custoEvento = custoEventoService.findEntityById(lancamentoDespesa.getCustoEvento().getId());
+        custoEvento.adicionarLancamento(lancamentoDespesa);
+        custoEventoService.atualizarValoresCusto(custoEvento);
+        custoEventoService.save(custoEvento);
+        
+        return lancamentoDespesa;
     }
-    
-    
+
+    public Lancamento criarSalvarLancamentoReceita(Lancamento lancamentoDespesa) throws Exception {
+
+        validateObjectNull(lancamentoDespesa);
+
+        Lancamento lancamentoEntradaEmpresa = criarLancamentoEntrada(lancamentoDespesa);
+
+        parcelaVinculadaService.vincularParcelas(lancamentoDespesa.getParcelas(), lancamentoEntradaEmpresa.getParcelas());
+
+        return save(lancamentoEntradaEmpresa);
+    }
+
     public Lancamento criarLancamentoEntrada(Lancamento entity) throws Exception {
 
         validateObjectNull(entity);
 
         Lancamento lancamento = new Lancamento(TipoLancamento.RECEITA);
-        
+
         lancamento.setDataVencimento(entity.getDataVencimento());
         lancamento.setEnvolvidoDestino(entity.getEnvolvidoOrigem());
         lancamento.setEnvolvidoOrigem(entity.getEnvolvidoDestino());
@@ -308,14 +317,10 @@ public class LancamentoService extends BasicService<Lancamento> {
         lancamento.setValorEstimado(entity.getValorEstimado());
         lancamento.setValorTotalPago(entity.getValorTotalPago());
         lancamento.calcularParcelas();
-        
+
         return lancamento;
 
     }
-    
-    
-    
-    
 
     @Override
     public void validateId(Long idEntity) {

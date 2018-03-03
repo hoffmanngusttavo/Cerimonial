@@ -98,3 +98,8 @@ input.currency {
     text-align: right;
     padding-right: 15px;
 }
+
+.tab-pane-scroll{
+    max-height: 200px;
+    overflow-y: scroll;
+}

@@ -353,6 +353,17 @@
                             <div class="form-group col-md-6">
                                 <p:commandButton value="Salvar"
                                                  action="#{LancamentoServicoPrestadoMB.save()}"
+                                                 rendered="#{LancamentoServicoPrestadoMB.entity.id == null}"
+                                                 update="@form"
+                                                 style="margin-right: 10px;"
+                                                 icon="fa fa-check" 
+                                                 class="btn btn-success"
+                                                 onstart="PF('statusDialog').show();"
+                                                 oncomplete="PF('statusDialog').hide();"/>
+                                
+                                <p:commandButton value="Criar Lançamento de Receita para sua Empresa"
+                                                 action="#{LancamentoServicoPrestadoMB.criarLancamentoReceita()}"
+                                                 rendered="#{LancamentoServicoPrestadoMB.entity.id != null}"
                                                  update="@form"
                                                  style="margin-right: 10px;"
                                                  icon="fa fa-check" 

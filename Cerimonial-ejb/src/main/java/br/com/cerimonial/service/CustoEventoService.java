@@ -51,7 +51,10 @@ public class CustoEventoService extends BasicService<CustoEvento> {
 
     @Override
     public CustoEvento findEntityById(Long id) throws Exception {
-        return repository.getEntity(id);
+        
+        CustoEvento entity = repository.getEntity(id);
+        
+        return smartLazy(entity, Arrays.asList("lancamentos"));
     }
 
     @Override
@@ -156,6 +159,12 @@ public class CustoEventoService extends BasicService<CustoEvento> {
     
     public CustoEvento atualizarSalvarValoresCusto(CustoEvento custoEvento) throws Exception {
     
+        validateObjectNull(custoEvento);
+       
+        if(custoEvento.getId() != null){
+            custoEvento = this.findEntityById(custoEvento.getId());
+        }
+        
         atualizarValoresCusto(custoEvento);
         
         return save(custoEvento);

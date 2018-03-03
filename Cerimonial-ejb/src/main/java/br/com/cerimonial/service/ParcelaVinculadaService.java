@@ -12,6 +12,7 @@ import br.com.cerimonial.exceptions.ErrorCode;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.repository.ParcelaVinculadaRepository;
 import br.com.cerimonial.utils.CollectionUtils;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -90,26 +91,24 @@ public class ParcelaVinculadaService extends BasicService<ParcelaVinculada> {
 
     }
 
-    public void vincularSalvarParcelas(Lancamento lancamentoSaida, Lancamento lancamentoEntrada) throws Exception {
+    public void vincularParcelas(List<Parcela> parcelasDespesa, List<Parcela> parcelasReceita) throws Exception {
 
-        lancamentoService.validateObjectNull(lancamentoSaida);
+        if(CollectionUtils.isNotBlank(parcelasDespesa) 
+                && CollectionUtils.isNotBlank(parcelasReceita)){
         
-        lancamentoService.validateObjectNull(lancamentoEntrada);
-        
-        
-        if(CollectionUtils.isNotBlank(lancamentoSaida.getParcelas()) 
-                && CollectionUtils.isNotBlank(lancamentoEntrada.getParcelas())){
-        
-            for (Parcela parcela : lancamentoSaida.getParcelas()) {
+            if(parcelasDespesa.size() != parcelasReceita.size()){
+                throw new Exception("Numero de parcelas deve ser igual para serem vinculadas");
+            }
+            
+            for (Parcela parcelaDespesa : parcelasDespesa) {
                 
-                for (Parcela parcelaSaida : lancamentoSaida.getParcelas()) {
+                for (Parcela parcelaReceita : parcelasReceita) {
                     
-                    if(parcela.getNumeroParcela() == parcelaSaida.getNumeroParcela()){
+                    if(parcelaDespesa.getNumeroParcela() == parcelaReceita.getNumeroParcela()){
                         
-                        ParcelaVinculada vinculada = new ParcelaVinculada(parcela, parcelaSaida);
-
+                        ParcelaVinculada vinculada = new ParcelaVinculada(parcelaDespesa, parcelaReceita);
+                        
                         save(vinculada);
-                        
                         break;
                     }
                     

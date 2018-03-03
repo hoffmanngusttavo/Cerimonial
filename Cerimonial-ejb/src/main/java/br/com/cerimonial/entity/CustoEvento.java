@@ -5,8 +5,11 @@
  */
 package br.com.cerimonial.entity;
 
+import br.com.cerimonial.exceptions.ErrorCode;
+import br.com.cerimonial.exceptions.GenericException;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -222,6 +225,22 @@ public class CustoEvento implements Serializable, ModelInterface{
     @Override
     public String toString() {
         return "CustoEvento{" + "id=" + id + '}';
+    }
+
+    public void adicionarLancamento(Lancamento lancamento) {
+        
+        if(lancamento == null){
+            throw new GenericException("Lancamento nulo", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(lancamentos == null){
+            lancamentos = new LinkedList<Lancamento>();
+        }
+        
+        if(!lancamentos.contains(lancamento)){
+            lancamentos.add(lancamento);
+        }
+        
     }
     
     

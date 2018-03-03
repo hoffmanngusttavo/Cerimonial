@@ -49,31 +49,17 @@ public class ParcelaRepository extends AbstractRepository<Parcela> {
         return getPureListRange(Parcela.class, sb.toString(), max, 0);
     }
 
-    public List<Parcela> findParcelasVencidasEmpresa(int max, String dataFormatada) {
-       
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT par FROM Parcela par ");
-        sb.append(" INNER JOIN par.lancamento lan ");
-        sb.append(" INNER JOIN lan.custoEvento custo ");
-        sb.append(" WHERE custo.id IS NULL ");
-        sb.append(" AND par.pago = false ");
-        sb.append(" AND par.dataVencimento <= '").append(dataFormatada).append("'");
-        sb.append(" ORDER BY par.dataVencimento ASC ");
-
-        return getPureListRange(Parcela.class, sb.toString(), max, 0);
-        
-    }
+    
 
     public List<Parcela> findParcelasAReceberEmpresa(int max, String dataFormatada) {
         
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT par FROM Parcela par ");
         sb.append(" INNER JOIN par.lancamento lan ");
-        sb.append(" INNER JOIN lan.custoEvento custo ");
+        sb.append(" LEFT JOIN lan.custoEvento custo ");
         sb.append(" WHERE custo.id IS NULL ");
         sb.append(" AND par.pago = false ");
-        sb.append(" AND lan.tipoLancamento = 'ENTRADA' ");
-        sb.append(" AND par.dataVencimento <= '").append(dataFormatada).append("'");
+        sb.append(" AND lan.tipoLancamento = 'RECEITA' ");
         sb.append(" ORDER BY par.dataVencimento ASC ");
 
         return getPureListRange(Parcela.class, sb.toString(), max, 0);
@@ -85,7 +71,7 @@ public class ParcelaRepository extends AbstractRepository<Parcela> {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT par FROM Parcela par ");
         sb.append(" INNER JOIN par.lancamento lan ");
-        sb.append(" INNER JOIN lan.custoEvento custo ");
+        sb.append(" LEFT JOIN lan.custoEvento custo ");
         sb.append(" WHERE custo.id IS NULL ");
         sb.append(" AND par.pago = false ");
         sb.append(" AND lan.tipoLancamento = 'DESPESA' ");
@@ -96,4 +82,21 @@ public class ParcelaRepository extends AbstractRepository<Parcela> {
         
     }
 
+    
+    public List<Parcela> findDespesasVencidasEmpresa(int max, String dataFormatada) {
+       
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT par FROM Parcela par ");
+        sb.append(" INNER JOIN par.lancamento lan ");
+        sb.append(" LEFT JOIN lan.custoEvento custo ");
+        sb.append(" WHERE custo.id IS NULL ");
+        sb.append(" AND par.pago = false ");
+        sb.append(" AND lan.tipoLancamento = 'DESPESA' ");
+        sb.append(" AND par.dataVencimento <= '").append(dataFormatada).append("'");
+        sb.append(" ORDER BY par.dataVencimento ASC ");
+
+        return getPureListRange(Parcela.class, sb.toString(), max, 0);
+        
+    }
+    
 }

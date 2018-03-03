@@ -84,7 +84,7 @@ public class DashBoardMB extends BasicControl {
 
         contasReceberEmpresa = parcelaService.findParcelasAReceberEmpresa(10);
 
-        contasVencidasEmpresa = parcelaService.findParcelasVencidasEmpresa(10);
+        contasVencidasEmpresa = parcelaService.findDespesasVencidasEmpresa(10);
 
     }
 
