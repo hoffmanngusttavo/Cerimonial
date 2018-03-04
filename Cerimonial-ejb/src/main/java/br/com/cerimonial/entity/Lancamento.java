@@ -103,7 +103,8 @@ public class Lancamento implements Serializable, ModelInterface {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataUltimaAlteracao;
 
-    @OneToOne(mappedBy = "lancamento")
+    
+    @OneToOne
     private AtividadeEvento atividadeEvento;
 
     public Lancamento() {
@@ -120,7 +121,6 @@ public class Lancamento implements Serializable, ModelInterface {
     public Lancamento(AtividadeEvento atividadeEvento) {
         this.tipoLancamento = TipoLancamento.DESPESA;
         this.dataCadastro = new Date();
-        this.dataVencimento = new Date();
         this.atividadeEvento = atividadeEvento;
         this.servico = atividadeEvento.getServico();
 

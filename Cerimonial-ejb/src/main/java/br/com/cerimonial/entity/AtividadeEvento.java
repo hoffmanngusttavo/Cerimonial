@@ -63,7 +63,8 @@ public class AtividadeEvento implements Serializable, ModelInterface {
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario modificadoPor;
     
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    
+    @OneToOne(mappedBy = "atividadeEvento", cascade = CascadeType.REMOVE)
     private Lancamento lancamento;
     
     @ManyToOne

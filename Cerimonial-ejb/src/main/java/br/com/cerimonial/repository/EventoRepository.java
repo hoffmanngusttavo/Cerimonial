@@ -170,5 +170,29 @@ public class EventoRepository extends AbstractRepository<Evento> {
         return null;
 
     }
+    
+    public Evento findEventoByAtividadeId(Long idAtividade) throws Exception{
+
+        try {
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("SELECT eve FROM Evento eve ");
+            sb.append("INNER JOIN eve.atividades ati ");
+            sb.append("WHERE 1=1 ");
+            sb.append("AND ati.id =?1 ");
+
+            return getPurePojo(Evento.class, sb.toString(), idAtividade);
+
+        } catch (GenericException e) {
+
+            if (e.getCode() != ErrorCode.NOT_FOUND.getCode()) {
+                throw new Exception(e);
+            }
+        }
+
+        return null;
+
+    }
 
 }

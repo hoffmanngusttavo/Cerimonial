@@ -5,6 +5,7 @@
  */
 package br.com.cerimonial.service;
 
+import br.com.cerimonial.entity.AtividadeEvento;
 import br.com.cerimonial.entity.CustoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Lancamento;
@@ -58,6 +59,8 @@ public class LancamentoService extends BasicService<Lancamento> {
     private ParcelaService parcelaService;
     @EJB
     private ParcelaVinculadaService parcelaVinculadaService;
+    @EJB
+    private AtividadeEventoService atividadeEventoService;
 
     @PostConstruct
     @PostActivate
@@ -69,8 +72,7 @@ public class LancamentoService extends BasicService<Lancamento> {
     public Lancamento findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
-    
-    
+
     @Override
     public Lancamento save(Lancamento entity) throws Exception {
 
@@ -133,6 +135,22 @@ public class LancamentoService extends BasicService<Lancamento> {
         smartLazy(lancamento, Arrays.asList("parcelas"));
 
         return lancamento;
+    }
+
+    /**
+     * Vai buscar um lançamento que foi gerado a partir de uma atividade
+     * carregando em lazy as parcelas e orcamentos
+     *
+     * @param idAtividade
+     * @return
+     */
+    public Lancamento findLancamentoByAtividadeId(Long idAtividade) {
+
+        validateId(idAtividade);
+
+        Lancamento lancamento = repository.findLancamentoByAtividadeId(idAtividade);
+
+        return smartLazy(lancamento, Arrays.asList("parcelas", "orcamentos"));
     }
 
     /**
@@ -244,7 +262,7 @@ public class LancamentoService extends BasicService<Lancamento> {
         entity.setCustoEvento(evento.getCustoEvento());
 
         entity.setValorEstimado(evento.getPreEvento().getServicoPrestadoEvento().getValorFinal());
-        
+
         entity.setValorBase(evento.getPreEvento().getServicoPrestadoEvento().getValorFinal());
 
         //rita
@@ -278,19 +296,40 @@ public class LancamentoService extends BasicService<Lancamento> {
     public Lancamento saveLancamentoServicoPrestado(Lancamento lancamentoDespesa) throws Exception {
 
         validateObjectNull(lancamentoDespesa);
-        
+
         custoEventoService.validateObjectAndIdNull(lancamentoDespesa.getCustoEvento());
 
         lancamentoDespesa.calcularParcelas();
 
         lancamentoDespesa = save(lancamentoDespesa);
-        
+
         CustoEvento custoEvento = custoEventoService.findEntityById(lancamentoDespesa.getCustoEvento().getId());
         custoEvento.adicionarLancamento(lancamentoDespesa);
         custoEventoService.atualizarValoresCusto(custoEvento);
         custoEventoService.save(custoEvento);
-        
+
         return lancamentoDespesa;
+    }
+
+    public Lancamento saveLancamentoAtividade(Lancamento entity, Evento evento) throws Exception {
+
+        validateObjectNull(entity);
+
+        eventoService.validateObjectAndIdNull(evento);
+        
+        entity.calcularParcelas();
+
+        CustoEvento custoEvento = custoEventoService.findCustoEventoByIdEvento(evento.getId());
+        entity.setCustoEvento(custoEvento);
+
+        custoEvento.adicionarLancamento(entity);
+
+        save(entity);
+        
+        custoEventoService.atualizarValoresCusto(custoEvento);
+        custoEventoService.save(custoEvento);
+        
+        return entity;
     }
 
     public Lancamento criarSalvarLancamentoReceita(Lancamento lancamentoDespesa) throws Exception {
@@ -357,43 +396,44 @@ public class LancamentoService extends BasicService<Lancamento> {
     }
 
     public void removerLancamentoPlanilhaCustoEvento(Lancamento lancamento) throws GenericException, Exception {
-        
+
         validateObjectAndIdNull(lancamento);
-        
+
         lancamento = this.findEntityById(lancamento.getId());
-        
-        if(!lancamento.permiteRemoverLancamento()){
-            
-             motivoNaoRemoverLancamento(lancamento);
+
+        if (!lancamento.permiteRemoverLancamento()) {
+
+            motivoNaoRemoverLancamento(lancamento);
         }
-        
-        CustoEvento custoEvento = lancamento.getCustoEvento();
-        
+
         this.delete(lancamento);
-        
-        custoEvento = custoEventoService.findEntityById(custoEvento.getId());
-        
-        custoEventoService.atualizarValoresCusto(custoEvento);
-        custoEventoService.save(custoEvento);
     }
-    
+
     public void motivoNaoRemoverLancamento(Lancamento lancamento) throws Exception {
-    
+
         validateObjectNull(lancamento);
-        
-        if(lancamento.possuiFornecedorContratado()){
+
+        if (lancamento.possuiFornecedorContratado()) {
             throw new GenericException("Lançamento já possui um Fornecedor Contratado", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        if(lancamento.possuiParcelaPaga()){
+
+        if (lancamento.possuiParcelaPaga()) {
             throw new GenericException("Lançamento já possui parcela(s) paga(s)", ErrorCode.BAD_REQUEST.getCode());
         }
-        
-        if(lancamento.possuiLancamentoGeradoServicoPrestado()){
+
+        if (lancamento.possuiLancamentoGeradoServicoPrestado()) {
             throw new GenericException("Lançamento gerado a partir de um servico contratado da empresa", ErrorCode.BAD_REQUEST.getCode());
         }
-    
+
     }
-    
+
+    public Lancamento criarLancamentoDespesaEventoByAtividadeId(Long idAtividade) throws Exception {
+
+        atividadeEventoService.validateId(idAtividade);
+
+        AtividadeEvento atividade = atividadeEventoService.findEntityById(idAtividade);
+
+        return new Lancamento(atividade);
+    }
 
 }

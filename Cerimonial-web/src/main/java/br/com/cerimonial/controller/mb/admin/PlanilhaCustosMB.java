@@ -73,15 +73,16 @@ public class PlanilhaCustosMB extends BasicControl {
     
     }
     
-    public void removerLancamento(){
+    public String removerLancamento(){
         try {
 
             lancamentoService.removerLancamentoPlanilhaCustoEvento(lancamento);
             
-            init();
+            service.atualizarSalvarValoresCusto(entity);
             
             createFacesInfoMessage("Dados removidos com sucesso");
             
+            return "/intranet/admin/operacional/pre-evento/partials/planilha-custos.xhtml?idEvento=" + idEvento + "&faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             
@@ -92,6 +93,7 @@ public class PlanilhaCustosMB extends BasicControl {
             scrollTopMessage();
         }
     
+        return null;
     }
     
     

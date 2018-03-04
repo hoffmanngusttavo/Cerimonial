@@ -274,6 +274,7 @@ public class EventoService extends BasicService<Evento> {
             evento.setQuantidadeConvidados(preEvento.getContatoEvento().getQuantidadeConvidados());
         }
 
+        evento.setEventoProprioContratante(preEvento.getContatoEvento().isEventoProprioContratante());
         evento.setNome(preEvento.getContatoEvento().getNomeEvento());
         evento.setTipoEvento(preEvento.getContatoEvento().getTipoEvento());
         evento.setPreEvento(preEvento);
@@ -287,9 +288,7 @@ public class EventoService extends BasicService<Evento> {
 
         Evento evento = repository.findEventoByServicoPrestadoId(idServicoPrestado);
         
-        smartLazy(evento, Arrays.asList("preEvento", "preEvento.servicoPrestado"));
-        
-        return evento;
+        return smartLazy(evento, Arrays.asList("preEvento", "preEvento.servicoPrestado"));
     }
 
     public Evento findEventoByPreEventoId(Long idPreEvento) throws Exception {
@@ -297,6 +296,13 @@ public class EventoService extends BasicService<Evento> {
         validateId(idPreEvento);
 
         return repository.findEventoByPreEventoId(idPreEvento);
+    }
+    
+    public Evento findEventoByAtividadeId(Long idAtividade) throws Exception {
+
+        validateId(idAtividade);
+
+        return repository.findEventoByAtividadeId(idAtividade);
     }
 
     public Evento getEventoByContatoInicial(ContatoEvento contatoEvento) throws Exception {

@@ -45,5 +45,32 @@ public class LancamentoRepository extends AbstractRepository<Lancamento> {
 
         return lancamento;
     }
+    
+    
+    public Lancamento findLancamentoByAtividadeId(Long idAtividade) {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT lan FROM Lancamento lan ");
+        sb.append("INNER JOIN lan.atividadeEvento ativi ");
+        sb.append("WHERE 1=1 ");
+        sb.append("AND ativi.id =?1 ");
+
+        Lancamento lancamento = null;
+
+        try {
+            
+            lancamento = getPurePojo(Lancamento.class, sb.toString(), idAtividade);
+
+        } catch (GenericException e) {
+
+            if (e != null && ErrorCode.NOT_FOUND.getCode() != e.getCode()) {
+                throw new GenericException(e.getMessage(), e.getCode());
+            }
+
+        }
+
+        return lancamento;
+    }
 
 }

@@ -95,7 +95,7 @@
                                                       converter="DateConverter">
                                         </h:outputText>
                                     </td>
-                                    
+
                                     <td>
                                         <h:outputText value="#{atividade.descricao}"/>
                                     </td>
@@ -103,28 +103,34 @@
                                     <td>
                                         <h:outputText value="#{atividade.servico.nome}"/>
                                     </td>
-                                    
+
                                     <td class="text-center">
-                                        <h:outputText value="#{atividade.lancamento.valorEstimado}"/>
+                                        <h:outputText value="#{atividade.lancamento.valorEstimado}">
+                                            <f:convertNumber maxFractionDigits="2"
+                                                             minFractionDigits="2"
+                                                             locale="pt_BR"/>
+                                        </h:outputText>
                                     </td>
 
                                     <td>
                                         <p:splitButton styleClass="splitButton icon-fa" value="t">
-                                            
+
                                             <p:menuitem value="Adicionar Custo"   
                                                         icon="ui-icon-plus" 
+                                                        process="@this"
+                                                        url="/intranet/admin/operacional/pre-evento/partials/custo-atividade.xhtml?idAtividade=#{atividade.id}"
                                                         rendered="#{atividade.lancamento == null}"/>
-                                            
+
                                             <p:menuitem value="Adicionar Compromisso"   
                                                         icon="ui-icon-plus" />
-                                            
+
                                             <p:menuitem value="Remover"  
                                                         icon="ui-icon-trash" 
                                                         actionListener="#{CheckListEventoMB.setEntity(atividade)}"
                                                         process="@this"
                                                         update="groupRemove"
                                                         oncomplete="$('#removeDialogVar').modal('show');"/>
-                                            
+
                                         </p:splitButton>
                                     </td>
 
