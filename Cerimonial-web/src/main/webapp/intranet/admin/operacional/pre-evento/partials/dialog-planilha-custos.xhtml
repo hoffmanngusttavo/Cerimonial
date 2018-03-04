@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <div class="modal fade" 
+         id="removeDialogVar" tabindex="-1" 
+         role="dialog" aria-labelledby="myModal" 
+         aria-hidden="true" data-keyboard="false" 
+         data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <h:panelGroup id="groupRemove">
+                    <div class="modal-header modal-header-danger">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Remover ?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label class="control-label ">Fornecedor
+                                    </label>
+                                </div>
+                                <div class="col-md-3 col-md-offset-3">
+                                    <h:outputText value="#{PlanilhaCustosMB.lancamento.envolvidoOrigem.nome}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h:panelGroup layout="block" styleClass="modal-footer">
+                        <p:commandLink value="Cancelar"
+                                       immediate="true" 
+                                       styleClass="btn btn-default" 
+                                       process="@this"
+                                       actionListener="#{PlanilhaCustosMB.setLancamento(null)}"
+                                       oncomplete="$('#removeDialogVar').modal('hide');" />
+
+                        <p:commandLink value="Confirmar" 
+                                       action="#{PlanilhaCustosMB.removerLancamento()}" 
+                                       styleClass="btn btn-primary"
+                                       process="groupRemove" 
+                                       onstart="PF('statusDialog').show();"
+                                       oncomplete="PF('statusDialog').hide();$('#removeDialogVar').modal('hide');"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </div>
+        </div>
+    </div>
+
+</ui:composition>
+

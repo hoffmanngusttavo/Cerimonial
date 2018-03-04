@@ -39,6 +39,8 @@ public class AtividadeEventoService extends BasicService<AtividadeEvento>{
     private LancamentoService lancamentoService;
     @EJB
     private EventoService eventoService;
+    @EJB
+    private ServicoService servicoService;
     
     @PostConstruct
     @PostActivate
@@ -66,6 +68,26 @@ public class AtividadeEventoService extends BasicService<AtividadeEvento>{
         } else {
             return repository.edit(entity);
         }
+    }
+    
+   /**
+    * Vai salvar uma atividade criada pela empresa
+    * validando a criação de um novo serviço;
+     * @param entity
+     * @return 
+     * @throws java.lang.Exception
+    */
+    public AtividadeEvento saveAtividadeEvento(AtividadeEvento entity) throws Exception {
+
+        validateObjectNull(entity);
+        
+        servicoService.validateObjectNull(entity.getServico());
+        
+        if(entity.getServico().getId() == null){
+            servicoService.save(entity.getServico());
+        }
+        
+        return save(entity);
     }
 
     public List<AtividadeEvento> findRangeListagem(HashMap<String, Object> params, int max, int offset, String sortField, String sortAscDesc) {

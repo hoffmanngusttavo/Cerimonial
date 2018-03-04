@@ -7,10 +7,11 @@ package br.com.cerimonial.controller.mb.admin;
 
 import br.com.cerimonial.controller.BasicControl;
 import br.com.cerimonial.entity.CustoEvento;
-import br.com.cerimonial.entity.Evento;
+import br.com.cerimonial.entity.Lancamento;
+import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.service.CustoEventoService;
 import br.com.cerimonial.service.EventoService;
-import java.util.Arrays;
+import br.com.cerimonial.service.LancamentoService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -30,11 +31,14 @@ public class PlanilhaCustosMB extends BasicControl {
      */
     protected Long idEvento;
     protected CustoEvento entity;
+    protected Lancamento lancamento;
 
     @EJB
     protected CustoEventoService service;
     @EJB
     protected EventoService eventoService;
+    @EJB
+    protected LancamentoService lancamentoService;
 
     /**
      * Evento invocado ao abrir o xhtml carregar os dados do contrato do evento
@@ -69,6 +73,27 @@ public class PlanilhaCustosMB extends BasicControl {
     
     }
     
+    public void removerLancamento(){
+        try {
+
+            lancamentoService.removerLancamentoPlanilhaCustoEvento(lancamento);
+            
+            init();
+            
+            createFacesInfoMessage("Dados removidos com sucesso");
+            
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            
+            String msg = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
+            
+            createFacesErrorMessage("Não foi possível remover: "+msg);
+        }finally{
+            scrollTopMessage();
+        }
+    
+    }
+    
     
 
     public Long getIdEvento() {
@@ -85,6 +110,14 @@ public class PlanilhaCustosMB extends BasicControl {
 
     public void setEntity(CustoEvento entity) {
         this.entity = entity;
+    }
+
+    public Lancamento getLancamento() {
+        return lancamento;
+    }
+
+    public void setLancamento(Lancamento lancamento) {
+        this.lancamento = lancamento;
     }
     
     

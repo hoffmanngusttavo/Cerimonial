@@ -42,7 +42,7 @@ public class AtividadeEvento implements Serializable, ModelInterface {
     private Long id;
     
     
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Servico servico;
     
     @Column(columnDefinition = "TEXT")

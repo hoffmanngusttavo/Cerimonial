@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.cerimonial.web;
+package br.com.cerimonial.web.converters;
 
 import java.util.HashMap;
 import java.util.Map;

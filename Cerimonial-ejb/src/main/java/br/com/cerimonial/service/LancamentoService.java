@@ -69,7 +69,8 @@ public class LancamentoService extends BasicService<Lancamento> {
     public Lancamento findEntityById(Long id) throws Exception {
         return repository.getEntity(id);
     }
-
+    
+    
     @Override
     public Lancamento save(Lancamento entity) throws Exception {
 
@@ -354,5 +355,45 @@ public class LancamentoService extends BasicService<Lancamento> {
         validateId(entity.getId());
 
     }
+
+    public void removerLancamentoPlanilhaCustoEvento(Lancamento lancamento) throws GenericException, Exception {
+        
+        validateObjectAndIdNull(lancamento);
+        
+        lancamento = this.findEntityById(lancamento.getId());
+        
+        if(!lancamento.permiteRemoverLancamento()){
+            
+             motivoNaoRemoverLancamento(lancamento);
+        }
+        
+        CustoEvento custoEvento = lancamento.getCustoEvento();
+        
+        this.delete(lancamento);
+        
+        custoEvento = custoEventoService.findEntityById(custoEvento.getId());
+        
+        custoEventoService.atualizarValoresCusto(custoEvento);
+        custoEventoService.save(custoEvento);
+    }
+    
+    public void motivoNaoRemoverLancamento(Lancamento lancamento) throws Exception {
+    
+        validateObjectNull(lancamento);
+        
+        if(lancamento.possuiFornecedorContratado()){
+            throw new GenericException("Lançamento já possui um Fornecedor Contratado", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(lancamento.possuiParcelaPaga()){
+            throw new GenericException("Lançamento já possui parcela(s) paga(s)", ErrorCode.BAD_REQUEST.getCode());
+        }
+        
+        if(lancamento.possuiLancamentoGeradoServicoPrestado()){
+            throw new GenericException("Lançamento gerado a partir de um servico contratado da empresa", ErrorCode.BAD_REQUEST.getCode());
+        }
+    
+    }
+    
 
 }

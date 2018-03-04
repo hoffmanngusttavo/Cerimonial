@@ -453,7 +453,7 @@ public class EventoService extends BasicService<Evento> {
 
         validateObjectAndIdNull(evento);
 
-        evento = findEntityById(evento.getId(), Arrays.asList("orcamentoEvento", "orcamentoEvento.contatoEvento"));
+        evento = findEntityById(evento.getId(), Arrays.asList("preEvento", "preEvento.contatoEvento"));
 
         Pessoa cliente = pessoaService.criarClienteFromContato(evento.getPreEvento().getContatoEvento());
         pessoaService.saveCliente(cliente);

@@ -169,6 +169,7 @@
                                     <th>Valor Cobrado</th>
                                     <th>Valor Pago</th>
                                     <th>Parcelas</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -201,7 +202,7 @@
                                                                  locale="pt_BR"/>
                                             </h:outputText>
                                         </td>
-                                        
+
                                         <td class="text-center">
                                             <h:outputText value="#{lancamento.valorTotalPago}">
                                                 <f:convertNumber maxFractionDigits="2"
@@ -214,6 +215,22 @@
 
                                             <h:outputText value="#{lancamento.parcelas.size()}"/>
                                         </td>
+
+                                        <td>
+                                            <p:splitButton styleClass="splitButton icon-fa" value="t">
+
+                                                <p:menuitem value="Adicionar Compromisso"   
+                                                            icon="ui-icon-plus" />
+
+                                                <p:menuitem value="Remover"  
+                                                            icon="ui-icon-trash" 
+                                                            actionListener="#{PlanilhaCustosMB.setLancamento(lancamento)}"
+                                                            process="@this"
+                                                            update="groupRemove"
+                                                            oncomplete="$('#removeDialogVar').modal('show');"/>
+
+                                            </p:splitButton>
+                                        </td>
                                     </tr>
                                 </p:repeat>
                             </tbody>
@@ -222,6 +239,8 @@
                 </h:panelGroup>
             </h:panelGroup>
 
+
+            <ui:include src="./dialog-planilha-custos.xhtml" />
 
         </h:form>
 

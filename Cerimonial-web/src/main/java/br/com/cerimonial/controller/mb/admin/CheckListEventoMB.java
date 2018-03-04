@@ -54,8 +54,9 @@ public class CheckListEventoMB extends BasicControl {
 
             if (idEvento != null) {
 
-                evento = eventoService.findEntityById(idEvento, Arrays.asList("preEvento", "atividades"));
+                evento = eventoService.findEntityById(idEvento, Arrays.asList("preEvento"));
 
+                evento.setAtividades(service.findAtividadesByIdEvento(evento.getId()));
             }
 
         } catch (Exception ex) {
@@ -94,7 +95,7 @@ public class CheckListEventoMB extends BasicControl {
         
         try {
             
-            service.save(entity);
+            service.saveAtividadeEvento(entity);
             
             createFacesInfoMessage("Atividade gravada com sucesso!");
             

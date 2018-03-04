@@ -48,6 +48,20 @@
                     <div role="tabpanel" class="tab-pane active" id="etapa1">
 
                         <div class="row">
+                            <div class="col-md-12 text-center">
+                                <div class="panel panel-danger">
+                                    <div class="panel-body">
+                                        <div style="margin-left: 28px;">
+                                            <div class="col-md-3">#dadosContratante#</div>
+                                            <div class="col-md-3">#dadosEvento#</div>
+                                            <div class="col-md-3">#formaPagamento#</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Modelo de Contrato
                                     <span class="asteriskField">
@@ -87,6 +101,9 @@
                             </div>
                         </div>
 
+                        
+
+
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label>Conteúdo
@@ -118,8 +135,8 @@
                                  style="margin-left: 10px;"
                                  onstart="PF('statusDialog').show();"
                                  oncomplete="PF('statusDialog').hide();"/>
-                
-                
+
+
 
                 <p:commandButton value="Salvar"
                                  action="#{ContratoEventoMB.save()}"
@@ -130,7 +147,7 @@
                                  style="margin-left: 10px;"
                                  onstart="PF('statusDialog').show();"
                                  oncomplete="PF('statusDialog').hide();"/>
-                
+
                 <p:commandButton value="Imprimir"
                                  onclick="window.open('#{facesContext.externalContext.requestContextPath}/intranet/admin/operacional/pre-evento/partials/impressao-contrato.xhtml?id=#{ContratoEventoMB.entity.id}')"
                                  rendered="#{ContratoEventoMB.entity.liberadoCliente}"

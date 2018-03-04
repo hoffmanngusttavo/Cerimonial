@@ -429,5 +429,33 @@ public class Lancamento implements Serializable, ModelInterface {
         return false;
 
     }
+    
+    public boolean possuiParcelaPaga() {
+
+        if (CollectionUtils.isNotBlank(parcelas)) {
+
+            if (parcelas.stream().anyMatch((parcela) -> (parcela.isPago()))) {
+                return true;
+            }
+
+        }
+
+        return false;
+
+    }
+    
+    public boolean possuiLancamentoGeradoServicoPrestado() {
+
+       return servicoPrestadoEvento != null;
+
+    }
+    
+    public boolean permiteRemoverLancamento() {
+
+       return !(possuiFornecedorContratado() 
+               || possuiParcelaPaga() 
+               || possuiLancamentoGeradoServicoPrestado());
+
+    }
 
 }
