@@ -45,13 +45,6 @@ public class PlanilhaCustosMB extends BasicControl {
 
             entity = service.findCustoEventoByIdEvento(idEvento);
             
-            if(entity == null){
-                
-                Evento evento = eventoService.findEntityById(idEvento, Arrays.asList("preEvento"));
-                
-                entity = new CustoEvento(evento);
-            }
-
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             createFacesErrorMessage(ex.getCause().getMessage());
@@ -59,6 +52,24 @@ public class PlanilhaCustosMB extends BasicControl {
         }
 
     }
+    
+    public void salvarValor(){
+        
+        try {
+
+            entity = service.save(entity);
+            
+            createFacesInfoMessage("Dados gravados com sucesso");
+            
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            createFacesErrorMessage(ex.getCause().getMessage());
+            scrollTopMessage();
+        }
+    
+    }
+    
+    
 
     public Long getIdEvento() {
         return idEvento;

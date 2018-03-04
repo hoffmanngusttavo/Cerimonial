@@ -69,11 +69,11 @@
                         <thead class="thead-inverse">
                             <tr>
                                 <th>#</th>
-                                <th>Tarefa</th>
-                                <th>Custo Estimado</th>
                                 <th>Prazo Inicial</th>
                                 <th>Prazo Final</th>
+                                <th>Tarefa</th>
                                 <th>Serviço</th>
+                                <th>Valor Estimado</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -84,15 +84,7 @@
                                         <h:outputText value="#{indexVar.index +1}"/>
                                     </th>
 
-                                    <td>
-                                        <h:outputText value="#{atividade.descricao}"/>
-                                    </td>
-
-                                    <td>
-                                        <h:outputText value="#{atividade.lancamento.valorEstimado}"/>
-                                    </td>
-
-                                    <td>
+                                    <td class="">
                                         <h:outputText value="#{atividade.prazoInicial}"
                                                       converter="DateConverter">
                                         </h:outputText>
@@ -103,9 +95,17 @@
                                                       converter="DateConverter">
                                         </h:outputText>
                                     </td>
+                                    
+                                    <td>
+                                        <h:outputText value="#{atividade.descricao}"/>
+                                    </td>
 
                                     <td>
                                         <h:outputText value="#{atividade.servico.nome}"/>
+                                    </td>
+                                    
+                                    <td class="text-center">
+                                        <h:outputText value="#{atividade.lancamento.valorEstimado}"/>
                                     </td>
 
                                     <td>

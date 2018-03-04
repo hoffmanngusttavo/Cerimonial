@@ -242,6 +242,8 @@ public class LancamentoService extends BasicService<Lancamento> {
 
         entity.setCustoEvento(evento.getCustoEvento());
 
+        entity.setValorEstimado(evento.getPreEvento().getServicoPrestadoEvento().getValorFinal());
+        
         entity.setValorBase(evento.getPreEvento().getServicoPrestadoEvento().getValorFinal());
 
         //rita

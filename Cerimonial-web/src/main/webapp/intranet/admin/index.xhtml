@@ -34,149 +34,318 @@
 
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4 text-center">
+
+                    <div class="col-md-12 text-center">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Verificar Disponibilidade de Evento</h3>
-                            </div>
-                            <div class="panel-body" style="min-height: 104px;">
-                                <div style="margin-left: 28px;">
+                                <div class="row">
 
-                                    <p:calendar pattern="dd/MM/yyyy"
-                                                mask="true" 
-                                                id="inptDataEvento"
-                                                style="width: 100px !important;"
-                                                value="#{DashBoardMB.dataSelecionada}"
-                                                label="Data Evento" 
-                                                converter="DateConverter"
-                                                showOn="button"
-                                                navigator="true">
+                                    <div class="col-md-6">
+                                        <h3 class="panel-title">
+                                            Verificar Disponibilidade
 
-                                        <p:ajax event="dateSelect"
-                                                process="@this"
-                                                onstart="PF('statusDialog').show();"
-                                                oncomplete="PF('statusDialog').hide();"
-                                                listener="#{DashBoardMB.carregarEventosDoDia()}"
-                                                update="groupEvento"/>
 
-                                        <p:ajax event="change"
-                                                process="@this"
-                                                onstart="PF('statusDialog').show();"
-                                                oncomplete="PF('statusDialog').hide();"
-                                                listener="#{DashBoardMB.carregarEventosDoDia()}"
-                                                update="groupEvento"/>
+                                            <p:calendar pattern="dd/MM/yyyy"
+                                                        mask="true" 
+                                                        id="inptDataEvento"
+                                                        value="#{DashBoardMB.dataSelecionada}"
+                                                        label="Data Evento" 
+                                                        converter="DateConverter"
+                                                        showOn="button"
+                                                        navigator="true">
 
-                                    </p:calendar>
+                                                <p:ajax event="dateSelect"
+                                                        process="@this"
+                                                        onstart="PF('statusDialog').show();"
+                                                        oncomplete="PF('statusDialog').hide();"
+                                                        listener="#{DashBoardMB.carregarEventoECompromissosDoDia()}"
+                                                        update="groupEvento, groupCompromissos"/>
+
+                                                <p:ajax event="change"
+                                                        process="@this"
+                                                        onstart="PF('statusDialog').show();"
+                                                        oncomplete="PF('statusDialog').hide();"
+                                                        listener="#{DashBoardMB.carregarEventoECompromissosDoDia()}"
+                                                        update="groupEvento, groupCompromissos"/>
+
+                                            </p:calendar>
+                                        </h3>
+                                    </div>
                                 </div>
-
-                                <h:panelGroup id="groupEvento">
-                                    <h:panelGroup rendered="#{not empty DashBoardMB.eventosDia}">
-                                        <table class="table table-hover table-sm table-responsive table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th>Evento</th>
-                                                    <th>Hora</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <p:repeat value="#{DashBoardMB.eventosDia}" var="evento">
-                                                    <tr>
-                                                        <td>
-                                                            <h:outputText value="#{evento.nome}"/>
-                                                        </td>
-                                                        <td>
-
-                                                            <h:outputText value="#{evento.horaInicio}"
-                                                                          converter="TimeConverter"/>
-                                                        </td>
-                                                    </tr>
-                                                </p:repeat>
-                                            </tbody>
-                                        </table>
-                                    </h:panelGroup>
-                                </h:panelGroup>
-
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4 text-center">
-
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    Contatos Ativos
-                                </h3>
-                            </div>
                             <div class="panel-body" style="min-height: 104px;">
-                                <div class="tab-content">
-                                    <div class="tab-pane-scroll active">
-                                        <table class="table table-hover table-sm table-responsive table-condensed">
-                                            <tbody>
-                                                <p:repeat value="#{DashBoardMB.contatosAtivos}" var="cont" >
-                                                    <tr>
-                                                        <td>
-                                                            <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{cont.preEvento.id}" >
-                                                                <span>#{cont.nomeEvento}</span>
-                                                            </p:link>
-                                                        </td>
-                                                        <td>
-                                                            <span>#{cont.status.label}</span>
-                                                        </td>
-                                                    </tr>
-                                                </p:repeat>
-                                            </tbody>
-                                        </table>
+
+                                <div class="col-md-6 text-center">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Eventos do Dia</h3>
+                                        </div>
+
+                                        <div class="panel-body" style="min-height: 104px;">
+                                            <h:panelGroup id="groupEvento">
+                                                <h:panelGroup rendered="#{not empty DashBoardMB.eventosDia}">
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane-scroll active">
+                                                            <table class="table table-hover table-sm table-responsive table-condensed">
+                                                                <tbody>
+                                                                    <p:repeat value="#{DashBoardMB.eventosDia}" var="evento">
+                                                                        <tr>
+                                                                            <td>
+                                                                                <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{evento.preEvento.id}" >
+                                                                                    <span>#{evento.nome}</span>
+                                                                                </p:link>
+                                                                            </td>
+                                                                            <td>
+
+                                                                                <h:outputText value="#{evento.horaInicio}"
+                                                                                              converter="TimeConverter"/>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </p:repeat>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
+
+                                        </div>
                                     </div>
                                 </div>
 
-                                <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
-                                        rendered="#{DashBoardMB.contatosAtivos.size() > 5}">
-                                    <span>Visualizar Todos</span>
-                                </p:link>
+                                <div class="col-md-6 text-center">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Compromissos do Dia</h3>
+                                        </div>
+                                        <div class="panel-body" style="min-height: 104px;">
+                                            <h:panelGroup id="groupCompromissos">
+                                                <div class="tab-content">
+                                                    <div class="tab-pane-scroll active">
+                                                        <table class="table table-hover table-sm table-responsive table-condensed">
+                                                            <tbody>
+                                                                <p:repeat value="#{DashBoardMB.compromissosDia}" var="comp" >
+                                                                    <tr>
 
-                            </div>
-                        </div>
-                    </div>
+                                                                        <td>
+                                                                            <h:outputText value="#{comp.dataCompromisso}"
+                                                                                          converter="DateConverter"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <h:outputText value="#{comp.horaCompromisso}"
+                                                                                          converter="TimeConverter"/>
+                                                                        </td>
 
-                    <div class="col-md-4 text-center">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Eventos Ativos</h3>
-                            </div>
-                            <div class="panel-body" style="min-height: 104px;">
-                                <div class="tab-content">
-                                    <div class="tab-pane-scroll active">
-                                        <table class="table table-hover table-sm table-responsive table-condensed">
-                                            <tbody>
-                                                <p:repeat value="#{DashBoardMB.eventosAtivos}" var="eve">
-                                                    <tr>
-                                                        <td>
-                                                            <h:outputText value="#{eve.dataInicio}"
-                                                                          converter="DateConverter"/>
-                                                        </td>
-                                                        <td>
-                                                            <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{eve.preEvento.id}" >
-                                                                <span>#{eve.nome}</span>
-                                                            </p:link>
-                                                        </td>
+                                                                        <td>
+                                                                            <h:outputText value="#{comp.descricao}"
+                                                                                          title="#{comp.descricao}"
+                                                                                          class="reticencias"/>
+                                                                        </td>
 
-                                                    </tr>
-                                                </p:repeat>
-                                            </tbody>
-                                        </table>
+                                                                    </tr>
+                                                                </p:repeat>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <p:link href="" 
+                                                        rendered="#{DashBoardMB.compromissosDia.size() > 5}">
+                                                    <span>Visualizar Todos</span>
+                                                </p:link>
+                                            </h:panelGroup>
+                                        </div>
+
                                     </div>
                                 </div>
-                                <p:link href="/intranet/admin/operacional/evento/index.xhtml" 
-                                        rendered="#{DashBoardMB.eventosAtivos.size() > 5}">
-                                    <span>Visualizar Todos</span>
-                                </p:link>
+
                             </div>
                         </div>
                     </div>
 
+                    <!--EVENTOS-->
+                    <div class="col-md-12 text-center">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Eventos</h3>
+                            </div>
 
+                            <div class="panel-body" style="min-height: 104px;">
 
+                                <div class="col-md-6 text-center">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Contatos Ativos</h3>
+                                        </div>
+
+                                        <div class="panel-body" style="min-height: 104px;">
+                                            <div class="tab-content">
+                                                <div class="tab-pane-scroll active">
+                                                    <table class="table table-hover table-sm table-responsive table-condensed">
+                                                        <tbody>
+                                                            <p:repeat value="#{DashBoardMB.contatosAtivos}" var="cont" >
+                                                                <tr>
+                                                                    <td>
+                                                                        <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{cont.preEvento.id}" >
+                                                                            <span>#{cont.nomeEvento}</span>
+                                                                        </p:link>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span>#{cont.status.label}</span>
+                                                                    </td>
+                                                                </tr>
+                                                            </p:repeat>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
+                                                    rendered="#{DashBoardMB.contatosAtivos.size() > 5}">
+                                                <span>Visualizar Todos</span>
+                                            </p:link>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 text-center">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Eventos Ativos</h3>
+                                        </div>
+                                        <div class="panel-body" style="min-height: 104px;">
+                                            <div class="tab-content">
+                                                <div class="tab-pane-scroll active">
+                                                    <table class="table table-hover table-sm table-responsive table-condensed">
+                                                        <tbody>
+                                                            <p:repeat value="#{DashBoardMB.eventosAtivos}" var="eve">
+                                                                <tr>
+                                                                    <td>
+                                                                        <h:outputText value="#{eve.dataInicio}"
+                                                                                      converter="DateConverter"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <p:link href="/intranet/admin/operacional/pre-evento/index.xhtml?id=#{eve.preEvento.id}" >
+                                                                            <span>#{eve.nome}</span>
+                                                                        </p:link>
+                                                                    </td>
+
+                                                                </tr>
+                                                            </p:repeat>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p:link href="/intranet/admin/operacional/evento/index.xhtml" 
+                                                    rendered="#{DashBoardMB.eventosAtivos.size() > 5}">
+                                                <span>Visualizar Todos</span>
+                                            </p:link>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--ATIVIDADES-->
+                    <div class="col-md-12 text-center">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Atividades dos Eventos</h3>
+                            </div>
+
+                            <div class="panel-body" style="min-height: 104px;">
+
+                                <div class="col-md-6 text-center">
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Atividades em Atraso</h3>
+                                        </div>
+
+                                        <div class="panel-body" style="min-height: 104px;">
+                                            <div class="tab-content">
+                                                <div class="tab-pane-scroll active">
+                                                    <table class="table table-hover table-sm table-responsive table-condensed">
+                                                        <tbody>
+                                                            <p:repeat value="#{DashBoardMB.contasPagarEvento}" var="pagarEve" >
+                                                                <tr>
+                                                                    <td>
+                                                                        <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{pagarEve.id}" >
+                                                                            <h:outputText value="#{pagarEve.dataVencimento}"
+                                                                                          converter="DateConverter"/>
+                                                                        </p:link>
+                                                                    </td>
+                                                                    <td>
+                                                                        <h:outputText value="#{pagarEve.valorCobrado}">
+                                                                            <f:convertNumber maxFractionDigits="2"
+                                                                                             minFractionDigits="2"
+                                                                                             locale="pt_BR"/>
+                                                                        </h:outputText>
+                                                                    </td>
+                                                                </tr>
+                                                            </p:repeat>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
+                                                    rendered="#{DashBoardMB.contasPagarEvento.size() > 5}">
+                                                <span>Visualizar Todos</span>
+                                            </p:link>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 text-center">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Atividades a Realizar</h3>
+                                        </div>
+
+                                        <div class="panel-body" style="min-height: 104px;">
+                                            <div class="tab-content">
+                                                <div class="tab-pane-scroll active">
+                                                    <table class="table table-hover table-sm table-responsive table-condensed">
+                                                        <tbody>
+                                                            <p:repeat value="#{DashBoardMB.contasVencidasEvento}" var="vencEve" >
+                                                                <tr>
+                                                                    <td>
+                                                                        <p:link href="/intranet/admin/operacional/pre-evento/form.xhtml?id=#{vencEve.id}" >
+                                                                            <h:outputText value="#{vencEve.dataVencimento}"
+                                                                                          converter="DateConverter"/>
+                                                                        </p:link>
+                                                                    </td>
+                                                                    <td>
+                                                                        <h:outputText value="#{vencEve.valorCobrado}">
+                                                                            <f:convertNumber maxFractionDigits="2"
+                                                                                             minFractionDigits="2"
+                                                                                             locale="pt_BR"/>
+                                                                        </h:outputText>
+
+                                                                    </td>
+                                                                </tr>
+                                                            </p:repeat>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <p:link href="/intranet/admin/operacional/contato-inicial/index.xhtml" 
+                                                    rendered="#{DashBoardMB.contasVencidasEvento.size() > 5}">
+                                                <span>Visualizar Todos</span>
+                                            </p:link>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
 
                     <!--FINANCEIRO EVENTOS-->
                     <div class="col-md-12 text-center">

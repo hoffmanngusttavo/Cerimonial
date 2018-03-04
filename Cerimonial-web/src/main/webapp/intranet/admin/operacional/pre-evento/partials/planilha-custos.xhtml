@@ -8,7 +8,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titleOfPage">
-       Planilha de Custos
+        Planilha de Custos
     </ui:define>
 
     <ui:define name="content">
@@ -45,6 +45,99 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div style="margin-left: 28px;">
+
+                                <div class="form-group col-md-3">
+                                    <label>Valor Orçamento
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputText id="inptValorOrcamento"
+                                                 value="#{PlanilhaCustosMB.entity.valorOrcamento}"
+                                                 required="true"
+                                                 requiredMessage="Preencha o valor do orçamento"
+                                                 placeholder="Valor do seu orçamento"
+                                                 class="form-control text-right"
+                                                 label="Valor Orçamento">
+
+                                        <p:ajax process="@this"
+                                                event="change"
+                                                update="@this"
+                                                listener="#{PlanilhaCustosMB.salvarValor()}"
+                                                onstart="PF('statusDialog').show();"
+                                                oncomplete="PF('statusDialog').hide();"/>
+
+                                        <f:convertNumber maxFractionDigits="2"
+                                                         minFractionDigits="2"
+                                                         locale="pt_BR"/>
+                                    </p:inputText>
+
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>Valor Estimado
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputText disabled="true"
+                                                 value="#{PlanilhaCustosMB.entity.valorCustoEstimado}"
+                                                 class="form-control text-right">
+                                        <f:convertNumber maxFractionDigits="2"
+                                                         minFractionDigits="2"
+                                                         locale="pt_BR"/>
+                                    </p:inputText>
+
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>Valor Estimado
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputText disabled="true"
+                                                 value="#{PlanilhaCustosMB.entity.valorCustoReal}"
+                                                 class="form-control text-right">
+                                        <f:convertNumber maxFractionDigits="2"
+                                                         minFractionDigits="2"
+                                                         locale="pt_BR"/>
+                                    </p:inputText>
+
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>Valor Pago
+                                        <span class="asteriskField">
+                                            *
+                                        </span>
+                                    </label>
+
+                                    <p:inputText disabled="true"
+                                                 value="#{PlanilhaCustosMB.entity.valorTotalPago}"
+                                                 class="form-control text-right">
+                                        <f:convertNumber maxFractionDigits="2"
+                                                         minFractionDigits="2"
+                                                         locale="pt_BR"/>
+                                    </p:inputText>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="fixed-rounded-button">
                 <span class="glyphicon"
                       style="margin-top: -9px;margin-left: -10px;">
@@ -59,21 +152,22 @@
                                      oncomplete="PF('statusDialog').hide();"/>
                 </span>
             </div>
-            
-            
+
+
             <h:panelGroup id="groupOrcamento">
                 <h:panelGroup id="groupPropostas">
-                    
+
                     <div class="row">
 
                         <table class="table table-hover table-inverse table-striped table-responsive">
                             <thead class="thead-inverse">
                                 <tr>
                                     <th>#</th>
-                                    <th>Serviços</th>
-                                    <th>Estimativa</th>
+                                    <th>Serviço</th>
                                     <th>Fornecedor</th>
-                                    <th>Valor</th>
+                                    <th>Valor Estimado</th>
+                                    <th>Valor Cobrado</th>
+                                    <th>Valor Pago</th>
                                     <th>Parcelas</th>
                                 </tr>
                             </thead>
@@ -87,8 +181,12 @@
                                         <td>
                                             <h:outputText value="#{lancamento.servico.nome}"/>
                                         </td>
-                                        
+
                                         <td>
+                                            <h:outputText value="#{lancamento.envolvidoOrigem.nome}"/>
+                                        </td>
+
+                                        <td class="text-center">
                                             <h:outputText value="#{lancamento.valorEstimado}">
                                                 <f:convertNumber maxFractionDigits="2"
                                                                  minFractionDigits="2"
@@ -96,12 +194,16 @@
                                             </h:outputText>
                                         </td>
 
-                                        <td>
-                                            <h:outputText value="#{lancamento.envolvidoOrigem.nome}"/>
+                                        <td class="text-center">
+                                            <h:outputText value="#{lancamento.valorBase}">
+                                                <f:convertNumber maxFractionDigits="2"
+                                                                 minFractionDigits="2"
+                                                                 locale="pt_BR"/>
+                                            </h:outputText>
                                         </td>
                                         
-                                         <td>
-                                            <h:outputText value="#{lancamento.valorBase}">
+                                        <td class="text-center">
+                                            <h:outputText value="#{lancamento.valorTotalPago}">
                                                 <f:convertNumber maxFractionDigits="2"
                                                                  minFractionDigits="2"
                                                                  locale="pt_BR"/>
@@ -109,7 +211,7 @@
                                         </td>
 
                                         <td>
-                                            
+
                                             <h:outputText value="#{lancamento.parcelas.size()}"/>
                                         </td>
                                     </tr>

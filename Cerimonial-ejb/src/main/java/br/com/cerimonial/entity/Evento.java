@@ -135,6 +135,9 @@ public class Evento implements Serializable, ModelInterface {
 
     @OneToOne(fetch = FetchType.LAZY)
     private PreEvento preEvento;
+    
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+    private List<Compromisso> compromissos;
 
     @Override
     public Long getId() {
@@ -408,6 +411,14 @@ public class Evento implements Serializable, ModelInterface {
 
     public void setPreEvento(PreEvento preEvento) {
         this.preEvento = preEvento;
+    }
+
+    public List<Compromisso> getCompromissos() {
+        return compromissos;
+    }
+
+    public void setCompromissos(List<Compromisso> compromissos) {
+        this.compromissos = compromissos;
     }
     
     

@@ -6,12 +6,14 @@
 package br.com.cerimonial.controller.mb;
 
 import br.com.cerimonial.controller.BasicControl;
+import br.com.cerimonial.entity.Compromisso;
 import br.com.cerimonial.entity.ContatoEvento;
 import br.com.cerimonial.entity.Evento;
 import br.com.cerimonial.entity.Login;
 import br.com.cerimonial.entity.Parcela;
 import br.com.cerimonial.exceptions.GenericException;
 import br.com.cerimonial.service.AlertaDestinatarioService;
+import br.com.cerimonial.service.CompromissoService;
 import br.com.cerimonial.service.ContatoEventoService;
 import br.com.cerimonial.service.EventoService;
 import br.com.cerimonial.service.LoginService;
@@ -36,6 +38,8 @@ public class DashBoardMB extends BasicControl {
     @EJB
     protected EventoService eventoService;
     @EJB
+    protected CompromissoService compromissoService;
+    @EJB
     protected ContatoEventoService contatoEventoService;
     @EJB
     protected AlertaDestinatarioService alertaDestinatarioService;
@@ -44,6 +48,7 @@ public class DashBoardMB extends BasicControl {
 
     private List<Login> ultimosLogins;
     private List<Evento> eventosDia;
+    private List<Compromisso> compromissosDia;
     private List<Evento> eventosAtivos;
     private List<ContatoEvento> contatosAtivos;
     //Financeiro Evento
@@ -62,7 +67,7 @@ public class DashBoardMB extends BasicControl {
 
     @PostConstruct
     public void postConstruct() {
-        carregarEventosDoDia();
+        carregarEventoECompromissosDoDia();
         carregarEventosAtivos();
         carregarContatosAtivos();
         carregarFinanceiroEventos();
@@ -87,13 +92,30 @@ public class DashBoardMB extends BasicControl {
         contasVencidasEmpresa = parcelaService.findDespesasVencidasEmpresa(10);
 
     }
+    
+    public void carregarEventoECompromissosDoDia(){
+        
+        carregarEventosDoDia();
+    
+        carregarCompromissosDoDia();
+    }
 
-    public void carregarEventosDoDia() {
+    private void carregarEventosDoDia() {
         try {
 
             eventosDia = eventoService.findEventosDia(dataSelecionada);
             
         } catch (GenericException e) {
+            createFacesErrorMessage(e.getCause().getMessage());
+        }
+    }
+    
+    private void carregarCompromissosDoDia() {
+        try {
+
+            compromissosDia = compromissoService.findCompromissosDia(dataSelecionada);
+            
+        } catch (Exception e) {
             createFacesErrorMessage(e.getCause().getMessage());
         }
     }
@@ -190,5 +212,15 @@ public class DashBoardMB extends BasicControl {
     public void setContasVencidasEmpresa(List<Parcela> contasVencidasEmpresa) {
         this.contasVencidasEmpresa = contasVencidasEmpresa;
     }
+
+    public List<Compromisso> getCompromissosDia() {
+        return compromissosDia;
+    }
+
+    public void setCompromissosDia(List<Compromisso> compromissosDia) {
+        this.compromissosDia = compromissosDia;
+    }
+    
+    
 
 }

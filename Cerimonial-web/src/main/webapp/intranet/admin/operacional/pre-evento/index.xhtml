@@ -78,40 +78,7 @@
                         </div>
                     </div>
 
-                    <h:panelGroup rendered="#{PreEventoMB.evento.id != null}">
-                        <div class="col-md-4 text-center">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Acesso ao sistema</h3>
-                                </div>
-                                <div class="panel-body" align="center" style="min-height: 66px; max-height: 45px;">
 
-                                    <p:commandButton process="@this"
-                                                     rendered="#{!PreEventoMB.evento.acessoSistemaLiberado}"
-                                                     styleClass="btn btn-success"
-                                                     title="Liberar Acesso ao Contratante"
-                                                     value="Liberar Acesso ao Contratante"
-                                                     update="@form"
-                                                     action="#{PreEventoMB.liberarAcessoContratante()}"
-                                                     immediate="true"
-                                                     onstart="PF('statusDialog').show();"
-                                                     oncomplete="PF('statusDialog').hide();"/>
-
-                                    <p:commandButton process="@this"
-                                                     rendered="#{PreEventoMB.evento.acessoSistemaLiberado}"
-                                                     styleClass="btn btn-danger"
-                                                     title="Cancelar Acesso ao Contratante"
-                                                     value="Cancelar Acesso ao Contratante"
-                                                     update="@form"
-                                                     action="#{PreEventoMB.cancelarAcessoContratante()}"
-                                                     immediate="true"
-                                                     onstart="PF('statusDialog').show();"
-                                                     oncomplete="PF('statusDialog').hide();"/>
-
-                                </div>
-                            </div>
-                        </div>
-                    </h:panelGroup>
 
                     <div class="col-md-4">
 
@@ -189,6 +156,23 @@
                                                          oncomplete="PF('statusDialog').hide();"/>
 
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{PreEventoMB.evento != null}">
+                        <div class="col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Compromissos</h3>
+                                </div>
+                                <div class="panel-body" style="min-height: 66px;">
+                                    <p:link href="/intranet/admin/operacional/pre-evento/partials/contrato.xhtml?idEvento=#{PreEventoMB.evento.id}">
+                                        <i class="fa fa-list"></i>
+                                        <span></span>
+                                    </p:link>
+
                                 </div>
                             </div>
                         </div>
@@ -392,8 +376,40 @@
                             </div>
                         </div>
 
-                    </h:panelGroup>
 
+                        <div class="col-md-4 text-center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Acesso ao sistema</h3>
+                                </div>
+                                <div class="panel-body" align="center" style="min-height: 66px; max-height: 45px;">
+
+                                    <p:commandButton process="@this"
+                                                     rendered="#{!PreEventoMB.evento.acessoSistemaLiberado}"
+                                                     styleClass="btn btn-success"
+                                                     title="Liberar Acesso ao Contratante"
+                                                     value="Liberar Acesso ao Contratante"
+                                                     update="@form"
+                                                     action="#{PreEventoMB.liberarAcessoContratante()}"
+                                                     immediate="true"
+                                                     onstart="PF('statusDialog').show();"
+                                                     oncomplete="PF('statusDialog').hide();"/>
+
+                                    <p:commandButton process="@this"
+                                                     rendered="#{PreEventoMB.evento.acessoSistemaLiberado}"
+                                                     styleClass="btn btn-danger"
+                                                     title="Cancelar Acesso ao Contratante"
+                                                     value="Cancelar Acesso ao Contratante"
+                                                     update="@form"
+                                                     action="#{PreEventoMB.cancelarAcessoContratante()}"
+                                                     immediate="true"
+                                                     onstart="PF('statusDialog').show();"
+                                                     oncomplete="PF('statusDialog').hide();"/>
+
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
 
 
                 </div>

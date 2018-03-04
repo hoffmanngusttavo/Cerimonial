@@ -171,8 +171,16 @@ public class EventoService extends BasicService<Evento> {
             throw new GenericException("Data não pode ser nula", ErrorCode.BAD_REQUEST.getCode());
         }
 
-        return repository.findEventosDia(dataSelecionada);
+        List<Evento> eventos = repository.findEventosDia(dataSelecionada);
+        
+        if(CollectionUtils.isNotBlank(eventos)){
+        
+            for (Evento evento : eventos) {
+                smartLazy(evento, Arrays.asList("preEvento"));
+            }
+        }
 
+        return eventos;
     }
 
     /**
